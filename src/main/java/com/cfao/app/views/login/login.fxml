@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
+    <children>
+        <StackPane prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 1px 0;" VBox.vgrow="ALWAYS" />
+        <HBox prefHeight="157.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Pane prefHeight="238.0" prefWidth="208.0" HBox.hgrow="ALWAYS" />
+                <VBox prefHeight="238.0" prefWidth="381.0" HBox.hgrow="NEVER">
+                    <children>
+                        <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="184.0" prefWidth="260.0" style="-fx-border-color: gray; -fx-background-color: white;" VBox.vgrow="SOMETIMES">
+                            <VBox.margin>
+                                <Insets right="100.0" top="20.0" />
+                            </VBox.margin>
+                            <children>
+                                <Label prefHeight="17.0" prefWidth="165.0" text="Nom Utilisateur / Username" VBox.vgrow="NEVER">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="15.0" />
+                                    </padding>
+                                </Label>
+                                <TextField fx:id="login" prefHeight="30.0" prefWidth="259.0" promptText="Entrer votre login">
+                                    <VBox.margin>
+                                        <Insets bottom="4.0" left="20.0" right="20.0" />
+                                    </VBox.margin>
+                                </TextField>
+                                <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="135.0" text="Mot de Passe / Password" VBox.vgrow="NEVER">
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </Label>
+                                <PasswordField fx:id="password" prefHeight="30.0" promptText="Entrer votre mot de passe">
+                                    <VBox.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                                    </VBox.margin>
+                                </PasswordField>
+                                <Button fx:id="btnConnexion" mnemonicParsing="false" onAction="#btnConnexion" prefHeight="40.0" prefWidth="259.0" text="Connexion">
+                                    <VBox.margin>
+                                        <Insets left="20.0" right="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                        <Label alignment="TOP_CENTER" prefHeight="50.0" prefWidth="326.0" text="aaaaa" textFill="WHITE" VBox.vgrow="SOMETIMES">
+                            <VBox.margin>
+                                <Insets right="100.0" />
+                            </VBox.margin>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Pane prefHeight="0.0" prefWidth="600.0" style="-fx-border-color: blue; -fx-border-width: 1px 0 0 0; -fx-background-color: white;" VBox.vgrow="ALWAYS" />
+    </children>
+</VBox>
