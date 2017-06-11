@@ -12,6 +12,7 @@ public class Personne {
     private SimpleStringProperty matricule = new SimpleStringProperty();
     private SimpleStringProperty nom = new SimpleStringProperty();
     private SimpleStringProperty prenom = new SimpleStringProperty();
+    private Pays pays;
 
     public int getIdpersonne() {
         return idPersonne.get();
@@ -55,5 +56,13 @@ public class Personne {
                 ", nom=" + nom +
                 ", prenom=" + prenom +
                 '}';
+    }
+
+    public Pays getPays() {
+        return pays;
+    }
+
+    public void setPays(Pays pays) {
+        this.pays = pays;
     }
 }

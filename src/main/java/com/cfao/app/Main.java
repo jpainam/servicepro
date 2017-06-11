@@ -34,9 +34,9 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
 
         Scene scene = new Scene(loginPane, getWidth(90), getHeight(85));
-        /*String css = getClass().getResource("src/main/resources/css/style.css").toExternalForm();
+        String css = getClass().getResource("/css/style.css").toExternalForm();
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);*/
+        scene.getStylesheets().add(css);
         primaryStage.setOnCloseRequest(e->closeWindow());
         primaryStage.setScene(scene);
         primaryStage.show();

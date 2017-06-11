@@ -29,6 +29,10 @@ public class CiviliteController implements Initializable{
     public TableView<Personne> personneTable;
     public TableColumn<Personne, String> personneNom;
     public TableColumn<Personne, String> personneMatricule;
+    public TextField txtNom;
+    public TextField txtPrenom;
+    public TextField txtMatricule;
+    public TextField txtNationalite;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,9 +83,11 @@ public class CiviliteController implements Initializable{
     public void addListenerToRow(){
         if(personneTable.getSelectionModel().getSelectedItem() != null){
             TableView.TableViewSelectionModel<Personne> selectionModel = personneTable.getSelectionModel();
-            Personne personne = selectionModel.getSelectedItem();
-            System.out.println(personne);
-
+            Personne p = selectionModel.getSelectedItem();
+            txtMatricule.setText(p.getMatricule());
+            txtNom.setText(p.getNom());
+            txtPrenom.setText(p.getPrenom());
+            txtNationalite.setText(p.getPays().toString());
         }
     }
 }

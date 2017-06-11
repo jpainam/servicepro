@@ -17,5 +17,8 @@
         <property name="prenom">
             <column name="prenom"/>
         </property>
+        <many-to-one name="Pays" class="com.cfao.app.beans.Pays"
+                     column="pays" unique="true" not-null="true"
+                     cascade="all" />
     </class>
 </hibernate-mapping>

@@ -88,4 +88,9 @@ public class Pays {
     public void setPhoneCode(int phoneCode) {
         this.phoneCode.set(phoneCode);
     }
+
+    @Override
+    public String toString() {
+        return  getNameFr() ;
+    }
 }
