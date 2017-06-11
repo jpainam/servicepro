@@ -37,7 +37,7 @@ public class Main extends Application {
         /*String css = getClass().getResource("src/main/resources/css/style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);*/
-
+        primaryStage.setOnCloseRequest(e->closeWindow());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -49,6 +49,9 @@ public class Main extends Application {
     public double getHeight(double per){
         double h = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
         return (per * h) / 100;
+    }
+    private void closeWindow(){
+        System.exit(0);
     }
 
     public static void main(String[] args) {

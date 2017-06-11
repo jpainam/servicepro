@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.cfao.app.beans.Users" table="users">
+        <id name="iduser" type="int" column="iduser">
+            <generator class="assigned"/>
+        </id>
+        <property name="login">
+            <column name="login"/>
+        </property>
+        <property name="password">
+            <column name="password"/>
+        </property>
+        <property name="profile">
+            <column name="profile"/>
+        </property>
+    </class>
+</hibernate-mapping>

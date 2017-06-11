@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.cfao.app.beans.Pays" table="pays">
+        <id name="idpays" type="int" column="idPays">
+            <generator class="assigned"/>
+        </id>
+        <property name="iso">
+            <column name="iso"/>
+        </property>
+        <property name="nameFr">
+            <column name="nameFr"/>
+        </property>
+        <property name="nameEn">
+            <column name="nameEn"/>
+        </property>
+        <property name="iso3">
+            <column name="iso3"/>
+        </property>
+        <property name="numCode">
+            <column name="numCode"/>
+        </property>
+        <property name="phoneCode">
+            <column name="phoneCode"/>
+        </property>
+    </class>
+</hibernate-mapping>

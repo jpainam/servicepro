@@ -23,9 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.cfao.app.controllers.AccueilController">
+<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
 
     <children>
 
@@ -86,7 +84,7 @@
             <children>
                 <SplitPane dividerPositions="0.22687224669603523" prefHeight="487.0" prefWidth="910.0">
                     <items>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <StackPane maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
                             <children>
                                 <Accordion fx:id="leftMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                     <panes>

@@ -29,7 +29,7 @@ public enum FXMLView {
         }
 
         public String getFXMLFile() {
-            return  "/views/personne/civilite.fxml";
+            return  "src/main/java/com/cfao/app/views/civilite/civilite.fxml";
         }
     }, PERSONNE{
         public String getTitle() {

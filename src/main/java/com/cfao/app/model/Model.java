@@ -19,4 +19,9 @@ public class Model {
     public Object get(){
         return null;
     }
+
+    public void close(){
+        session.flush();
+        session.close();
+    }
 }

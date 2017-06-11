@@ -26,7 +26,7 @@
                                         <Insets left="15.0" />
                                     </padding>
                                 </Label>
-                                <TextField fx:id="login" prefHeight="30.0" prefWidth="259.0" promptText="Entrer votre login">
+                                <TextField fx:id="login" prefHeight="30.0" prefWidth="259.0" promptText="Entrer votre login" text="test">
                                     <VBox.margin>
                                         <Insets bottom="4.0" left="20.0" right="20.0" />
                                     </VBox.margin>
@@ -36,7 +36,7 @@
                                         <Insets />
                                     </VBox.margin>
                                 </Label>
-                                <PasswordField fx:id="password" prefHeight="30.0" promptText="Entrer votre mot de passe">
+                                <PasswordField fx:id="password" prefHeight="30.0" promptText="Entrer votre mot de passe" text="pwd">
                                     <VBox.margin>
                                         <Insets bottom="20.0" left="20.0" right="20.0" />
                                     </VBox.margin>
@@ -48,7 +48,7 @@
                                 </Button>
                             </children>
                         </VBox>
-                        <Label alignment="TOP_CENTER" prefHeight="50.0" prefWidth="326.0" text="aaaaa" textFill="WHITE" VBox.vgrow="SOMETIMES">
+                        <Label fx:id="errorLabel" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="326.0" style="-fx-font-weight: bold; -fx-alignment: center; -fx-text-fill: red;" textFill="WHITE" VBox.vgrow="SOMETIMES">
                             <VBox.margin>
                                 <Insets right="100.0" />
                             </VBox.margin>

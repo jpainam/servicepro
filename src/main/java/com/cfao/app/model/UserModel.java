@@ -12,13 +12,15 @@ public class UserModel extends Model{
         this.key = "IDUSER";
     }
 
-    public Users get(String login){
-        /*session.beginTransaction();
+
+    public boolean isAuthorized(String login, String pwd){
+        session.beginTransaction();
         String q = "FROM Users WHERE LOGIN = :login AND PASSWORD = :pwd";
         Query query = session.createQuery(q);
         query.setString("login", login);
         query.setString("pwd", pwd);
-        Users user = (Users)query.uniqueResult();*/
-        return null;
+        Users user = (Users)query.uniqueResult();
+        close();
+        return user != null;
     }
 }

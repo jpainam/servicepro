@@ -12,12 +12,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by JP on 6/9/2017.
  */
 public class PersonneController implements Initializable {
     public Tab tabCivilite;
+    private static Logger logger = Logger.getLogger(PersonneController.class.getName());
 
     public void initialize(URL location, ResourceBundle resources) {
         Image img = new Image(ResourceBundle.getBundle("Bundle").getString("civilite.icon"));
@@ -27,6 +30,7 @@ public class PersonneController implements Initializable {
             Parent civilitePane = loader.load(new FileInputStream(FXMLView.CIVILITE.getFXMLFile()));
             tabCivilite.setContent(civilitePane);
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "Initializing PersonneController", e.getStackTrace());
             e.printStackTrace();
         }
     }
