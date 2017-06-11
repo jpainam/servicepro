@@ -35,9 +35,15 @@ public enum FXMLView {
         public String getTitle() {
             return getStringFromResourceBundle("login.title");
         }
-
         public String getFXMLFile() {
             return  "src/main/java/com/cfao/app/views/civilite/personne.fxml";
+        }
+    }, PARAMETRE{
+        public String getTitle() {
+            return getStringFromResourceBundle("parametre.title");
+        }
+        public String getFXMLFile() {
+            return  "src/main/java/com/cfao/app/views/parametre/parametre.fxml";
         }
     };
     public abstract String getTitle();

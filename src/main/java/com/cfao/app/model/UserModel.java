@@ -1,6 +1,6 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Users;
+import com.cfao.app.beans.User;
 import org.hibernate.Query;
 
 /**
@@ -8,18 +8,18 @@ import org.hibernate.Query;
  */
 public class UserModel extends Model{
     public UserModel(){
-        this.table = "Users";
+        this.table = "User";
         this.key = "IDUSER";
     }
 
 
     public boolean isAuthorized(String login, String pwd){
         session.beginTransaction();
-        String q = "FROM Users WHERE LOGIN = :login AND PASSWORD = :pwd";
+        String q = "FROM User WHERE LOGIN = :login AND PASSWORD = :pwd";
         Query query = session.createQuery(q);
         query.setString("login", login);
         query.setString("pwd", pwd);
-        Users user = (Users)query.uniqueResult();
+        User user = (User)query.uniqueResult();
         close();
         return user != null;
     }

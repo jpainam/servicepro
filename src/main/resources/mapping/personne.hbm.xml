@@ -18,7 +18,16 @@
             <column name="prenom"/>
         </property>
         <many-to-one name="Pays" class="com.cfao.app.beans.Pays"
-                     column="pays" unique="true" not-null="true"
+                     column="pays" unique="true" not-null="false"
+                     cascade="all" />
+        <many-to-one name="Groupe" class="com.cfao.app.beans.Groupe"
+                     column="groupe" unique="true" not-null="false"
+                     cascade="all" />
+        <many-to-one name="Societe" class="com.cfao.app.beans.Societe"
+                     column="societe" unique="true" not-null="false"
+                     cascade="all" />
+        <many-to-one name="Section" class="com.cfao.app.beans.Section"
+                     column="section" unique="true" not-null="false"
                      cascade="all" />
     </class>
 </hibernate-mapping>

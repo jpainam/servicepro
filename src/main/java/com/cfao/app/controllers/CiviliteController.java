@@ -33,10 +33,23 @@ public class CiviliteController implements Initializable{
     public TextField txtPrenom;
     public TextField txtMatricule;
     public TextField txtNationalite;
+    public TextField txtSociete;
+    public TextField txtGroupe;
+    public TextField txtSection;
+
+    TableView.TableViewSelectionModel<Personne> personneTableModel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setAccordionExpanded();
+        fillPersonneTableWithData();
+        personneTableModel = personneTable.getSelectionModel();
+        personneTableModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            addListenerToRow();
+        });
+    }
 
+    private void setAccordionExpanded() {
         accordion.setExpandedPane(informationPanel);
         searchCombo.setEditable(true);
         TextFields.bindAutoCompletion(searchCombo.getEditor(), searchCombo.getItems());
@@ -55,17 +68,12 @@ public class CiviliteController implements Initializable{
                 });
             }
         });
-
-        // Table View Personne
-        personneNom.setCellValueFactory(new PropertyValueFactory<Personne, String>("nom"));
-        personneMatricule.setCellValueFactory(new PropertyValueFactory<Personne, String>("matricule"));
-        buildData();
-        /* Add a listener when a line is selected */
-        personneTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            addListenerToRow();
-        });
     }
-    public void buildData(){
+
+    public void fillPersonneTableWithData(){
+        personneNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        personneMatricule.setCellValueFactory(new PropertyValueFactory<>("matricule"));
+
         PersonneModel personneModel = new PersonneModel();
 
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
@@ -81,13 +89,15 @@ public class CiviliteController implements Initializable{
 
     }
     public void addListenerToRow(){
-        if(personneTable.getSelectionModel().getSelectedItem() != null){
-            TableView.TableViewSelectionModel<Personne> selectionModel = personneTable.getSelectionModel();
-            Personne p = selectionModel.getSelectedItem();
+        if(personneTableModel.getSelectedItem() != null){
+            Personne p = personneTableModel.getSelectedItem();
             txtMatricule.setText(p.getMatricule());
             txtNom.setText(p.getNom());
             txtPrenom.setText(p.getPrenom());
             txtNationalite.setText(p.getPays().toString());
+            txtSociete.setText(p.getSociete().toString());
+            txtGroupe.setText(p.getGroupe().toString());
+            txtSection.setText(p.getSection().toString());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.cfao.app.util;
 
+import org.controlsfx.control.Notifications;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -13,12 +14,15 @@ public class HibernateUtil {
             // Create the sessionFactory from hibernate.cfg.xml
             return new Configuration().configure().buildSessionFactory();
         }catch (Throwable ex){
-            System.err.println("SessionFactory creation failed." + ex);
+            /*System.err.println("SessionFactory creation failed." + ex); */
+            Notifications.create().title("Connexion à la Base de données")
+                    .text("Impossible de se connecter à la Base de données ").showError();
             throw new ExceptionInInitializerError(ex);
         }
     }
     public static SessionFactory getSessionFactory(){
-        return sessionFactory;
+         return sessionFactory;
+
     }
     public static void shutdown(){
         getSessionFactory().close();

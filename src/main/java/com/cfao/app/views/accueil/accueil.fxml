@@ -64,6 +64,14 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Paramètres">
                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Utilisateurs" />
+                        <MenuItem mnemonicParsing="false" onAction="#profilAction" text="Profils" />
+                        <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Sociétés" />
+                        <MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Niveau d'études" />
+                        <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Groupes" />
+                        <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Sections" />
+                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="About" />
                         <MenuItem mnemonicParsing="false" text="About" />
                      </items>
                   </Menu>

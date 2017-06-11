@@ -13,8 +13,12 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
-        <mapping resource="mapping/users.hbm.xml" />
+        <mapping resource="mapping/user.hbm.xml" />
         <mapping resource="mapping/pays.hbm.xml" />
         <mapping resource="mapping/personne.hbm.xml" />
+        <mapping resource="mapping/profil.hbm.xml" />
+        <mapping resource="mapping/groupe.hbm.xml" />
+        <mapping resource="mapping/societe.hbm.xml" />
+        <mapping resource="mapping/section.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

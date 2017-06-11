@@ -13,6 +13,9 @@ public class Personne {
     private SimpleStringProperty nom = new SimpleStringProperty();
     private SimpleStringProperty prenom = new SimpleStringProperty();
     private Pays pays;
+    private Groupe groupe;
+    private Societe societe;
+    private Section section;
 
     public int getIdpersonne() {
         return idPersonne.get();
@@ -64,5 +67,29 @@ public class Personne {
 
     public void setPays(Pays pays) {
         this.pays = pays;
+    }
+
+    public Groupe getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe = groupe;
+    }
+
+    public Societe getSociete() {
+        return societe;
+    }
+
+    public void setSociete(Societe societe) {
+        this.societe = societe;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
     }
 }
