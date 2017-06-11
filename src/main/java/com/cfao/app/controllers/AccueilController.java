@@ -3,6 +3,8 @@ package com.cfao.app.controllers;
 import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.FXMLView;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
@@ -31,6 +34,7 @@ public class AccueilController implements Initializable, Controller {
     public ProgressBar progressBar;
     public StackPane shortcutContent;
     public StackPane notificationContent;
+    public Button exitButton;
 
     public void displayCivilite(ActionEvent actionEvent) {
         Task<Void> task = new Task<Void>() {
@@ -71,6 +75,8 @@ public class AccueilController implements Initializable, Controller {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SAVE);
+
     }
     public void openParameterScene(int activeTab){
         try {

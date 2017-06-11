@@ -84,11 +84,12 @@
                 </MenuBar>
             </children>
         </StackPane>
-      <HBox styleClass="background">
+      <Pane>
          <children>
                 <ImageView fx:id="cfaoLogo" fitHeight="73.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="exitButton" layoutX="814.0" layoutY="24.0" mnemonicParsing="false" text="Save me" />
          </children>
-      </HBox>
+      </Pane>
         <StackPane fx:id="mainContent" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
             <children>
                 <SplitPane dividerPositions="0.22577092511013216, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
