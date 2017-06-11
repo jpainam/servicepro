@@ -10,6 +10,9 @@ import java.util.Vector;
  * Created by JP on 6/10/2017.
  */
 public class PersonneModel extends Model {
+    public PersonneModel(){
+        super();
+    }
     public List<Personne> select(){
         session.beginTransaction();
         String q = "FROM Personne";

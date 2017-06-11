@@ -29,6 +29,8 @@ public class AccueilController implements Initializable, Controller {
     public StackPane content;
     public ImageView cfaoLogo;
     public ProgressBar progressBar;
+    public StackPane shortcutContent;
+    public StackPane notificationContent;
 
     public void displayCivilite(ActionEvent actionEvent) {
         Task<Void> task = new Task<Void>() {

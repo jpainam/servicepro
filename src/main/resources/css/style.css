@@ -9,3 +9,6 @@
 /************
 GLOBAL CSS
 *************/
+.button{
+    -fx-cursor: hand;
+}

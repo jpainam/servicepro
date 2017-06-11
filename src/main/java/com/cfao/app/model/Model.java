@@ -13,13 +13,6 @@ public class Model {
     public Model(){
         session = HibernateUtil.getSessionFactory().openSession();
     }
-    public boolean delete(Object obj){
-        return false;
-    }
-    public Object get(){
-        return null;
-    }
-
     public void close(){
         session.flush();
         session.close();
