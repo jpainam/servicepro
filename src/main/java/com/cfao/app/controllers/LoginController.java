@@ -79,8 +79,8 @@ public class LoginController implements Initializable {
                     Toast.makeText(stage, toastMsg, toastMsgTime, fadeInTime, fadeOutTime);
 
                     Notifications.create().title("Connexion")
-                            .text("Erreur de connexion | Connection failed")
-                            .showError();
+                            .text(toastMsg)
+                            .showWarning();
                 }
             });
         });

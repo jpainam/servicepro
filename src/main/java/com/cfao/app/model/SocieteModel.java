@@ -1,6 +1,8 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Societe;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 
@@ -15,21 +17,29 @@ public class SocieteModel extends Model {
 
     }
     public List<Societe> select() {
-        session.beginTransaction();
-        String q = "FROM Societe";
-        Query query = session.createQuery(q);
-        return query.list();
-
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Societe.class);
+            return criteria.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return null;
     }
 
     public void insert(Societe societe) {
+        Transaction tx = null;
         try{
-            Transaction t = session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(societe);
-            t.commit();
-            session.close();
-        }catch(Exception ex){
+            tx.commit();
+        }catch(HibernateException ex){
+            if(tx != null) tx.rollback();
             ex.printStackTrace();
+        }finally {
+            session.close();
         }
     }
 }

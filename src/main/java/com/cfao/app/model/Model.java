@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.util.HibernateUtil;
+import org.controlsfx.control.Notifications;
 import org.hibernate.Session;
 
 /**

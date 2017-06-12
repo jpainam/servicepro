@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Personne;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 
 import java.util.List;
@@ -14,9 +15,15 @@ public class PersonneModel extends Model {
         super();
     }
     public List<Personne> select(){
-        session.beginTransaction();
-        String q = "FROM Personne";
-        Query query = session.createQuery(q);
-        return query.list();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Personne.class);
+            return criteria.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return null;
     }
 }

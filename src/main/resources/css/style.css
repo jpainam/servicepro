@@ -68,5 +68,11 @@ SEARCH
     -glyph-name: SEARCH;
 }
 .searchField:fail {
-    -fx-background-color: -colour-search-fail;
+    -fx-background-color: blanchedalmond;
+}
+.searchField{
+     /*-fx-background-color: azure;*/
+}
+.searchField:success{
+    -fx-background-color: azure;
 }
