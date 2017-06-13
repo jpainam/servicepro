@@ -76,3 +76,6 @@ SEARCH
 .searchField:success{
     -fx-background-color: azure;
 }
+.obligatoire{
+    -fx-background-color: blanchedalmond;
+}

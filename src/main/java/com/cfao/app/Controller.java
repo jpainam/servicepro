@@ -3,6 +3,7 @@ package com.cfao.app;
 
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
+import org.controlsfx.control.NotificationPane;
 
 
 /**
@@ -11,4 +12,6 @@ import javafx.scene.control.ProgressBar;
 public interface Controller {
     void setContent(Node node);
     ProgressBar getProgressBar();
+    Node getHighlightPane();
+    NotificationPane getNotificationPane();
 }

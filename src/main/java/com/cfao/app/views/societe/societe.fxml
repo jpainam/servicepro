@@ -45,8 +45,9 @@
                                           <Label layoutX="15.0" layoutY="67.0" text="Adresse du siège / Headquater address" />
                                           <TextField fx:id="txtNom" layoutX="253.0" layoutY="23.0" prefHeight="25.0" prefWidth="316.0" promptText="Entrer le nom de la société" />
                                           <TextArea fx:id="txtAdresse" layoutX="253.0" layoutY="65.0" prefHeight="93.0" prefWidth="320.0" promptText="Entrer l'adresse de la société" />
-                                          <Button fx:id="btnValider" alignment="CENTER_RIGHT" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#addSociete" text="Valider" />
+                                          <Button fx:id="btnValider" alignment="CENTER_RIGHT" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" />
                                           <Button fx:id="btnAnnuler" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" />
+                                          <HBox fx:id="notifContent" layoutX="179.0" layoutY="287.0" prefHeight="100.0" prefWidth="200.0" />
                                        </children>
                                     </Pane>
                                  </content>
@@ -76,7 +77,7 @@
                      <Label fx:id="labelMatches" prefHeight="17.0" prefWidth="179.0" />
                   <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="527.0">
                      <children>
-                        <Button fx:id="btnSupprimer" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="462.0" mnemonicParsing="false" text="Supprimer" />
+                        <Button fx:id="btnSupprimer" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="462.0" mnemonicParsing="false" onAction="#supprimerAction" text="Supprimer" />
                         <Button fx:id="btnModifier" alignment="CENTER_RIGHT" layoutX="377.0" mnemonicParsing="false" onAction="#editSociete" text="Modifier" />
                         <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" layoutX="283.0" mnemonicParsing="false" onAction="#nouveauAction" text="Nouveau" />
                      </children>

@@ -3,27 +3,36 @@ package com.cfao.app.controllers;
 import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.FXMLView;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.action.Action;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /**
  * Created by JP on 6/9/2017.
@@ -35,6 +44,45 @@ public class AccueilController implements Initializable, Controller {
     public StackPane shortcutContent;
     public StackPane notificationContent;
     public Button exitButton;
+    public NotificationPane notificationPane;
+    public HBox highlightPane;
+    public StackPane notificationStack;
+    public Pane headerPane;
+
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            cfaoLogo.setImage(new Image(new FileInputStream("src/main/resources/images/logo.png")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT);
+        StackPane pane1 = new StackPane();
+        notificationPane = new NotificationPane(pane1);
+        notificationPane.setText("Notification Panel");
+        notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
+            notificationPane.hide();
+        }));
+       notificationStack.getChildren().add(notificationPane);
+
+        JFXTabPane tabPane = new JFXTabPane();
+        tabPane.setPrefSize(300, 200);
+        Tab tab = new Tab();
+        tab.setText("Tab 1");
+        tab.setContent(new Label("Content"));
+
+        Tab tab1 = new Tab();
+        tab1.setText("Tab 2");
+        tab1.setContent(new Label("Content"));
+
+        Tab tab2 = new Tab();
+        tab2.setText("Tab 2");
+        tab2.setContent(new Label("Content"));
+
+        tabPane.getTabs().addAll(tab, tab1, tab2);
+
+        content.getChildren().setAll(tabPane);
+
+    }
 
     public void displayCivilite(ActionEvent actionEvent) {
         Task<Void> task = new Task<Void>() {
@@ -69,15 +117,16 @@ public class AccueilController implements Initializable, Controller {
         return progressBar;
     }
 
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            cfaoLogo.setImage(new Image(new FileInputStream("src/main/resources/images/logo.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SAVE);
-
+    @Override
+    public Node getHighlightPane() {
+        return highlightPane;
     }
+
+    @Override
+    public NotificationPane getNotificationPane() {
+        return notificationPane;
+    }
+
     public void openParameterScene(int activeTab){
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -111,5 +160,13 @@ public class AccueilController implements Initializable, Controller {
 
     public void sectionAction(ActionEvent actionEvent) {
         openParameterScene(ParametreController.TAB_SECTION);
+    }
+
+    public void exitAction(ActionEvent actionEvent) {
+        if(notificationPane.isShowing()){
+            notificationPane.hide();
+        }else {
+            notificationPane.show();
+        }
     }
 }

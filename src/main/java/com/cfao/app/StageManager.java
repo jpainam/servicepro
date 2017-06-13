@@ -3,6 +3,7 @@ package com.cfao.app;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import org.controlsfx.control.NotificationPane;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,5 +23,8 @@ public class StageManager {
         }catch(IOException ex){
             ex.printStackTrace();
         }
+    }
+    public static NotificationPane getNotificationPane() {
+        return mainController.getNotificationPane();
     }
 }
