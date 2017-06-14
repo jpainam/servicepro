@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -23,7 +24,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
+<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
 
     <children>
 
@@ -126,7 +128,10 @@
                                 </Accordion>
                             </children>
                         </StackPane>
-                        <StackPane fx:id="content" prefHeight="150.0" prefWidth="200.0" />
+                        <StackPane fx:id="content" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton styleClass="button-raised" text="Test" />
+                     </children></StackPane>
                   <StackPane fx:id="notificationContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="429.0" prefWidth="165.0" />
                     </items>
                 </SplitPane>

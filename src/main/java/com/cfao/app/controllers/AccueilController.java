@@ -3,9 +3,8 @@ package com.cfao.app.controllers;
 import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.FXMLView;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
+import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -20,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -64,23 +64,10 @@ public class AccueilController implements Initializable, Controller {
         }));
        notificationStack.getChildren().add(notificationPane);
 
-        JFXTabPane tabPane = new JFXTabPane();
-        tabPane.setPrefSize(300, 200);
-        Tab tab = new Tab();
-        tab.setText("Tab 1");
-        tab.setContent(new Label("Content"));
+        JFXSnackbar bar = new JFXSnackbar(content);
 
-        Tab tab1 = new Tab();
-        tab1.setText("Tab 2");
-        tab1.setContent(new Label("Content"));
-
-        Tab tab2 = new Tab();
-        tab2.setText("Tab 2");
-        tab2.setContent(new Label("Content"));
-
-        tabPane.getTabs().addAll(tab, tab1, tab2);
-
-        content.getChildren().setAll(tabPane);
+        bar.show("Je suis fort", 5000);
+        //content.getChildren().setAll(validationField);
 
     }
 

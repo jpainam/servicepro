@@ -39,7 +39,7 @@ public class SocieteController implements Initializable {
     public Button btnModifier;
     public Button btnValider;
     public Button btnAnnuler;
-    public Button buttonCloseSearch;
+
     public Label searchBoxLabel;
     public TextField txtNom;
     public TextArea txtAdresse;
@@ -76,8 +76,8 @@ public class SocieteController implements Initializable {
         GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.TIMES);
         /** Set Font awesome icon */
         FontAwesomeIconView iconView = new FontAwesomeIconView();
-        iconView.getStyleClass().add("buttonSearchCloseIcon");
-        buttonCloseSearch.setGraphic(iconView);
+        /*iconView.getStyleClass().add("buttonSearchCloseIcon");
+        buttonCloseSearch.setGraphic(iconView);*/
         iconView = new FontAwesomeIconView();
         iconView.getStyleClass().add("searchBoxLabelIcon");
         searchBoxLabel.setGraphic(iconView);

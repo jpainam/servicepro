@@ -9,10 +9,9 @@
 /************
 GLOBAL CSS
 *************/
-.button {
-
-    -fx-font-family: "Segoe UI Semibold";
+.button{
     -fx-cursor: hand;
+    -fx-font-size: 10pt;
 }
 .button.save {
     -fx-padding: 5 22 5 22;
@@ -78,4 +77,36 @@ SEARCH
 }
 .obligatoire{
     -fx-background-color: blanchedalmond;
+}
+/**
+JFOenix CSS
+*/
+.button-raised{
+    -fx-padding: 0.15em;
+     -fx-font-size: 10pt;
+    -jfx-button-type: RAISED;
+    -fx-font-weight: 400;
+     -fx-background-color: green;
+    -fx-pref-width: 100;
+    -fx-text-fill: WHITE;
+    -fx-cursor: hand;
+}
+.button-success{
+    -fx-background-color: #29a400;
+}
+.button-danger{
+    -fx-background-color: #901313;
+}
+.button-attention{
+    -fx-background-color: #112a83;
+}
+.jfx-hamburger-icon{
+    -fx-spacing: 5;
+    -fx-cursor: hand;
+}
+.jfx-hamburger-icon StackPane{
+    -fx-pref-width: 40px;
+    -fx-pref-height: 7px;
+    -fx-background-color : #D63333;
+    -fx-background-radius : 5px;
 }
