@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.textfield.*?>
+<?import com.jfoenix.controls.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CompetenceController">
+   <children>
+      <StackPane prefHeight="44.0" prefWidth="778.0">
+         <children>
+             <ButtonBar>
+                 <buttons>
+                     <CustomTextField fx:id="fieldSearch" styleClass="searchField" ButtonBar.buttonData="LEFT">
+                         <left>
+                             <Label fx:id="searchBoxLabel" styleClass="searchBoxLabel">
+                                </Label>
+                         </left>
+                     </CustomTextField>
+                     <Label fx:id="labelMatches" prefHeight="17.0" prefWidth="179.0" ButtonBar.buttonData="LEFT" />
+                     <JFXButton fx:id="btnNouveau" maxWidth="100.0" minWidth="100.0" onAction="#nouveauAction" text="Nouveau" ButtonBar.buttonData="RIGHT">
+                         <styleClass>
+                             <String fx:value="button-success" />
+                             <String fx:value="button-raised" />
+                         </styleClass>
+                  </JFXButton>
+
+                              <JFXButton fx:id="btnModifier" maxWidth="100.0" minWidth="100.0" onAction="#editSociete" text="Modifier" ButtonBar.buttonData="RIGHT">
+                         <styleClass>
+                             <String fx:value="button-attention" />
+                             <String fx:value="button-raised" />
+                         </styleClass>
+                  </JFXButton>
+                     <JFXButton fx:id="btnSupprimer" maxWidth="100.0" minWidth="100.0" onAction="#supprimerAction" text="Supprimer" ButtonBar.buttonData="RIGHT">
+                         <styleClass>
+                             <String fx:value="button-danger" />
+                             <String fx:value="button-raised" />
+                         </styleClass>
+                  </JFXButton>
+                 </buttons>
+             </ButtonBar>
+         </children>
+      </StackPane>
+      <SplitPane dividerPositions="0.5128834355828221" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <items>
+            <StackPane>
+               <children>
+                  <TableView fx:id="competenceTable" prefHeight="524.0" prefWidth="609.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="numeroColumn" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
+                        <TableColumn fx:id="libelleColumn" minWidth="-1.0" prefWidth="-1.0" text="Libellé" />
+                        <TableColumn fx:id="connaissanceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Connaissance" />
+                        <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" right="10.0" />
+               </padding>
+            </StackPane>
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="prerequisTable" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Formation prérequis" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </TableView>
+                        <TableView prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TableView>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" />
+               </padding>
+            </StackPane>
+         </items>
+      </SplitPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

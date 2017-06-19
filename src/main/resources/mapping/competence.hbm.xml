@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.cfao.app.beans.Competence" table="competences">
+        <id name="idcompetence" type="int" column="idcompetence">
+            <generator class="assigned"/>
+        </id>
+        <property name="description">
+            <column name="description"/>
+        </property>
+        <many-to-one name="Niveaucompetence" class="com.cfao.app.beans.Niveaucompetence"
+                     column="niveau" unique="true" not-null="false"
+                     cascade="all" />
+
+        <property name="type">
+            <column name="type"/>
+        </property>
+    </class>
+</hibernate-mapping>

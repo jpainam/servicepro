@@ -45,6 +45,39 @@ public enum FXMLView {
         public String getFXMLFile() {
             return  "src/main/java/com/cfao/app/views/parametre/parametre.fxml";
         }
+    } , COMPETENCE{
+        public String getTitle() {
+        return getStringFromResourceBundle("competence.title");
+        }
+
+            public String getFXMLFile() {
+        return  "src/main/java/com/cfao/app/views/competence/competence.fxml";
+        }
+
+        },ADDCOMPETENCE{
+        public String getTitle() {
+            return getStringFromResourceBundle("competence.title");
+        }
+
+        public String getFXMLFile() {
+            return  "src/main/java/com/cfao/app/views/competence/add.fxml";
+        }
+
+    }, PROFIL{
+        public String getTitle() {
+            return getStringFromResourceBundle("profil.title");
+        }
+        public String getFXMLFile() {
+            return  "src/main/java/com/cfao/app/views/profil/profil.fxml";
+        }
+    }, FORMATION {
+        public String getTitle() {
+            return getStringFromResourceBundle("formation.title");
+        }
+
+        public String getFXMLFile() {
+            return "src/main/java/com/cfao/app/views/formation/formation.fxml";
+        }
     };
     public abstract String getTitle();
     public abstract String getFXMLFile();

@@ -4,6 +4,8 @@ import com.cfao.app.util.HibernateUtil;
 import org.controlsfx.control.Notifications;
 import org.hibernate.Session;
 
+import java.util.List;
+
 /**
  * Created by JP on 6/9/2017.
  */
@@ -17,5 +19,9 @@ public class Model {
     public void close(){
         session.flush();
         session.close();
+    }
+
+    public List select() {
+        return null;
     }
 }

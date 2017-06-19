@@ -44,19 +44,28 @@
                                        <children>
                                           <Label layoutX="15.0" layoutY="27.0" text="Nom de la société / Society name" />
                                           <Label layoutX="15.0" layoutY="67.0" text="Adresse du siège / Headquater address" />
-                                          <TextField fx:id="txtNom" layoutX="253.0" layoutY="23.0" prefHeight="25.0" prefWidth="316.0" promptText="Entrer le nom de la société" />
-                                          <TextArea fx:id="txtAdresse" layoutX="253.0" layoutY="65.0" prefHeight="93.0" prefWidth="320.0" promptText="Entrer l'adresse de la société" />
-                                          <JFXButton fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider">
-                                             <styleClass>
-                                                <String fx:value="button-raised" />
-                                                <String fx:value="button-success" />
-                                             </styleClass></JFXButton>
-                                          <JFXButton fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler">
-                                             <styleClass>
-                                                <String fx:value="button-raised" />
-                                                <String fx:value="button-attention" />
-                                             </styleClass></JFXButton>
-                                          <HBox fx:id="notifContent" layoutX="179.0" layoutY="287.0" prefHeight="100.0" prefWidth="200.0" />
+                                          <TextField fx:id="txtNom" layoutX="253.0" layoutY="23.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="400.0" promptText="Entrer le nom de la société" />
+                                          <TextArea fx:id="txtAdresse" layoutX="253.0" layoutY="60.0" maxWidth="1.7976931348623157E308" prefHeight="93.0" prefWidth="400.0" promptText="Entrer l'adresse de la société" />
+                                          <StackPane alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="645.0" prefWidth="630.0">
+                                             <children>
+                                              <ButtonBar>
+                                                  <buttons>
+                                                      <JFXButton fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT">
+                                                          <styleClass>
+                                                              <String fx:value="button-raised" />
+                                                              <String fx:value="button-success" />
+                                                          </styleClass>
+                                                      </JFXButton>
+                                                      <JFXButton fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT">
+                                                          <styleClass>
+                                                              <String fx:value="button-raised" />
+                                                              <String fx:value="button-attention" />
+                                                          </styleClass>
+                                                      </JFXButton>
+                                                  </buttons>
+                                              </ButtonBar>
+                                             </children>
+                                          </StackPane>
                                        </children>
                                     </Pane>
                                  </content>
@@ -84,18 +93,18 @@
                          </left>
                      </CustomTextField>
                      <Label fx:id="labelMatches" prefHeight="17.0" prefWidth="179.0" ButtonBar.buttonData="LEFT" />
-                    <JFXButton fx:id="btnNouveau" minWidth="100.0" maxWidth="100.0" onAction="#nouveauAction" text="Nouveau" ButtonBar.buttonData="RIGHT">
+                    <JFXButton fx:id="btnNouveau" maxWidth="100.0" minWidth="100.0" onAction="#nouveauAction" text="Nouveau" ButtonBar.buttonData="RIGHT">
                         <styleClass>
                             <String fx:value="button-success" />
                             <String fx:value="button-raised" />
                         </styleClass></JFXButton>
 
-                        <JFXButton fx:id="btnModifier" onAction="#editSociete" minWidth="100.0" maxWidth="100.0" text="Modifier" ButtonBar.buttonData="RIGHT">
+                        <JFXButton fx:id="btnModifier" maxWidth="100.0" minWidth="100.0" onAction="#editSociete" text="Modifier" ButtonBar.buttonData="RIGHT">
                            <styleClass>
                               <String fx:value="button-attention" />
                               <String fx:value="button-raised" />
                            </styleClass></JFXButton>
-                    <JFXButton fx:id="btnSupprimer" onAction="#supprimerAction" minWidth="100.0" maxWidth="100.0" text="Supprimer" ButtonBar.buttonData="RIGHT">
+                    <JFXButton fx:id="btnSupprimer" maxWidth="100.0" minWidth="100.0" onAction="#supprimerAction" text="Supprimer" ButtonBar.buttonData="RIGHT">
                         <styleClass>
                             <String fx:value="button-danger" />
                             <String fx:value="button-raised" />

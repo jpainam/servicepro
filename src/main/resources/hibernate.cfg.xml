@@ -20,5 +20,8 @@
         <mapping resource="mapping/groupe.hbm.xml" />
         <mapping resource="mapping/societe.hbm.xml" />
         <mapping resource="mapping/section.hbm.xml" />
+        <mapping resource="mapping/competence.hbm.xml" />
+        <mapping resource="mapping/niveaucompetence.hbm.xml" />
+        <mapping resource="mapping/niveauetude.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

@@ -24,8 +24,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
+<?import org.controlsfx.control.*?>
+<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
 
     <children>
 
@@ -36,27 +36,30 @@
                         <Menu mnemonicParsing="false" text="Personnes">
                             <items>
                                 <MenuItem fx:id="btnCivilite" mnemonicParsing="false" onAction="#displayCivilite" text="Civilite" />
-                        <MenuItem fx:id="btnCivilite1" mnemonicParsing="false" onAction="#add" text="Nouveau" />
-                        <MenuItem fx:id="btnCivilite11" mnemonicParsing="false" onAction="#displayCivilite" text="Formations" />
+                        <MenuItem mnemonicParsing="false" onAction="#add" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Formations" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="btnCivilite111" mnemonicParsing="false" onAction="#displayCivilite" text="Tests" />
-                        <MenuItem fx:id="btnCivilite1111" mnemonicParsing="false" onAction="#displayCivilite" text="Entretiens" />
-                        <MenuItem fx:id="btnCivilite11111" mnemonicParsing="false" onAction="#displayCivilite" text="Certifications" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Tests" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Entretiens" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Certifications" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Formations">
                             <items>
+                                <MenuItem mnemonicParsing="false" onAction="#showFormation" text="Liste des formations" />
+                                <MenuItem mnemonicParsing="false" text="Nouveau" />
                                 <MenuItem mnemonicParsing="false" text="About" />
                             </items>
                         </Menu>
                   <Menu mnemonicParsing="false" text="Compétences">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" onAction="#showAction" text="Liste des compétences" />
+                        <MenuItem mnemonicParsing="false" onAction="#addAction" text="Nouvelle compétence" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Profils">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                         <MenuItem mnemonicParsing="false" onAction="#showProfil" text="Liste des Profils" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Tests">
@@ -101,6 +104,9 @@
             </StackPane>
          </right>
       </BorderPane>
+        <BreadCrumbBar fx:id="breadCrumb">
+
+        </BreadCrumbBar>
         <StackPane fx:id="mainContent" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
             <children>
                 <SplitPane dividerPositions="0.22577092511013216, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -128,11 +134,9 @@
                                 </Accordion>
                             </children>
                         </StackPane>
-                        <StackPane fx:id="content" prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                        <JFXButton styleClass="button-raised" text="Test" />
-                     </children></StackPane>
-                  <StackPane fx:id="notificationContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="429.0" prefWidth="165.0" />
+                        <StackPane fx:id="content" prefHeight="150.0" prefWidth="200.0" >
+                        </StackPane>
+                  <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0"/>
                     </items>
                 </SplitPane>
             </children>

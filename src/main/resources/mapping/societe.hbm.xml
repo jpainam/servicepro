@@ -11,6 +11,21 @@
         <property name="nom">
             <column name="nom"/>
         </property>
+        <property name="code">
+            <column name="code"/>
+        </property>
+        <property name="contact">
+            <column name="contact"/>
+        </property>
+        <property name="telephone">
+            <column name="telephone"/>
+        </property>
+        <property name="email">
+            <column name="email"/>
+        </property>
+        <property name="fax">
+            <column name="fax"/>
+        </property>
         <property name="adresse">
             <column name="adresse"/>
         </property>

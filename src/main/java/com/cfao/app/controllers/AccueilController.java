@@ -4,8 +4,6 @@ import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.FXMLView;
 import com.jfoenix.controls.*;
-import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
-import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.concurrent.Task;
@@ -23,6 +21,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import org.controlsfx.control.BreadCrumbBar;
+import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.action.Action;
 
@@ -48,6 +48,7 @@ public class AccueilController implements Initializable, Controller {
     public HBox highlightPane;
     public StackPane notificationStack;
     public Pane headerPane;
+    public BreadCrumbBar breadCrumb;
 
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -64,11 +65,12 @@ public class AccueilController implements Initializable, Controller {
         }));
        notificationStack.getChildren().add(notificationPane);
 
-        JFXSnackbar bar = new JFXSnackbar(content);
+        ListSelectionView<String> view = new ListSelectionView<>();
+        view.getSourceItems().add("One");
+        view.getTargetItems().add("Four");
 
-        bar.show("Je suis fort", 5000);
-        //content.getChildren().setAll(validationField);
-
+        content.getChildren().setAll(view);
+        
     }
 
     public void displayCivilite(ActionEvent actionEvent) {
@@ -155,5 +157,21 @@ public class AccueilController implements Initializable, Controller {
         }else {
             notificationPane.show();
         }
+    }
+
+    public void showAction(ActionEvent actionEvent) {
+        StageManager.loadContent(FXMLView.COMPETENCE.getFXMLFile());
+    }
+
+    public void addAction(ActionEvent actionEvent) {
+        StageManager.loadContent(FXMLView.ADDCOMPETENCE.getFXMLFile());
+    }
+
+    public void showProfil(ActionEvent actionEvent) {
+        StageManager.loadContent(FXMLView.PROFIL.getFXMLFile());    }
+
+    public void showFormation(ActionEvent actionEvent) {
+
+            StageManager.loadContent(FXMLView.FORMATION.getFXMLFile());
     }
 }
