@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import org.controlsfx.control.*?>
+<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.cfao.app.controllers.TemplateController">
+
+    <children>
+
+        <StackPane alignment="TOP_LEFT" prefHeight="23.0" prefWidth="910.0">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="Personnes">
+                            <items>
+                                <MenuItem fx:id="btnCivilite" mnemonicParsing="false" onAction="#displayCivilite" text="Civilite" />
+                        <MenuItem mnemonicParsing="false" onAction="#add" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Formations" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Tests" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Entretiens" />
+                        <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Certifications" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Formations">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#showFormation" text="Liste des formations" />
+                                <MenuItem mnemonicParsing="false" text="Nouveau" />
+                                <MenuItem mnemonicParsing="false" text="About" />
+                            </items>
+                        </Menu>
+                  <Menu mnemonicParsing="false" text="Compétences">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showAction" text="Liste des compétences" />
+                        <MenuItem mnemonicParsing="false" onAction="#addAction" text="Nouvelle compétence" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Profils">
+                     <items>
+                         <MenuItem mnemonicParsing="false" onAction="#showProfil" text="Liste des Profils" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Tests">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Paramètres">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Utilisateurs" />
+                        <MenuItem mnemonicParsing="false" onAction="#profilAction" text="Profils" />
+                        <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Sociétés" />
+                        <MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Niveau d'études" />
+                        <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Groupes" />
+                        <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Sections" />
+                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Rapports">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </StackPane>
+      <BorderPane prefHeight="30.0" prefWidth="910.0">
+         <left>
+                <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+         </left>
+         <center>
+            <StackPane fx:id="notificationStack" prefHeight="41.0" prefWidth="667.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER" />
+         </center>
+         <right>
+            <StackPane prefHeight="54.0" prefWidth="175.0">
+               <children>
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitAction" text="Exit" BorderPane.alignment="CENTER" />
+               </children>
+            </StackPane>
+         </right>
+      </BorderPane>
+        <BreadCrumbBar fx:id="breadCrumb">
+
+        </BreadCrumbBar>
+        <StackPane fx:id="mainContent" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
+            <children>
+                <SplitPane dividerPositions="0.22577092511013216, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <items>
+                        <StackPane fx:id="shortcutContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
+                            <children>
+                                <Accordion fx:id="Leftmenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                                    <panes>
+                                        <TitledPane animated="false" text="Personnes">
+                                            <content>
+                                                <ListView fx:id="listPersonnes" prefHeight="200.0" prefWidth="200.0" />
+                                            </content></TitledPane>
+                                        <TitledPane animated="false" text="Formations">
+                                            <content>
+                                                <ListView fx:id="listFormations" prefHeight="200.0" prefWidth="200.0" />
+                                            </content></TitledPane>
+                                        <TitledPane animated="false" text="Compétences">
+                                            <content>
+                                                <ListView fx:id="listCompetences" prefHeight="200.0" prefWidth="200.0" />
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Profils">
+                                            <content>
+                                                <ListView fx:id="listProfils" prefHeight="200.0" prefWidth="200.0" />
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Tests">
+                                            <content>
+                                                <ListView fx:id="listTests" prefHeight="200.0" prefWidth="200.0" />
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Paramètres">
+                                            <content>
+                                                <ListView fx:id="listParametres" prefHeight="200.0" prefWidth="200.0" />
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Rapports">
+                                            <content>
+                                                <ListView fx:id="listRapports" prefHeight="200.0" prefWidth="200.0" />
+                                            </content>
+                                        </TitledPane>
+                                    </panes>
+                                </Accordion>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="content" prefHeight="150.0" prefWidth="200.0" >
+                        </StackPane>
+                  <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0"/>
+                    </items>
+                </SplitPane>
+            </children>
+        </StackPane>
+        <HBox fx:id="highlightPane" alignment="TOP_RIGHT" prefHeight="11.0" prefWidth="910.0" VBox.vgrow="SOMETIMES">
+            <children>
+            <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
+
+            </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </HBox>
+    </children>
+</VBox>

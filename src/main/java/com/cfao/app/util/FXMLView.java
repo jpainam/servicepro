@@ -6,13 +6,13 @@ import java.util.ResourceBundle;
  * Created by JP on 6/9/2017.
  */
 public enum FXMLView {
-    MAIN{
+    TEMPLATE{
         public String getTitle() {
 
             return getStringFromResourceBundle("app.title");
         }
         public String getFXMLFile() {
-            return "src/main/java/com/cfao/app/views/accueil/accueil.fxml";
+            return "src/main/java/com/cfao/app/views/template.fxml";
         }
     }, LOGIN{
         public String getTitle() {
@@ -77,6 +77,13 @@ public enum FXMLView {
 
         public String getFXMLFile() {
             return "src/main/java/com/cfao/app/views/formation/formation.fxml";
+        }
+    }, ACCUEIL{
+        public String getTitle() {
+            return getStringFromResourceBundle("login.title");
+        }
+        public String getFXMLFile() {
+            return  "src/main/java/com/cfao/app/views/accueil/accueil.fxml";
         }
     };
     public abstract String getTitle();
