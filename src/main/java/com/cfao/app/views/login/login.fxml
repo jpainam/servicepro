@@ -5,7 +5,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController"
+fx:id="connexionPane">
     <children>
         <StackPane prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 1px 0;" VBox.vgrow="ALWAYS" />
         <HBox prefHeight="157.0" prefWidth="600.0" VBox.vgrow="ALWAYS">

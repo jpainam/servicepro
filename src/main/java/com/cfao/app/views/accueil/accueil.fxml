@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
 
-
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-           prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="com.cfao.app.controllers.AccueilController">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="693.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
 <children>
       <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0">
         <items>
@@ -15,8 +14,12 @@ fx:controller="com.cfao.app.controllers.AccueilController">
                <children>
                   <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                        <VBox fx:id="formationBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                        <VBox fx:id="participantBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <StackPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </StackPane.margin>
+                        </VBox>
                     </items>
                   </SplitPane>
                </children>
@@ -25,8 +28,8 @@ fx:controller="com.cfao.app.controllers.AccueilController">
                <children>
                   <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                        <StackPane />
-                        <StackPane />
+                        <StackPane fx:id="overalPerformance" />
+                        <StackPane fx:id="participantPerformance" />
                     </items>
                   </SplitPane>
                </children>

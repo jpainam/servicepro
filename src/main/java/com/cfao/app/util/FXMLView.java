@@ -7,10 +7,6 @@ import java.util.ResourceBundle;
  */
 public enum FXMLView {
     TEMPLATE{
-        public String getTitle() {
-
-            return getStringFromResourceBundle("app.title");
-        }
         public String getFXMLFile() {
             return "src/main/java/com/cfao/app/views/template.fxml";
         }
@@ -79,14 +75,17 @@ public enum FXMLView {
             return "src/main/java/com/cfao/app/views/formation/formation.fxml";
         }
     }, ACCUEIL{
-        public String getTitle() {
-            return getStringFromResourceBundle("login.title");
-        }
         public String getFXMLFile() {
             return  "src/main/java/com/cfao/app/views/accueil/accueil.fxml";
         }
+    }, LEFTMENU{
+        public String getFXMLFile() {
+            return  "src/main/java/com/cfao/app/views/menu/leftmenu.fxml";
+        }
     };
-    public abstract String getTitle();
+    public  String getTitle(){
+        return getStringFromResourceBundle("app.title");
+    }
     public abstract String getFXMLFile();
     String getStringFromResourceBundle(String key){
         return ResourceBundle.getBundle("Bundle").getString(key);

@@ -41,5 +41,7 @@ public class Model <T>  {
         return null;
     }
     public static String getBeansClass(String s){return "com.cfao.app.beans."+s;}
-
+    public List<T> select(){
+        return this.getList();
+    }
 }

@@ -5,6 +5,8 @@ import com.cfao.app.StageManager;
 import com.cfao.app.model.UserModel;
 import com.cfao.app.util.FXMLView;
 
+import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.ServiceproUtil;
 import com.cfao.app.util.Toast;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
@@ -26,6 +29,7 @@ import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 
@@ -36,10 +40,11 @@ public class LoginController implements Initializable {
     public TextField login;
     public PasswordField password;
     public Label errorLabel;
+    public VBox connexionPane;
 
 
     public void initialize(URL location, ResourceBundle resources) {
-
+        //connexionPane.getChildren().add(new SearchBox());
     }
 
     public void btnConnexion(ActionEvent actionEvent) throws IOException {
@@ -57,18 +62,21 @@ public class LoginController implements Initializable {
         task.setOnSucceeded(event ->{
             Platform.runLater(() ->{
                 if (task.getValue()){
+                    // Set static variable
+                    ServiceproUtil.setLoggedUser(login);
+                    ServiceproUtil.setLoggedTime(Calendar.getInstance());
                     FXMLLoader loader = new FXMLLoader();
 
                     Pane mainPane = null;
                     try {
-                        FileInputStream f = new FileInputStream(FXMLView.MAIN.getFXMLFile());
+                        FileInputStream f = new FileInputStream(FXMLView.TEMPLATE.getFXMLFile());
                         mainPane = loader.load(f);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     Controller controller = loader.getController();
                     StageManager.setMainController(controller);
-                    stage.setTitle(FXMLView.MAIN.getTitle());
+                    stage.setTitle(FXMLView.TEMPLATE.getTitle());
                     stage.getScene().setRoot(mainPane);
                 }else{
                     //errorLabel.setText(ResourceBundle.getBundle("Application").getString("login.error"));

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.cfao.app.beans.Formation" table="formations">
+        <id name="idformation" type="int" column="idformation">
+            <generator class="assigned"/>
+        </id>
+        <property name="libelle">
+            <column name="libelle"/>
+        </property>
+
+    </class>
+</hibernate-mapping>

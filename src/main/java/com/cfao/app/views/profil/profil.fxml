@@ -31,7 +31,8 @@
                                   </Button>
                               </children>
                           </HBox>
-                        <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" prefHeight="5000.0" prefWidth="350.0" style="-fx-cursor: hand;" BorderPane.alignment="CENTER">
+                        <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" prefHeight="5000.0"
+                                   prefWidth="350.0" style="-fx-cursor: hand;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="abbreviationColumn" minWidth="120.0" prefWidth="120.0" text="Abbréviation" />
                             <TableColumn fx:id="libelleColumn" minWidth="120.0" prefWidth="200.0" text="Libellé" />

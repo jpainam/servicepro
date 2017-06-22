@@ -2,6 +2,7 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.PersonneModel;
+import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -41,32 +42,13 @@ public class CiviliteController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAccordionExpanded();
+        ServiceproUtil.setAccordionExpanded(accordion, informationPanel);
+        searchCombo.setEditable(true);
+        TextFields.bindAutoCompletion(searchCombo.getEditor(), searchCombo.getItems());
         fillPersonneTableWithData();
         personneTableModel = personneTable.getSelectionModel();
         personneTableModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             addListenerToRow();
-        });
-    }
-
-    private void setAccordionExpanded() {
-        accordion.setExpandedPane(informationPanel);
-        searchCombo.setEditable(true);
-        TextFields.bindAutoCompletion(searchCombo.getEditor(), searchCombo.getItems());
-        accordion.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> observable, TitledPane oldPane, TitledPane newPane) -> {
-            // This value will change to false if there's (at least) one pane that is in "expanded" state, so we don't have to expand anything manually
-            boolean expand = true;
-            for(TitledPane pane: accordion.getPanes()) {
-                if(pane.isExpanded()) {
-                    expand = false;
-                }
-            }
-        /* Here we already know whether we need to expand the old pane again */
-            if((expand == true) && (oldPane != null)) {
-                Platform.runLater( () -> {
-                    accordion.setExpandedPane(oldPane);
-                });
-            }
         });
     }
 
