@@ -65,6 +65,7 @@ SEARCH
 .searchBoxLabelIcon {
     -glyph-size: 13;
     -glyph-name: SEARCH;
+    -glyph-color: red;
 }
 .searchField:fail {
     -fx-background-color: blanchedalmond;

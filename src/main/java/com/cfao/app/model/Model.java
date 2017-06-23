@@ -29,6 +29,9 @@ public class Model <T>  {
     }
     public List<T> getList(){
         try {
+            if(!session.isOpen()){
+                session = HibernateUtil.getSessionFactory().openSession();
+            }
             session.beginTransaction();
             Criteria criteria;
             criteria = session.createCriteria(Class.forName(tmpClass));
@@ -36,7 +39,7 @@ public class Model <T>  {
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            session.close();
+            //session.close();
         }
         return null;
     }

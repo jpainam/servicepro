@@ -17,9 +17,10 @@ import java.util.ResourceBundle;
  * Created by JP on 6/9/2017.
  */
 public class Main extends Application {
+    public static Stage stage;
 
     public void start(Stage primaryStage) throws Exception {
-
+        stage = primaryStage;
         String iconName = ResourceBundle.getBundle("Application").getString("app.icon");
 
         Image icon = new Image(new FileInputStream(iconName));
