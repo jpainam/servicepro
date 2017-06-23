@@ -55,4 +55,20 @@ public class User {
     public void setProfile(int profile) {
         this.profile.set(profile);
     }
+
+    public SimpleIntegerProperty iduserProperty() {
+        return iduser;
+    }
+
+    public SimpleStringProperty loginProperty() {
+        return login;
+    }
+
+    public SimpleStringProperty passwordProperty() {
+        return password;
+    }
+
+    public SimpleIntegerProperty profileProperty() {
+        return profile;
+    }
 }

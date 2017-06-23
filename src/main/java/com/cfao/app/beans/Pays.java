@@ -47,6 +47,41 @@ public class Pays {
         return nameEn.get();
     }
 
+    public int getIdPays() {
+        return idPays.get();
+    }
+
+    public SimpleIntegerProperty idPaysProperty() {
+        return idPays;
+    }
+
+    public void setIdPays(int idPays) {
+        this.idPays.set(idPays);
+    }
+
+    public SimpleStringProperty isoProperty() {
+        return iso;
+    }
+
+    public SimpleStringProperty nameFrProperty() {
+        return nameFr;
+    }
+
+    public SimpleStringProperty nameEnProperty() {
+        return nameEn;
+    }
+
+    public SimpleStringProperty iso3Property() {
+        return iso3;
+    }
+
+    public SimpleIntegerProperty numCodeProperty() {
+        return numCode;
+    }
+
+    public SimpleIntegerProperty phoneCodeProperty() {
+        return phoneCode;
+    }
 
     public String getIso3() {
         return iso3.get();

@@ -36,4 +36,12 @@ public class Groupe {
     public String toString() {
         return getLibelle();
     }
+
+    public SimpleIntegerProperty idgroupeProperty() {
+        return idgroupe;
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
 }

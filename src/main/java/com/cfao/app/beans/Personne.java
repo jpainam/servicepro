@@ -92,4 +92,28 @@ public class Personne {
     public void setSection(Section section) {
         this.section = section;
     }
+
+    public int getIdPersonne() {
+        return idPersonne.get();
+    }
+
+    public SimpleIntegerProperty idPersonneProperty() {
+        return idPersonne;
+    }
+
+    public void setIdPersonne(int idPersonne) {
+        this.idPersonne.set(idPersonne);
+    }
+
+    public SimpleStringProperty matriculeProperty() {
+        return matricule;
+    }
+
+    public SimpleStringProperty nomProperty() {
+        return nom;
+    }
+
+    public SimpleStringProperty prenomProperty() {
+        return prenom;
+    }
 }

@@ -93,4 +93,19 @@ public class LoginController implements Initializable {
             });
         });
     }
+
+    public void logar(ActionEvent actionEvent) {
+    }
+
+    public void linkMuseuID(ActionEvent actionEvent) {
+    }
+
+    public void linkGeoPark(ActionEvent actionEvent) {
+    }
+
+    public void minimizar(ActionEvent actionEvent) {
+    }
+
+    public void fechar(ActionEvent actionEvent) {
+    }
 }

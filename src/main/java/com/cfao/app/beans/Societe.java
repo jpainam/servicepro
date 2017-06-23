@@ -30,6 +30,38 @@ public class Societe {
     }
     public Societe(){}
 
+    public SimpleIntegerProperty idsocieteProperty() {
+        return idsociete;
+    }
+
+    public SimpleStringProperty nomProperty() {
+        return nom;
+    }
+
+    public SimpleStringProperty codeProperty() {
+        return code;
+    }
+
+    public SimpleStringProperty contactProperty() {
+        return contact;
+    }
+
+    public SimpleStringProperty telephoneProperty() {
+        return telephone;
+    }
+
+    public SimpleStringProperty emailProperty() {
+        return email;
+    }
+
+    public SimpleStringProperty faxProperty() {
+        return fax;
+    }
+
+    public SimpleStringProperty adresseProperty() {
+        return adresse;
+    }
+
     public int getIdsociete() {
         return idsociete.get();
     }

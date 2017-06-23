@@ -4,12 +4,15 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.SocieteModel;
 import com.cfao.app.util.Constante;
+import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.SearchFieldClassTool;
+import com.cfao.app.util.ServiceproUtil;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -20,12 +23,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.textfield.CustomTextField;
 
 import java.net.CookieStore;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -39,13 +45,18 @@ public class SocieteController implements Initializable {
     public Button btnModifier;
     public Button btnValider;
     public Button btnAnnuler;
-
-    public Label searchBoxLabel;
+    public SearchBox searchBox = new SearchBox();
     public TextField txtNom;
     public TextArea txtAdresse;
-    public CustomTextField fieldSearch;
     public Button btnNouveau;
     public HBox notifContent;
+    public HBox researchBox;
+    public TableColumn telephoneColumn;
+    public TextField txtCode;
+    public TextField txtTelephone;
+    public TextField txtContact;
+    public TextField txtEmail;
+    public TextField txtFax;
     private TableView.TableViewSelectionModel<Societe> societeTableModel;
 
 
@@ -53,16 +64,20 @@ public class SocieteController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        societeColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        societeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Societe, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Societe, String> cellValue) {
+                return cellValue.getValue().nomProperty();
+            }
+        });
         adresseColumn.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+        telephoneColumn.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         societeTableModel = societeTable.getSelectionModel();
         societeTableModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             addListenerToRow();
         });
         setButtonSettings();
         buildSocieteTable();
-
-
     }
 
     /**
@@ -74,17 +89,20 @@ public class SocieteController implements Initializable {
         GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.EDIT);
         GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE_TEXT);
         GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.TIMES);
-        /** Set Font awesome icon */
-        FontAwesomeIconView iconView = new FontAwesomeIconView();
-        /*iconView.getStyleClass().add("buttonSearchCloseIcon");
-        buttonCloseSearch.setGraphic(iconView);*/
-        iconView = new FontAwesomeIconView();
-        iconView.getStyleClass().add("searchBoxLabelIcon");
-        searchBoxLabel.setGraphic(iconView);
+        HBox.setHgrow(searchBox, Priority.ALWAYS);
+        searchBox.setMaxWidth(Double.MAX_VALUE);
+        researchBox.setSpacing(10);
+        researchBox.getChildren().setAll(new Label("Sociétés : "), searchBox);
         //Desactiver certain button
-        btnNouveau.setDisable(true);
-        btnModifier.setDisable(true);
-        btnSupprimer.setDisable(true);
+        btnValider.setDisable(true);
+        btnAnnuler.setDisable(true);
+        txtCode.setEditable(false);
+        txtContact.setEditable(false);
+        txtFax.setEditable(false);
+        txtEmail.setEditable(false);
+        txtTelephone.setEditable(false);
+        txtAdresse.setEditable(false);
+        txtNom.setEditable(false);
     }
 
     /**
@@ -101,7 +119,7 @@ public class SocieteController implements Initializable {
         task.run();
         task.setOnSucceeded(event -> {
             FilteredList<Societe> filteredList = new FilteredList<Societe>(task.getValue(), p -> true);
-            fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredList.setPredicate(societe -> {
                     if (newValue == null || newValue.isEmpty()) {
                         return true;
@@ -109,10 +127,10 @@ public class SocieteController implements Initializable {
                     // Comparer les champs dans la classe Societe
                     String valueCompare = newValue.toLowerCase();
                     if (societe.getNom().toLowerCase().contains(valueCompare)) {
-                        SearchFieldClassTool.updateStateClass(fieldSearch, false);
+                        SearchFieldClassTool.updateStateClass(searchBox, false);
                         return true;
                     } else if (societe.getAdresse() != null && societe.getAdresse().toLowerCase().contains(valueCompare)) {
-                        SearchFieldClassTool.updateStateClass(fieldSearch, false);
+                        SearchFieldClassTool.updateStateClass(searchBox, false);
                         return true;
                     } else {
                         return false;
@@ -127,60 +145,70 @@ public class SocieteController implements Initializable {
 
     private void addListenerToRow() {
         if (societeTableModel.getSelectedItem() != null) {
-            txtNom.setEditable(false);
-            txtAdresse.setEditable(false);
             Societe societe = societeTableModel.getSelectedItem();
             txtNom.setText(societe.getNom());
             txtAdresse.setText(societe.getAdresse());
-            btnSupprimer.setDisable(false);
-            btnModifier.setDisable(false);
-            btnNouveau.setDisable(false);
-            btnValider.setDisable(true);
-            btnAnnuler.setDisable(true);
-        } else {
-            btnSupprimer.setDisable(true);
-            btnModifier.setDisable(true);
-            txtNom.setText("");
-            txtAdresse.setText("");
-            btnValider.setDisable(false);
-            btnAnnuler.setDisable(false);
+            txtCode.setText(societe.getCode());
+            txtContact.setText(societe.getContact());
+            txtEmail.setText(societe.getEmail());
+            txtFax.setText(societe.getFax());
+            txtTelephone.setText(societe.getTelephone());
+
         }
     }
 
 
     public void editSociete(ActionEvent actionEvent) {
         this.activeAction = Constante.EDIT_BUTTON;
-
-        btnModifier.setDisable(true);
         if (societeTableModel.getSelectedItem() != null) {
             btnValider.setDisable(false);
             btnAnnuler.setDisable(false);
-            txtNom.setEditable(true);
-            txtAdresse.setEditable(true);
+            btnSupprimer.setDisable(true);
+            btnNouveau.setDisable(true);
+            enableTextField(true);
+        } else {
+            enableTextField(false);
         }
     }
 
     public void annulerAction(ActionEvent actionEvent) {
         btnValider.setDisable(true);
         btnAnnuler.setDisable(true);
-        txtNom.setEditable(false);
-        txtAdresse.setEditable(false);
-        btnModifier.setDisable(true);
-        btnNouveau.setDisable(false);
-        txtAdresse.setText("");
+        enableTextField(false);
+        emptyTextField();
+    }
+
+    private void enableTextField(boolean enabled) {
+        txtNom.setEditable(enabled);
+        txtAdresse.setEditable(enabled);
+        txtContact.setEditable(enabled);
+        txtFax.setEditable(enabled);
+        txtEmail.setEditable(enabled);
+        txtTelephone.setEditable(enabled);
+        txtCode.setEditable(enabled);
+    }
+
+    private void disableButton(boolean disabled) {
+
+    }
+
+    private void emptyTextField() {
         txtNom.setText("");
-        btnSupprimer.setDisable(true);
+        txtAdresse.setText("");
+        txtTelephone.setText("");
+        txtEmail.setText("");
+        txtFax.setText("");
+        txtContact.setText("");
+        txtCode.setText("");
     }
 
     public void nouveauAction(ActionEvent actionEvent) {
         this.activeAction = Constante.ADD_BUTTON;
-        txtAdresse.setText("");
-        txtNom.setText("");
-        txtAdresse.setEditable(true);
-        txtNom.setEditable(true);
+        emptyTextField();
+        enableTextField(true);
+
         btnModifier.setDisable(true);
         btnSupprimer.setDisable(true);
-        btnNouveau.setDisable(true);
         btnValider.setDisable(false);
         btnAnnuler.setDisable(false);
     }
@@ -188,6 +216,11 @@ public class SocieteController implements Initializable {
     public void validerAction(ActionEvent actionEvent) {
         String nom = txtNom.getText();
         String adresse = txtAdresse.getText();
+        String code = txtCode.getText();
+        String contact = txtContact.getText();
+        String telephone = txtTelephone.getText();
+        String email = txtEmail.getText();
+        String fax = txtFax.getText();
         if (nom.isEmpty()) {
             txtNom.getStyleClass().add("obligatoire");
         }
@@ -198,48 +231,60 @@ public class SocieteController implements Initializable {
             Societe societe;
             SocieteModel societeModel = new SocieteModel();
             boolean success = false;
-            String txtNotif;
-            if(this.activeAction == Constante.ADD_BUTTON) {
+            String txtNotif = "Aucune opération effectuée";
+            if (this.activeAction == Constante.ADD_BUTTON) {
                 societe = new Societe();
                 societe.setNom(nom);
                 societe.setAdresse(adresse);
+                societe.setTelephone(telephone);
+                societe.setCode(code);
+                societe.setContact(contact);
+                societe.setEmail(email);
+                societe.setFax(fax);
                 success = societeModel.insert(societe);
-                txtNotif = "Société ajoutée avec succès";
-            }else{
+                txtNotif = "Enregistrement OK";
+            } else if (this.activeAction == Constante.EDIT_BUTTON) {
                 societe = societeTableModel.getSelectedItem();
                 societe.setNom(nom);
                 societe.setAdresse(adresse);
+                societe.setTelephone(telephone);
+                societe.setCode(code);
+                societe.setContact(contact);
+                societe.setEmail(email);
+                societe.setFax(fax);
                 success = societeModel.update(societe);
-                txtNotif = "Société modifiée avec succès";
+                txtNotif = "Modification OK";
             }
             if (success) {
                 buildSocieteTable();
-                txtNom.setText("");
-                txtAdresse.setText("");
-            }else{
-                txtNotif = "L'opération en cours à échouée";
+                emptyTextField();
             }
-            NotificationPane notif = StageManager.getNotificationPane();
-            notif.setText(txtNotif);
-            notif.show();
-            PauseTransition delay = new PauseTransition(Duration.seconds(5));
-            delay.setOnFinished( event -> notif.hide());
-            delay.play();
+            btnNouveau.setDisable(false);
+            btnSupprimer.setDisable(false);
+            btnModifier.setDisable(false);
+            btnValider.setDisable(true);
+            btnAnnuler.setDisable(true);
+            ServiceproUtil.notify(txtNotif);
         }
     }
 
     public void supprimerAction(ActionEvent actionEvent) {
+
         if (societeTableModel.getSelectedItem() != null) {
             Societe societe = societeTableModel.getSelectedItem();
             SocieteModel societeModel = new SocieteModel();
-            if (societeModel.delete(societe)) {
-                buildSocieteTable();
-                NotificationPane notif = StageManager.getNotificationPane();
-                notif.setText("Suppression effectuée avec succès");
-                notif.show();
-                PauseTransition delay = new PauseTransition(Duration.seconds(5));
-                delay.setOnFinished( event -> notif.hide());
-                delay.play();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Suppression");
+            alert.setHeaderText("");
+            alert.setContentText("Etes vous sûr de vouloir supprimer " + societe.getNom());
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                if (societeModel.delete(societe)) {
+                    buildSocieteTable();
+                    ServiceproUtil.notify("Suppression OK");
+                } else {
+                    ServiceproUtil.notify("Erreur de suppression");
+                }
             }
         }
     }

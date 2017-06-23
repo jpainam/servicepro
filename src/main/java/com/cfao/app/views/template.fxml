@@ -69,12 +69,12 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Paramètres">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Utilisateurs" />
-                        <MenuItem mnemonicParsing="false" onAction="#profilAction" text="Profils" />
-                        <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Sociétés" />
-                        <MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Niveau d'études" />
-                        <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Groupes" />
-                        <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Sections" />
+                        <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Gestion des Utilisateurs" />
+                        <MenuItem mnemonicParsing="false" onAction="#profilAction" text="Gestion des Profils" />
+                        <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Gestion des Sociétés" />
+                        <MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Gestion des Niveaux d'études" />
+                        <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Gestion des Groupes" />
+                        <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Rapports">

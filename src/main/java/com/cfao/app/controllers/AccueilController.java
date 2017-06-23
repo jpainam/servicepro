@@ -6,6 +6,7 @@ import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.SearchBox;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -30,7 +31,7 @@ import java.util.ResourceBundle;
  * Created by JP on 6/21/2017.
  */
 public class AccueilController implements Initializable {
-    public CheckListView<Formation> formationListView = new CheckListView<>();
+    public CheckListView<String> formationListView = new CheckListView<>();
     public TableView participantTable = new TableView();
     public StackPane overalPerformance;
     public StackPane participantPerformance;
@@ -78,10 +79,11 @@ public class AccueilController implements Initializable {
         searchBox1.setMaxWidth(Double.MAX_VALUE);
         reserchePanel.setMaxWidth(Double.MAX_VALUE);
         reserchePanel.getChildren().addAll(label, searchBox1);
+
         FormationModel formationModel = new FormationModel(Model.getBeansClass("Formation"));
         formationListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
+        /* Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
             protected ObservableList<Formation> call() throws Exception {
 
@@ -93,10 +95,23 @@ public class AccueilController implements Initializable {
         task.setOnSucceeded(event -> {
             formationListView.setItems(task.getValue());
         });
-
-        formationListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Formation>() {
+        */
+        String[] formations = {"CFAO Academy", "JCB Distance Learning", "JCB JDS","Introduction conduite engins",
+                "Mécanique de base CFAO Academy", "Niveau Initial CFAO Academy (4 modules)"};
+        final ObservableList<String> strings = FXCollections.observableArrayList();
+        for (int i = 0; i < formations.length; i++) {
+            strings.add(formations[i]);
+        }
+        formationListView.setItems(strings);
+        /*formationListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Formation>() {
             @Override
             public void onChanged(Change<? extends Formation> c) {
+                System.out.println(formationListView.getCheckModel().getCheckedItems());
+            }
+        });*/
+
+        formationListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
                 System.out.println(formationListView.getCheckModel().getCheckedItems());
             }
         });

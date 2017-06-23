@@ -8,9 +8,23 @@
         <id name="idformation" type="int" column="idformation">
             <generator class="assigned"/>
         </id>
-        <property name="libelle">
-            <column name="libelle"/>
+        <property name="codeformation">
+            <column name="codeformation"/>
         </property>
-
+        <many-to-one name="Modele" class="com.cfao.app.beans.Modele"
+                     column="modele" unique="true" not-null="false"
+                     cascade="all" />
+        <property name="titre">
+            <column name="titre"/>
+        </property>
+        <property name="description">
+            <column name="description"/>
+        </property>
+        <property name="datedebut" type="com.cfao.app.util.LocalDateTimeHibernateUserType">
+            <column name="datedebut"/>
+        </property>
+        <property name="datefin" type="com.cfao.app.util.LocalDateTimeHibernateUserType">
+            <column name="datefin" />
+        </property>
     </class>
 </hibernate-mapping>

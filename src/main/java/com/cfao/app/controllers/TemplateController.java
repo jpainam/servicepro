@@ -30,6 +30,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 import jdk.internal.org.objectweb.asm.Opcodes;
 import org.controlsfx.control.BreadCrumbBar;
 import org.controlsfx.control.ListSelectionView;
@@ -213,11 +214,24 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void exitAction(ActionEvent actionEvent) {
-        if (notificationPane.isShowing()) {
+        Pane connexionPane = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            FileInputStream f = new FileInputStream(FXMLView.LOGIN.getFXMLFile());
+            connexionPane = loader.load(f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle(FXMLView.LOGIN.getTitle());
+        stage.getScene().setRoot(connexionPane);
+        /*if (notificationPane.isShowing()) {
             notificationPane.hide();
         } else {
             notificationPane.show();
-        }
+        }*/
+
     }
 
     public void showAction(ActionEvent actionEvent) {

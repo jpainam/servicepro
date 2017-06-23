@@ -45,6 +45,18 @@ public class Profil {
         return libelle.get();
     }
 
+    public SimpleIntegerProperty idprofilProperty() {
+        return idprofil;
+    }
+
+    public SimpleStringProperty abbreviationProperty() {
+        return abbreviation;
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
+
     @Override
     public String toString() {
         return  getLibelle();

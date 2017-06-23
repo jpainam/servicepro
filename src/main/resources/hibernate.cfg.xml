@@ -23,6 +23,7 @@
         <mapping resource="mapping/competence.hbm.xml" />
         <mapping resource="mapping/niveaucompetence.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
+        <mapping resource="mapping/modele.hbm.xml" />
         <mapping resource="mapping/formation.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

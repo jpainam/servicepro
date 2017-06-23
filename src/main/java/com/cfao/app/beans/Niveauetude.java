@@ -32,4 +32,12 @@ public class Niveauetude {
     public void setLibelle(String libelle) {
         this.libelle.set(libelle);
     }
+
+    public SimpleIntegerProperty idniveauetudeProperty() {
+        return idniveauetude;
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
 }

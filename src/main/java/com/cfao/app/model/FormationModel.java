@@ -9,6 +9,6 @@ public class FormationModel extends Model<Formation> {
     public FormationModel(String classname){
         super(classname);
     }
-
+    public FormationModel(){}
 
 }

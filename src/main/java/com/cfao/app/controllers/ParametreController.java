@@ -42,17 +42,26 @@ public class ParametreController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         setTabIcon();
+        tabSociete.setContent(getTabContent(FXMLView.SOCIETE.getFXMLFile()));
+        //tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
+        tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
+        tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
+
         singleSelectionModel = tabPane.getSelectionModel();
+
+        singleSelectionModel.select(getActiveTab());
+    }
+
+    public Parent getTabContent(String fxmlFile){
         try {
             FXMLLoader loader = new FXMLLoader();
-            Parent tab = loader.load(new FileInputStream("src/main/java/com/cfao/app/views/societe/societe.fxml"));
-            tabSociete.setContent(tab);
-            singleSelectionModel.select(getActiveTab());
+            Parent tab = loader.load(new FileInputStream(fxmlFile));
+            return tab;
         }catch (Exception ex){
             ex.printStackTrace();
         }
+        return null;
     }
-
     public void setTabIcon(){
         tabUtilsateur.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("utilisateur.icon")));
         tabProfil.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("profil.icon")));

@@ -1,16 +1,22 @@
 package com.cfao.app.util;
 
+import com.cfao.app.StageManager;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.Pane;
-import org.controlsfx.control.textfield.TextFields;
 
-import java.sql.Date;
+import javafx.util.Duration;
+import org.controlsfx.control.NotificationPane;
+
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 
@@ -20,6 +26,12 @@ import java.util.Calendar;
 public class ServiceproUtil {
     public static String loggedUser = null;
     public static String loggedTime = null;
+
+    /**
+     * Definir les panel qui reste deroule dans le panel accordion
+     * @param accordion
+     * @param expandedPane
+     */
     public static void setAccordionExpanded(Accordion accordion, TitledPane expandedPane) {
         accordion.setExpandedPane(expandedPane);
         accordion.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> observable, TitledPane oldPane, TitledPane newPane) -> {
@@ -39,10 +51,39 @@ public class ServiceproUtil {
         });
     }
 
+    /**
+     * Notification Panel
+     * @param sms
+     */
+    public static void notify(String sms){
+        NotificationPane notif = StageManager.getNotificationPane();
+        notif.setText(sms);
+        notif.show();
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+        delay.setOnFinished( event -> notif.hide());
+        delay.play();
+    }
+
+    /**
+     * Toast Notification
+     * @param sms
+     */
+    public static void toast(String sms){
+
+    }
+
+    /**
+     * L'utilisateur connecte
+     * @return
+     */
     public static String getLoggedUser() {
         return loggedUser;
     }
 
+    /**
+     * Date de derniere connexion
+     * @return
+     */
     public static String getLoggedTime() {
         return loggedTime;
     }
@@ -52,6 +93,14 @@ public class ServiceproUtil {
     public static void setLoggedTime(Calendar cal){
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
         loggedTime = dateFormat.format(cal.getTime());
+    }
+
+    public static void link(String link) {
+        try {
+            Desktop.getDesktop().browse(new URI(link));
+        } catch (URISyntaxException | IOException ex) {
+            MessageUtil.erro("Não possível exibir www.fapce.edu.br !");
+        }
     }
 
 }

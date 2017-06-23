@@ -17,11 +17,16 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.textfield.CustomTextField;
 
 import javax.swing.*;
@@ -39,14 +44,55 @@ public class ProfilController  implements Initializable{
     public Button btnModifier;
     public Button btnSupprimer;
     public Button btnNouveau;
+    public TableColumn fondamentalColumn;
+    public TableColumn avanceColumn;
+    public TableColumn expertColumn;
+    public TableColumn listecompetenceColumn;
+    public TableColumn connaissanceColumn;
+    public TableColumn competenceColumn;
     private TableView.TableViewSelectionModel tableProfilModel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setColumnSettings();
         setButtonSettings();
         buildProfilTable();
         tableProfilModel = profilTable.getSelectionModel();
     }
+
+    private void setColumnSettings() {
+
+        VBox vbox = new VBox(new Label(fondamentalColumn.getText()));
+        vbox.setRotate(-90);
+        Group group = new Group(vbox);
+        fondamentalColumn.setText("");
+        fondamentalColumn.setGraphic(group);
+
+        vbox = new VBox(new Label(avanceColumn.getText()));
+        avanceColumn.setText("");
+        vbox.setRotate(-90);
+        group = new Group(vbox);
+        avanceColumn.setGraphic(group);
+
+        vbox = new VBox(new Label(connaissanceColumn.getText()));
+        connaissanceColumn.setText("");
+        vbox.setRotate(-90);
+        group = new Group(vbox);
+        connaissanceColumn.setGraphic(group);
+
+        vbox = new VBox(new Label(competenceColumn.getText()));
+        competenceColumn.setText("");
+        vbox.setRotate(-90);
+        group = new Group(vbox);
+        competenceColumn.setGraphic(group);
+
+        vbox = new VBox(new Label(expertColumn.getText()));
+        expertColumn.setText("");
+        vbox.setRotate(-90);
+        group = new Group(vbox);
+        expertColumn.setGraphic(group);
+    }
+
     public void setButtonSettings() {
         GlyphsDude.setIcon(btnSupprimer, FontAwesomeIcon.TRASH_ALT);
         //GlyphsDude.setIcon(btnValider, FontAwesomeIcon.SAVE);

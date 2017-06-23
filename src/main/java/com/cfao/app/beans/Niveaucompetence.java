@@ -38,4 +38,12 @@ public class Niveaucompetence {
     public void setLibelle(String libelle) {
         this.libelle.set(libelle);
     }
+
+    public SimpleIntegerProperty idniveaucompetenceProperty() {
+        return idniveaucompetence;
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
 }

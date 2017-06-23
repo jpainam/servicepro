@@ -52,4 +52,16 @@ public class Competence {
     public void setType(String type) {
         this.type.set(type);
     }
+
+    public SimpleIntegerProperty idcompetenceProperty() {
+        return idcompetence;
+    }
+
+    public SimpleStringProperty descriptionProperty() {
+        return description;
+    }
+
+    public SimpleStringProperty typeProperty() {
+        return type;
+    }
 }

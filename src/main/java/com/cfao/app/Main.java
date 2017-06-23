@@ -33,10 +33,11 @@ public class Main extends Application {
         primaryStage.setTitle(FXMLView.LOGIN.getTitle());
         primaryStage.setMaximized(true);
 
-        Scene scene = new Scene(loginPane, getWidth(90), getHeight(85));
+        Scene scene = new Scene(loginPane);
         String css = getClass().getResource("/css/style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
+        scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
         primaryStage.setOnCloseRequest(e->closeWindow());
         primaryStage.setScene(scene);
         primaryStage.show();

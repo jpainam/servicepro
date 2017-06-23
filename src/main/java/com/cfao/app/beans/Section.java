@@ -34,6 +34,14 @@ public class Section {
         this.libelle.set(libelle);
     }
 
+    public SimpleIntegerProperty idsectionProperty() {
+        return idsection;
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
+
     @Override
     public String toString() {
         return getLibelle();
