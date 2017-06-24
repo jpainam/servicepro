@@ -62,13 +62,13 @@
                         </VBox>
                         <HBox alignment="CENTER" maxHeight="30.0" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Hyperlink onAction="#linkMuseuID" text="MuseuID" textAlignment="CENTER">
+                              <Hyperlink onAction="#linkMuseuID" text="CFAO Cameroun" textAlignment="CENTER">
                                  <styleClass>
                                     <String fx:value="link" />
                                     <String fx:value="link-museuid" />
                                  </styleClass>
                               </Hyperlink>
-                              <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkGeoPark" text="GeoPark Araripe" textAlignment="CENTER">
+                              <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkGeoPark" text="Cosendai University" textAlignment="CENTER">
                                  <styleClass>
                                     <String fx:value="link" />
                                     <String fx:value="link-geopark" />
