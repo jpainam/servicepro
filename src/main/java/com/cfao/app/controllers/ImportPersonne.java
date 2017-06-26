@@ -1,8 +1,10 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Pays;
 import com.cfao.app.beans.Societe;
+import com.cfao.app.util.FXMLView;
 import com.sun.org.apache.xerces.internal.impl.xs.XSModelImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -11,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -33,7 +36,7 @@ import java.util.ResourceBundle;
 /**
  * Created by armel on 17/06/2017.
  */
-public class ImportPersonne implements Initializable{
+public class ImportPersonne  implements Initializable{
     @FXML
     public Button importer;
     @FXML

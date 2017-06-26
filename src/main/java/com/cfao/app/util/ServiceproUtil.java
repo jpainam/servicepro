@@ -1,6 +1,7 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
+import com.cfao.app.controllers.TemplateController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -56,7 +57,7 @@ public class ServiceproUtil {
      * @param sms
      */
     public static void notify(String sms){
-        NotificationPane notif = StageManager.getNotificationPane();
+        NotificationPane notif = TemplateController.getInstance().getNotificationPane();
         notif.setText(sms);
         notif.show();
         PauseTransition delay = new PauseTransition(Duration.seconds(5));

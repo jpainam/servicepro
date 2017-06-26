@@ -1,12 +1,10 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.SocieteModel;
-import com.cfao.app.util.Constante;
-import com.cfao.app.util.SearchBox;
-import com.cfao.app.util.SearchFieldClassTool;
-import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.*;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -19,6 +17,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,7 +36,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class SocieteController implements Initializable {
+public class SocieteController extends Controller implements Initializable {
     public TableColumn societeColumn;
     public TableColumn adresseColumn;
     public TableView societeTable;
@@ -62,6 +61,17 @@ public class SocieteController implements Initializable {
 
     public int activeAction = Constante.ADD_BUTTON;
 
+    public SocieteController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.SOCIETE.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         societeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Societe, String>, ObservableValue<String>>() {

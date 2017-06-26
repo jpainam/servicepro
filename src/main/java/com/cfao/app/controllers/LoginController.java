@@ -69,8 +69,7 @@ public class LoginController implements Initializable {
 
                     Pane mainPane = null;
                     try {
-                        FileInputStream f = new FileInputStream(FXMLView.TEMPLATE.getFXMLFile());
-                        mainPane = loader.load(f);
+                        mainPane = FXMLLoader.load(getClass().getResource(FXMLView.TEMPLATE.getFXMLFile()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -94,18 +93,11 @@ public class LoginController implements Initializable {
         });
     }
 
-    public void logar(ActionEvent actionEvent) {
+    public void linkToCosendai(ActionEvent actionEvent) {
+        ServiceproUtil.link("http://uacosendai-edu.net");
     }
 
-    public void linkMuseuID(ActionEvent actionEvent) {
-    }
-
-    public void linkGeoPark(ActionEvent actionEvent) {
-    }
-
-    public void minimizar(ActionEvent actionEvent) {
-    }
-
-    public void fechar(ActionEvent actionEvent) {
+    public void linkToCfao(ActionEvent actionEvent) {
+        ServiceproUtil.link("");
     }
 }

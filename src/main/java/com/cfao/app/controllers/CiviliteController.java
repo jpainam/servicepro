@@ -1,8 +1,10 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.FormatDate;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -15,12 +17,14 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -35,7 +39,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/9/2017.
  */
-public class CiviliteController implements Initializable{
+public class CiviliteController extends Controller implements Initializable{
 
 
     public TableView personneTable;
@@ -70,6 +74,16 @@ public class CiviliteController implements Initializable{
 
     private TableView.TableViewSelectionModel<Personne> personneTableModel;
 
+    public CiviliteController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.CIVILITE.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

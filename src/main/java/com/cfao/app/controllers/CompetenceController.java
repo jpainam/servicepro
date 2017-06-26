@@ -1,9 +1,11 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.SocieteModel;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchFieldClassTool;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -15,6 +17,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -27,7 +30,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/14/2017.
  */
-public class CompetenceController implements Initializable{
+public class CompetenceController extends Controller implements Initializable{
     public Button btnNouveau;
     public Button btnModifier;
     public Button btnSupprimer;
@@ -39,6 +42,16 @@ public class CompetenceController implements Initializable{
     public TableColumn competenceColumn;
     public TableView prerequisTable;
 
+    public CompetenceController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.COMPETENCE.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setButtonSettings();

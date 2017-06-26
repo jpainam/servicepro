@@ -1,38 +1,10 @@
 
-.background {
-    -fx-background-image: url("/img/background.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-color: transparent;
-    -fx-background-position: top;
-    -fx-background-repeat: no-repeat;
-}
 
 .box-janela {
     -fx-padding: 5 5 0 0;
     -fx-spacing: 5;
 }
 
-.minimizar,
-.close {
-    -fx-background-color: transparent;
-    -fx-content-display: graphic-only;
-    -fx-cursor: hand;
-}
-
-.minimizar:hover,
-.minimizar:selected,
-.close:hover,
-.close:selected {
-    -fx-opacity: 0.8;
-}
-
-.close {
-    -fx-graphic: url("/img/icon/fechar.png");
-}
-
-.minimizar {
-    -fx-graphic: url("/img/icon/minimizar.png");
-}
 
 .logo {
     -fx-image: url("/img/logo.png");
@@ -53,8 +25,8 @@
     -fx-effect: dropshadow(two-pass-box, rgba(0, 0, 0, 0.69), 5, 0.1, 2, 2);
 }
 
-.nome,
-.senha {
+.txtNom,
+.txtPwd {
     -fx-background-color: transparent;
     -fx-border-color: #e8e8e8;
     -fx-border-width: 0 0 1 0;
@@ -67,20 +39,20 @@
     -fx-highlight-text-fill: #333;
 }
 
-.nome:focused,
-.senha:focused {
+.txtNom:focused,
+.txtPwd:focused {
     -fx-prompt-text-fill: transparent;
 }
 
-.nome {
+.txtNom {
     -fx-background-image: url("/img/icon/user-b.png");
 }
 
-.senha {
+.txtPwd {
     -fx-background-image: url("/img/icon/key.png");
 }
 
-.bt-logar {
+.bt-connexion {
     -fx-text-fill: #fff;
     -fx-background-color: #cbde70;
     -fx-border-color: #bed452;
@@ -92,8 +64,8 @@
     -fx-cursor: hand;
 }
 
-.bt-logar:hover,
-.bt-logar:selected {
+.bt-connexion:hover,
+.bt-connexion:selected {
     -fx-background-color: #d0e278;
 }
 
@@ -122,10 +94,10 @@
     -fx-alignment: bottom-center;
 }
 
-.link-museuid {
+.link-cosendai {
     -fx-graphic: url("/img/icon/logo-mini.png");
 }
 
-.link-geopark {
+.link-cfao {
     -fx-graphic: url("/img/icon/geopark-mini.png");
 }

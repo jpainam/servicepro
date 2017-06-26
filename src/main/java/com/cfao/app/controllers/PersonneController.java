@@ -26,8 +26,7 @@ public class PersonneController implements Initializable {
         Image img = new Image(ResourceBundle.getBundle("Bundle").getString("civilite.icon"));
         tabCivilite.setGraphic(new ImageView(img));
         try {
-            FXMLLoader loader = new FXMLLoader();
-            Parent civilitePane = loader.load(new FileInputStream(FXMLView.CIVILITE.getFXMLFile()));
+            Parent civilitePane = FXMLLoader.load(getClass().getResource(FXMLView.CIVILITE.getFXMLFile()));
             tabCivilite.setContent(civilitePane);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Initializing PersonneController", e.getStackTrace());

@@ -23,12 +23,10 @@ public class Main extends Application {
         stage = primaryStage;
         String iconName = ResourceBundle.getBundle("Application").getString("app.icon");
 
-        Image icon = new Image(new FileInputStream(iconName));
+        Image icon = new Image(getClass().getResourceAsStream(iconName));
         primaryStage.getIcons().add(icon);
 
-        FileInputStream f = new FileInputStream(FXMLView.LOGIN.getFXMLFile());
-        FXMLLoader loader = new FXMLLoader();
-        Pane loginPane = loader.load(f);
+        Pane loginPane = FXMLLoader.load(getClass().getResource(FXMLView.LOGIN.getFXMLFile()));
 
 
         primaryStage.setTitle(FXMLView.LOGIN.getTitle());
@@ -39,6 +37,7 @@ public class Main extends Application {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
         scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
+       // scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
         primaryStage.setOnCloseRequest(e->closeWindow());
         primaryStage.setScene(scene);
         primaryStage.show();

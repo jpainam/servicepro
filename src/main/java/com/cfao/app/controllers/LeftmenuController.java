@@ -75,8 +75,14 @@ public class LeftmenuController implements Initializable{
                     switch (listPersonnes.getSelectionModel().getSelectedIndex()){
                         case 0:
                             //fonction menu 1
-                            String fxml = "src/main/java/com/cfao/app/views/civilite/import.fxml";
-                            StageManager.loadContent(fxml);
+                            String fxml = "/views/civilite/import.fxml";
+                            Node importPane = null;
+                            try {
+                                importPane = FXMLLoader.load(getClass().getResource(fxml));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            TemplateController.getInstance().content.getChildren().addAll(importPane);
                             break;
                         case 1:
                             Notifications.create().title("Implémentation")

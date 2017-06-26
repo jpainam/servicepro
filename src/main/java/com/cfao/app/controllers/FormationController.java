@@ -1,34 +1,41 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Modele;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ModeleModel;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * Created by JP on 6/19/2017.
  */
-public class FormationController implements Initializable {
+public class FormationController extends Controller implements Initializable{
     public HBox researchBox;
     public TableView formationTable;
     public TableColumn titreColumn;
@@ -42,13 +49,30 @@ public class FormationController implements Initializable {
     public ComboBox<Modele> comboModele;
     private TableView.TableViewSelectionModel formationTableModel;
     private SearchBox searchBox = new SearchBox();
+    public Tab tabFormationDetail;
+    public Tab tabCompetenceAssociee;
+    public Tab tabParticipant;
 
+
+    public FormationController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.FORMATION.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createFormationTable();
         TextFields.bindAutoCompletion(comboModele.getEditor(), comboModele.getItems());
         comboModele.setEditable(true);
         fillComboModele();
+        GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.HAND_LIZARD_ALT);
+        GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
+        GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
 
     }
 

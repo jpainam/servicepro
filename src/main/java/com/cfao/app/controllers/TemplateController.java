@@ -1,11 +1,13 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Controller;
+import com.cfao.app.Module;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.ServiceproUtil;
 import com.jfoenix.controls.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -24,10 +26,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -50,8 +49,12 @@ import java.util.function.Consumer;
 /**
  * Created by JP on 6/9/2017.
  */
-public class TemplateController implements Initializable, Controller {
-    public StackPane content;
+public class TemplateController implements Initializable {
+    private static TemplateController instance;
+
+    @FXML
+    public AnchorPane content;
+    @FXML
     public ImageView cfaoLogo;
     public ProgressBar progressBar;
     public StackPane shortcutContent;
@@ -71,11 +74,17 @@ public class TemplateController implements Initializable, Controller {
     BreadCrumbBar breadCrumb = new BreadCrumbBar();
     PopOver profilPopOver = new PopOver();
 
+    public TemplateController(){
+
+    }
+    public static TemplateController getInstance(){
+        return instance;
+    }
     public void initialize(URL location, ResourceBundle resources) {
         breadCrumbContainer.getItems().add(createBreadCrumbBar());
         try {
-            cfaoLogo.setImage(new Image(new FileInputStream("src/main/resources/images/logo.png")));
-        } catch (FileNotFoundException e) {
+            cfaoLogo.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
@@ -88,8 +97,7 @@ public class TemplateController implements Initializable, Controller {
         userNameLabel.setText(ServiceproUtil.getLoggedUser());
         currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
         try {
-            FXMLLoader loader = new FXMLLoader();
-            Pane leftMenuPane = loader.load(new FileInputStream(FXMLView.LEFTMENU.getFXMLFile()));
+            Pane leftMenuPane = FXMLLoader.load(getClass().getResource(FXMLView.LEFTMENU.getFXMLFile()));
             shortcutContent.getChildren().setAll(leftMenuPane);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -105,9 +113,7 @@ public class TemplateController implements Initializable, Controller {
 
         // Charger la vue accueil
         try {
-            FileInputStream fi = new FileInputStream(FXMLView.ACCUEIL.getFXMLFile());
-            FXMLLoader loader = new FXMLLoader();
-            Pane accueil = loader.load(fi);
+            Pane accueil = FXMLLoader.load(getClass().getResource(FXMLView.ACCUEIL.getFXMLFile()));
             content.getChildren().setAll(accueil);
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +140,7 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void displayCivilite(ActionEvent actionEvent) {
-        Task<Void> task = new Task<Void>() {
+       /* Task<Void> task = new Task<Void>() {
             @Override
             public Void call() {
                 final int max = 1000000;
@@ -151,13 +157,15 @@ public class TemplateController implements Initializable, Controller {
         };
 
         progressBar.progressProperty().bind(task.progressProperty());
-        new Thread(task).start();
-        StageManager.loadContent(FXMLView.PERSONNE.getFXMLFile());
+        new Thread(task).start();*/
+
+        Module.setCivilite(content);
     }
 
     public void add(ActionEvent actionEvent) {
     }
 
+    /*@Override
     public void setContent(Node node) {
         content.getChildren().setAll(node);
     }
@@ -171,54 +179,45 @@ public class TemplateController implements Initializable, Controller {
     public Node getHighlightPane() {
         return highlightPane;
     }
+*/
 
-    @Override
-    public NotificationPane getNotificationPane() {
+    public  NotificationPane getNotificationPane() {
         return notificationPane;
     }
 
+
     public void openParameterScene(int activeTab) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            Parent parameterPane = loader.load(new FileInputStream(FXMLView.PARAMETRE.getFXMLFile()));
-            ParametreController parametreController = loader.getController();
-            parametreController.setActiveTab(activeTab);
-            setContent(parameterPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+       Module.setParametre(content);
     }
 
     public void utilisateurAction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_UTILISATEUR);
+        Module.setParametre(content);
     }
 
     public void profilAction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_PROFIL);
+        Module.setParametre(content);
     }
 
     public void societeAction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_SOCIETE);
+        Module.setParametre(content);
     }
 
     public void niveauEtudeaction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_NIVEAUETUDE);
+        Module.setParametre(content);
     }
 
     public void groupeAction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_GROUPE);
+        Module.setParametre(content);
     }
 
     public void sectionAction(ActionEvent actionEvent) {
-        openParameterScene(ParametreController.TAB_SECTION);
+        Module.setParametre(content);
     }
 
     public void exitAction(ActionEvent actionEvent) {
         Pane connexionPane = null;
         try {
-            FXMLLoader loader = new FXMLLoader();
-            FileInputStream f = new FileInputStream(FXMLView.LOGIN.getFXMLFile());
-            connexionPane = loader.load(f);
+            connexionPane = FXMLLoader.load(getClass().getResource(FXMLView.LOGIN.getFXMLFile()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -235,7 +234,7 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void showAction(ActionEvent actionEvent) {
-        StageManager.loadContent(FXMLView.COMPETENCE.getFXMLFile());
+        Module.setCompetence(content);
     }
 
     public void addAction(ActionEvent actionEvent) {
@@ -243,13 +242,14 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void showProfil(ActionEvent actionEvent) {
-        StageManager.loadContent(FXMLView.PROFIL.getFXMLFile());
+        Module.setProfil(content);
     }
 
+    @FXML
     public void showFormation(ActionEvent actionEvent) {
-
-        StageManager.loadContent(FXMLView.FORMATION.getFXMLFile());
+        Module.setFormation(content);
     }
+
 
     public void showProfilPopOver(MouseEvent mouseEvent) {
         VBox popOverContent = new VBox();

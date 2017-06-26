@@ -24,17 +24,20 @@
                                  <children>
                                     <AnchorPane layoutX="46.0" layoutY="17.0" prefHeight="281.0" prefWidth="354.0" styleClass="box-login" AnchorPane.bottomAnchor="-55.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
                                        <children>
-                                          <TextField fx:id="login" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0" promptText="Entrer le nom d'utilisateur" styleClass="nome" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                                          <TextField fx:id="login" text="test" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0"
+                                                     promptText="Entrer le nom d'utilisateur" styleClass="txtNom" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </TextField>
-                                          <PasswordField fx:id="password" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0" promptText="Entrer le mot de passe" styleClass="senha" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0">
+                                          <PasswordField fx:id="password" text="pwd" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0"
+                                                         promptText="Entrer le mot de passe" styleClass="txtPwd" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </PasswordField>
-                                          <Button layoutX="17.0" layoutY="235.0" mnemonicParsing="false" onAction="#btnConnexion" prefHeight="20.0" styleClass="bt-logar" text="Connexion" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                                          <Button layoutX="17.0" layoutY="235.0" mnemonicParsing="false" onAction="#btnConnexion"
+                                                  prefHeight="20.0" styleClass="bt-connexion" text="Connexion" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -62,16 +65,16 @@
                         </VBox>
                         <HBox alignment="CENTER" maxHeight="30.0" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Hyperlink onAction="#linkMuseuID" text="CFAO Cameroun" textAlignment="CENTER">
+                              <Hyperlink onAction="#linkToCfao" text="CFAO Cameroun" textAlignment="CENTER">
                                  <styleClass>
                                     <String fx:value="link" />
-                                    <String fx:value="link-museuid" />
+                                    <String fx:value="link-cosendai" />
                                  </styleClass>
                               </Hyperlink>
-                              <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkGeoPark" text="Cosendai University" textAlignment="CENTER">
+                              <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkToCosendai" text="Cosendai University" textAlignment="CENTER">
                                  <styleClass>
                                     <String fx:value="link" />
-                                    <String fx:value="link-geopark" />
+                                    <String fx:value="link-cfao" />
                                  </styleClass>
                               </Hyperlink>
                            </children>

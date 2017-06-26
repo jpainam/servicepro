@@ -1,9 +1,11 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.ProfilModel;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchFieldClassTool;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -16,6 +18,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -36,7 +39,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class ProfilController  implements Initializable{
+public class ProfilController extends Controller implements Initializable{
     public TableColumn abbreviationColumn;
     public TableColumn libelleColumn;
     public TableView profilTable;
@@ -52,6 +55,16 @@ public class ProfilController  implements Initializable{
     public TableColumn competenceColumn;
     private TableView.TableViewSelectionModel tableProfilModel;
 
+    public ProfilController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.PROFIL.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setColumnSettings();

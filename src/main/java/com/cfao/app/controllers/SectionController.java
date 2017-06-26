@@ -1,10 +1,12 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.beans.Groupe;
 import com.cfao.app.beans.Section;
 import com.cfao.app.model.GroupeModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.SectionModel;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -24,7 +27,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class SectionController implements Initializable{
+public class SectionController extends Controller implements Initializable{
     public HBox researchBox;
     public JFXButton btnNouveau;
     public JFXButton btnModifier;
@@ -35,6 +38,17 @@ public class SectionController implements Initializable{
     public ListView<Section> sectionListView;
     private SearchBox searchBox = new SearchBox();
     private MultipleSelectionModel sectionListModel;
+
+    public SectionController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.SECTION.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

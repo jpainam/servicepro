@@ -44,6 +44,7 @@ public class AccueilController implements Initializable {
 
     PieChart.Data passedChart, failedChart, averageChart;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Region veil = new Region();

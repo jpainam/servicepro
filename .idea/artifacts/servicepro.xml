@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="servicepro">
+    <output-path>$PROJECT_DIR$/out/artifacts/servicepro</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="com.cfao.app.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="CFAO Equipment" />
+        <option name="vendor" value="Jean-Paul Ainam" />
+        <option name="version" value="1.0" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="servicepro.jar">
+        <element id="module-output" name="servicepro" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,8 +1,10 @@
 package com.cfao.app;
 
 
+import com.cfao.app.controllers.TemplateController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import org.controlsfx.control.NotificationPane;
 
 import java.io.FileInputStream;
@@ -18,13 +20,13 @@ public class StageManager {
     }
     public  static  void loadContent(String fxmlFile){
         try {
-            FXMLLoader loader = new FXMLLoader();
-            mainController.setContent((Node) loader.load(new FileInputStream(fxmlFile)));
+            Node content = FXMLLoader.load(TemplateController.class.getResource(fxmlFile));
+             //mainController.setContent(content);
         }catch(IOException ex){
             ex.printStackTrace();
         }
     }
-    public static NotificationPane getNotificationPane() {
+    /*public static NotificationPane getNotificationPane() {
         return mainController.getNotificationPane();
-    }
+    }*/
 }

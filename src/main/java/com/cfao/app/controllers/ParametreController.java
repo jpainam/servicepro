@@ -1,5 +1,6 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.util.FXMLView;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class ParametreController implements Initializable{
+public class ParametreController extends Controller implements Initializable{
     public static final int TAB_UTILISATEUR = 1;
     public static final int TAB_PROFIL = 2;
     public static final int TAB_SOCIETE = 3;
@@ -38,14 +39,24 @@ public class ParametreController implements Initializable{
     private int activeTab;
     private SingleSelectionModel<Tab> singleSelectionModel;
 
+    public ParametreController(){
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.PARAMETRE.getFXMLFile()));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         setTabIcon();
-        tabSociete.setContent(getTabContent(FXMLView.SOCIETE.getFXMLFile()));
+        tabSociete.setContent(new SocieteController());
         //tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
-        tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
-        tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
+        tabGroupe.setContent(new GroupeController());
+        tabSection.setContent(new SectionController());
 
         singleSelectionModel = tabPane.getSelectionModel();
 
@@ -54,8 +65,7 @@ public class ParametreController implements Initializable{
 
     public Parent getTabContent(String fxmlFile){
         try {
-            FXMLLoader loader = new FXMLLoader();
-            Parent tab = loader.load(new FileInputStream(fxmlFile));
+            Parent tab = FXMLLoader.load(getClass().getResource(fxmlFile));
             return tab;
         }catch (Exception ex){
             ex.printStackTrace();
