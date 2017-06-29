@@ -131,12 +131,7 @@ JFOenix CSS
     -fx-background-color: #aaaaaa;
     -fx-padding: 9.5px;
 }
-.actionButttonIcon{
-     -fx-background-color: transparent;
-     -fx-content-display: graphic-only;
-     -fx-cursor: hand;
-}
-.actionButttonIcon:hover,
-.actionButttonIcon:selected {
-    -fx-opacity: 0.8;
+
+.split-pane-divider {
+  -fx-padding: 1 ;
 }

@@ -8,9 +8,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="566.0" prefWidth="1259.0" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="788.0" prefWidth="1044.0"
+           fx:controller="com.cfao.app.controllers.ParametreController" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab fx:id="tabUtilsateur" text="Utilisateurs" />
             <Tab fx:id="tabProfil" text="Profils" />
@@ -21,4 +22,4 @@
         </tabs>
       </TabPane>
    </children>
-</fx:root>
+</StackPane>

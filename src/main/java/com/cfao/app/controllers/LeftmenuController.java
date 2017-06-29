@@ -1,5 +1,7 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
+import com.cfao.app.Module;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -16,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
@@ -53,6 +56,7 @@ public class LeftmenuController implements Initializable{
     public ListView listRapports;
     public TitledPane personnePane;
 
+    public StackPane container;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,6 +64,9 @@ public class LeftmenuController implements Initializable{
         ServiceproUtil.setAccordionExpanded(Leftmenu, personnePane);
     }
 
+    public void setContainer(StackPane container){
+        this.container = container;
+    }
     private void buildleftMenu() {
 
         ObservableList<Label> data ;
@@ -74,15 +81,7 @@ public class LeftmenuController implements Initializable{
                 (ObservableValue observable, Object oldValue, Object newValue) -> {
                     switch (listPersonnes.getSelectionModel().getSelectedIndex()){
                         case 0:
-                            //fonction menu 1
-                            String fxml = "/views/civilite/import.fxml";
-                            Node importPane = null;
-                            try {
-                                importPane = FXMLLoader.load(getClass().getResource(fxml));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            TemplateController.getInstance().content.getChildren().addAll(importPane);
+                                Module.setImportPersonne(container);
                             break;
                         case 1:
                             Notifications.create().title("Implémentation")

@@ -30,7 +30,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import jdk.internal.org.objectweb.asm.Opcodes;
 import org.controlsfx.control.BreadCrumbBar;
 import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.NotificationPane;
@@ -49,11 +48,11 @@ import java.util.function.Consumer;
 /**
  * Created by JP on 6/9/2017.
  */
-public class TemplateController implements Initializable {
+public class TemplateController implements Initializable, Controller {
     private static TemplateController instance;
 
     @FXML
-    public AnchorPane content;
+    public StackPane content;
     @FXML
     public ImageView cfaoLogo;
     public ProgressBar progressBar;
@@ -61,7 +60,7 @@ public class TemplateController implements Initializable {
     public StackPane notificationContent;
     public Button exitButton;
 
-    public NotificationPane notificationPane;
+    public NotificationPane notificationPane = new NotificationPane(new StackPane());
     public HBox highlightPane;
     public StackPane notificationStack;
 
@@ -74,13 +73,10 @@ public class TemplateController implements Initializable {
     BreadCrumbBar breadCrumb = new BreadCrumbBar();
     PopOver profilPopOver = new PopOver();
 
-    public TemplateController(){
 
-    }
-    public static TemplateController getInstance(){
-        return instance;
-    }
     public void initialize(URL location, ResourceBundle resources) {
+        StageManager.setMainController(this);
+
         breadCrumbContainer.getItems().add(createBreadCrumbBar());
         try {
             cfaoLogo.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
@@ -88,7 +84,7 @@ public class TemplateController implements Initializable {
             e.printStackTrace();
         }
         GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
-        //GlyphsDude.setIcon(userLabel, FontAwesomeIcon.USER);
+
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.USER);
         icon.setGlyphSize(40);
         icon.setFill(Color.DARKBLUE);
@@ -97,19 +93,19 @@ public class TemplateController implements Initializable {
         userNameLabel.setText(ServiceproUtil.getLoggedUser());
         currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
         try {
-            Pane leftMenuPane = FXMLLoader.load(getClass().getResource(FXMLView.LEFTMENU.getFXMLFile()));
+            FXMLLoader loader = new FXMLLoader();
+            Pane leftMenuPane = loader.load(getClass().getResourceAsStream(FXMLView.LEFTMENU.getFXMLFile()));
+            LeftmenuController leftmenuController = loader.getController();
+            leftmenuController.setContainer(content);
             shortcutContent.getChildren().setAll(leftMenuPane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        StackPane pane1 = new StackPane();
-        notificationPane = new NotificationPane(pane1);
-        notificationPane.setText("Notification Panel");
         notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
             notificationPane.hide();
         }));
         notificationStack.getChildren().add(notificationPane);
-
+        StageManager.setNotificationPane(notificationPane);
 
         // Charger la vue accueil
         try {
@@ -118,7 +114,8 @@ public class TemplateController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //content.getChildren().setAll(new SearchBox());
+
+        //content.getChildren().setAll(button);
     }
 
     private BreadCrumbBar createBreadCrumbBar() {
@@ -131,7 +128,6 @@ public class TemplateController implements Initializable {
 
         personne.getChildren().add(nouveau);
 
-
         root.getChildren().addAll(personne, formation, competence);
 
         breadCrumb.selectedCrumbProperty().set(nouveau);
@@ -140,36 +136,17 @@ public class TemplateController implements Initializable {
     }
 
     public void displayCivilite(ActionEvent actionEvent) {
-       /* Task<Void> task = new Task<Void>() {
-            @Override
-            public Void call() {
-                final int max = 1000000;
-                for (int i = 1; i <= max; i++) {
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    updateProgress(i, max);
-                }
-                return null;
-            }
-        };
-
-        progressBar.progressProperty().bind(task.progressProperty());
-        new Thread(task).start();*/
-
         Module.setCivilite(content);
     }
 
     public void add(ActionEvent actionEvent) {
     }
 
-    /*@Override
+    @Override
     public void setContent(Node node) {
         content.getChildren().setAll(node);
     }
-
+    /*
     @Override
     public ProgressBar getProgressBar() {
         return progressBar;
@@ -181,13 +158,14 @@ public class TemplateController implements Initializable {
     }
 */
 
-    public  NotificationPane getNotificationPane() {
+    @Override
+    public NotificationPane getNotificationPane() {
         return notificationPane;
     }
 
 
     public void openParameterScene(int activeTab) {
-       Module.setParametre(content);
+        Module.setParametre(content);
     }
 
     public void utilisateurAction(ActionEvent actionEvent) {
@@ -222,14 +200,9 @@ public class TemplateController implements Initializable {
             e.printStackTrace();
         }
 
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle(FXMLView.LOGIN.getTitle());
         stage.getScene().setRoot(connexionPane);
-        /*if (notificationPane.isShowing()) {
-            notificationPane.hide();
-        } else {
-            notificationPane.show();
-        }*/
 
     }
 

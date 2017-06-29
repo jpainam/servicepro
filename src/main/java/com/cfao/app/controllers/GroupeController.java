@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class GroupeController  extends Controller implements Initializable{
+public class GroupeController  implements Initializable{
     public HBox researchBox;
     public JFXButton btnNouveau;
     public JFXButton btnModifier;
@@ -41,16 +41,7 @@ public class GroupeController  extends Controller implements Initializable{
     public ListView groupeListView;
     private SearchBox searchBox = new SearchBox();
 
-    public GroupeController(){
-        try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.GROUPE.getFXMLFile()));
-            fxml.setRoot(this);
-            fxml.setController(this);
-            fxml.load();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createGroupeList();

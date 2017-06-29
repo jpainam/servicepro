@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/14/2017.
  */
-public class CompetenceController extends Controller implements Initializable{
+public class CompetenceController implements Initializable{
     public Button btnNouveau;
     public Button btnModifier;
     public Button btnSupprimer;
@@ -42,16 +42,6 @@ public class CompetenceController extends Controller implements Initializable{
     public TableColumn competenceColumn;
     public TableView prerequisTable;
 
-    public CompetenceController(){
-        try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.COMPETENCE.getFXMLFile()));
-            fxml.setRoot(this);
-            fxml.setController(this);
-            fxml.load();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setButtonSettings();

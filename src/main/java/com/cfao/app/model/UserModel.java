@@ -12,8 +12,12 @@ import org.hibernate.criterion.Restrictions;
  */
 public class UserModel extends Model{
     public UserModel(){
+        super();
         this.table = "User";
         this.key = "IDUSER";
+    }
+    public UserModel(String className){
+        super(className);
     }
 
 

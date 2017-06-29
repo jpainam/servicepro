@@ -39,7 +39,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/9/2017.
  */
-public class CiviliteController extends Controller implements Initializable{
+public class CiviliteController implements Initializable{
 
 
     public TableView personneTable;
@@ -74,16 +74,6 @@ public class CiviliteController extends Controller implements Initializable{
 
     private TableView.TableViewSelectionModel<Personne> personneTableModel;
 
-    public CiviliteController(){
-        try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.CIVILITE.getFXMLFile()));
-            fxml.setRoot(this);
-            fxml.setController(this);
-            fxml.load();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

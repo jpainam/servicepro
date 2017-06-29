@@ -37,7 +37,7 @@ public class Main extends Application {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
         scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
-       // scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+       //scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
         primaryStage.setOnCloseRequest(e->closeWindow());
         primaryStage.setScene(scene);
         primaryStage.show();

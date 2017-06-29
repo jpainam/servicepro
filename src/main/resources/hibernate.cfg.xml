@@ -13,6 +13,7 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
+        <property name="hibernate.current_session_context_class">thread</property>
         <mapping resource="mapping/user.hbm.xml" />
         <mapping resource="mapping/pays.hbm.xml" />
         <mapping resource="mapping/personne.hbm.xml" />
@@ -25,5 +26,6 @@
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
         <mapping resource="mapping/formation.hbm.xml" />
+        <mapping resource="mapping/profilcompetence.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

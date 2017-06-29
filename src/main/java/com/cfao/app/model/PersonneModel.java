@@ -22,7 +22,7 @@ public class PersonneModel extends Model {
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            session.close();
+            close();
         }
         return null;
     }

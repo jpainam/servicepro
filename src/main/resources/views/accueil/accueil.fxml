@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="693.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
+<StackPane prefHeight="763.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
 <children>
-      <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0">
+      <SplitPane dividerPositions="0.298">
         <items>
-            <StackPane>
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                  <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL">
                     <items>
                         <VBox fx:id="formationBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <VBox fx:id="participantBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -24,12 +24,12 @@
                   </SplitPane>
                </children>
             </StackPane>
-            <StackPane>
+            <StackPane alignment="TOP_LEFT">
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                  <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                        <StackPane fx:id="overalPerformance" />
-                        <StackPane fx:id="participantPerformance" />
+                        <StackPane fx:id="overalPerformance" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                        <StackPane fx:id="participantPerformance" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                     </items>
                   </SplitPane>
                </children>

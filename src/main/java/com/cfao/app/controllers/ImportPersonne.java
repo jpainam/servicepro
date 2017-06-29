@@ -52,6 +52,18 @@ public class ImportPersonne  implements Initializable{
     public TableColumn societeColumn;
     public TableColumn sectionColumn;
 
+    /*public ImportPersonne(){
+        try {
+            //fonction menu 1
+            String fxmlFile = "/views/civilite/import.fxml";
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(fxmlFile));
+            fxml.setRoot(this);
+            fxml.setController(this);
+            fxml.load();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }*/
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }

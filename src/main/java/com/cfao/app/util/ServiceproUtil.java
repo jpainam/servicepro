@@ -57,7 +57,7 @@ public class ServiceproUtil {
      * @param sms
      */
     public static void notify(String sms){
-        NotificationPane notif = TemplateController.getInstance().getNotificationPane();
+        NotificationPane notif = StageManager.getNotificationPane();
         notif.setText(sms);
         notif.show();
         PauseTransition delay = new PauseTransition(Duration.seconds(5));

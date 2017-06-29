@@ -5,7 +5,7 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.SocieteModel;
 import com.cfao.app.util.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/11/2017.
  */
-public class SocieteController extends Controller implements Initializable {
+public class SocieteController implements Initializable {
     public TableColumn societeColumn;
     public TableColumn adresseColumn;
     public TableView societeTable;
@@ -61,16 +61,6 @@ public class SocieteController extends Controller implements Initializable {
 
     public int activeAction = Constante.ADD_BUTTON;
 
-    public SocieteController(){
-        try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.SOCIETE.getFXMLFile()));
-            fxml.setRoot(this);
-            fxml.setController(this);
-            fxml.load();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {

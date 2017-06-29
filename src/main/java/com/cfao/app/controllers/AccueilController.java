@@ -1,10 +1,12 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Controller;
 import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
+import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -43,6 +46,7 @@ public class AccueilController implements Initializable {
     public VBox participantBox;
 
     PieChart.Data passedChart, failedChart, averageChart;
+
 
 
     @Override
@@ -83,6 +87,8 @@ public class AccueilController implements Initializable {
 
         FormationModel formationModel = new FormationModel(Model.getBeansClass("Formation"));
         formationListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        VBox.setVgrow(formationListView, Priority.ALWAYS);
 
         /* Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
@@ -137,6 +143,8 @@ public class AccueilController implements Initializable {
         participantMatricule.setCellValueFactory(new PropertyValueFactory<>("matricule"));
         participantTable.getColumns().addAll(participantNom, participantMatricule);
         participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        VBox.setVgrow(participantTable, Priority.ALWAYS);
+
         PersonneModel personneModel = new PersonneModel();
 
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {

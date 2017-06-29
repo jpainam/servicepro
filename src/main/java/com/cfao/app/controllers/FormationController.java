@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/19/2017.
  */
-public class FormationController extends Controller implements Initializable{
+public class FormationController implements Initializable{
     public HBox researchBox;
     public TableView formationTable;
     public TableColumn titreColumn;
@@ -47,6 +47,7 @@ public class FormationController extends Controller implements Initializable{
     public JFXDatePicker dateFin;
     public TextArea txtDescription;
     public ComboBox<Modele> comboModele;
+    public HBox actionButtonBox;
     private TableView.TableViewSelectionModel formationTableModel;
     private SearchBox searchBox = new SearchBox();
     public Tab tabFormationDetail;
@@ -54,16 +55,6 @@ public class FormationController extends Controller implements Initializable{
     public Tab tabParticipant;
 
 
-    public FormationController(){
-        try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(FXMLView.FORMATION.getFXMLFile()));
-            fxml.setRoot(this);
-            fxml.setController(this);
-            fxml.load();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createFormationTable();

@@ -10,13 +10,15 @@ import java.util.List;
  * Created by JP on 6/9/2017.
  */
 public class Model <T>  {
-    protected Session session;
+    protected static Session session = HibernateUtil.getSessionFactory().openSession();
     protected String table;
     protected  String key;
     protected String tmpClass;
 
     public Model(){
-        session = HibernateUtil.getSessionFactory().openSession();
+        if(!session.isOpen()){
+            session = HibernateUtil.getSessionFactory().openSession();
+        }
     }
 
     public Model(String tmpClass){
@@ -24,8 +26,10 @@ public class Model <T>  {
         this.tmpClass = tmpClass;
     }
     public void close(){
-        session.flush();
-        session.close();
+        if(session.isOpen()) {
+            session.flush();
+            session.close();
+        }
     }
     public List<T> getList(){
         try {
@@ -39,7 +43,7 @@ public class Model <T>  {
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            //session.close();
+            close();
         }
         return null;
     }

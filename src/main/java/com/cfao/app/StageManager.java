@@ -5,6 +5,7 @@ import com.cfao.app.controllers.TemplateController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.controlsfx.control.NotificationPane;
 
 import java.io.FileInputStream;
@@ -15,18 +16,22 @@ import java.io.IOException;
  */
 public class StageManager {
     private static Controller mainController;
+    private static NotificationPane notificationPane;
     public static void setMainController(Controller mainController){
         StageManager.mainController = mainController;
     }
     public  static  void loadContent(String fxmlFile){
         try {
             Node content = FXMLLoader.load(TemplateController.class.getResource(fxmlFile));
-             //mainController.setContent(content);
+             mainController.setContent(content);
         }catch(IOException ex){
             ex.printStackTrace();
         }
     }
-    /*public static NotificationPane getNotificationPane() {
-        return mainController.getNotificationPane();
-    }*/
+    public static NotificationPane getNotificationPane(){
+        return notificationPane;
+    }
+    public static void setNotificationPane(NotificationPane notificationPane){
+        StageManager.notificationPane = notificationPane;
+    }
 }

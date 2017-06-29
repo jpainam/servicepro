@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -28,5 +28,6 @@
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.12" level="project" />
     <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.9" level="project" />
     <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hsqldb:hsqldb:2.3.4" level="project" />
   </component>
 </module>
