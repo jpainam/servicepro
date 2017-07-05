@@ -2,12 +2,19 @@ package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
 import com.cfao.app.controllers.TemplateController;
+import de.jensd.fx.glyphs.GlyphIcons;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 
+import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 
@@ -104,4 +111,13 @@ public class ServiceproUtil {
         }
     }
 
+    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon, double iconSize){
+        FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
+        icon.setGlyphSize(iconSize);
+        icon.setFill(Color.WHITE);
+        button.setGraphic(icon);
+    }
+    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon){
+        setButtonIcon(button, fontAwesomeIcon, 1.5);
+    }
 }

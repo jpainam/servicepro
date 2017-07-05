@@ -1,16 +1,12 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import com.cfao.app.util.FormatDate;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import org.hibernate.mapping.Set;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * Created by JP on 6/10/2017.
@@ -26,12 +22,18 @@ public class Personne {
     private SimpleStringProperty matricule = new SimpleStringProperty();
     private SimpleStringProperty nom = new SimpleStringProperty();
     private SimpleStringProperty prenom = new SimpleStringProperty();
-    private ObjectProperty<Date> naissance = new SimpleObjectProperty<Date>();
-    private ObjectProperty<java.util.List<Langue>> langues = new SimpleObjectProperty<java.util.List<Langue>>();
-    private Pays pays;
-    private Groupe groupe;
-    private Societe societe;
-    private Section section;
+    private ObjectProperty<LocalDate> naissance = new SimpleObjectProperty<LocalDate>();
+    private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
+    private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
+    private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
+    private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
+    private ObjectProperty<Section> section = new SimpleObjectProperty<Section>();
+
+    /**
+     * CONSTRUCT
+     */
+
+
 
     /**
      * GETTERS
@@ -59,33 +61,39 @@ public class Personne {
     }
 
     @Column(name = "DATENAISS")
-    public Date getNaissance(){return naissance.get();}
+    public Date getNaissance(){return Date.valueOf(naissance.get());}
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "langue_parlee", joinColumns = {@JoinColumn(name = "IDPERS")}, inverseJoinColumns = {@JoinColumn(name = "IDLANGUE")})
+    @ManyToMany()
+    @JoinTable(name = "langue_parlee", joinColumns = {@JoinColumn(name = "IDPERS")},
+            inverseJoinColumns = {@JoinColumn(name = "IDLANGUE")})
     public java.util.List<Langue> getLangues(){
         return langues.get();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne()
+    @JoinColumn(name = "PAYS")
     public Pays getPays() {
-        return pays;
+        return pays.get();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JoinColumn(name = "GROUPE")
     public Groupe getGroupe() {
-        return groupe;
+        return groupe.get();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JoinColumn(name = "SOCIETE")
     public Societe getSociete() {
-        return societe;
+        return societe.get();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JoinColumn(name = "SECTION")
     public Section getSection() {
-        return section;
+        return section.get();
     }
+
 
 
     /**
@@ -107,43 +115,28 @@ public class Personne {
         this.prenom.set(prenom);
     }
 
-    public void setNaissance(Date date){this.naissance.set(date);}
+    public void setNaissance(Date date){this.naissance.set(date.toLocalDate());}
 
     public void setLangues(java.util.List<Langue> set){
-        this.langues.set(set);
+        this.langues.set(FXCollections.observableList(set) );
     }
 
     public void setPays(Pays pays) {
-        this.pays = pays;
+        this.pays.set(pays);
     }
 
     public void setGroupe(Groupe groupe) {
-        this.groupe = groupe;
+        this.groupe.set(groupe);
     }
 
     public void setSociete(Societe societe) {
-        this.societe = societe;
+        this.societe.set(societe);
     }
 
     public void setSection(Section section) {
-        this.section = section;
+        this.section.set(section);
     }
 
-    public SimpleIntegerProperty idPersonneProperty() {
-        return idPersonne;
-    }
-
-    public SimpleStringProperty matriculeProperty() {
-        return matricule;
-    }
-
-    public SimpleStringProperty nomProperty() {
-        return nom;
-    }
-
-    public SimpleStringProperty prenomProperty() {
-        return prenom;
-    }
 
     /**
      * METHODS
@@ -155,9 +148,43 @@ public class Personne {
                 ", matricule=" + matricule +
                 ", nom=" + nom +
                 ", prenom=" + prenom +
+                ", date Naissance =" + naissance +
+                ", Langues =" + langues +
+                ", pays=" + pays +
                 '}';
     }
 
+
+    /**
+     * GETTERS PROPERTY
+     */
+    public IntegerProperty idPersonneProperty() {
+        return idPersonne;
+    }
+
+    public StringProperty matriculeProperty() {
+        return matricule;
+    }
+
+    public StringProperty nomProperty() {
+        return nom;
+    }
+
+    public StringProperty prenomProperty() {
+        return prenom;
+    }
+
+    public ObjectProperty<LocalDate> naissance() {return naissance; }
+
+    public ListProperty<Langue> langues() {return langues; }
+
+    public ObjectProperty<Pays> pays() {return pays; }
+
+    public ObjectProperty<Section> section() {return section; }
+
+    public ObjectProperty<Societe> societe() {return societe; }
+
+    public ObjectProperty<Groupe> groupe() {return groupe; }
 
 
 }

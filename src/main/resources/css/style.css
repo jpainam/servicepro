@@ -10,10 +10,7 @@
 /************
 GLOBAL CSS
 *************/
-.button{
-    -fx-cursor: hand;
-    -fx-font-size: 10pt;
-}
+
 .label{
     -fx-font-family: Verdana;
 }
@@ -135,4 +132,18 @@ JFOenix CSS
 
 .split-pane-divider {
   -fx-padding: 1 ;
+}
+.onlyIcon{
+     -fx-background-color: transparent;
+     -fx-cursor: hand;
+}
+.actionButton{
+    -fx-cursor: hand;
+    -fx-font-size: 10pt;
+    -fx-padding: 2 10 2 10;
+    -fx-text-fill: #fff;
+    -fx-background-color: #080c50 ;
+}
+.actionButton .glyph-icon {
+    -fx-fill: white;
 }
