@@ -20,8 +20,8 @@
         <property name="iso3">
             <column name="iso3"/>
         </property>
-        <property name="numCode">
-            <column name="numCode"/>
+        <property name="numCode" not-null="false">
+            <column name="numCode" not-null="false" default="NULL"/>
         </property>
         <property name="phoneCode">
             <column name="phoneCode"/>

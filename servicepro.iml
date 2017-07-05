@@ -29,5 +29,6 @@
     <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.9" level="project" />
     <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.hsqldb:hsqldb:2.3.4" level="project" />
+    <orderEntry type="library" name="Maven: com.airhacks:afterburner.fx:1.6.0" level="project" />
   </component>
 </module>

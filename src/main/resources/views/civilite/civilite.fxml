@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -9,10 +10,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane  maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="569.0"
-         prefWidth="767.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="569.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
     <children>
-        <BorderPane prefHeight="670.0" prefWidth="918.0">
+        <BorderPane prefHeight="670.0" prefWidth="100.0">
             <top>
                 <HBox fx:id="iconsPanel" prefHeight="24.0" prefWidth="873.0" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
@@ -105,15 +106,16 @@
                                                             </GridPane.margin>
                                                         </Button>
                                                         <Button fx:id="delPhoto" mnemonicParsing="false" onAction="#delPhotoClic" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-                                                        <TextField fx:id="txtMatricule" disable="true" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" prefWidth="105.0" style="-fx-background-color: gray;" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1">
-                                                            <GridPane.margin>
-                                                                <Insets />
-                                                            </GridPane.margin>
+                                                        <AnchorPane fx:id="paneImage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="105.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1">
                                                             <children>
-                                                                <ImageView fitHeight="90.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" />
+                                                                <ImageView fx:id="imageview" fitHeight="90.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                    <viewport>
+                                                                        <Rectangle2D height="90.0" width="105.0" />
+                                                                    </viewport>
+                                                                </ImageView>
                                                             </children>
-                                                        </Pane>
+                                                        </AnchorPane>
+                                                        <TextField fx:id="txtMatricule" disable="true" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                                         <Label fx:id="labelPrenom" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Prenom / Surname :" GridPane.rowIndex="5">
                                                         </Label>
                                                         <Label fx:id="labelDateNaiss" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Date Naissance / Born Date:" GridPane.rowIndex="6">

@@ -1,55 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="573.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
-   <children>
-      <SplitPane dividerPositions="0.46511627906976744" prefHeight="160.0" prefWidth="200.0">
-        <items>
-          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="571.0" prefWidth="392.0">
-               <children>
-                  <HBox fx:id="researchBox" maxHeight="1.7976931348623157E308" prefHeight="44.0" prefWidth="317.0" />
-                  <TableView layoutY="48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="523.0" prefWidth="317.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
-                    <columns>
-                      <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre" />
-                      <TableColumn fx:id="datedebutColumn" prefWidth="75.0" text="Date de debut" />
-                        <TableColumn fx:id="datefinColumn" prefWidth="75.0" text="Date de fin" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="571.0" prefWidth="216.0">
-               <children>
-                  <TabPane prefHeight="571.0" prefWidth="365.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <tabs>
-                      <Tab fx:id="tabFormationDetail" text="Détails de la formation">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                      <Tab fx:id="tabCompetenceAssociee" text="Compétences associées">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                        <Tab fx:id="tabParticipant" text="Participants">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                           </content>
-                        </Tab>
-                    </tabs>
-                  </TabPane>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </children>
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="666.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
+    <children>
+        <SplitPane dividerPositions="0.3441258094357077">
+            <items>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="664.0" prefWidth="317.0">
+                    <children>
+                        <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                        </HBox>
+                        <TableView fx:id="formationTable" layoutX="20.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="618.0" prefWidth="349.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
+                            <columns>
+                                <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre" />
+                                <TableColumn fx:id="datedebutColumn" prefWidth="75.0" text="Date de debut" />
+                                <TableColumn fx:id="datefinColumn" prefWidth="75.0" text="Date de fin" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="500.0" prefHeight="664.0" prefWidth="810.0">
+                    <children>
+                        <TabPane minWidth="200.0" prefHeight="571.0" prefWidth="365.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <tabs>
+                                <Tab fx:id="tabFormationDetail" text="Détails de la formation">
+                                    <content>
+                                        <VBox spacing="10.0" style="-fx-border-color: #CCC;">
+                                            <children>
+                                                <ToolBar maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="33.0" prefWidth="686.0" VBox.vgrow="ALWAYS">
+                                       <items>
+                                          <Button mnemonicParsing="false" onAction="#SupprimerAction" text="Supprimer" />
+                                          <Button mnemonicParsing="false" onAction="#modifierAction" text="Modifier" />
+                                          <Button mnemonicParsing="false" onAction="#nouveauAction" text="Nouveau" />
+                                       </items></ToolBar>
+                                                <HBox prefHeight="29.0" prefWidth="686.0" spacing="5.0">
+                                                    <children>
+                                                        <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Titre" />
+                                                        <TextField fx:id="txtTitre" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
+                                                        <Label minWidth="40.0" prefHeight="17.0" prefWidth="40.0" text="Code" HBox.hgrow="NEVER" />
+                                                        <TextField fx:id="txtCode" minWidth="75.0" prefHeight="25.0" prefWidth="73.0" HBox.hgrow="NEVER" />
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <HBox prefHeight="26.0" prefWidth="686.0" spacing="5.0">
+                                                    <children>
+                                                        <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Modèle" HBox.hgrow="NEVER" />
+                                                        <ComboBox fx:id="comboModele" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <Separator layoutY="127.0" prefHeight="1.0" prefWidth="680.0" />
+                                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                                    <children>
+                                                        <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Description" />
+                                                        <TextArea fx:id="txtDescription" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <HBox prefHeight="132.0" prefWidth="686.0" spacing="5.0">
+                                                    <children>
+                                                        <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Formateurs" />
+                                                        <ListView maxWidth="1.7976931348623157E308" minWidth="10.0" prefHeight="132.0" prefWidth="296.0" HBox.hgrow="ALWAYS" />
+                                                        <GridPane layoutX="26.0" layoutY="21.0" minWidth="250.0" prefHeight="112.0" prefWidth="251.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <ComboBox fx:id="comboEtatformation" prefHeight="25.0" prefWidth="106.0" GridPane.columnIndex="1" />
+                                                                <Label text="Date de début" GridPane.rowIndex="1" />
+                                                                <Label text="Date de fin" GridPane.rowIndex="2" />
+                                                                <Label text="Etat de la formation" />
+                                                                <DatePicker fx:id="dateFin" prefHeight="25.0" prefWidth="108.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                <DatePicker fx:id="dateDebut" prefHeight="25.0" prefWidth="106.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            </children>
+                                                            <HBox.margin>
+                                                                <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                            </HBox.margin>
+                                                        </GridPane>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <Separator layoutY="254.0" prefHeight="3.0" prefWidth="686.0" />
+                                                <HBox prefHeight="26.0" prefWidth="664.0" spacing="5.0">
+                                                    <children>
+                                                        <Label minWidth="100.0" prefWidth="100.0" text="Formateurs" />
+                                                        <ComboBox fx:id="comboFormateur" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="285.0" HBox.hgrow="ALWAYS" />
+                                                        <Button fx:id="btnAjouterFormateur" mnemonicParsing="false" HBox.hgrow="NEVER" />
+                                                        <Button fx:id="btnSupprimerFormateur" mnemonicParsing="false" HBox.hgrow="NEVER" />
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="tabCompetenceAssociee" text="Compétences associées">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="tabParticipant" text="Participants">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </AnchorPane>
+            </items>
+            <StackPane.margin>
+                <Insets />
+            </StackPane.margin>
+        </SplitPane>
+    </children>
 </StackPane>

@@ -3,34 +3,32 @@ package com.cfao.app.model;
 import com.cfao.app.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import java.lang.Class;
 import java.util.List;
 
 /**
  * Created by JP on 6/9/2017.
  */
-public class Model <T>  {
-    protected static Session session = HibernateUtil.getSessionFactory().openSession();
+public class Model <T>{
+    protected Session session;
     protected String table;
-    protected  String key;
+    protected String key;
     protected String tmpClass;
+    protected Transaction tx;
 
     public Model(){
-        if(!session.isOpen()){
-            session = HibernateUtil.getSessionFactory().openSession();
-        }
+
+        session = HibernateUtil.getSessionFactory().openSession();
+
     }
 
     public Model(String tmpClass){
         this();
         this.tmpClass = tmpClass;
     }
-    public void close(){
-        if(session.isOpen()) {
-            session.flush();
-            session.close();
-        }
-    }
+
     public List<T> getList(){
         try {
             if(!session.isOpen()){
@@ -43,12 +41,52 @@ public class Model <T>  {
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            close();
+            //session.close();
         }
         return null;
     }
-    public static String getBeansClass(String s){return "com.cfao.app.beans."+s;}
+
+    public void saveOrUpdate(T type){
+        try {
+            if(!session.isOpen()){
+                session = HibernateUtil.getSessionFactory().openSession();
+            }
+
+            tx = session.beginTransaction();
+            session.saveOrUpdate(type);
+            tx.commit();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }finally {
+            //session.close();
+        }
+    }
+
+    public void delete(T type){
+        try {
+            tx = session.beginTransaction();
+            session.delete(type);
+            tx.commit();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }finally {
+            //session.close();
+        }
+    }
+
+    public static String getBeanPath(String s){return "com.cfao.app.beans."+s;}
+    public static String getBeansClass(String s){return getBeanPath(s);}
+
     public List<T> select(){
         return this.getList();
     }
+
+    public void close(){
+        session.flush();
+        session.close();
+    }
+
+
 }

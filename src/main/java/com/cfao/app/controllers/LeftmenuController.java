@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -56,7 +57,7 @@ public class LeftmenuController implements Initializable{
     public ListView listRapports;
     public TitledPane personnePane;
 
-    public StackPane container;
+    public AnchorPane container;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,7 +65,7 @@ public class LeftmenuController implements Initializable{
         ServiceproUtil.setAccordionExpanded(Leftmenu, personnePane);
     }
 
-    public void setContainer(StackPane container){
+    public void setContainer(AnchorPane container){
         this.container = container;
     }
     private void buildleftMenu() {

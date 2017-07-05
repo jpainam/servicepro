@@ -17,6 +17,9 @@
         <property name="prenom">
             <column name="prenom"/>
         </property>
+        <property name="naissance">
+                      <column name="datenaiss"/>
+                 </property>
         <many-to-one name="pays" class="com.cfao.app.beans.Pays"
                      column="pays" unique="true" not-null="false"
                      cascade="all" />

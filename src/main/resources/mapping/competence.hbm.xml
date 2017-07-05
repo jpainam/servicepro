@@ -11,7 +11,7 @@
         <property name="description">
             <column name="description"/>
         </property>
-        <many-to-one name="Niveaucompetence" class="com.cfao.app.beans.Niveaucompetence"
+        <many-to-one foreign-key="NIVEAU" name="niveau" class="com.cfao.app.beans.Niveaucompetence"
                      column="niveau" unique="true" not-null="false"
                      cascade="all" />
 

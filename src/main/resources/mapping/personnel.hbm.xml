@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.cfao.app.beans.Personnel" table="personnels">
+        <id name="idpersonnel" type="int" column="idpersonnel">
+            <generator class="assigned"/>
+        </id>
+        <property name="nom">
+            <column name="nom"/>
+        </property>
+        <property name="prenom">
+            <column name="prenom"/>
+        </property>
+        <property name="adresse">
+            <column name="adresse"/>
+        </property>
+    </class>
+</hibernate-mapping>

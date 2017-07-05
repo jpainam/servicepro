@@ -116,11 +116,16 @@ public class Pays {
         this.iso3.set(iso3);
     }
 
-    public void setNumCode(int numCode) {
-        this.numCode.set(numCode);
+    public void setNumCode(Integer numCode)
+    {
+        if(numCode != null)
+                       this.numCode.set(numCode);
+             else
+                    this.numCode.set(0);
+
     }
 
-    public void setPhoneCode(int phoneCode) {
+    public void setPhoneCode(Integer phoneCode) {
         this.phoneCode.set(phoneCode);
     }
 

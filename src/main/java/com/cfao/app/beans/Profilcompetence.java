@@ -1,6 +1,7 @@
 package com.cfao.app.beans;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableSet;
 
 import java.io.Serializable;
 
@@ -8,13 +9,14 @@ import java.io.Serializable;
  * Created by JP on 6/29/2017.
  */
 public class Profilcompetence implements Serializable {
-    private SimpleObjectProperty<Competence> competence;
-    private SimpleObjectProperty<Profil> profil;
+    private SimpleObjectProperty<Competence> competence = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<Profil> profil = new SimpleObjectProperty<>();
 
     public Profilcompetence(SimpleObjectProperty<Competence> competence, SimpleObjectProperty<Profil> profil) {
         this.competence = competence;
         this.profil = profil;
     }
+    public Profilcompetence(){ }
 
     public Competence getCompetence() {
         return competence.get();
@@ -39,4 +41,6 @@ public class Profilcompetence implements Serializable {
     public void setProfil(Profil profil) {
         this.profil.set(profil);
     }
+
+
 }

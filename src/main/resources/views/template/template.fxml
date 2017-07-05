@@ -26,7 +26,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.*?>
 
-<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
+<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0" prefWidth="659.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
 
     <children>
 
@@ -60,6 +60,7 @@
                   <Menu mnemonicParsing="false" text="Profils">
                      <items>
                          <MenuItem mnemonicParsing="false" onAction="#showProfil" text="Liste des Profils" />
+                        <MenuItem mnemonicParsing="false" text="Nouveau profil" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Tests">
@@ -123,14 +124,11 @@
             <children>
                 <SplitPane dividerPositions="0.22577092511013216, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <items>
-                        <StackPane fx:id="shortcutContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
-                            <children>
-                            </children>
-                        </StackPane>
+                  <StackPane fx:id="shortcutContent" prefWidth="200.0" />
                   <VBox prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ToolBar fx:id="breadCrumbContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" minWidth="-Infinity" prefHeight="40.0" />
-                        <StackPane fx:id="content" />
+                         <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
                      </children>
 
                   </VBox>

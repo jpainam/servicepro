@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 public enum FXMLView {
     TEMPLATE {
         public String getFXMLFile() {
-            return "/views/template.fxml";
+            return "/views/template/template.fxml";
         }
     }, LOGIN {
         public String getTitle() {

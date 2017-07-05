@@ -26,7 +26,7 @@ public class Main extends Application {
         Image icon = new Image(getClass().getResourceAsStream(iconName));
         primaryStage.getIcons().add(icon);
 
-        Pane loginPane = FXMLLoader.load(getClass().getResource(FXMLView.LOGIN.getFXMLFile()));
+        Pane loginPane = FXMLLoader.load(getClass().getResource(FXMLView.TEMPLATE.getFXMLFile()));
 
 
         primaryStage.setTitle(FXMLView.LOGIN.getTitle());

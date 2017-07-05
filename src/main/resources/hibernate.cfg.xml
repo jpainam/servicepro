@@ -14,11 +14,12 @@
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
         <property name="hibernate.current_session_context_class">thread</property>
+
         <mapping resource="mapping/user.hbm.xml" />
         <mapping resource="mapping/pays.hbm.xml" />
-        <mapping resource="mapping/personne.hbm.xml" />
+
         <mapping resource="mapping/profil.hbm.xml" />
-        <mapping resource="mapping/groupe.hbm.xml" />
+
         <mapping resource="mapping/societe.hbm.xml" />
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/competence.hbm.xml" />
@@ -27,5 +28,11 @@
         <mapping resource="mapping/modele.hbm.xml" />
         <mapping resource="mapping/formation.hbm.xml" />
         <mapping resource="mapping/profilcompetence.hbm.xml" />
+        <mapping resource="mapping/etatformation.hbm.xml" />
+        <mapping resource="mapping/personnel.hbm.xml" />
+
+        <mapping class="com.cfao.app.beans.Personne" />
+        <mapping class="com.cfao.app.beans.Groupe" />
+        <mapping class="com.cfao.app.beans.Langue" />
     </session-factory>
 </hibernate-configuration>

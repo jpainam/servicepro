@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Tue Jun 27 21:48:38 WAT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-015c-eb50-2a4c-0000046139d8 
+on database directory D:\serviceproDB  with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/C:/Users/JP/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=D:\java\servicepro
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

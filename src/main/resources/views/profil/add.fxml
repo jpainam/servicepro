@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+
+<VBox fx:id="rootContentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="603.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilAddController">
+   <children>
+      <GridPane alignment="CENTER" hgap="10.0" prefHeight="46.0" prefWidth="603.0" HBox.hgrow="ALWAYS">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="29.0" valignment="CENTER" vgrow="ALWAYS" />
+        </rowConstraints>
+         <children>
+            <Label text="Titre du profil" />
+            <TextField fx:id="txtProfil" alignment="TOP_LEFT" promptText="Entrer le titre du profil" GridPane.rowIndex="1" />
+            <Label text="Abbréviation" GridPane.columnIndex="1" />
+            <TextField fx:id="txtAbbreviation" promptText="Entrer une abbréviation du profil" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+             <JFXButton fx:id="btnValider" alignment="CENTER" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                 <styleClass>
+                     <String fx:value="button-raised" />
+                     <String fx:value="button-success" />
+                 </styleClass>
+             </JFXButton>
+             <JFXButton fx:id="btnAnnuler" alignment="CENTER" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                 <styleClass>
+                     <String fx:value="button-raised" />
+                     <String fx:value="button-attention" />
+                 </styleClass>
+             </JFXButton>
+         </children>
+      </GridPane>
+      <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="competenceColumn" maxWidth="80.0" minWidth="80.0" text="Compétence" />
+            <TableColumn fx:id="connaissanceColumn" maxWidth="80.0" minWidth="80.0" text="Connaissance" />
+          <TableColumn fx:id="intituleColumn" prefWidth="75.0" text="Intitulé" />
+            <TableColumn fx:id="possedeColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Possède" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</VBox>

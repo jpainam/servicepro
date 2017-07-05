@@ -4,6 +4,7 @@ import com.cfao.app.controllers.*;
 import com.cfao.app.util.FXMLView;
 import javafx.fxml.FXMLLoader;
 
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -14,101 +15,77 @@ public class Module {
     private Module() {
     }
 
-    public static Pane formation = null;
-    public static Pane civilite = null;
-    public static Pane competence = null;
-    public static Pane groupe = null;
-    public static Pane profil = null;
-    public static Pane parametre = null;
-    public static Pane importPeronne = null;
 
-    public static void setFormation(StackPane container) {
+    public static void setFormation(AnchorPane container) {
         try {
-            if (formation == null) {
-                formation = FXMLLoader.load(Module.class.getResource(FXMLView.FORMATION.getFXMLFile()));
-                ;
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.FORMATION.getFXMLFile()));
             container.getChildren().clear();
-            container.getChildren().add(formation);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
 
         }
     }
 
-    public static void setCivilite(StackPane container) {
+    public static void setCivilite(AnchorPane container) {
         try {
-            if (civilite == null) {
-                civilite = FXMLLoader.load(Module.class.getResource(FXMLView.CIVILITE.getFXMLFile()));
-                ;
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.CIVILITE.getFXMLFile()));
             container.getChildren().clear();
-            container.getChildren().add(civilite);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void setCompetence(StackPane container) {
+    public static void setCompetence(AnchorPane container) {
         try {
-            if (competence == null) {
-                competence = FXMLLoader.load(Module.class.getResource(FXMLView.COMPETENCE.getFXMLFile()));
-                ;
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.COMPETENCE.getFXMLFile()));
+
             container.getChildren().clear();
-            container.getChildren().add(competence);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
     }
 
-    public static void setGroupe(StackPane container) {
+    public static void setGroupe(AnchorPane container) {
         try {
-            if (groupe == null) {
-                groupe = FXMLLoader.load(Module.class.getResource(FXMLView.GROUPE.getFXMLFile()));
-                ;
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.GROUPE.getFXMLFile()));
             container.getChildren().clear();
-            container.getChildren().add(groupe);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void setProfil(StackPane container) {
+    public static void setProfil(AnchorPane container) {
         try {
-            if (profil == null) {
-                profil = FXMLLoader.load(Module.class.getResource(FXMLView.PROFIL.getFXMLFile()));
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.PROFIL.getFXMLFile()));
             container.getChildren().clear();
-            container.getChildren().add(profil);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void setParametre(StackPane container) {
+    public static void setParametre(AnchorPane container) {
         try {
-            if (parametre == null) {
-                parametre = FXMLLoader.load(Module.class.getResource(FXMLView.PARAMETRE.getFXMLFile()));
-                ;
-            }
+            Pane pane = FXMLLoader.load(Module.class.getResource(FXMLView.PARAMETRE.getFXMLFile()));
+
             container.getChildren().clear();
-            container.getChildren().add(parametre);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void setImportPersonne(StackPane container) {
+    public static void setImportPersonne(AnchorPane container) {
         try {
-            if (importPeronne == null) {
-                String fxmlFile = "/views/civilite/import.fxml";
-                importPeronne = FXMLLoader.load(Module.class.getResource(fxmlFile));
-            }
+            String fxmlFile = "/views/civilite/import.fxml";
+            Pane pane = FXMLLoader.load(Module.class.getResource(fxmlFile));
             container.getChildren().clear();
-            container.getChildren().add(importPeronne);
+            container.getChildren().add(pane);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -1,3 +1,4 @@
+
 .background {
     /*-fx-background-image: url("/images/CoarseGrid.png");
        -fx-background-repeat: repeat;
@@ -12,6 +13,9 @@ GLOBAL CSS
 .button{
     -fx-cursor: hand;
     -fx-font-size: 10pt;
+}
+.label{
+    -fx-font-family: Verdana;
 }
 .button.save {
     -fx-padding: 5 22 5 22;
@@ -44,10 +48,7 @@ GLOBAL CSS
 .menu .left-container {
     -fx-background-color: black;
 }
-.text-field {
-    -fx-font-size: 10pt;
-    -fx-font-family: "Segoe UI Semibold";
-}
+
 /**************
 SEARCH
 ***************/
@@ -117,10 +118,10 @@ JFOenix CSS
     -fx-background-color: #aaaaaa;
 }
 .search-box {
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-text-fill: #363636;
-    -fx-background-radius: 15, 14;
-    -fx-padding: 0 0 0 30;
+    -fx-background-radius: 10, 9;
+    -fx-padding: 5 5 5 30;
 }
 .search-box:focused {
     -fx-background-radius: 15,14,16,14;

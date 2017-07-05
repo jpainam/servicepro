@@ -9,13 +9,13 @@ import javafx.beans.property.SimpleStringProperty;
 public class Competence {
     private SimpleIntegerProperty idcompetence = new SimpleIntegerProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
-    private Niveaucompetence niveaucompetence;
+    private Niveaucompetence niveau = new Niveaucompetence();
     private SimpleStringProperty type = new SimpleStringProperty();
 
-    public Competence(int idcompetence, String description, Niveaucompetence niveaucompetence, String type) {
+    public Competence(int idcompetence, String description, Niveaucompetence niveau, String type) {
         this.idcompetence.set(idcompetence);
         this.description.set(description);
-        this.niveaucompetence = niveaucompetence;
+        this.niveau = niveau;
         this.type.set(type);
     }
     public Competence(){}
@@ -37,12 +37,12 @@ public class Competence {
         this.description.set(description);
     }
 
-    public Niveaucompetence getNiveaucompetence() {
-        return niveaucompetence;
+    public Niveaucompetence getNiveau() {
+        return niveau;
     }
 
-    public void setNiveaucompetence(Niveaucompetence niveaucompetence) {
-        this.niveaucompetence = niveaucompetence;
+    public void setNiveau(Niveaucompetence niveau) {
+        this.niveau = niveau;
     }
 
     public String getType() {
@@ -63,5 +63,10 @@ public class Competence {
 
     public SimpleStringProperty typeProperty() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return getDescription();
     }
 }

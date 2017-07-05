@@ -2,11 +2,17 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.hibernate.annotations.MetaValue;
+
+import javax.persistence.*;
 
 /**
  * Created by JP on 6/11/2017.
  */
+@Entity
+@Table(name = "groupes")
 public class Groupe {
+
     private SimpleIntegerProperty idgroupe = new SimpleIntegerProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
 
@@ -16,10 +22,15 @@ public class Groupe {
     }
 
     public Groupe(){}
+
+    @Id
+    @GeneratedValue
+    @Column(name = "IDGROUPE")
     public int getIdgroupe() {
         return idgroupe.get();
     }
 
+    @Column(name = "LIBELLE")
     public String getLibelle() {
         return libelle.get();
     }

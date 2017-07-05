@@ -1,21 +1,27 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Controller;
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Modele;
 import com.cfao.app.beans.Profil;
+import com.cfao.app.beans.Profilcompetence;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
+import com.cfao.app.util.Constante;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.SearchFieldClassTool;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,17 +40,18 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.CustomTextField;
 
 import javax.swing.*;
+import javax.swing.text.StyledEditorKit;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -58,15 +65,17 @@ public class ProfilController implements Initializable {
     public JFXButton btnModifier;
     public JFXButton btnSupprimer;
     public JFXButton btnNouveau;
-    public TableColumn fondamentalColumn;
-    public TableColumn initialColumn;
-    public TableColumn avanceColumn;
-    public TableColumn expertColumn;
-    public TableColumn listecompetenceColumn;
-    public TableColumn connaissanceColumn;
-    public TableColumn competenceColumn;
+    public TableColumn<Profilcompetence, Boolean> fondamentalColumn;
+    public TableColumn<Profilcompetence, Boolean> initialColumn;
+    public TableColumn<Profilcompetence, Boolean> avanceColumn;
+    public TableColumn<Profilcompetence, Boolean> expertColumn;
+    public TableColumn<Profilcompetence, Competence> listecompetenceColumn;
+    public TableColumn<Profilcompetence, Boolean> connaissanceColumn;
+    public TableColumn<Profilcompetence, Boolean> competenceColumn;
     public TableView competenceTable;
     public HBox actionButtonBox;
+    public StackPane rootPane1;
+    public StackPane rootPane2;
     private TableView.TableViewSelectionModel<Profil> tableProfilModel;
     private SearchBox searchBox = new SearchBox();
 
@@ -77,12 +86,7 @@ public class ProfilController implements Initializable {
         buildProfilTable();
         HBox.setHgrow(profilTable, Priority.ALWAYS);
         tableProfilModel = profilTable.getSelectionModel();
-        tableProfilModel.selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                fillCompetenceTable();
-            }
-        });
+        tableProfilModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> fillCompetenceTable());
 
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -94,16 +98,67 @@ public class ProfilController implements Initializable {
     private void fillCompetenceTable() {
         if (tableProfilModel.getSelectedItem() != null) {
             Profil profil = tableProfilModel.getSelectedItem();
-            ProfilModel profilModel = new ProfilModel(Model.getBeansClass("Profil"));
-            Task<ObservableList<ArrayList>> task = new Task<ObservableList<ArrayList>>() {
+            //ProfilModel profilModel = new ProfilModel(Model.getBeansClass("Profil"));
+            CompetenceModel competenceModel = new CompetenceModel();
+            System.out.println(competenceModel.getCompetenceParProfil(profil));
+
+            Task<ObservableList<Profilcompetence>> task = new Task<ObservableList<Profilcompetence>>() {
                 @Override
-                protected ObservableList<ArrayList> call() throws Exception {
-                    return FXCollections.observableArrayList(profilModel.getCompetenceParProfil(profil));
+                protected ObservableList<Profilcompetence> call() throws Exception {
+                    return FXCollections.observableArrayList(competenceModel.getCompetenceParProfil(profil));
                 }
             };
             new Thread(task).start();
-            task.setOnSucceeded(event -> competenceTable.setItems(task.getValue()));
+            task.setOnSucceeded((WorkerStateEvent event) -> {
+                if(task.getValue().isEmpty()){
+                    competenceTable.getItems().clear();
+                    return;
+                }
+                competenceTable.setItems(task.getValue());
+                setColumnProperty(initialColumn, task.getValue(), ProfilModel.INITIAL);
+                setColumnProperty(fondamentalColumn,  task.getValue(), ProfilModel.FONDAMENTAL);
+                setColumnProperty(avanceColumn,  task.getValue(), ProfilModel.AVANCE);
+                setColumnProperty(expertColumn,  task.getValue(), ProfilModel.EXPERT);
+                listecompetenceColumn.setCellValueFactory(param -> {
+                    Competence competence = param.getValue().getCompetence();
+                    return new SimpleObjectProperty<>(competence);
+                });
+                competenceColumn.setCellValueFactory(param -> {
+                    Competence competence = param.getValue().getCompetence();
+                    if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                        return new SimpleBooleanProperty(true);
+                    } else {
+                        return new SimpleBooleanProperty(false);
+                    }
+                });
+                competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+                connaissanceColumn.setCellValueFactory(param -> {
+                    Competence competence = param.getValue().getCompetence();
+                    if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                        return new SimpleBooleanProperty(true);
+                    } else {
+                        return new SimpleBooleanProperty(false);
+                    }
+                });
+                connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+            });
         }
+    }
+
+    private void setColumnProperty(TableColumn<Profilcompetence, Boolean> tableColumn, ObservableList<Profilcompetence> list, int niveau) {
+        tableColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Profilcompetence, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Profilcompetence, Boolean> param) {
+                Competence competence = param.getValue().getCompetence();
+                if(competence.getNiveau().getIdniveaucompetence() == niveau){
+                    return new SimpleBooleanProperty(true);
+                }else{
+                    return new SimpleBooleanProperty(false);
+                }
+            }
+        });
+
     }
 
     /**
@@ -116,18 +171,12 @@ public class ProfilController implements Initializable {
         setSingleColumnSetting(competenceColumn);
         setSingleColumnSetting(expertColumn);
         setSingleColumnSetting(initialColumn);
-
-        initialColumn.setCellValueFactory(new PropertyValueFactory<>("initial"));
-        fondamentalColumn.setCellValueFactory(new PropertyValueFactory<>("fondamendal"));
-        avanceColumn.setCellValueFactory(new PropertyValueFactory<>("avance"));
-        connaissanceColumn.setCellValueFactory(new PropertyValueFactory<>("connaissance"));
-        competenceColumn.setCellValueFactory(new PropertyValueFactory<>("competence"));
-        expertColumn.setCellValueFactory(new PropertyValueFactory<>("expert"));
-        listecompetenceColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 
     /**
      * Transformer une colonne passer en parametre en vertical, utiliser dans setColumnSettings
+     * Ajouter une rotation pour que les texte soit vertical
+     *
      * @param column
      */
     private void setSingleColumnSetting(TableColumn column) {
@@ -135,8 +184,8 @@ public class ProfilController implements Initializable {
         label.setWrapText(true);
         label.setTextAlignment(TextAlignment.CENTER);
         VBox vbox = new VBox(label);
-        vbox.setPadding(new Insets(5, 5,5,5));
-        vbox.setMaxWidth(90);
+        vbox.setPadding(new Insets(5, 5, 5, 5));
+        vbox.setMaxWidth(120);
         column.setText("");
         vbox.setRotate(-90);
         Group group = new Group(vbox);
@@ -167,7 +216,6 @@ public class ProfilController implements Initializable {
     private void buildProfilTable() {
         abbreviationColumn.setCellValueFactory(new PropertyValueFactory<>("abbreviation"));
         libelleColumn.setCellValueFactory(new PropertyValueFactory<>("libelle"));
-
         ProfilModel profilModel = new ProfilModel();
 
         Task<ObservableList<Profil>> task = new Task<ObservableList<Profil>>() {
@@ -186,15 +234,13 @@ public class ProfilController implements Initializable {
     }
 
     public void nouveauAction(ActionEvent actionEvent) {
-    }
-
-    public void editAction(ActionEvent actionEvent) {
-        if (tableProfilModel.getSelectedItem() != null) {
-
-        } else {
-            JFXDialog dialog = new JFXDialog();
-            dialog.show();
-            //JOptionPane.showMessageDialog(null, "Veuillez choisir un profil a editer");
+        try {
+            rootPane2.getChildren().setAll((Node) FXMLLoader.load(getClass().getResource("/views/profil/add.fxml")));
+            btnModifier.setDisable(true);
+            btnNouveau.setDisable(true);
+            btnSupprimer.setDisable(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
