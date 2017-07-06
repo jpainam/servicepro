@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2017 at 04:19 PM
+-- Generation Time: Jul 06, 2017 at 02:22 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -19,6 +19,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `servicepro`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ambitions`
+--
+
+CREATE TABLE IF NOT EXISTS `ambitions` (
+  `IDAMBITION` int(11) NOT NULL AUTO_INCREMENT,
+  `LIBELLE` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDAMBITION`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `ambitions`
+--
+
+INSERT INTO `ambitions` (`IDAMBITION`, `LIBELLE`) VALUES
+(1, 'Fondamental'),
+(2, 'Avancé'),
+(3, 'Expert');
 
 -- --------------------------------------------------------
 
@@ -58,6 +79,28 @@ CREATE TABLE IF NOT EXISTS `continents` (
   `LIBELLE` varchar(20) NOT NULL,
   PRIMARY KEY (`IDCONTIENT`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contrats`
+--
+
+CREATE TABLE IF NOT EXISTS `contrats` (
+  `IDCONTRAT` int(11) NOT NULL AUTO_INCREMENT,
+  `LIBELLE` varchar(50) NOT NULL,
+  `IDPOTENTIEL` int(11) NOT NULL,
+  PRIMARY KEY (`IDCONTRAT`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `contrats`
+--
+
+INSERT INTO `contrats` (`IDCONTRAT`, `LIBELLE`, `IDPOTENTIEL`) VALUES
+(1, 'Contrat à durée déterminée (CDD)', 0),
+(2, 'Contrat à durée indéterminée (CDI)', 0),
+(3, 'Autres', 0);
 
 -- --------------------------------------------------------
 
@@ -151,7 +194,16 @@ CREATE TABLE IF NOT EXISTS `langue` (
   `IDLANGUE` int(11) NOT NULL AUTO_INCREMENT,
   `LIBELLE` varchar(100) NOT NULL,
   PRIMARY KEY (`IDLANGUE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `langue`
+--
+
+INSERT INTO `langue` (`IDLANGUE`, `LIBELLE`) VALUES
+(1, 'Francais'),
+(2, 'Anglais'),
+(3, 'Espagnol');
 
 -- --------------------------------------------------------
 
@@ -165,6 +217,16 @@ CREATE TABLE IF NOT EXISTS `langue_parlee` (
   PRIMARY KEY (`IDPERS`,`IDLANGUE`),
   KEY `IDLANGUE` (`IDLANGUE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `langue_parlee`
+--
+
+INSERT INTO `langue_parlee` (`IDPERS`, `IDLANGUE`) VALUES
+(1, 2),
+(2, 2),
+(1, 3),
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -812,39 +874,58 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   `NOM` varchar(30) NOT NULL,
   `PRENOM` varchar(30) NOT NULL,
   `AUTRENOM` varchar(30) DEFAULT NULL,
-  `DATENAISS` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `DATENAISS` date NOT NULL,
   `PAYS` int(11) DEFAULT NULL,
   `GROUPE` int(11) DEFAULT NULL,
   `SOCIETE` int(11) DEFAULT NULL,
   `SECTION` int(11) DEFAULT NULL,
-  `groupe_IDGROUPE` int(11) DEFAULT NULL,
-  `pays_idPays` int(11) DEFAULT NULL,
-  `section_idsection` int(11) DEFAULT NULL,
-  `societe_idsociete` int(11) DEFAULT NULL,
+  `CONTRAT` int(11) DEFAULT NULL,
+  `AMBITION` int(11) DEFAULT NULL,
+  `LANGUE` int(11) DEFAULT NULL,
   PRIMARY KEY (`IDPERSONNE`),
   KEY `PAYS` (`PAYS`),
   KEY `GROUPE` (`GROUPE`),
   KEY `SOCIETE` (`SOCIETE`),
   KEY `SECTION` (`SECTION`),
-  KEY `FK_hs8olc6vqsd2n6oobk1hssjgv` (`groupe_IDGROUPE`),
-  KEY `FK_922cleq29vjxosj57kxdatjsk` (`pays_idPays`),
-  KEY `FK_ai7vog44xok7ulm2g55qstm3h` (`section_idsection`),
-  KEY `FK_608w9j6vuyelemsrlnfellsde` (`societe_idsociete`)
+  KEY `FK_contrat` (`CONTRAT`),
+  KEY `LANGUE` (`LANGUE`),
+  KEY `AMBITION` (`AMBITION`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `personnes`
 --
 
-INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `groupe_IDGROUPE`, `pays_idPays`, `section_idsection`, `societe_idsociete`) VALUES
-(1, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-10 23:05:43', 130, 1, 1, 2, NULL, NULL, NULL, NULL),
-(2, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-10 23:05:43', 18, 2, 2, 4, NULL, NULL, NULL, NULL),
-(3, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26 09:05:27', 14, 1, 3, 3, NULL, NULL, NULL, NULL),
-(4, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26 09:05:27', 15, 1, 4, 4, NULL, NULL, NULL, NULL),
-(5, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26 09:06:22', 20, 2, 11, 5, NULL, NULL, NULL, NULL),
-(6, 'CICI03430', 'ANGORA', 'KOUAKOU', NULL, '2017-06-26 09:06:22', 100, 2, 9, 3, NULL, NULL, NULL, NULL),
-(7, 'ML00350', 'CISSE', 'MAMADOU', NULL, '2017-06-26 09:07:14', 15, 1, 3, 5, NULL, NULL, NULL, NULL),
-(8, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26 09:07:14', 55, 3, 13, 4, NULL, NULL, NULL, NULL);
+INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `CONTRAT`, `AMBITION`, `LANGUE`) VALUES
+(1, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', 130, 1, 1, 2, 1, 2, 2),
+(2, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', 18, 2, 2, 4, 2, 3, 1),
+(3, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', 14, 1, 3, 3, 2, 1, 3),
+(4, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', 15, 1, 4, 4, 2, 3, 3),
+(5, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', 20, 2, 11, 5, 3, 2, 2),
+(7, '', '', '', NULL, '2017-06-26', NULL, NULL, NULL, NULL, 1, 3, 3),
+(8, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', 55, 3, 13, 4, 3, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `potentiels`
+--
+
+CREATE TABLE IF NOT EXISTS `potentiels` (
+  `IDPOTENTIEL` int(11) NOT NULL AUTO_INCREMENT,
+  `LIBELLE` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDPOTENTIEL`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `potentiels`
+--
+
+INSERT INTO `potentiels` (`IDPOTENTIEL`, `LIBELLE`) VALUES
+(1, 'Aucun'),
+(2, 'Faible'),
+(3, 'Bon'),
+(4, 'Talent');
 
 -- --------------------------------------------------------
 
@@ -1050,21 +1131,20 @@ ALTER TABLE `formations`
 -- Constraints for table `langue_parlee`
 --
 ALTER TABLE `langue_parlee`
-  ADD CONSTRAINT `langue_parlee_ibfk_2` FOREIGN KEY (`IDLANGUE`) REFERENCES `langue` (`IDLANGUE`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `langue_parlee_ibfk_1` FOREIGN KEY (`IDPERS`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `langue_parlee_ibfk_1` FOREIGN KEY (`IDPERS`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `langue_parlee_ibfk_2` FOREIGN KEY (`IDLANGUE`) REFERENCES `langue` (`IDLANGUE`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `personnes`
 --
 ALTER TABLE `personnes`
-  ADD CONSTRAINT `FK_608w9j6vuyelemsrlnfellsde` FOREIGN KEY (`societe_idsociete`) REFERENCES `societes` (`IDSOCIETE`),
-  ADD CONSTRAINT `FK_922cleq29vjxosj57kxdatjsk` FOREIGN KEY (`pays_idPays`) REFERENCES `pays` (`IDPAYS`),
-  ADD CONSTRAINT `FK_ai7vog44xok7ulm2g55qstm3h` FOREIGN KEY (`section_idsection`) REFERENCES `sections` (`IDSECTION`),
-  ADD CONSTRAINT `FK_hs8olc6vqsd2n6oobk1hssjgv` FOREIGN KEY (`groupe_IDGROUPE`) REFERENCES `groupes` (`IDGROUPE`),
+  ADD CONSTRAINT `FK_contrat` FOREIGN KEY (`CONTRAT`) REFERENCES `contrats` (`IDCONTRAT`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `personnes_ibfk_1` FOREIGN KEY (`PAYS`) REFERENCES `pays` (`IDPAYS`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `personnes_ibfk_2` FOREIGN KEY (`GROUPE`) REFERENCES `groupes` (`IDGROUPE`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `personnes_ibfk_3` FOREIGN KEY (`SOCIETE`) REFERENCES `societes` (`IDSOCIETE`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `personnes_ibfk_4` FOREIGN KEY (`SECTION`) REFERENCES `sections` (`IDSECTION`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `personnes_ibfk_4` FOREIGN KEY (`SECTION`) REFERENCES `sections` (`IDSECTION`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `personnes_ibfk_5` FOREIGN KEY (`AMBITION`) REFERENCES `ambitions` (`IDAMBITION`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `personnes_ibfk_6` FOREIGN KEY (`LANGUE`) REFERENCES `langue` (`IDLANGUE`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `prerequis`
