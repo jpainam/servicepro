@@ -9,5 +9,5 @@ import java.time.format.DateTimeFormatter;
 
 public class FormatDate {
     public static final DateTimeFormatter currentForme = DateTimeFormatter.ofPattern("dd/MM/yyyy");
- public static final DateTimeFormatter sqlForme = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter sqlForme = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 }

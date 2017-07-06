@@ -23,16 +23,21 @@ public class Personne {
     private SimpleStringProperty nom = new SimpleStringProperty();
     private SimpleStringProperty prenom = new SimpleStringProperty();
     private ObjectProperty<LocalDate> naissance = new SimpleObjectProperty<LocalDate>();
+    // Liste des langues parlees
     private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
     private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
     private ObjectProperty<Section> section = new SimpleObjectProperty<Section>();
 
+    private ObjectProperty<Contrat> contrat = new SimpleObjectProperty<Contrat>();
+    private ObjectProperty<Ambition> ambition = new SimpleObjectProperty<>();
+    // Langue principale
+    private ObjectProperty<Langue> langue = new SimpleObjectProperty<>();
+
     /**
      * CONSTRUCT
      */
-
 
 
     /**
@@ -61,12 +66,14 @@ public class Personne {
     }
 
     @Column(name = "DATENAISS")
-    public Date getNaissance(){return Date.valueOf(naissance.get());}
+    public Date getNaissance() {
+        return Date.valueOf(naissance.get());
+    }
 
     @ManyToMany()
     @JoinTable(name = "langue_parlee", joinColumns = {@JoinColumn(name = "IDPERS")},
             inverseJoinColumns = {@JoinColumn(name = "IDLANGUE")})
-    public java.util.List<Langue> getLangues(){
+    public java.util.List<Langue> getLangues() {
         return langues.get();
     }
 
@@ -94,6 +101,25 @@ public class Personne {
         return section.get();
     }
 
+    @ManyToOne()
+    @JoinColumn(name = "CONTRAT")
+    public Contrat getContrat() {
+        return contrat.get();
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "AMBITION")
+    public Ambition getAmbition() {
+        return ambition.get();
+    }
+    @ManyToOne()
+    @JoinColumn(name="LANGUE")
+    public Langue getLangue() {
+        return langue.get();
+    }
+    public ObjectProperty<Contrat> contratProperty() {
+        return contrat;
+    }
 
 
     /**
@@ -115,10 +141,12 @@ public class Personne {
         this.prenom.set(prenom);
     }
 
-    public void setNaissance(Date date){this.naissance.set(date.toLocalDate());}
+    public void setNaissance(Date date) {
+        this.naissance.set(date.toLocalDate());
+    }
 
-    public void setLangues(java.util.List<Langue> set){
-        this.langues.set(FXCollections.observableList(set) );
+    public void setLangues(java.util.List<Langue> set) {
+        this.langues.set(FXCollections.observableList(set));
     }
 
     public void setPays(Pays pays) {
@@ -137,6 +165,13 @@ public class Personne {
         this.section.set(section);
     }
 
+    public void setContrat(Contrat contrat) {
+        this.contrat.set(contrat);
+    }
+
+    public void setAmbition(Ambition ambition) {
+        this.ambition.set(ambition);
+    }
 
     /**
      * METHODS
@@ -174,17 +209,45 @@ public class Personne {
         return prenom;
     }
 
-    public ObjectProperty<LocalDate> naissance() {return naissance; }
+    public ObjectProperty<LocalDate> naissance() {
+        return naissance;
+    }
 
-    public ListProperty<Langue> langues() {return langues; }
+    public ListProperty<Langue> langues() {
+        return langues;
+    }
 
-    public ObjectProperty<Pays> pays() {return pays; }
+    public ObjectProperty<Pays> pays() {
+        return pays;
+    }
 
-    public ObjectProperty<Section> section() {return section; }
+    public ObjectProperty<Section> section() {
+        return section;
+    }
 
-    public ObjectProperty<Societe> societe() {return societe; }
+    public ObjectProperty<Societe> societe() {
+        return societe;
+    }
 
-    public ObjectProperty<Groupe> groupe() {return groupe; }
+    public ObjectProperty<Groupe> groupe() {
+        return groupe;
+    }
+
+    public ObjectProperty<Contrat> contrat() {
+        return contrat;
+    }
+
+    public ObjectProperty<Ambition> ambitionProperty() {
+        return ambition;
+    }
 
 
+
+    public ObjectProperty<Langue> langueProperty() {
+        return langue;
+    }
+
+    public void setLangue(Langue langue) {
+        this.langue.set(langue);
+    }
 }

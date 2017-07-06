@@ -1,16 +1,10 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.ComboBoxAutoComplete;
-import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.FormatDate;
 import com.cfao.app.util.ServiceproUtil;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import de.jensd.fx.glyphs.GlyphIcons;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
@@ -20,14 +14,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,22 +26,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.textfield.TextFields;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,10 +43,10 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/9/2017.
  */
-public class CiviliteController implements Initializable{
+public class CiviliteController implements Initializable {
 
 
-    public TableView <Personne> personneTable;
+    public TableView<Personne> personneTable;
     public TableColumn columnNom;
     public TableColumn columnMatricule;
 
@@ -87,7 +70,7 @@ public class CiviliteController implements Initializable{
     public ComboBox<Section> comboSection;
     public Label labelAge;
 
-    public CheckComboBox<Langue> comboLangue;
+    public CheckComboBox<Langue> comboLanguesParlees;
     public Button addPhoto;
     public Button delPhoto;
     public ImageView imageview;
@@ -98,7 +81,7 @@ public class CiviliteController implements Initializable{
     public TableView.TableViewSelectionModel<Personne> personneTableModel;
     public Model<Personne> modelPersonne;
 
-     public Personne pers;
+    public Personne pers;
 
     public Button btnPrevious;
     public Button btnPrint;
@@ -107,6 +90,10 @@ public class CiviliteController implements Initializable{
     public Tab tabDetails;
     public Tab tabFormation;
     public Tab tabTest;
+    public ComboBox<Ambition> comboAmbition;
+    public ComboBox<Potentiel> comboPotentiel;
+    public ComboBox<Contrat> comboContrat;
+    public ComboBox<Langue> comboLangue;
 
 
     @Override
@@ -123,10 +110,10 @@ public class CiviliteController implements Initializable{
 
     private void initComponents() {
 
-        comboLangue = new CheckComboBox(FXCollections.observableArrayList());
-        comboLangue.setMaxWidth(Double.MAX_VALUE);
-        comboLangue.setDisable(true);
-        gridB.add(comboLangue, 3, 1 );
+        comboLanguesParlees = new CheckComboBox(FXCollections.observableArrayList());
+        comboLanguesParlees.setMaxWidth(Double.MAX_VALUE);
+        //comboLanguesParlees.setDisable(true);
+        gridB.add(comboLanguesParlees, 3, 1);
         GlyphsDude.setIcon(addPhoto, FontAwesomeIcon.PICTURE_ALT);
         GlyphsDude.setIcon(delPhoto, FontAwesomeIcon.CLOSE);
 
@@ -143,7 +130,7 @@ public class CiviliteController implements Initializable{
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
 
-       GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
+        GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
         GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
         GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
         GlyphsDude.setIcon(btnSuppr, FontAwesomeIcon.TRASH);
@@ -154,28 +141,37 @@ public class CiviliteController implements Initializable{
 
     private void buildCombo() {
 
-        Task<ObservableMap<String,ObservableList>> task = new Task<ObservableMap<String,ObservableList>>() {
+        Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
             @Override
-            protected ObservableMap<String,ObservableList> call() throws Exception {
+            protected ObservableMap<String, ObservableList> call() throws Exception {
                 modelPersonne = new Model<>();
-                ObservableMap<String,ObservableList> map =FXCollections.observableHashMap();
+                ObservableMap<String, ObservableList> map = FXCollections.observableHashMap();
                 map.put("societe", FXCollections.observableList(new Model<Societe>(Model.getBeanPath("Societe")).getList()));
                 map.put("section", FXCollections.observableList(new Model<Section>(Model.getBeanPath("Section")).getList()));
                 map.put("groupe", FXCollections.observableList(new Model<Groupe>(Model.getBeanPath("Groupe")).getList()));
                 map.put("pays", FXCollections.observableList(new Model<Pays>(Model.getBeanPath("Pays")).getList()));
                 map.put("langue", FXCollections.observableList(new Model<Langue>(Model.getBeanPath("Langue")).getList()));
+                map.put("potentiel", FXCollections.observableList(new Model<Potentiel>(Model.getBeanPath("Potentiel")).getList()));
+                map.put("contrat", FXCollections.observableList(new Model<Contrat>(Model.getBeanPath("Contrat")).getList()));
+                map.put("ambition", FXCollections.observableList(new Model<Ambition>(Model.getBeanPath("Ambition")).getList()));
+                map.put("langue", FXCollections.observableList(new Model<Langue>(Model.getBeanPath("Langue")).getList()));
+
                 return map;
             }
         };
         task.run();
         task.setOnSucceeded(event -> {
-            ObservableMap<String,ObservableList> map = task.getValue();
+            ObservableMap<String, ObservableList> map = task.getValue();
             comboPays.setItems(map.get("pays"));
             comboGroupe.setItems(map.get("groupe"));
             comboSociete.setItems(map.get("societe"));
             comboSection.setItems(map.get("section"));
-            comboLangue.getItems().setAll(map.get("langue"));
-        } );
+            comboLanguesParlees.getItems().setAll(map.get("langue"));
+            comboPotentiel.setItems(map.get("potentiel"));
+            comboContrat.setItems(map.get("contrat"));
+            comboAmbition.setItems(map.get("ambition"));
+            comboLangue.setItems(map.get("langue"));
+        });
     }
 
     private void buildtablePersonne() {
@@ -196,14 +192,14 @@ public class CiviliteController implements Initializable{
         personneTableModel.selectedItemProperty().addListener(new ChangeListener<Personne>() {
             @Override
             public void changed(ObservableValue<? extends Personne> observable, Personne oldValue, Personne newValue) {
-                if(stateBtnNouveau == 1){
+                if (stateBtnNouveau == 1) {
                     disableComponent(btnModifier, false);
                     disableComponent(btnSuppr, false);
                     disableAllComponents(true);
                     btnNouveau.setText("Nouveau / New");
                     stateBtnNouveau = 0;
                 }
-                if(stateBtnModifier != 1)
+                if (stateBtnModifier != 1)
                     renduFormulaire(newValue);
             }
         });
@@ -226,8 +222,8 @@ public class CiviliteController implements Initializable{
         txtPrenom.setText(person.getPrenom());
 
         LocalDate date = person.getNaissance().toLocalDate();
-        datePicker.setValue(date);
         datePicker.getEditor().setText(date.format(FormatDate.currentForme));
+
         labelAge.setText(age(date));
 
         comboSection.setValue(person.getSection());
@@ -237,6 +233,9 @@ public class CiviliteController implements Initializable{
         comboGroupe.setValue(person.getGroupe());
 
         comboPays.setValue(person.getPays());
+        comboContrat.setValue(person.getContrat());
+        comboAmbition.setValue(person.getAmbition());
+        comboLangue.setValue(person.getLangue());
 
         /*Necessaire à l'update du component checkcombobox
           des Langues parlées par une personne*/
@@ -248,19 +247,15 @@ public class CiviliteController implements Initializable{
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-
-                comboLangue.getCheckModel().clearChecks();
+                comboLanguesParlees.getCheckModel().clearChecks();
                 int index = 0;
-                for(Langue l  : comboLangue.getItems()){
-
+                for (Langue l : comboLanguesParlees.getItems()) {
                     Iterator<Langue> iterator = listLangue.iterator();
-
-                    while (iterator.hasNext()){
-                        if(l.equals(iterator.next()))
-                            comboLangue.getCheckModel().check(index);
+                    while (iterator.hasNext()) {
+                        if (l.equals(iterator.next()))
+                            comboLanguesParlees.getCheckModel().check(index);
                     }
-
-                    index ++;
+                    index++;
                 }
                 return null;
             }
@@ -268,23 +263,21 @@ public class CiviliteController implements Initializable{
         task.run();
     }
 
-    public void disableComponent (Node component, boolean b){
-        if(this.stateBtnNouveau == 0 && !btnNouveau.isDisable())
-            if(component instanceof TextField) {
+    public void disableComponent(Node component, boolean b) {
+        if (this.stateBtnNouveau == 0 && !btnNouveau.isDisable())
+            if (component instanceof TextField) {
                 ((TextField) component).setText("");
-                ((TextField)component).setEditable(!b);
-            }
-            else if (component instanceof ComboBox) {
+                ((TextField) component).setEditable(!b);
+            } else if (component instanceof ComboBox) {
                 ((ComboBox) component).setValue(null);
                 component.setDisable(b);
-            }
-            else if (component instanceof DatePicker)
+            } else if (component instanceof DatePicker)
                 ((DatePicker) component).getEditor().setText("");
             else if (component instanceof CheckComboBox)
                 ((CheckComboBox) component).getCheckModel().clearChecks();
     }
 
-    public void disableAllComponents(boolean bool){
+    public void disableAllComponents(boolean bool) {
         disableComponent(txtMatricule, bool);
         disableComponent(txtNom, bool);
         disableComponent(txtPrenom, bool);
@@ -293,17 +286,17 @@ public class CiviliteController implements Initializable{
         disableComponent(comboSociete, bool);
         disableComponent(comboSection, bool);
         disableComponent(datePicker, bool);
-        disableComponent(comboLangue, bool);
+        disableComponent(comboLanguesParlees, bool);
     }
 
-    public String age(LocalDate date){
+    public String age(LocalDate date) {
         int a = LocalDate.now().getYear() - date.getYear();
         return a + (a > 1 ? " ans" : " an");
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
-        if(!btnNouveau.isDisable())
-            switch (stateBtnNouveau){
+        if (!btnNouveau.isDisable())
+            switch (stateBtnNouveau) {
 
                 case 0:
 
@@ -326,9 +319,9 @@ public class CiviliteController implements Initializable{
                     personne.setPays(comboPays.getValue());
 
                     /*
-                    * comboLangue.getCheckModel().getCheckedItems() renvoi une ReadOnlyObserverList
+                    * comboLanguesParlees.getCheckModel().getCheckedItems() renvoi une ReadOnlyObserverList
                     * */
-                    personne.setLangues(comboLangue.getCheckModel().getCheckedItems());
+                    personne.setLangues(comboLanguesParlees.getCheckModel().getCheckedItems());
 
                     personne.setGroupe(comboGroupe.getValue());
                     personne.setSection(comboSection.getValue());
@@ -344,6 +337,7 @@ public class CiviliteController implements Initializable{
                     break;
             }
     }
+
     /*
         bool == true for save, and false for update
      */
@@ -360,7 +354,7 @@ public class CiviliteController implements Initializable{
         task.run();
         task.setOnSucceeded(event -> {
 
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 personneTable.getSelectionModel().select(task.getValue());
                 System.out.println("Good");
             });
@@ -369,11 +363,11 @@ public class CiviliteController implements Initializable{
 
     public void clicModifier(ActionEvent actionEvent) {
 
-        if(!btnModifier.isDisable())
-            switch (stateBtnModifier){
+        if (!btnModifier.isDisable())
+            switch (stateBtnModifier) {
                 case 0:
-                    System.out.println("Avant bind - "+pers.toString());
-                    bindPersonne(pers,true);
+                    System.out.println("Avant bind - " + pers.toString());
+                    bindPersonne(pers, true);
                     disableComponent(btnNouveau, true);
                     disableComponent(btnSuppr, true);
                     disableAllComponents(false);
@@ -395,7 +389,7 @@ public class CiviliteController implements Initializable{
     }
 
     private void bindPersonne(Personne personne, boolean bind) {
-        if(bind){
+        if (bind) {
             personne.matriculeProperty().bind(txtMatricule.textProperty());
             personne.nomProperty().bind(txtNom.textProperty());
             personne.prenomProperty().bind(txtPrenom.textProperty());
@@ -404,8 +398,8 @@ public class CiviliteController implements Initializable{
             personne.societe().bind(comboSociete.valueProperty());
             personne.section().bind(comboSection.valueProperty());
             personne.groupe().bind(comboGroupe.valueProperty());
-            personne.langues().bindContent(comboLangue.getCheckModel().getCheckedItems());
-        }else {
+            personne.langues().bindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
+        } else {
             personne.matriculeProperty().unbind();
             personne.nomProperty().unbind();
             personne.prenomProperty().unbind();
@@ -414,13 +408,13 @@ public class CiviliteController implements Initializable{
             personne.societe().unbind();
             personne.section().unbind();
             personne.groupe().unbind();
-            personne.langues().unbindContent(comboLangue.getCheckModel().getCheckedItems());
-            System.out.println("Après bind - "+personne.toString());
+            personne.langues().unbindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
+            System.out.println("Après bind - " + personne.toString());
         }
     }
 
     public void clicSuppr(ActionEvent actionEvent) {
-        if(personneTableModel.getSelectedItem() != null) {
+        if (personneTableModel.getSelectedItem() != null) {
             Personne personne = personneTable.getSelectionModel().getSelectedItem();
             deletePersonne(personne);
         }
@@ -434,7 +428,7 @@ public class CiviliteController implements Initializable{
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                if(personneTable.getItems().size() > 0){
+                if (personneTable.getItems().size() > 0) {
                     modelPersonne.delete(personne);
                     modelPersonne.close();
                 }
@@ -444,8 +438,8 @@ public class CiviliteController implements Initializable{
         task.run();
         task.setOnSucceeded(event -> {
 
-            Platform.runLater(()->{
-                if(personneTable.getItems().size() == 0)
+            Platform.runLater(() -> {
+                if (personneTable.getItems().size() == 0)
                     disableAllComponents(true);
 
                 ServiceproUtil.notify("Suppression OK");
@@ -465,7 +459,7 @@ public class CiviliteController implements Initializable{
     public void addPhotoClic(ActionEvent actionEvent) {
         FileChooser choosePic = new FileChooser();
         choosePic.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichiers Image", "*.png","*.jpg","*.gif", "*.jpeg")
+                new FileChooser.ExtensionFilter("Fichiers Image", "*.png", "*.jpg", "*.gif", "*.jpeg")
         );
         photo = choosePic.showOpenDialog(Main.stage);
         try {

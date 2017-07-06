@@ -34,5 +34,8 @@
         <mapping class="com.cfao.app.beans.Personne" />
         <mapping class="com.cfao.app.beans.Groupe" />
         <mapping class="com.cfao.app.beans.Langue" />
+        <mapping class="com.cfao.app.beans.Potentiel" />
+        <mapping class="com.cfao.app.beans.Contrat" />
+        <mapping class="com.cfao.app.beans.Ambition" />
     </session-factory>
 </hibernate-configuration>

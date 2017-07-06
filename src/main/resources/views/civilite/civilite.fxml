@@ -55,16 +55,16 @@
                                                 <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
                                                 <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
                                                 <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau" textFill="#2920b0" />
-                                                <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier" />
+                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau / New" textFill="#2920b0" />
+                                                <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier / Edit" />
                                                 <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clicSuppr" styleClass="actionButton" text="Supprimer" />
-                                                <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clicAnnuler" styleClass="actionButton" text="Annuler" />
+                                                <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clicSuppr" styleClass="actionButton" text="Supprimer / Delete" />
+                                                <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clicAnnuler" styleClass="actionButton" text="Annuler / Cancel" />
                                              </items>
                                           </ToolBar>
-                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                          <HBox prefHeight="120.0" prefWidth="648.0" spacing="10.0">
                                              <children>
-                                                <VBox prefHeight="150.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
+                                                <VBox prefHeight="129.0" prefWidth="491.0" HBox.hgrow="ALWAYS">
                                                    <children>
                                                                     <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
                                                         </Label>
@@ -77,17 +77,18 @@
                                                                     <TextField fx:id="txtPrenom" maxWidth="1.7976931348623157E308" />
                                                    </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER" HBox.hgrow="NEVER">
+                                                <VBox alignment="CENTER" prefHeight="115.0" prefWidth="127.0" HBox.hgrow="NEVER">
                                                    <children>
-                                                      <AnchorPane fx:id="paneImage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="101.0" prefWidth="143.0" VBox.vgrow="NEVER">
+                                                      <Label fx:id="labelAge" />
+                                                      <AnchorPane fx:id="paneImage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="114.0" VBox.vgrow="NEVER">
                                                          <children>
-                                                            <ImageView fx:id="imageview" fitHeight="100.0" fitWidth="131.0" layoutX="98.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <ImageView fx:id="imageview" fitHeight="81.0" fitWidth="88.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="0.0">
                                                                <image>
                                                                   <Image url="@../../images/civilite/avatar_defaut.png" />
                                                                </image>
                                                             </ImageView>
                                                          </children></AnchorPane>
-                                                      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="148.0" spacing="10.0" VBox.vgrow="NEVER">
+                                                      <HBox alignment="CENTER" prefHeight="0.0" prefWidth="127.0" spacing="10.0" VBox.vgrow="NEVER">
                                                          <children>
                                                                           <Button fx:id="addPhoto" mnemonicParsing="false" onAction="#addPhotoClic" styleClass="onlyIcon" />
                                                                           <Button fx:id="delPhoto" mnemonicParsing="false" onAction="#delPhotoClic" styleClass="onlyIcon" />
@@ -100,14 +101,18 @@
                                                 <Insets left="10.0" right="10.0" />
                                              </padding>
                                           </HBox>
+                                          <Separator />
                                           <HBox spacing="10.0">
                                              <children>
-                                                              <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="150.0" text="Date Naissance / Born Date" HBox.hgrow="NEVER">
+                                                              <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" text="Date Naiss./Born Date" HBox.hgrow="NEVER">
                                                         </Label>
-                                                              <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="245.0" HBox.hgrow="NEVER" />
+                                                              <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="114.0" HBox.hgrow="NEVER" />
                                                               <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" text="Nationalité / Citizen" HBox.hgrow="NEVER">
                                                         </Label>
-                                                              <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="217.0" HBox.hgrow="ALWAYS" />
+                                                              <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="99.0" HBox.hgrow="ALWAYS" />
+                                                <Separator orientation="VERTICAL" />
+                                                <Label minWidth="50.0" prefWidth="50.0" text="Langue" />
+                                                <ComboBox fx:id="comboLangue" prefHeight="25.0" prefWidth="125.0" />
                                              </children>
                                              <padding>
                                                 <Insets left="10.0" right="10.0" />
@@ -137,15 +142,15 @@
                                                               <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Section/ Branch " GridPane.columnIndex="2">
                                                         </Label>
                                                               <ComboBox fx:id="comboSection" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                              <Label fx:id="labelPrenom1" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition :" GridPane.rowIndex="2" />
-                                                              <ComboBox maxWidth="1.7976931348623157E308" GridPane.rowIndex="3" />
-                                                              <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Potentiel /  :" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                              <ComboBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat /  :" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                              <ComboBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                              <Label fx:id="labelPrenom1" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition" GridPane.rowIndex="2" />
+                                                              <ComboBox fx:id="comboAmbition" maxWidth="1.7976931348623157E308" GridPane.rowIndex="3" />
+                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                              <ComboBox fx:id="comboPotentiel" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                              <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                                               <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                                               <DatePicker maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                                <Label text="Langues" GridPane.columnIndex="3" />
+                                                <Label text="Langues parlées" GridPane.columnIndex="3" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets left="10.0" right="10.0" />
