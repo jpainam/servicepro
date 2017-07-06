@@ -286,7 +286,7 @@ public class CiviliteController implements Initializable {
         disableComponent(comboSociete, bool);
         disableComponent(comboSection, bool);
         disableComponent(datePicker, bool);
-        disableComponent(comboLanguesParlees, bool);
+       // disableComponent(comboLanguesParlees, bool);
     }
 
     public String age(LocalDate date) {
