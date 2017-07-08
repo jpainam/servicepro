@@ -85,7 +85,7 @@ public class AccueilController implements Initializable {
         reserchePanel.setMaxWidth(Double.MAX_VALUE);
         reserchePanel.getChildren().addAll(label, searchBox1);
 
-        FormationModel formationModel = new FormationModel(Model.getBeansClass("Formation"));
+        //FormationModel formationModel = new FormationModel(Model.getBeansClass("Formation"));
         formationListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         VBox.setVgrow(formationListView, Priority.ALWAYS);
@@ -144,13 +144,10 @@ public class AccueilController implements Initializable {
         participantTable.getColumns().addAll(participantNom, participantMatricule);
         participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         VBox.setVgrow(participantTable, Priority.ALWAYS);
-
-        PersonneModel personneModel = new PersonneModel();
-
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
             protected ObservableList<Personne> call() throws Exception {
-                return FXCollections.observableArrayList(personneModel.select());
+                return FXCollections.observableArrayList(new Model<Personne>(Model.getBeanPath("Personne")).getList());
             }
         };
         new Thread(task).start();

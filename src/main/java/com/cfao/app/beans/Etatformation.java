@@ -3,9 +3,13 @@ package com.cfao.app.beans;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import javax.persistence.*;
+
 /**
  * Created by JP on 7/2/2017.
  */
+@Entity
+@Table(name = "etat_formation")
 public class Etatformation {
     private SimpleIntegerProperty idetatformation = new SimpleIntegerProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
@@ -20,6 +24,9 @@ public class Etatformation {
         return getLibelle();
     }
 
+    @Id
+    @GeneratedValue
+    @Column(name = "IDETATFORMATION")
     public int getIdetatformation() {
         return idetatformation.get();
     }
@@ -32,6 +39,7 @@ public class Etatformation {
         this.idetatformation.set(idetatformation);
     }
 
+    @Column(name = "LIBELLE")
     public String getLibelle() {
         return libelle.get();
     }

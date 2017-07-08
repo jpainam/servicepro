@@ -6,6 +6,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import java.util.logging.Level;
+
 /**
  * Created by JP on 6/9/2017.
  */
@@ -14,6 +16,7 @@ public class HibernateUtil {
     private static ServiceRegistry serviceRegistry;
     private static final String HIBERNATE_CONFIG = "/hibernate.cfg.xml";
     private static SessionFactory buildSessionFactory(){
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
         try {
             Configuration configuration = new Configuration();
             configuration.configure(HIBERNATE_CONFIG);

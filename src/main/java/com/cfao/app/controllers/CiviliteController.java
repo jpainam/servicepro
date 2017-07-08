@@ -4,6 +4,8 @@ import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.FormatDate;
+import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.SearchFieldClassTool;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -13,7 +15,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -26,6 +31,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.CheckComboBox;
@@ -94,12 +101,24 @@ public class CiviliteController implements Initializable {
     public ComboBox<Potentiel> comboPotentiel;
     public ComboBox<Contrat> comboContrat;
     public ComboBox<Langue> comboLangue;
+    public HBox hboxSearch;
+    public SearchBox searchBox = new SearchBox();
+    public Button btnAjouterProfil;
+    public Button btnDeleteProfil;
+    public Button btnAjouterPoste;
+    public Button btnDeletePoste;
+    public TitledPane posteAccordeon;
+    public TitledPane profilAccordeon;
+    public Accordion accordeon;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildcontent();
-
+        searchBox.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(searchBox, Priority.ALWAYS);
+        hboxSearch.getChildren().setAll(new Label("Civilités :" ), searchBox);
+        ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
     }
 
     private void buildcontent() {
@@ -137,6 +156,10 @@ public class CiviliteController implements Initializable {
         GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
         GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
         GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
+        GlyphsDude.setIcon(btnAjouterPoste, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnAjouterProfil, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnDeletePoste, FontAwesomeIcon.MINUS_SQUARE);
+        GlyphsDude.setIcon(btnDeleteProfil, FontAwesomeIcon.MINUS_SQUARE);
     }
 
     private void buildCombo() {
@@ -154,7 +177,6 @@ public class CiviliteController implements Initializable {
                 map.put("potentiel", FXCollections.observableList(new Model<Potentiel>(Model.getBeanPath("Potentiel")).getList()));
                 map.put("contrat", FXCollections.observableList(new Model<Contrat>(Model.getBeanPath("Contrat")).getList()));
                 map.put("ambition", FXCollections.observableList(new Model<Ambition>(Model.getBeanPath("Ambition")).getList()));
-                map.put("langue", FXCollections.observableList(new Model<Langue>(Model.getBeanPath("Langue")).getList()));
 
                 return map;
             }
@@ -186,8 +208,30 @@ public class CiviliteController implements Initializable {
             }
         };
         task.run();
-        task.setOnSucceeded(event -> {
-            personneTable.setItems(task.getValue());
+        task.setOnSucceeded((WorkerStateEvent event) -> {
+            FilteredList<Personne> filteredList = new FilteredList<Personne>(task.getValue(), p -> true);
+            searchBox.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                filteredList.setPredicate((Personne personne) -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+                    // Comparer les champs dans la classe Personne
+                    String valueCompare = newValue.toLowerCase();
+                    if (personne.getNom().toLowerCase().contains(valueCompare)) {
+                        return true;
+                    }
+                    if (personne.getPrenom() != null && personne.getPrenom().toLowerCase().contains(valueCompare)) {
+                        return true;
+                    }
+                    if(personne.getPays() != null && personne.getPays().getNameFr().toLowerCase().contains(valueCompare)){
+                        return true;
+                    }
+                    return false;
+                });
+            });
+            SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
+            sortedList.comparatorProperty().bind(personneTable.comparatorProperty());
+            personneTable.setItems(sortedList);
         });
         personneTableModel.selectedItemProperty().addListener(new ChangeListener<Personne>() {
             @Override
@@ -286,7 +330,7 @@ public class CiviliteController implements Initializable {
         disableComponent(comboSociete, bool);
         disableComponent(comboSection, bool);
         disableComponent(datePicker, bool);
-       // disableComponent(comboLanguesParlees, bool);
+        // disableComponent(comboLanguesParlees, bool);
     }
 
     public String age(LocalDate date) {
@@ -474,5 +518,37 @@ public class CiviliteController implements Initializable {
     public void clicAnnuler(ActionEvent actionEvent) {
         btnNouveau.setText("Nouveau / New");
         btnModifier.setText("Modifier / Edit");
+    }
+
+    public void addPoste(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Titre du dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Ajout d'un nouveau poste");
+        alert.showAndWait();
+    }
+
+    public void deletePoste(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Titre du dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Suppression d'un poste");
+        alert.showAndWait();
+    }
+
+    public void addProfil(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Titre du dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Ajout d'un nouveau profil");
+        alert.showAndWait();
+    }
+
+    public void deleteProfil(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Titre du dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Suppression d'un profil");
+        alert.showAndWait();
     }
 }

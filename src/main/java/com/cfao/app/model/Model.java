@@ -19,9 +19,7 @@ public class Model <T>{
     protected Transaction tx;
 
     public Model(){
-
         session = HibernateUtil.getSessionFactory().openSession();
-
     }
 
     public Model(String tmpClass){

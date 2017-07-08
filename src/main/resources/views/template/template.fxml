@@ -26,9 +26,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.*?>
 
-<VBox fx:id="principalLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="-Infinity" prefWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
+<VBox fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
 
     <children>
 
@@ -124,13 +122,13 @@
        
         <StackPane fx:id="mainContent" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
             <children>
-                <SplitPane dividerPositions="0.22577092511013216, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                <SplitPane dividerPositions="0.11233480176211454, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <items>
-                  <StackPane fx:id="shortcutContent" prefWidth="200.0" />
-                  <VBox prefHeight="150.0" prefWidth="200.0">
+                  <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="200.0" />
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0">
                      <children>
                         <ToolBar fx:id="breadCrumbContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" minWidth="-Infinity" prefHeight="40.0" />
-                         <AnchorPane fx:id="content" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                         <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
                      </children>
 
                   </VBox>

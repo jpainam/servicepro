@@ -26,10 +26,11 @@
         <mapping resource="mapping/niveaucompetence.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
-        <mapping resource="mapping/formation.hbm.xml" />
         <mapping resource="mapping/profilcompetence.hbm.xml" />
         <mapping resource="mapping/etatformation.hbm.xml" />
         <mapping resource="mapping/personnel.hbm.xml" />
+
+
 
         <mapping class="com.cfao.app.beans.Personne" />
         <mapping class="com.cfao.app.beans.Groupe" />
@@ -37,5 +38,8 @@
         <mapping class="com.cfao.app.beans.Potentiel" />
         <mapping class="com.cfao.app.beans.Contrat" />
         <mapping class="com.cfao.app.beans.Ambition" />
+        <mapping class="com.cfao.app.beans.Formation" />
+
+
     </session-factory>
 </hibernate-configuration>

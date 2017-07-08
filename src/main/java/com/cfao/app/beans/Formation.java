@@ -1,36 +1,46 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by JP on 6/21/2017.
  */
+@Entity
+@Table(name = "formations")
 public class Formation {
     private SimpleIntegerProperty idformation = new SimpleIntegerProperty();
-   private SimpleStringProperty codeformation = new SimpleStringProperty();
-    private Modele modele = new Modele();
+    private SimpleStringProperty codeformation = new SimpleStringProperty();
+    private ObjectProperty<Modele> modele = new SimpleObjectProperty<>();
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
-    private SimpleObjectProperty<LocalDateTime> datedebut = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<LocalDateTime> datefin = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<LocalDate> datedebut = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
+
+    private ListProperty<Personnel> formateurs = new SimpleListProperty<>();
 
     public Formation(int idformation, String codeformation, Modele modele, String titre,
-                     String description, LocalDateTime datedebut,
-                     LocalDateTime datefin) {
+                     String description, LocalDate datedebut,
+                     LocalDate datefin) {
         this.idformation.set(idformation);
         this.codeformation.set(codeformation);
-        this.modele = modele;
+        this.modele.set(modele);
         this.titre.set(titre);
         this.description.set(description);
         this.datedebut.set(datedebut);
         this.datefin.set(datefin);
     }
 
+    @Id
+    @GeneratedValue
+    @Column(name = "IDFORMATION")
     public int getIdformation() {
         return idformation.get();
     }
@@ -43,6 +53,7 @@ public class Formation {
         this.idformation.set(idformation);
     }
 
+    @Column(name = "CODEFORMATION")
     public String getCodeformation() {
         return codeformation.get();
     }
@@ -55,14 +66,17 @@ public class Formation {
         this.codeformation.set(codeformation);
     }
 
+    @ManyToOne()
+    @JoinColumn(name = "MODELE")
     public Modele getModele() {
-        return modele;
+        return modele.get();
     }
 
     public void setModele(Modele modele) {
-        this.modele = modele;
+        this.modele.set(modele);
     }
 
+    @Column(name = "TITRE")
     public String getTitre() {
         return titre.get();
     }
@@ -75,6 +89,7 @@ public class Formation {
         this.titre.set(titre);
     }
 
+    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return description.get();
     }
@@ -87,28 +102,30 @@ public class Formation {
         this.description.set(description);
     }
 
-    public LocalDateTime getDatedebut() {
-        return datedebut.get();
+    @Column(name = "DATEDEBUT")
+    public Date getDatedebut() {
+        return Date.valueOf(datedebut.get());
     }
 
-    public SimpleObjectProperty<LocalDateTime> datedebutProperty() {
+    public SimpleObjectProperty<LocalDate> datedebutProperty() {
         return datedebut;
     }
 
-    public void setDatedebut(LocalDateTime datedebut) {
-        this.datedebut.set(datedebut);
+    public void setDatedebut(Date datedebut) {
+        this.datedebut.set(datedebut.toLocalDate());
     }
 
-    public LocalDateTime getDatefin() {
-        return datefin.get();
+    @Column(name = "DATEFIN")
+    public Date getDatefin() {
+        return Date.valueOf(datefin.get());
     }
 
-    public SimpleObjectProperty<LocalDateTime> datefinProperty() {
+    public SimpleObjectProperty<LocalDate> datefinProperty() {
         return datefin;
     }
 
-    public void setDatefin(LocalDateTime datefin) {
-        this.datefin.set(datefin);
+    public void setDatefin(Date datefin) {
+        this.datefin.set(datefin.toLocalDate());
     }
 
     public Formation(){}
@@ -119,4 +136,18 @@ public class Formation {
     }
 
 
+    @ManyToMany()
+    @JoinTable(name = "formateurs", joinColumns = {@JoinColumn(name = "FORMATION")},
+            inverseJoinColumns = {@JoinColumn(name = "PERSONNEL")})
+    public java.util.List<Personnel> getFormateurs() {
+        return formateurs.get();
+    }
+
+    public ListProperty<Personnel> formateursProperty() {
+        return formateurs;
+    }
+
+    public void setFormateurs(List<Personnel> formateurs) {
+        this.formateurs.set(FXCollections.observableList(formateurs));
+    }
 }

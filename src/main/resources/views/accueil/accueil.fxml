@@ -6,9 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
-<StackPane prefHeight="763.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
-<children>
-      <SplitPane dividerPositions="0.298">
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="417.0" prefWidth="541.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilController">
+   <children>
+      <SplitPane dividerPositions="0.298" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
@@ -37,4 +41,4 @@
         </items>
       </SplitPane>
    </children>
-</StackPane>
+</AnchorPane>

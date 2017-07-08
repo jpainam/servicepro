@@ -20,10 +20,10 @@
         <property name="description">
             <column name="description"/>
         </property>
-        <property name="datedebut" type="com.cfao.app.util.LocalDateTimeHibernateUserType">
+        <property name="datedebut" type="com.cfao.app.util.LocalDateHibernateUserType">
             <column name="datedebut"/>
         </property>
-        <property name="datefin" type="com.cfao.app.util.LocalDateTimeHibernateUserType">
+        <property name="datefin" type="com.cfao.app.util.LocalDateHibernateUserType">
             <column name="datefin" />
         </property>
     </class>

@@ -1,21 +1,21 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Controller;
-import com.cfao.app.beans.Etatformation;
-import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.Modele;
-import com.cfao.app.beans.Personnel;
+import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.ServiceproUtil;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.sun.prism.impl.FactoryResetException;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -31,15 +31,18 @@ import javafx.scene.layout.Priority;
 import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.textfield.TextFields;
 
+import javax.jws.WebParam;
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
  * Created by JP on 6/19/2017.
  */
 public class FormationController implements Initializable {
-    public TableView formationTable;
+    public TableView<Formation> formationTable;
     public TableColumn titreColumn;
     public TableColumn datedebutColumn;
     public TableColumn datefinColumn;
@@ -54,151 +57,165 @@ public class FormationController implements Initializable {
     public Button btnAjouterFormateur;
     public Button btnSupprimerFormateur;
     public HBox researchBox;
-    private TableView.TableViewSelectionModel<Formation> formationTableModel;
+    public Button btnPrevious;
+    public Button btnNext;
+    public Button btnPrint;
+    public Button btnNouveau;
+    public Button btnModifier;
+    public Button btnSuppr;
+    public Button btnAnnuler;
+    public ListView<Personnel> listeViewFormateurs;
+    public HBox hboxCompetenceAssociee;
     private SearchBox searchBox = new SearchBox();
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
     public Tab tabParticipant;
+    SearchBox searchBoxAssocie = new SearchBox();
 
+    public Model<Formation> modelFormation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        createFormationTable();
-        //TextFields.bindAutoCompletion(comboModele.getEditor(), comboModele.getItems());
+        initComponents();
+        formationTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFormationFields());
+        tabParticipant.setContent(new ListSelectionView<Formation>());
+        buildCombo();
+    }
 
+    private void initComponents() {
         comboModele.setEditable(true);
-        fillComboModele();
         comboEtatformation.setEditable(true);
-        fillComboEtatformation();
         comboFormateur.setEditable(true);
-        fillComboFormateur();
+        titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
+        datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
+        datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
+        HBox.setHgrow(searchBox, Priority.ALWAYS);
+        searchBox.setMaxWidth(Double.MAX_VALUE);
+        researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
+
         GlyphsDude.setIcon(btnAjouterFormateur, FontAwesomeIcon.USER_PLUS);
         GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.HAND_LIZARD_ALT);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
 
-        formationTableModel.selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                fillFormationFields();
-            }
-        });
+        GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
+        GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
+        GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
+        GlyphsDude.setIcon(btnSuppr, FontAwesomeIcon.TRASH);
+        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
+        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
+        GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
 
-        tabParticipant.setContent(new ListSelectionView<Formation>());
-
+        searchBoxAssocie.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(searchBoxAssocie, Priority.ALWAYS);
+        hboxCompetenceAssociee.getChildren().addAll(new Label("Compétences associées : "), searchBoxAssocie);
     }
 
+    private void buildCombo() {
+        Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
+            @Override
+            protected ObservableMap<String, ObservableList> call() throws Exception {
+                modelFormation = new Model<>();
+                ObservableMap<String, ObservableList> map = FXCollections.observableHashMap();
+                map.put("personnel", FXCollections.observableList(new Model<Personnel>(Model.getBeanPath("Personnel")).getList()));
+                map.put("modele", FXCollections.observableList(new Model<Modele>(Model.getBeanPath("Modele")).getList()));
+                map.put("etatformation", FXCollections.observableList(new Model<Etatformation>(Model.getBeanPath("Etatformation")).getList()));
+                map.put("formation", FXCollections.observableList(new Model<Formation>(Model.getBeanPath("Formation")).getList()));
+                return map;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(event -> {
+            ObservableMap<String, ObservableList> map = task.getValue();
+            comboFormateur.setItems(map.get("personnel"));
+            comboModele.setItems(map.get("modele"));
+            comboEtatformation.setItems(map.get("etatformation"));
+            formationTable.setItems(map.get("formation"));
+        });
+    }
+
+
     private void fillFormationFields() {
-        if (formationTableModel.getSelectedItem() != null) {
-            Formation formation = formationTableModel.getSelectedItem();
+        if (formationTable.getSelectionModel().getSelectedItem() != null) {
+            Formation formation = (Formation) formationTable.getSelectionModel().getSelectedItem();
             txtCode.setText(formation.getCodeformation());
             txtTitre.setText(formation.getTitre());
             txtDescription.setText(formation.getDescription());
+            listeViewFormateurs.setItems(FXCollections.observableList(formation.getFormateurs()));
         }
     }
 
-    private void fillComboFormateur() {
-        PersonnelModel personnelModel = new PersonnelModel(Model.getBeansClass("Personnel"));
-        Task<ObservableList<Personnel>> task = new Task<ObservableList<Personnel>>() {
-            @Override
-            protected ObservableList<Personnel> call() throws Exception {
-                return FXCollections.observableArrayList(personnelModel.getList());
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                comboFormateur.setItems(task.getValue());
-            }
-        });
-    }
-
-    private void fillComboModele() {
-        ModeleModel modeleModel = new ModeleModel(Model.getBeansClass("Modele"));
-        Task<ObservableList<Modele>> task = new Task<ObservableList<Modele>>() {
-            @Override
-            protected ObservableList<Modele> call() throws Exception {
-                return FXCollections.observableArrayList(modeleModel.getList());
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                comboModele.setItems(task.getValue());
-            }
-        });
-    }
-
-    private void fillComboEtatformation() {
-        EtatformationModel etatformationModel = new EtatformationModel(Model.getBeansClass("Etatformation"));
-        Task<ObservableList<Etatformation>> task = new Task<ObservableList<Etatformation>>() {
-            @Override
-            protected ObservableList<Etatformation> call() throws Exception {
-                return FXCollections.observableArrayList(etatformationModel.getList());
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                comboEtatformation.setItems(task.getValue());
-            }
-        });
-    }
-
-    private void createFormationTable() {
-        titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
-        datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
-        datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
-        formationTableModel = formationTable.getSelectionModel();
-
-        HBox.setHgrow(searchBox, Priority.ALWAYS);
-        searchBox.setMaxWidth(Double.MAX_VALUE);
-        researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
-
-        FormationModel formationModel = new FormationModel(Model.getBeansClass("Formation"));
-
-        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
-            @Override
-            protected ObservableList<Formation> call() throws Exception {
-                return FXCollections.observableArrayList(formationModel.getList());
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                formationTable.setItems(task.getValue());
-            }
-        });
-    }
 
     public void nouveauAction(ActionEvent actionEvent) {
     }
 
-    public void editFormation(ActionEvent actionEvent) {
-    }
 
     public void supprimerAction(ActionEvent actionEvent) {
-        if (formationTableModel.getSelectedItem() != null) {
+        if (formationTable.getSelectionModel().getSelectedItem() != null) {
 
         } else {
 
         }
     }
 
-    public void validerAction(ActionEvent actionEvent) {
+    public void clickNouveau(ActionEvent actionEvent) {
     }
 
-    public void annulerAction(ActionEvent actionEvent) {
+    public void clickModifier(ActionEvent actionEvent) {
     }
 
-    public void SupprimerAction(ActionEvent actionEvent) {
+    public void clickSupprimer(ActionEvent actionEvent) {
     }
 
-    public void modifierAction(ActionEvent actionEvent) {
+    public void clickAnnuler(ActionEvent actionEvent) {
+    }
+
+    public void ajouterFormateur(ActionEvent actionEvent) {
+        if (comboFormateur.getSelectionModel().getSelectedItem() != null && formationTable.getSelectionModel().getSelectedItem() != null) {
+            Personnel personnel = comboFormateur.getSelectionModel().getSelectedItem();
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
+            Model<Formateur> model = new Model<Formateur>(Model.getBeanPath("Formateur"));
+
+            Task<ObservableList<Personnel>> task = new Task<ObservableList<Personnel>>() {
+                @Override
+                protected ObservableList<Personnel> call() throws Exception {
+                    return FXCollections.observableArrayList();
+                }
+            };
+            task.run();
+            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    listeViewFormateurs.setItems(task.getValue());
+                    formationTable.getSelectionModel().getSelectedItem().formateursProperty().bind(task.valueProperty());
+                }
+            });
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Sélectionner le formateur à ajouter dans la liste des formateurs");
+            alert.setTitle("");
+            alert.setHeaderText("");
+            alert.showAndWait();
+        }
+    }
+
+    public void supprimerFormateur(ActionEvent actionEvent) {
+        if (listeViewFormateurs.getSelectionModel().getSelectedItem() != null && formationTable.getSelectionModel().getSelectedItem() != null) {
+            Personnel personnel = listeViewFormateurs.getSelectionModel().getSelectedItem();
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
+            FormationModel formationModel = new FormationModel(Model.getBeanPath("Formation"));
+            if (formationModel.deleteFormateurs(personnel, formation)) {
+                ServiceproUtil.notify("Suppression OK");
+            } else {
+                ServiceproUtil.notify("Erreur de suppression");
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("");
+            alert.setTitle("");
+            alert.setContentText("Sélectionner le formateur à supprimer dans le tableau des formateurs");
+            alert.showAndWait();
+        }
     }
 }
