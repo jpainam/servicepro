@@ -1,5 +1,6 @@
 package com.cfao.app.model;
 
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -49,7 +50,6 @@ public class Model <T>{
             if(!session.isOpen()){
                 session = HibernateUtil.getSessionFactory().openSession();
             }
-
             tx = session.beginTransaction();
             session.saveOrUpdate(type);
             tx.commit();
@@ -61,18 +61,58 @@ public class Model <T>{
         }
     }
 
-    public void delete(T type){
-        try {
-            tx = session.beginTransaction();
-            session.delete(type);
-            tx.commit();
 
+    public boolean save(T type){
+        try {
+            if(!session.isOpen()){
+                session = HibernateUtil.getSessionFactory().openSession();
+            }
+            tx = session.beginTransaction();
+            session.save(type);
+            tx.commit();
+            return true;
         }catch (Exception ex){
             ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+            return false;
         }finally {
             //session.close();
         }
     }
+
+
+    public boolean update(T type){
+        try {
+            if(!session.isOpen()){
+                session = HibernateUtil.getSessionFactory().openSession();
+            }
+            tx = session.beginTransaction();
+            session.update(type);
+            tx.commit();
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex, "", "");
+            return false;
+        }finally {
+            //session.close();
+        }
+    }
+    public boolean delete(T type){
+        try {
+            tx = session.beginTransaction();
+            session.delete(type);
+            tx.commit();
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+            return false;
+        }finally {
+            //session.close();
+        }
+    }
+
 
     public static String getBeanPath(String s){return "com.cfao.app.beans."+s;}
     public static String getBeansClass(String s){return getBeanPath(s);}

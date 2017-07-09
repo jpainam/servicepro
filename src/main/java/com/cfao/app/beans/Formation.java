@@ -3,12 +3,14 @@ package com.cfao.app.beans;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JP on 6/21/2017.
@@ -21,6 +23,7 @@ public class Formation {
     private ObjectProperty<Modele> modele = new SimpleObjectProperty<>();
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
+    private ObjectProperty<Etatformation> etatformation = new SimpleObjectProperty<>();
     private SimpleObjectProperty<LocalDate> datedebut = new SimpleObjectProperty<>();
     private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
 
@@ -149,5 +152,19 @@ public class Formation {
 
     public void setFormateurs(List<Personnel> formateurs) {
         this.formateurs.set(FXCollections.observableList(formateurs));
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "ETATFORMATION")
+    public Etatformation getEtatformation() {
+        return etatformation.get();
+    }
+
+    public ObjectProperty<Etatformation> etatformationProperty() {
+        return etatformation;
+    }
+
+    public void setEtatformation(Etatformation etatformation) {
+        this.etatformation.set(etatformation);
     }
 }

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.*;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -33,6 +34,7 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
 
         Scene scene = new Scene(loginPane);
+
         String css = getClass().getResource("/css/style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);

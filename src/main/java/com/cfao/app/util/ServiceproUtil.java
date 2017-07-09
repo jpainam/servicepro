@@ -1,30 +1,31 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
-import com.cfao.app.controllers.TemplateController;
-import de.jensd.fx.glyphs.GlyphIcons;
-import de.jensd.fx.glyphs.GlyphsDude;
+import com.cfao.app.beans.Etatformation;
+import com.cfao.app.beans.Modele;
+import com.cfao.app.beans.Personnel;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.TitledPane;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 
-import javafx.scene.paint.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 
@@ -107,7 +108,7 @@ public class ServiceproUtil {
         try {
             Desktop.getDesktop().browse(new URI(link));
         } catch (URISyntaxException | IOException ex) {
-            MessageUtil.erro("Não possível exibir www.fapce.edu.br !");
+            AlertUtil.showSimpleAlert("Information", "");
         }
     }
 
@@ -119,5 +120,31 @@ public class ServiceproUtil {
     }
     public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon){
         setButtonIcon(button, fontAwesomeIcon, 1.5);
+    }
+    public static void emptyFields(Control... controls){
+        for(Control control : controls){
+            // TextField, TextArea
+            if(control instanceof TextInputControl) {
+                ((TextInputControl)control).setText("");
+            }else if(control instanceof DatePicker){
+                ((DatePicker)control).setValue(LocalDate.now());
+            }
+        }
+    }
+    public static void setEditable( boolean b, Control ... controls){
+        for(Control control : controls){
+            // TextField, TextArea
+            if(control instanceof TextInputControl){
+                ((TextInputControl) control).setEditable(b);
+            }else if(control instanceof DatePicker){
+                ((DatePicker) control).setEditable(b);
+            }
+        }
+    }
+
+    public static void setDisable(boolean b, Control ... controls) {
+        for(Control control : controls){
+            control.setDisable(b);
+        }
     }
 }

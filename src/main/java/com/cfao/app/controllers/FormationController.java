@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.sun.prism.impl.FactoryResetException;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,8 +33,10 @@ import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.jws.WebParam;
+import javax.print.ServiceUI;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -73,6 +76,8 @@ public class FormationController implements Initializable {
     SearchBox searchBoxAssocie = new SearchBox();
 
     public Model<Formation> modelFormation;
+    public int stateBtnNouveau = 0;
+    public int stateBtnModifier = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,12 +85,10 @@ public class FormationController implements Initializable {
         formationTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFormationFields());
         tabParticipant.setContent(new ListSelectionView<Formation>());
         buildCombo();
+        buildTable();
     }
 
     private void initComponents() {
-        comboModele.setEditable(true);
-        comboEtatformation.setEditable(true);
-        comboFormateur.setEditable(true);
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
         datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
@@ -95,7 +98,7 @@ public class FormationController implements Initializable {
 
         GlyphsDude.setIcon(btnAjouterFormateur, FontAwesomeIcon.USER_PLUS);
         GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
-        GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.HAND_LIZARD_ALT);
+        GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
 
@@ -110,87 +113,178 @@ public class FormationController implements Initializable {
         searchBoxAssocie.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBoxAssocie, Priority.ALWAYS);
         hboxCompetenceAssociee.getChildren().addAll(new Label("Compétences associées : "), searchBoxAssocie);
+
     }
 
     private void buildCombo() {
+        modelFormation = new Model<>();
         Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
             @Override
             protected ObservableMap<String, ObservableList> call() throws Exception {
-                modelFormation = new Model<>();
                 ObservableMap<String, ObservableList> map = FXCollections.observableHashMap();
-                map.put("personnel", FXCollections.observableList(new Model<Personnel>(Model.getBeanPath("Personnel")).getList()));
+                map.put("personnel", FXCollections.observableArrayList(new Model<Personnel>(Model.getBeanPath("Personnel")).getList()));
                 map.put("modele", FXCollections.observableList(new Model<Modele>(Model.getBeanPath("Modele")).getList()));
                 map.put("etatformation", FXCollections.observableList(new Model<Etatformation>(Model.getBeanPath("Etatformation")).getList()));
-                map.put("formation", FXCollections.observableList(new Model<Formation>(Model.getBeanPath("Formation")).getList()));
                 return map;
             }
         };
-        new Thread(task).start();
+        task.run();
         task.setOnSucceeded(event -> {
             ObservableMap<String, ObservableList> map = task.getValue();
             comboFormateur.setItems(map.get("personnel"));
             comboModele.setItems(map.get("modele"));
             comboEtatformation.setItems(map.get("etatformation"));
-            formationTable.setItems(map.get("formation"));
         });
     }
-
+    private void buildTable(){
+        btnNouveau.setText("Nouveau/New");
+        btnModifier.setText("Modifier/Edit");
+        ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSuppr);
+        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur, btnSupprimerFormateur);
+        ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin);
+        ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin);
+        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
+            @Override
+            protected ObservableList<Formation> call() throws Exception {
+                return FXCollections.observableList(new Model<Formation>(Model.getBeanPath("Formation")).getList());
+            }
+        };
+        task.run();
+        task.setOnSucceeded(event -> {
+            formationTable.setItems(task.getValue());
+        });
+        listeViewFormateurs.getItems().clear();
+    }
 
     private void fillFormationFields() {
         if (formationTable.getSelectionModel().getSelectedItem() != null) {
-            Formation formation = (Formation) formationTable.getSelectionModel().getSelectedItem();
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
             txtCode.setText(formation.getCodeformation());
             txtTitre.setText(formation.getTitre());
             txtDescription.setText(formation.getDescription());
-            listeViewFormateurs.setItems(FXCollections.observableList(formation.getFormateurs()));
-        }
-    }
-
-
-    public void nouveauAction(ActionEvent actionEvent) {
-    }
-
-
-    public void supprimerAction(ActionEvent actionEvent) {
-        if (formationTable.getSelectionModel().getSelectedItem() != null) {
-
-        } else {
-
+            comboModele.setValue(formation.getModele());
+            comboEtatformation.setValue(formation.getEtatformation());
+            listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
+            dateDebut.setValue(formation.getDatedebut().toLocalDate());
+            dateFin.setValue(formation.getDatefin().toLocalDate());
         }
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
-    }
-
-    public void clickModifier(ActionEvent actionEvent) {
-    }
-
-    public void clickSupprimer(ActionEvent actionEvent) {
-    }
-
-    public void clickAnnuler(ActionEvent actionEvent) {
-    }
-
-    public void ajouterFormateur(ActionEvent actionEvent) {
-        if (comboFormateur.getSelectionModel().getSelectedItem() != null && formationTable.getSelectionModel().getSelectedItem() != null) {
-            Personnel personnel = comboFormateur.getSelectionModel().getSelectedItem();
-            Formation formation = formationTable.getSelectionModel().getSelectedItem();
-            Model<Formateur> model = new Model<Formateur>(Model.getBeanPath("Formateur"));
-
-            Task<ObservableList<Personnel>> task = new Task<ObservableList<Personnel>>() {
+        if (stateBtnNouveau == 0) {
+            btnNouveau.setText("Enregistrer/Save");
+            btnModifier.setText("Modifier/Edit");
+            listeViewFormateurs.getItems().clear();
+            ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
+            ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut);
+            ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
+            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur, btnSupprimerFormateur);
+            stateBtnNouveau = 1;
+        } else {
+            Formation formation = new Formation();
+            formation.setEtatformation(comboEtatformation.getValue());
+            formation.setModele(comboModele.getValue());
+            formation.setFormateurs(listeViewFormateurs.getItems());
+            formation.setTitre(txtTitre.getText());
+            formation.setDescription(txtDescription.getText());
+            formation.setCodeformation(txtCode.getText());
+            formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
+            formation.setDatefin(Date.valueOf(dateFin.getValue()));
+            Task<Boolean> task = new Task<Boolean>() {
                 @Override
-                protected ObservableList<Personnel> call() throws Exception {
-                    return FXCollections.observableArrayList();
+                protected Boolean call() throws Exception {
+                    return modelFormation.save(formation);
                 }
             };
             task.run();
             task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
-                    listeViewFormateurs.setItems(task.getValue());
-                    formationTable.getSelectionModel().getSelectedItem().formateursProperty().bind(task.valueProperty());
+                    if (task.getValue()) {
+                        ServiceproUtil.notify("Ajouter avec succees");
+                        buildTable();
+                    } else {
+                        ServiceproUtil.notify("Erreur d'ajout");
+                    }
                 }
             });
+            stateBtnNouveau = 0;
+        }
+    }
+
+    public void clickModifier(ActionEvent actionEvent) {
+        if (stateBtnModifier == 0) {
+            if (formationTable.getSelectionModel().getSelectedItem() != null) {
+                btnModifier.setText("Enregistrer/Save");
+                btnNouveau.setText("Nouveau/New");
+                ServiceproUtil.setDisable(true, btnNouveau, btnSuppr);
+                ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
+                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur, btnAjouterFormateur);
+                stateBtnModifier = 1;
+            }
+        } else {
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
+            formation.setModele(comboModele.getValue());
+            formation.setCodeformation(txtCode.getText());
+            formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
+            formation.setDatefin(Date.valueOf(dateFin.getValue()));
+            formation.setTitre(txtTitre.getText());
+            formation.setDescription(txtDescription.getText());
+            formation.setEtatformation(comboEtatformation.getValue());
+            formation.setFormateurs(listeViewFormateurs.getItems());
+            Task<Boolean> task = new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return modelFormation.update(formation);
+                }
+            };
+            task.run();
+            task.setOnSucceeded(event -> {
+                if (task.getValue()) {
+                    ServiceproUtil.notify("Modification OK");
+                    buildTable();
+                } else {
+                    ServiceproUtil.notify("Erreur de modification");
+                }
+            });
+            stateBtnModifier = 0;
+        }
+    }
+
+    public void clickSupprimer(ActionEvent actionEvent) {
+        if (formationTable.getSelectionModel().getSelectedItem() != null) {
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
+            Task<Boolean> task = new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return modelFormation.delete(formation);
+                }
+            };
+            task.run();
+            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    if (task.getValue()) {
+                        ServiceproUtil.notify("Suppression OK");
+                        buildTable();
+                    } else {
+                        ServiceproUtil.notify("Erreur de suppression");
+                    }
+                }
+            });
+        }
+    }
+
+    public void clickAnnuler(ActionEvent actionEvent) {
+        buildTable();
+    }
+
+    public void ajouterFormateur(ActionEvent actionEvent) {
+        if (comboFormateur.getSelectionModel().getSelectedItem() != null) {
+            Personnel personnel = comboFormateur.getSelectionModel().getSelectedItem();
+            if (!listeViewFormateurs.getItems().contains(personnel)) {
+                listeViewFormateurs.getItems().add(personnel);
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Sélectionner le formateur à ajouter dans la liste des formateurs");
@@ -201,15 +295,9 @@ public class FormationController implements Initializable {
     }
 
     public void supprimerFormateur(ActionEvent actionEvent) {
-        if (listeViewFormateurs.getSelectionModel().getSelectedItem() != null && formationTable.getSelectionModel().getSelectedItem() != null) {
+        if (listeViewFormateurs.getSelectionModel().getSelectedItem() != null) {
             Personnel personnel = listeViewFormateurs.getSelectionModel().getSelectedItem();
-            Formation formation = formationTable.getSelectionModel().getSelectedItem();
-            FormationModel formationModel = new FormationModel(Model.getBeanPath("Formation"));
-            if (formationModel.deleteFormateurs(personnel, formation)) {
-                ServiceproUtil.notify("Suppression OK");
-            } else {
-                ServiceproUtil.notify("Erreur de suppression");
-            }
+            listeViewFormateurs.getItems().remove(personnel);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("");

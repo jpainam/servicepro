@@ -47,11 +47,11 @@
                                                         <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
                                                         <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
                                                         <Separator orientation="VERTICAL" />
-                                                        <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau / New" textFill="#2920b0" />
-                                                        <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier / Edit" />
+                                                        <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
+                                                        <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
                                                         <Separator orientation="VERTICAL" />
-                                                        <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer / Delete" />
-                                                        <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler / Cancel" />
+                                                        <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
+                                                        <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
                                                     </items>
                                                 </ToolBar>
                                                 <HBox prefHeight="29.0" prefWidth="686.0" spacing="5.0">

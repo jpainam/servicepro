@@ -54,6 +54,13 @@ public class TemplateController implements Initializable, Controller {
     public Label caretLabel;
     public Label userNameLabel;
     public Label currentLogTimeLabel;
+    public Button btnPersonne;
+    public Button btnCompetence;
+    public Button btnProfil;
+    public Button btnTest;
+    public Button btnRapport;
+    public Button btnParametre;
+    public Button btnFormation;
     BreadCrumbBar breadCrumb = new BreadCrumbBar();
     PopOver profilPopOver = new PopOver();
 
@@ -76,7 +83,7 @@ public class TemplateController implements Initializable, Controller {
         GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
         userNameLabel.setText(ServiceproUtil.getLoggedUser());
         currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
-        try {
+        /*try {
             FXMLLoader loader = new FXMLLoader();
             Pane leftMenuPane = loader.load(getClass().getResourceAsStream(FXMLView.LEFTMENU.getFXMLFile()));
             LeftmenuController leftmenuController = loader.getController();
@@ -84,7 +91,7 @@ public class TemplateController implements Initializable, Controller {
             shortcutContent.getChildren().setAll(leftMenuPane);
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
+        }*/
         notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
             notificationPane.hide();
         }));
@@ -99,7 +106,24 @@ public class TemplateController implements Initializable, Controller {
             e.printStackTrace();
         }
 
+        setLeftMenuSettings();
         //content.getChildren().setAll(button);
+    }
+    public void setLeftMenuSettings(){
+        setLeftMenuSetting(btnPersonne, FontAwesomeIcon.USERS);
+        setLeftMenuSetting(btnCompetence, FontAwesomeIcon.SLACK);
+        setLeftMenuSetting(btnParametre, FontAwesomeIcon.GEAR);
+        setLeftMenuSetting(btnFormation, FontAwesomeIcon.GRADUATION_CAP);
+        setLeftMenuSetting(btnRapport, FontAwesomeIcon.FILES_ALT);
+        setLeftMenuSetting(btnTest, FontAwesomeIcon.BALANCE_SCALE);
+        setLeftMenuSetting(btnProfil, FontAwesomeIcon.TAGS);
+
+    }
+    public void setLeftMenuSetting(Button button, FontAwesomeIcon fontAwesomeIcon){
+        FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
+        icon.setGlyphSize(35);
+        button.setContentDisplay(ContentDisplay.TOP);
+        button.setGraphic(icon);
     }
 
     private BreadCrumbBar createBreadCrumbBar() {

@@ -74,4 +74,19 @@ public class Personnel {
     public void setAdresse(String adresse) {
         this.adresse.set(adresse);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Personnel personnel = (Personnel) o;
+
+        return idpersonnel.equals(personnel.idpersonnel);
+    }
+
+    @Override
+    public int hashCode() {
+        return idpersonnel.hashCode();
+    }
 }
