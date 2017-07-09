@@ -8,78 +8,86 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.*?>
 
-<StackPane fx:id="rootPane1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilController">
+<AnchorPane fx:id="rootPane1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="493.0" prefWidth="757.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilController">
    <children>
-      <SplitPane dividerPositions="0.3620119126406353" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <SplitPane dividerPositions="0.362" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <StackPane prefHeight="780.0" prefWidth="798.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                     <children>
-                         <HBox fx:id="actionButtonBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="380.0" spacing="10.0" VBox.vgrow="NEVER">
-                             <children>
-                                 <JFXButton fx:id="btnNouveau" maxWidth="80.0" minWidth="80.0" onAction="#nouveauAction" text="Nouveau">
-                                     <styleClass>
-                                         <String fx:value="button-success" />
-                                         <String fx:value="button-raised" />
-                                     </styleClass>
-                                 </JFXButton>
-
-                                 <JFXButton fx:id="btnModifier" maxWidth="80.0" minWidth="80.0" onAction="#editProfil" text="Modifier">
-                                     <styleClass>
-                                         <String fx:value="button-attention" />
-                                         <String fx:value="button-raised" />
-                                     </styleClass>
-                                 </JFXButton>
-                                 <JFXButton fx:id="btnSupprimer" maxWidth="80.0" minWidth="80.0" onAction="#supprimerAction" text="Supprimer">
-                                     <styleClass>
-                                         <String fx:value="button-danger" />
-                                         <String fx:value="button-raised" />
-                                     </styleClass>
-                                 </JFXButton>
-                             </children>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                           </VBox.margin>
-                         </HBox>
-                        <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" style="-fx-cursor: hand;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-                          <columns>
-                            <TableColumn fx:id="abbreviationColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Abbréviation" />
-                            <TableColumn fx:id="libelleColumn" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Libellé" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                        </TableView>
-                     </children>
-                  </VBox>
-               </children>
-            </StackPane>
-            <StackPane fx:id="rootPane2" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TableView fx:id="competenceTable" prefHeight="3515.0" prefWidth="3201.0">
+                  <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1255.0" prefWidth="292.0" style="-fx-cursor: hand;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="initialColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Initial" />
-                      <TableColumn fx:id="fondamentalColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Fondamental" />
-                      <TableColumn fx:id="avanceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Avancé" />
-                        <TableColumn fx:id="expertColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Expert" />
-                        <TableColumn fx:id="listecompetenceColumn" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Liste des compétences" />
-                        <TableColumn fx:id="connaissanceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Connaissance" />
-                        <TableColumn fx:id="competenceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Compétence" />
+                      <TableColumn fx:id="abbreviationColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Abbréviation" />
+                      <TableColumn fx:id="libelleColumn" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Libellé" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
                   </TableView>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </StackPane>
+            </VBox>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="551.0" spacing="10.0">
+               <children>
+                  <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab fx:id="firstTab" text="Détails sur les compétences d'un profil">
+                        <content>
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1210.0" prefWidth="551.0">
+                                 <children>
+                                    <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
+                                       <items>
+                                          <Button fx:id="btnPrevious" mnemonicParsing="false" styleClass="onlyIcon" />
+                                          <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
+                                          <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="btnNouveau1" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
+                                          <Button fx:id="btnModifier1" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
+                                          <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
+                                       </items>
+                                    </ToolBar>
+                                    <HBox fx:id="researchBox2" maxWidth="1.7976931348623157E308" prefHeight="38.0" prefWidth="481.0" spacing="10.0" VBox.vgrow="NEVER">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="306.0" prefWidth="461.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                      <columns>
+                                          <TableColumn fx:id="initialColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Initial" />
+                                        <TableColumn fx:id="fondamentalColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Fondamental" />
+                                        <TableColumn fx:id="avanceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Avancé" />
+                                          <TableColumn fx:id="expertColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Expert" />
+                                          <TableColumn fx:id="listecompetenceColumn" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Liste des compétences" />
+                                          <TableColumn fx:id="connaissanceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Connaissance" />
+                                          <TableColumn fx:id="competenceColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Compétence" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </VBox>
          </items>
       </SplitPane>
    </children>
-</StackPane>
+</AnchorPane>

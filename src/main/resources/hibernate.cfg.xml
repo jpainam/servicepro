@@ -18,8 +18,6 @@
         <mapping resource="mapping/user.hbm.xml" />
         <mapping resource="mapping/pays.hbm.xml" />
 
-        <mapping resource="mapping/profil.hbm.xml" />
-
         <mapping resource="mapping/societe.hbm.xml" />
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/competence.hbm.xml" />
@@ -39,6 +37,7 @@
         <mapping class="com.cfao.app.beans.Contrat" />
         <mapping class="com.cfao.app.beans.Ambition" />
         <mapping class="com.cfao.app.beans.Formation" />
+        <mapping class="com.cfao.app.beans.Profil" />
 
 
     </session-factory>

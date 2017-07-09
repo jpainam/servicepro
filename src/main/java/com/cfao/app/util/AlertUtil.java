@@ -2,8 +2,11 @@ package com.cfao.app.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
+
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -89,6 +92,19 @@ public class AlertUtil {
 
         alert.getDialogPane().setExpandableContent(expContent);
         alert.showAndWait();
+    }
+
+    public static boolean showConfirmationMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Suppression");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
 

@@ -147,3 +147,6 @@ JFOenix CSS
 .actionButton .glyph-icon {
     -fx-fill: white;
 }
+.combo-box:disabled, .combo-box:disabled > * {
+    -fx-opacity: 1.0 ;
+}

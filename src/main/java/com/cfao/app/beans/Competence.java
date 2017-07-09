@@ -69,4 +69,19 @@ public class Competence {
     public String toString() {
         return getDescription();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Competence){
+            Competence competence = (Competence)o;
+            if(competence.getIdcompetence() == this.getIdcompetence())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return idcompetence != null ? idcompetence.hashCode() : 0;
+    }
 }

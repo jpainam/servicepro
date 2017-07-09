@@ -8,7 +8,8 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.*?>
 
-<VBox fx:id="rootContentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="603.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilAddController">
+<VBox fx:id="rootContentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="560.0" prefWidth="603.0"
+      spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <GridPane alignment="CENTER" hgap="10.0" prefHeight="46.0" prefWidth="603.0" HBox.hgrow="ALWAYS">
         <columnConstraints>
@@ -26,18 +27,8 @@
             <TextField fx:id="txtProfil" alignment="TOP_LEFT" promptText="Entrer le titre du profil" GridPane.rowIndex="1" />
             <Label text="Abbréviation" GridPane.columnIndex="1" />
             <TextField fx:id="txtAbbreviation" promptText="Entrer une abbréviation du profil" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-             <JFXButton fx:id="btnValider" alignment="CENTER" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                 <styleClass>
-                     <String fx:value="button-raised" />
-                     <String fx:value="button-success" />
-                 </styleClass>
-             </JFXButton>
-             <JFXButton fx:id="btnAnnuler" alignment="CENTER" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                 <styleClass>
-                     <String fx:value="button-raised" />
-                     <String fx:value="button-attention" />
-                 </styleClass>
-             </JFXButton>
+            <Button fx:id="btnValider" mnemonicParsing="false" onAction="#validerAction" text="Valider" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
@@ -52,4 +43,7 @@
          </columnResizePolicy>
       </TableView>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </VBox>

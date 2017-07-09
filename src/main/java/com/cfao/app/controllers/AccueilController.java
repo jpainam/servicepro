@@ -8,6 +8,7 @@ import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -152,7 +153,13 @@ public class AccueilController implements Initializable {
         };
         new Thread(task).start();
         task.setOnSucceeded(event -> {
-            participantTable.setItems(task.getValue());
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    participantTable.setItems(task.getValue());
+                }
+            });
+
         });
         participantBox.setPadding(new Insets(5, 5, 5, 5));
         participantBox.setSpacing(10);

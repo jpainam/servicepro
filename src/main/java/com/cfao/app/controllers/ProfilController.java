@@ -1,29 +1,15 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
-import com.cfao.app.beans.Modele;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.beans.Profilcompetence;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
-import com.cfao.app.util.Constante;
-import com.cfao.app.util.FXMLView;
-import com.cfao.app.util.SearchBox;
-import com.cfao.app.util.SearchFieldClassTool;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.application.Platform;
+import com.cfao.app.util.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -31,27 +17,17 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Callback;
-import org.controlsfx.control.textfield.CustomTextField;
 
-import javax.swing.*;
-import javax.swing.text.StyledEditorKit;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -62,9 +38,6 @@ public class ProfilController implements Initializable {
     public TableColumn libelleColumn;
     public TableView<Profil> profilTable;
 
-    public JFXButton btnModifier;
-    public JFXButton btnSupprimer;
-    public JFXButton btnNouveau;
     public TableColumn<Profilcompetence, Boolean> fondamentalColumn;
     public TableColumn<Profilcompetence, Boolean> initialColumn;
     public TableColumn<Profilcompetence, Boolean> avanceColumn;
@@ -73,26 +46,34 @@ public class ProfilController implements Initializable {
     public TableColumn<Profilcompetence, Boolean> connaissanceColumn;
     public TableColumn<Profilcompetence, Boolean> competenceColumn;
     public TableView competenceTable;
-    public HBox actionButtonBox;
-    public StackPane rootPane1;
-    public StackPane rootPane2;
+    public HBox researchBox;
+    public AnchorPane rootPane1;
+    public VBox rootPane2;
+    public HBox researchBox2;
+    public TabPane tabPane;
+    public Tab firstTab;
     private TableView.TableViewSelectionModel<Profil> tableProfilModel;
     private SearchBox searchBox = new SearchBox();
+    private SearchBox searchBox2 = new SearchBox();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setColumnSettings();
-        setButtonSettings();
         buildProfilTable();
+        firstTab.setClosable(false);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         HBox.setHgrow(profilTable, Priority.ALWAYS);
         tableProfilModel = profilTable.getSelectionModel();
         tableProfilModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> fillCompetenceTable());
 
         HBox.setHgrow(searchBox, Priority.ALWAYS);
+        HBox.setHgrow(searchBox2, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
-        actionButtonBox.setMaxWidth(Double.MAX_VALUE);
-        actionButtonBox.getChildren().setAll(searchBox, btnNouveau, btnModifier, btnSupprimer);
-
+        searchBox2.setMaxWidth(Double.MAX_VALUE);
+        researchBox.setMaxWidth(Double.MAX_VALUE);
+        researchBox2.setMaxWidth(Double.MAX_VALUE);
+        researchBox.getChildren().setAll(new Label("Profils : "), searchBox);
+        researchBox2.getChildren().setAll(new Label("Compétences associées au profil : "), searchBox2);
     }
 
     private void fillCompetenceTable() {
@@ -110,15 +91,15 @@ public class ProfilController implements Initializable {
             };
             new Thread(task).start();
             task.setOnSucceeded((WorkerStateEvent event) -> {
-                if(task.getValue().isEmpty()){
+                if (task.getValue().isEmpty()) {
                     competenceTable.getItems().clear();
                     return;
                 }
                 competenceTable.setItems(task.getValue());
                 setColumnProperty(initialColumn, task.getValue(), ProfilModel.INITIAL);
-                setColumnProperty(fondamentalColumn,  task.getValue(), ProfilModel.FONDAMENTAL);
-                setColumnProperty(avanceColumn,  task.getValue(), ProfilModel.AVANCE);
-                setColumnProperty(expertColumn,  task.getValue(), ProfilModel.EXPERT);
+                setColumnProperty(fondamentalColumn, task.getValue(), ProfilModel.FONDAMENTAL);
+                setColumnProperty(avanceColumn, task.getValue(), ProfilModel.AVANCE);
+                setColumnProperty(expertColumn, task.getValue(), ProfilModel.EXPERT);
                 listecompetenceColumn.setCellValueFactory(param -> {
                     Competence competence = param.getValue().getCompetence();
                     return new SimpleObjectProperty<>(competence);
@@ -147,15 +128,12 @@ public class ProfilController implements Initializable {
 
     private void setColumnProperty(TableColumn<Profilcompetence, Boolean> tableColumn, ObservableList<Profilcompetence> list, int niveau) {
         tableColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Profilcompetence, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Profilcompetence, Boolean> param) {
-                Competence competence = param.getValue().getCompetence();
-                if(competence.getNiveau().getIdniveaucompetence() == niveau){
-                    return new SimpleBooleanProperty(true);
-                }else{
-                    return new SimpleBooleanProperty(false);
-                }
+        tableColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue().getCompetence();
+            if (competence.getNiveau().getIdniveaucompetence() == niveau) {
+                return new SimpleBooleanProperty(true);
+            } else {
+                return new SimpleBooleanProperty(false);
             }
         });
 
@@ -193,24 +171,6 @@ public class ProfilController implements Initializable {
     }
 
     /**
-     * Definir les proprietes des button action
-     */
-    public void setButtonSettings() {
-        GlyphsDude.setIcon(btnSupprimer, FontAwesomeIcon.TRASH_ALT);
-        //GlyphsDude.setIcon(btnValider, FontAwesomeIcon.SAVE);
-        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.EDIT);
-        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE_TEXT_ALT);
-        //GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.TIMES);
-        /** Set Font awesome icon */
-        FontAwesomeIconView iconView = new FontAwesomeIconView();
-        /*iconView.getStyleClass().add("buttonSearchCloseIcon");
-        buttonCloseSearch.setGraphic(iconView);*/
-        iconView = new FontAwesomeIconView();
-        iconView.getStyleClass().add("searchBoxLabelIcon");
-        //searchBoxLabel.setGraphic(iconView);
-    }
-
-    /**
      * Construire la table view profil
      */
     private void buildProfilTable() {
@@ -233,27 +193,64 @@ public class ProfilController implements Initializable {
         });
     }
 
-    public void nouveauAction(ActionEvent actionEvent) {
+    public void clickNouveau(ActionEvent actionEvent) {
         try {
-            rootPane2.getChildren().setAll((Node) FXMLLoader.load(getClass().getResource("/views/profil/add.fxml")));
-            btnModifier.setDisable(true);
-            btnNouveau.setDisable(true);
-            btnSupprimer.setDisable(true);
+            ProfilAddEditController profilAddEditController = new ProfilAddEditController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/profil/add.fxml"));
+            loader.setController(profilAddEditController);
+            Tab tab = new Tab("Nouveau profil");
+            tab.setClosable(true);
+            tab.setContent(loader.load());
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
         } catch (Exception ex) {
             ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+
         }
     }
 
-    public void supprimerAction(ActionEvent actionEvent) {
-        if (tableProfilModel.getSelectedItem() != null) {
-
+    public void clickModifier(ActionEvent actionEvent) {
+        if (profilTable.getSelectionModel().getSelectedItem() != null) {
+            try {
+                Profil profil = profilTable.getSelectionModel().getSelectedItem();
+                ProfilAddEditController profilAddEditController = new ProfilAddEditController(profil);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/profil/add.fxml"));
+                loader.setController(profilAddEditController);
+                Tab tab = new Tab("Modification du profil " + profil.getLibelle());
+                tab.setContent(loader.load());
+                tab.setClosable(true);
+                tabPane.getTabs().add(tab);
+                tabPane.getSelectionModel().select(tab);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                AlertUtil.showErrorMessage(ex);
+            }
         } else {
-            //JOptionPane.showMessageDialog(null, "Veuillez choisir un profil a supprimer");
-            JFXDialog dialog = new JFXDialog();
-            dialog.show();
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le profil à modifier");
         }
     }
 
-    public void editProfil(ActionEvent actionEvent) {
+    public void clickSupprimer(ActionEvent actionEvent) {
+        if (profilTable.getSelectionModel().getSelectedItem() != null) {
+            Profil profil = profilTable.getSelectionModel().getSelectedItem();
+            boolean bool = AlertUtil.showConfirmationMessage("Etes vous sûr  de vouloir supprimer\n le profil " + profil);
+            if (bool) {
+                Model<Profil> model = new Model<>(Model.getBeanPath("Profil"));
+                if (model.delete(profil)) {
+                    ServiceproUtil.notify("Suppression OK");
+                    StageManager.loadContent("/views/profil/profil.fxml");
+                } else {
+                    ServiceproUtil.notify("Erreur de suppression");
+                }
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le profil à supprimer ");
+        }
+    }
+
+    public void clickAnnuler(ActionEvent actionEvent) {
+        Tab tab = tabPane.getTabs().get(1);
+        tabPane.getSelectionModel().select(tab);
     }
 }
