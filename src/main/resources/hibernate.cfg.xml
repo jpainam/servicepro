@@ -38,6 +38,7 @@
         <mapping class="com.cfao.app.beans.Ambition" />
         <mapping class="com.cfao.app.beans.Formation" />
         <mapping class="com.cfao.app.beans.Profil" />
+        <mapping class="com.cfao.app.beans.Typeformation" />
 
 
     </session-factory>

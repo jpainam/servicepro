@@ -39,6 +39,10 @@ public class ParametreController implements Initializable{
     private int activeTab;
     private SingleSelectionModel<Tab> singleSelectionModel;
 
+    public ParametreController(int activeTab){
+        this.activeTab = activeTab;
+    }
+    public ParametreController(){}
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -47,7 +51,7 @@ public class ParametreController implements Initializable{
         tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
         tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
         tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
-
+        tabNiveauetude.setContent(getTabContent("/views/niveauetude/niveauetude.fxml"));
         singleSelectionModel = tabPane.getSelectionModel();
 
         singleSelectionModel.select(getActiveTab());

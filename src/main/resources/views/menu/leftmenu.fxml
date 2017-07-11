@@ -1,52 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
-   <children>
-       <Accordion fx:id="Leftmenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-           <panes>
-               <TitledPane fx:id="personnePane" animated="false" text="Personnes">
-                   <content>
-                       <ListView fx:id="listPersonnes" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-            </TitledPane>
-               <TitledPane animated="false" text="Formations">
-                   <content>
-                       <ListView fx:id="listFormations" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-            </TitledPane>
-               <TitledPane animated="false" text="Compétences">
-                   <content>
-                       <ListView fx:id="listCompetences" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-               </TitledPane>
-               <TitledPane animated="false" text="Profils">
-                   <content>
-                       <ListView fx:id="listProfils" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-               </TitledPane>
-               <TitledPane animated="false" text="Tests">
-                   <content>
-                       <ListView fx:id="listTests" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-               </TitledPane>
-               <TitledPane animated="false" text="Paramètres">
-                   <content>
-                       <ListView fx:id="listParametres" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-               </TitledPane>
-               <TitledPane animated="false" text="Rapports">
-                   <content>
-                       <ListView fx:id="listRapports" prefHeight="200.0" prefWidth="200.0" />
-                   </content>
-               </TitledPane>
-           </panes>
-       </Accordion>
-   </children>
-
-</AnchorPane>
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
+    <children>
+        <Button fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+        <Button fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+        <Button fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+        <Button fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+        <Button fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+        <Button fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+        <Button fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+    </children>
+</VBox>

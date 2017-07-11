@@ -69,6 +69,7 @@ public class FormationController implements Initializable {
     public Button btnAnnuler;
     public ListView<Personnel> listeViewFormateurs;
     public HBox hboxCompetenceAssociee;
+    public ComboBox<Typeformation> comboTypeformation;
     private SearchBox searchBox = new SearchBox();
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
@@ -125,6 +126,7 @@ public class FormationController implements Initializable {
                 map.put("personnel", FXCollections.observableArrayList(new Model<Personnel>(Model.getBeanPath("Personnel")).getList()));
                 map.put("modele", FXCollections.observableList(new Model<Modele>(Model.getBeanPath("Modele")).getList()));
                 map.put("etatformation", FXCollections.observableList(new Model<Etatformation>(Model.getBeanPath("Etatformation")).getList()));
+                map.put("typeformation", FXCollections.observableList(new Model<Etatformation>(Model.getBeanPath("Typeformation")).getList()));
                 return map;
             }
         };
@@ -134,13 +136,14 @@ public class FormationController implements Initializable {
             comboFormateur.setItems(map.get("personnel"));
             comboModele.setItems(map.get("modele"));
             comboEtatformation.setItems(map.get("etatformation"));
+            comboTypeformation.setItems(map.get("typeformation"));
         });
     }
     private void buildTable(){
         btnNouveau.setText("Nouveau/New");
         btnModifier.setText("Modifier/Edit");
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSuppr);
-        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur, btnSupprimerFormateur);
+        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur, btnSupprimerFormateur, comboTypeformation);
         ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin);
         ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin);
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
@@ -164,6 +167,7 @@ public class FormationController implements Initializable {
             txtDescription.setText(formation.getDescription());
             comboModele.setValue(formation.getModele());
             comboEtatformation.setValue(formation.getEtatformation());
+            comboTypeformation.setValue(formation.getTypeformation());
             listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
             dateDebut.setValue(formation.getDatedebut().toLocalDate());
             dateFin.setValue(formation.getDatefin().toLocalDate());
@@ -178,7 +182,7 @@ public class FormationController implements Initializable {
             ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
             ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut);
             ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
-            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur, btnSupprimerFormateur);
+            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur, btnSupprimerFormateur, comboTypeformation);
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
@@ -190,6 +194,7 @@ public class FormationController implements Initializable {
             formation.setCodeformation(txtCode.getText());
             formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
             formation.setDatefin(Date.valueOf(dateFin.getValue()));
+            formation.setTypeformation(comboTypeformation.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -219,7 +224,7 @@ public class FormationController implements Initializable {
                 btnNouveau.setText("Nouveau/New");
                 ServiceproUtil.setDisable(true, btnNouveau, btnSuppr);
                 ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
-                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur, btnAjouterFormateur);
+                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur, btnAjouterFormateur, comboTypeformation);
                 stateBtnModifier = 1;
             }
         } else {
@@ -232,6 +237,7 @@ public class FormationController implements Initializable {
             formation.setDescription(txtDescription.getText());
             formation.setEtatformation(comboEtatformation.getValue());
             formation.setFormateurs(listeViewFormateurs.getItems());
+            formation.setTypeformation(comboTypeformation.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {

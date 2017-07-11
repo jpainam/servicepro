@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 <StackPane alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="788.0" prefWidth="1044.0"
-           fx:controller="com.cfao.app.controllers.ParametreController" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
         <tabs>

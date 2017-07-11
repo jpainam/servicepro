@@ -24,6 +24,7 @@ public class Formation {
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
     private ObjectProperty<Etatformation> etatformation = new SimpleObjectProperty<>();
+    private ObjectProperty<Typeformation> typeformation = new SimpleObjectProperty<>();
     private SimpleObjectProperty<LocalDate> datedebut = new SimpleObjectProperty<>();
     private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
 
@@ -166,5 +167,19 @@ public class Formation {
 
     public void setEtatformation(Etatformation etatformation) {
         this.etatformation.set(etatformation);
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "TYPEFORMATION")
+    public Typeformation getTypeformation() {
+        return typeformation.get();
+    }
+
+    public ObjectProperty<Typeformation> typeformationProperty() {
+        return typeformation;
+    }
+
+    public void setTypeformation(Typeformation typeformation) {
+        this.typeformation.set(typeformation);
     }
 }

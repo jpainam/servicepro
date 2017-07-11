@@ -89,9 +89,10 @@
             <version>2.3.4</version>
         </dependency>
         <dependency>
-            <groupId>com.airhacks</groupId>
-            <artifactId>afterburner.fx</artifactId>
-            <version>1.6.0</version>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.4.1</version>
         </dependency>
+
     </dependencies>
 </project>

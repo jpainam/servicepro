@@ -3,6 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.Controller;
 import com.cfao.app.Module;
 import com.cfao.app.StageManager;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -54,13 +55,7 @@ public class TemplateController implements Initializable, Controller {
     public Label caretLabel;
     public Label userNameLabel;
     public Label currentLogTimeLabel;
-    public Button btnPersonne;
-    public Button btnCompetence;
-    public Button btnProfil;
-    public Button btnTest;
-    public Button btnRapport;
-    public Button btnParametre;
-    public Button btnFormation;
+
     BreadCrumbBar breadCrumb = new BreadCrumbBar();
     PopOver profilPopOver = new PopOver();
 
@@ -71,60 +66,36 @@ public class TemplateController implements Initializable, Controller {
         breadCrumbContainer.getItems().add(createBreadCrumbBar());
         try {
             cfaoLogo.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
 
-        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.USER);
-        icon.setGlyphSize(40);
-        icon.setFill(Color.DARKBLUE);
-        userLabel.setGraphic(icon);
-        GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
-        userNameLabel.setText(ServiceproUtil.getLoggedUser());
-        currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
-        /*try {
-            FXMLLoader loader = new FXMLLoader();
-            Pane leftMenuPane = loader.load(getClass().getResourceAsStream(FXMLView.LEFTMENU.getFXMLFile()));
-            LeftmenuController leftmenuController = loader.getController();
-            leftmenuController.setContainer(content);
+            GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
+
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.USER);
+            icon.setGlyphSize(40);
+            icon.setFill(Color.DARKBLUE);
+            userLabel.setGraphic(icon);
+            GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
+            userNameLabel.setText(ServiceproUtil.getLoggedUser());
+            currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
+
+            Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
             shortcutContent.getChildren().setAll(leftMenuPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
-        notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
-            notificationPane.hide();
-        }));
-        notificationStack.getChildren().add(notificationPane);
-        StageManager.setNotificationPane(notificationPane);
 
-        // Charger la vue accueil
-        try {
+            notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
+                notificationPane.hide();
+            }));
+            notificationStack.getChildren().add(notificationPane);
+            StageManager.setNotificationPane(notificationPane);
+            // Charger la vue accueil
             Pane accueil = FXMLLoader.load(getClass().getResource(FXMLView.ACCUEIL.getFXMLFile()));
             content.getChildren().setAll(accueil);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        setLeftMenuSettings();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
         //content.getChildren().setAll(button);
     }
-    public void setLeftMenuSettings(){
-        setLeftMenuSetting(btnPersonne, FontAwesomeIcon.USERS);
-        setLeftMenuSetting(btnCompetence, FontAwesomeIcon.SLACK);
-        setLeftMenuSetting(btnParametre, FontAwesomeIcon.GEAR);
-        setLeftMenuSetting(btnFormation, FontAwesomeIcon.GRADUATION_CAP);
-        setLeftMenuSetting(btnRapport, FontAwesomeIcon.FILES_ALT);
-        setLeftMenuSetting(btnTest, FontAwesomeIcon.BALANCE_SCALE);
-        setLeftMenuSetting(btnProfil, FontAwesomeIcon.TAGS);
 
-    }
-    public void setLeftMenuSetting(Button button, FontAwesomeIcon fontAwesomeIcon){
-        FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
-        icon.setGlyphSize(35);
-        button.setContentDisplay(ContentDisplay.TOP);
-        button.setGraphic(icon);
-    }
 
     private BreadCrumbBar createBreadCrumbBar() {
         TreeItem<String> root = new TreeItem<String>("Accueil");
@@ -173,31 +144,39 @@ public class TemplateController implements Initializable, Controller {
 
 
     public void openParameterScene(int activeTab) {
-        Module.setParametre(content);
+        try {
+            ParametreController parametreController = new ParametreController(activeTab);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/parametre/parametre.fxml"));
+            loader.setController(parametreController);
+            content.getChildren().addAll((Node)loader.load());
+        }catch(Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
     }
 
     public void utilisateurAction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_UTILISATEUR);
     }
 
     public void profilAction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_PROFIL);
     }
 
     public void societeAction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_SOCIETE);
     }
 
     public void niveauEtudeaction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_NIVEAUETUDE);
     }
 
     public void groupeAction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_GROUPE);
     }
 
     public void sectionAction(ActionEvent actionEvent) {
-        Module.setParametre(content);
+        openParameterScene(ParametreController.TAB_SECTION);
     }
 
     public void exitAction(ActionEvent actionEvent) {

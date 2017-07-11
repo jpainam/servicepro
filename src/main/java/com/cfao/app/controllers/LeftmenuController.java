@@ -1,33 +1,14 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
-import com.cfao.app.Module;
-import com.cfao.app.StageManager;
-import com.cfao.app.util.ServiceproUtil;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import com.cfao.app.StageManager;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+
+import javafx.scene.control.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -38,7 +19,56 @@ import java.util.ResourceBundle;
  */
 public class LeftmenuController implements Initializable{
 
-    @FXML
+    public Button btnPersonne;
+    public Button btnCompetence;
+    public Button btnProfil;
+    public Button btnTest;
+    public Button btnRapport;
+    public Button btnParametre;
+    public Button btnFormation;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setLeftMenuSettings();
+    }
+    public void setLeftMenuSettings() {
+        setLeftMenuSetting(btnPersonne, FontAwesomeIcon.USERS);
+        setLeftMenuSetting(btnCompetence, FontAwesomeIcon.SLACK);
+        setLeftMenuSetting(btnParametre, FontAwesomeIcon.GEAR);
+        setLeftMenuSetting(btnFormation, FontAwesomeIcon.GRADUATION_CAP);
+        setLeftMenuSetting(btnRapport, FontAwesomeIcon.FILES_ALT);
+        setLeftMenuSetting(btnTest, FontAwesomeIcon.BALANCE_SCALE);
+        setLeftMenuSetting(btnProfil, FontAwesomeIcon.TAGS);
+    }
+    public void setLeftMenuSetting(Button button, FontAwesomeIcon fontAwesomeIcon) {
+        FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
+        icon.setGlyphSize(35);
+        button.setContentDisplay(ContentDisplay.TOP);
+        button.setGraphic(icon);
+    }
+    public void personneAction(ActionEvent event) {
+        StageManager.loadContent("/views/civilite/civilite.fxml");
+    }
+    public void formationAction(ActionEvent event) {
+        StageManager.loadContent("/views/formation/formation.fxml");
+    }
+    public void competenceAction(ActionEvent event) {
+        StageManager.loadContent("/views/competence/competence.fxml");
+    }
+    public void testAction(ActionEvent event) {
+        StageManager.loadContent("/views/test/test.fxml");
+    }
+    public void rapportAction(ActionEvent event) {
+        StageManager.loadContent("/views/rapport/rapport.fxml");
+    }
+    public void parametreAction(ActionEvent event) {
+        StageManager.loadContent("/views/parametre/parametre.fxml");
+    }
+    public void profilAction(ActionEvent event) {
+        StageManager.loadContent("/views/profil/profil.fxml");
+    }
+
+   /* @FXML
     public Accordion Leftmenu;
 
     @FXML
@@ -94,6 +124,6 @@ public class LeftmenuController implements Initializable{
                 });
 
     }
-
+*/
 
 }

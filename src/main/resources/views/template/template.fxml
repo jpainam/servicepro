@@ -127,61 +127,7 @@
                     <items>
                   <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="363.0" prefWidth="118.0">
                      <children>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                           <children>
-                              <Button fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
-                              <Button fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="102.0" text="Formations">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
-                              <Button fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="102.0" text="Compétences">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
-                              <Button fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="102.0" text="Profils">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
-                              <Button fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="102.0" text="Tests">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="102.0" text="Rapports">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="109.0" text="Paramètres">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
-                           </children>
-                        </VBox>
+
                      </children>
                   </StackPane>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
