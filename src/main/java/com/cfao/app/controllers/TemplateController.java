@@ -148,7 +148,7 @@ public class TemplateController implements Initializable, Controller {
             ParametreController parametreController = new ParametreController(activeTab);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/parametre/parametre.fxml"));
             loader.setController(parametreController);
-            content.getChildren().addAll((Node)loader.load());
+            content.getChildren().setAll((Node)loader.load());
         }catch(Exception ex){
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);

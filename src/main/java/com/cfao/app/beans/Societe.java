@@ -1,11 +1,18 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by JP on 6/11/2017.
  */
+@Entity
+@Table(name="societes")
 public class Societe {
     private SimpleIntegerProperty idsociete = new SimpleIntegerProperty();
     private SimpleStringProperty nom = new SimpleStringProperty();
@@ -14,8 +21,10 @@ public class Societe {
     private SimpleStringProperty telephone = new SimpleStringProperty();
     private SimpleStringProperty email = new SimpleStringProperty();
     private SimpleStringProperty fax = new SimpleStringProperty();
-
     private SimpleStringProperty adresse = new SimpleStringProperty();
+
+    private ListProperty<Personne> personnes = new SimpleListProperty<>();
+
 
     public Societe(int idsociete, String nom, String code, String contact,
                    String telephone, String email, String fax,  String adresse) {
@@ -62,19 +71,21 @@ public class Societe {
         return adresse;
     }
 
+    @Id
+    @GeneratedValue
+    @Column(name="IDSOCIETE")
     public int getIdsociete() {
         return idsociete.get();
     }
 
+    @Column(name="NOM")
     public String getNom() {
         return nom.get();
     }
-
-
+    @Column(name="ADRESSE")
     public String getAdresse() {
         return adresse.get();
     }
-
     public void setIdsociete(int idsociete) {
         this.idsociete.set(idsociete);
     }
@@ -92,6 +103,7 @@ public class Societe {
         return  getNom();
     }
 
+    @Column(name="CODE")
     public String getCode() {
         return code.get();
     }
@@ -101,6 +113,7 @@ public class Societe {
         this.code.set(code);
     }
 
+    @Column(name="CONTACT")
     public String getContact() {
         return contact.get();
     }
@@ -110,6 +123,7 @@ public class Societe {
         this.contact.set(contact);
     }
 
+    @Column(name="TELEPHONE")
     public String getTelephone() {
         return telephone.get();
     }
@@ -119,6 +133,7 @@ public class Societe {
         this.telephone.set(telephone);
     }
 
+    @Column(name="EMAIL")
     public String getEmail() {
         return email.get();
     }
@@ -128,6 +143,7 @@ public class Societe {
         this.email.set(email);
     }
 
+    @Column(name="FAX")
     public String getFax() {
         return fax.get();
     }
@@ -136,4 +152,29 @@ public class Societe {
     public void setFax(String fax) {
         this.fax.set(fax);
     }
+
+    @OneToMany(mappedBy = "societe")
+    public List<Personne> getPersonnes() {
+        return FXCollections.observableArrayList(personnes.get());
+    }
+
+    public ListProperty<Personne> personnesProperty() {
+        return personnes;
+    }
+
+    public void setPersonnes(List<Personne> personnes) {
+        this.personnes.set(FXCollections.observableArrayList(personnes));
+    }
+
+   /* public ObservableSet<Personne> getPersonnes() {
+        return personnes.get();
+    }
+
+    public SetProperty<Personne> personnesProperty() {
+        return personnes;
+    }
+
+    public void setPersonnes(ObservableSet<Personne> personnes) {
+        this.personnes.set(personnes);
+    }*/
 }

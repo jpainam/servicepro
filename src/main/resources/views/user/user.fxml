@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.UserController">
-    <children>
-        <SplitPane dividerPositions="0.30235042735042733" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0">
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.UserController">
+   <children>
+        <SplitPane dividerPositions="0.30235042735042733" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="705.0">
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <children>
                         <HBox fx:id="researchBox" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="280.0" VBox.vgrow="ALWAYS">
                             <VBox.margin>
@@ -39,99 +39,68 @@
                         </TableView>
                     </children>
                 </VBox>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="705.0">
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <children>
-                        <HBox fx:id="actionButtonBox" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="672.0" spacing="30.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <JFXButton fx:id="btnNouveau" maxWidth="100.0" minWidth="100.0" onAction="#nouveauAction" text="Nouveau" ButtonBar.buttonData="RIGHT">
-                                    <styleClass>
-                                        <String fx:value="button-success" />
-                                        <String fx:value="button-raised" />
-                                    </styleClass>
-                                </JFXButton>
-
-                                <JFXButton fx:id="btnModifier" maxWidth="100.0" minWidth="100.0" onAction="#editSociete" text="Modifier" ButtonBar.buttonData="RIGHT">
-                                    <styleClass>
-                                        <String fx:value="button-attention" />
-                                        <String fx:value="button-raised" />
-                                    </styleClass>
-                                </JFXButton>
-                                <JFXButton fx:id="btnSupprimer" maxWidth="100.0" minWidth="100.0" onAction="#supprimerAction" text="Supprimer" ButtonBar.buttonData="RIGHT">
-                                    <styleClass>
-                                        <String fx:value="button-danger" />
-                                        <String fx:value="button-raised" />
-                                    </styleClass>
-                                </JFXButton>
-                            </children>
-                            <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </padding>
-                        </HBox>
-                        <TitledPane alignment="TOP_LEFT" layoutX="19.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="654.0" prefWidth="672.0" text="Ajouter /Modification d'une société" StackPane.alignment="TOP_LEFT">
-                            <StackPane.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </StackPane.margin>
-                            <content>
-                                <AnchorPane>
-                                    <children>
-                                        <GridPane hgap="20.0" layoutX="29.6" layoutY="29.6" maxWidth="1.7976931348623157E308" prefHeight="501.0" prefWidth="616.0" vgap="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="230.0" prefWidth="230.0" />
-                                                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                            <children>
-                                                <Label text="Nom de la société / Society name" />
-                                                <Label text="Adresse du siège / Headquater address" GridPane.rowIndex="6" />
-                                                <Label text="Code de la société" GridPane.rowIndex="1" />
-                                                <Label text="Contact de la société" GridPane.rowIndex="2" />
-                                                <Label text="Numéro de téléphone" GridPane.rowIndex="3" />
-                                                <Label text="Email de la société" GridPane.rowIndex="4" />
-                                                <Label text="Fax de la société" GridPane.rowIndex="5" />
-                                                <TextField fx:id="txtNom" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="400.0" promptText="Entrer le nom de la société" GridPane.columnIndex="1" />
-                                                <TextField fx:id="txtCode" promptText="Entrer le code de la société" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="txtContact" promptText="Entrer le contact de la société" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="txtTelephone" promptText="Entrer le numéro de téléphone" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                <TextField fx:id="txtEmail" promptText="Entrer l'email de la société" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                <TextField fx:id="txtFax" promptText="Entrer le fax de la société" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                                <TextArea fx:id="txtAdresse" maxWidth="1.7976931348623157E308" prefHeight="66.0" prefWidth="293.0" promptText="Entrer l'adresse de la société" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                                <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                                                    <children>
-                                                        <JFXButton fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT">
-                                                            <styleClass>
-                                                                <String fx:value="button-raised" />
-                                                                <String fx:value="button-success" />
-                                                            </styleClass>
-                                                        </JFXButton>
-                                                        <JFXButton fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT">
-                                                            <styleClass>
-                                                                <String fx:value="button-raised" />
-                                                                <String fx:value="button-attention" />
-                                                            </styleClass>
-                                                        </JFXButton>
-                                                    </children>
-                                                </HBox>
-                                            </children>
-                                        </GridPane>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </TitledPane>
+                  <ToolBar maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+                    <items>
+                      <Button mnemonicParsing="false" text="Button" />
+                    </items>
+                  </ToolBar>
+                          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                              <children>
+                                  <GridPane hgap="5.0" layoutX="29.6" layoutY="29.6" maxWidth="1.7976931348623157E308" prefHeight="340.0" prefWidth="616.0" vgap="5.0" AnchorPane.bottomAnchor="324.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="207.0" prefWidth="214.0" />
+                                          <ColumnConstraints hgrow="ALWAYS" maxWidth="389.0" minWidth="10.0" prefWidth="382.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                      <children>
+                                          <Label text="Nom de la société / Society name" />
+                                          <Label text="Adresse du siège / Headquater address" GridPane.rowIndex="6" />
+                                          <Label text="Code de la société" GridPane.rowIndex="1" />
+                                          <Label text="Contact de la société" GridPane.rowIndex="2" />
+                                          <Label text="Numéro de téléphone" GridPane.rowIndex="3" />
+                                          <Label text="Email de la société" GridPane.rowIndex="4" />
+                                          <Label text="Fax de la société" GridPane.rowIndex="5" />
+                                          <TextField fx:id="txtNom" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="400.0" promptText="Entrer le nom de la société" GridPane.columnIndex="1" />
+                                          <TextField fx:id="txtCode" promptText="Entrer le code de la société" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <TextField fx:id="txtContact" promptText="Entrer le contact de la société" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="txtTelephone" promptText="Entrer le numéro de téléphone" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <TextField fx:id="txtEmail" promptText="Entrer l'email de la société" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <TextField fx:id="txtFax" promptText="Entrer le fax de la société" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <TextArea fx:id="txtAdresse" maxWidth="1.7976931348623157E308" prefHeight="66.0" prefWidth="293.0" promptText="Entrer l'adresse de la société" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                              <children>
+                                                  <JFXButton fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT">
+                                                      <styleClass>
+                                                          <String fx:value="button-raised" />
+                                                          <String fx:value="button-success" />
+                                                      </styleClass>
+                                                  </JFXButton>
+                                                  <JFXButton fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT">
+                                                      <styleClass>
+                                                          <String fx:value="button-raised" />
+                                                          <String fx:value="button-attention" />
+                                                      </styleClass>
+                                                  </JFXButton>
+                                              </children>
+                                          </HBox>
+                                      </children>
+                                  </GridPane>
+                              </children>
+                          </AnchorPane>
                     </children>
                 </VBox>
             </items>
         </SplitPane>
-    </children>
-    <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-    </padding>
-</StackPane>
+   </children>
+</AnchorPane>
