@@ -6,6 +6,7 @@ import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.Model;
+import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.model.SocieteModel;
 import com.cfao.app.util.*;
 
@@ -22,6 +23,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -162,23 +164,33 @@ public class SocieteController implements Initializable {
     private void buildCiviliteTable() {
         if (societeTable.getSelectionModel().getSelectedItem() != null) {
             Societe societe = societeTable.getSelectionModel().getSelectedItem();
-            FilteredList<Personne> filteredList = new FilteredList<Personne>(FXCollections.observableArrayList(societe.getPersonnes()), (Personne p) -> true);
-            searchBox2.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(personne -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
+            PersonnelModel personnelModel = new PersonnelModel();
+            Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
+                @Override
+                protected ObservableList<Personne> call() throws Exception {
+                    return FXCollections.observableArrayList(personnelModel.getPersonneBySociete(societe));
                 }
-                String valueCompare = newValue.toLowerCase();
-                if (personne.getNom().toLowerCase().contains(valueCompare) || personne.getPrenom().toLowerCase().contains(valueCompare)) {
-                    return true;
-                }
-                if (personne.getMatricule().toLowerCase().contains(valueCompare)) {
-                    return true;
-                }
-                return false;
-            }));
-            SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
-            sortedList.comparatorProperty().bind(civiliteTable.comparatorProperty());
-            civiliteTable.setItems(sortedList);
+            };
+            task.run();
+            task.setOnSucceeded(event -> {
+                FilteredList<Personne> filteredList = new FilteredList<Personne>(FXCollections.observableArrayList(task.getValue()), (Personne p) -> true);
+                searchBox2.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(personne -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+                    String valueCompare = newValue.toLowerCase();
+                    if (personne.getNom().toLowerCase().contains(valueCompare) || personne.getPrenom().toLowerCase().contains(valueCompare)) {
+                        return true;
+                    }
+                    if (personne.getMatricule().toLowerCase().contains(valueCompare)) {
+                        return true;
+                    }
+                    return false;
+                }));
+                SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
+                sortedList.comparatorProperty().bind(civiliteTable.comparatorProperty());
+                civiliteTable.setItems(sortedList);
+            });
         } else {
             civiliteTable.getItems().clear();
         }
@@ -257,12 +269,8 @@ public class SocieteController implements Initializable {
         if (societeTable.getSelectionModel().getSelectedItem() != null) {
             Societe societe = societeTableModel.getSelectedItem();
             SocieteModel societeModel = new SocieteModel();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Suppression");
-            alert.setHeaderText("");
-            alert.setContentText("Etes vous sûr de vouloir supprimer " + societe.getNom());
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean okay = AlertUtil.showConfirmationMessage("Suppression", "Etes vous sûr de vouloir supprimer " + societe);
+            if (okay) {
                 if (societeModel.delete(societe)) {
                     ServiceproUtil.notify("Suppression OK");
                 } else {

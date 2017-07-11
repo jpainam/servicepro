@@ -11,11 +11,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
+import javafx.stage.StageStyle;
 
 public class AlertUtil {
 
     public static void showSimpleAlert(String title, String content) {
         Alert alert = new Alert(AlertType.INFORMATION);
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -97,7 +105,28 @@ public class AlertUtil {
     public static boolean showConfirmationMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Suppression");
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+        region.visibleProperty().bind(alert.showingProperty());
         alert.setHeaderText("");
+        alert.setContentText(message);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public static boolean showConfirmationMessage(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+        region.visibleProperty().bind(alert.showingProperty());
+        alert.setHeaderText("");
+
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

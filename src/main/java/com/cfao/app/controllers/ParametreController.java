@@ -28,7 +28,6 @@ public class ParametreController implements Initializable{
     public static final int TAB_GROUPE = 6;
 
 
-
     public Tab tabUtilsateur;
     public Tab tabProfil;
     public Tab tabSociete;
@@ -43,6 +42,7 @@ public class ParametreController implements Initializable{
         this.activeTab = activeTab;
     }
     public ParametreController(){}
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -73,12 +73,7 @@ public class ParametreController implements Initializable{
         tabSection.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("section.icon")));
         tabSociete.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("societe.icon")));
         tabGroupe.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("groupe.icon")));
-
     }
-    public void setActiveTab(int activeTab){
-        this.activeTab = activeTab;
-    }
-
     public Tab getActiveTab(){
         switch (activeTab){
             case TAB_UTILISATEUR: return tabUtilsateur;

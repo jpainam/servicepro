@@ -39,6 +39,7 @@
         <mapping class="com.cfao.app.beans.Profil" />
         <mapping class="com.cfao.app.beans.Typeformation" />
         <mapping class="com.cfao.app.beans.Societe" />
+        <mapping class="com.cfao.app.beans.Support" />
 
 
     </session-factory>

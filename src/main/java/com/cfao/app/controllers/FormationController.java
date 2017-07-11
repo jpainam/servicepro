@@ -3,6 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.Controller;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.ServiceproUtil;
@@ -11,6 +12,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.sun.prism.impl.FactoryResetException;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,22 +26,34 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.util.Callback;
 import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.jws.WebParam;
 import javax.print.ServiceUI;
+import javax.swing.text.html.Option;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 /**
  * Created by JP on 6/19/2017.
@@ -70,6 +84,12 @@ public class FormationController implements Initializable {
     public ListView<Personnel> listeViewFormateurs;
     public HBox hboxCompetenceAssociee;
     public ComboBox<Typeformation> comboTypeformation;
+    public Button btnAjouterSupport;
+    public Button btnSupprimerSupport;
+    public Button btnAfficherSupport;
+    public TableView<Support> supportTable;
+    public TableColumn<Support, String> codeSupportColumn;
+    public TableColumn<Support, String> titreSupportColumn;
     private SearchBox searchBox = new SearchBox();
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
@@ -93,6 +113,8 @@ public class FormationController implements Initializable {
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
         datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
+        codeSupportColumn.setCellValueFactory(param -> param.getValue().codeProperty());
+        titreSupportColumn.setCellValueFactory(param -> param.getValue().titreProperty());
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
         researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
@@ -102,7 +124,9 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
-
+        GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
+        GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
         GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
         GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
         GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
@@ -139,7 +163,8 @@ public class FormationController implements Initializable {
             comboTypeformation.setItems(map.get("typeformation"));
         });
     }
-    private void buildTable(){
+
+    private void buildTable() {
         btnNouveau.setText("Nouveau/New");
         btnModifier.setText("Modifier/Edit");
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSuppr);
@@ -171,6 +196,7 @@ public class FormationController implements Initializable {
             listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
             dateDebut.setValue(formation.getDatedebut().toLocalDate());
             dateFin.setValue(formation.getDatefin().toLocalDate());
+            supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
         }
     }
 
@@ -189,6 +215,7 @@ public class FormationController implements Initializable {
             formation.setEtatformation(comboEtatformation.getValue());
             formation.setModele(comboModele.getValue());
             formation.setFormateurs(listeViewFormateurs.getItems());
+            formation.setSupports(supportTable.getItems());
             formation.setTitre(txtTitre.getText());
             formation.setDescription(txtDescription.getText());
             formation.setCodeformation(txtCode.getText());
@@ -237,6 +264,7 @@ public class FormationController implements Initializable {
             formation.setDescription(txtDescription.getText());
             formation.setEtatformation(comboEtatformation.getValue());
             formation.setFormateurs(listeViewFormateurs.getItems());
+            formation.setSupports(supportTable.getItems());
             formation.setTypeformation(comboTypeformation.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
@@ -310,6 +338,62 @@ public class FormationController implements Initializable {
             alert.setTitle("");
             alert.setContentText("Sélectionner le formateur à supprimer dans le tableau des formateurs");
             alert.showAndWait();
+        }
+    }
+
+    public void ajouterSupportAction(ActionEvent actionEvent) {
+        Dialog<Support> dialog = new Dialog<>();
+        try {
+            dialog.setTitle("Supports - Formation");
+            dialog.setHeaderText("Associer des supports à la formation");
+            ButtonType okButton = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+            DialogSupportController dialogSupportController = new DialogSupportController();
+            dialog.getDialogPane().setContent(dialogSupportController);
+            dialog.setResultConverter(new Callback<ButtonType, Support>() {
+                @Override
+                public Support call(ButtonType param) {
+                    return dialogSupportController.getSupport();
+                }
+            });
+            Optional<Support> result = dialog.showAndWait();
+            result.ifPresent(new Consumer<Support>() {
+                @Override
+                public void accept(Support support) {
+                    if (!supportTable.getItems().contains(support)) {
+                        supportTable.getItems().add(support);
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
+
+    public void supprimerSupportAction(ActionEvent actionEvent) {
+        if (supportTable.getSelectionModel().getSelectedItem() != null) {
+            Support support = supportTable.getSelectionModel().getSelectedItem();
+            supportTable.getItems().remove(support);
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le support à supprimer de la formation");
+        }
+    }
+
+    public void afficherSupportAction(ActionEvent actionEvent) {
+        if (supportTable.getSelectionModel().getSelectedItem() != null) {
+            try {
+                Support support = supportTable.getSelectionModel().getSelectedItem();
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(new File(support.getLien()));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                AlertUtil.showErrorMessage(ex);
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le support à afficher");
         }
     }
 }

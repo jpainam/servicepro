@@ -29,6 +29,7 @@ public class Formation {
     private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
 
     private ListProperty<Personnel> formateurs = new SimpleListProperty<>();
+    private ListProperty<Support> supports = new SimpleListProperty<>();
 
     public Formation(int idformation, String codeformation, Modele modele, String titre,
                      String description, LocalDate datedebut,
@@ -181,5 +182,20 @@ public class Formation {
 
     public void setTypeformation(Typeformation typeformation) {
         this.typeformation.set(typeformation);
+    }
+
+    @ManyToMany()
+    @JoinTable(name = "support_formation", joinColumns = {@JoinColumn(name="FORMATION")},
+    inverseJoinColumns = {@JoinColumn(name="SUPPORT")})
+    public List<Support> getSupports() {
+        return supports.get();
+    }
+
+    public ListProperty<Support> supportsProperty() {
+        return supports;
+    }
+
+    public void setSupports(List<Support> supports) {
+        this.supports.set(FXCollections.observableList(supports));
     }
 }

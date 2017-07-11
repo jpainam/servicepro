@@ -23,7 +23,6 @@ public class Societe {
     private SimpleStringProperty fax = new SimpleStringProperty();
     private SimpleStringProperty adresse = new SimpleStringProperty();
 
-    private ListProperty<Personne> personnes = new SimpleListProperty<>();
 
 
     public Societe(int idsociete, String nom, String code, String contact,
@@ -153,7 +152,7 @@ public class Societe {
         this.fax.set(fax);
     }
 
-    @OneToMany(mappedBy = "societe")
+    /*@OneToMany(mappedBy = "societe")
     public List<Personne> getPersonnes() {
         return FXCollections.observableArrayList(personnes.get());
     }
@@ -165,16 +164,5 @@ public class Societe {
     public void setPersonnes(List<Personne> personnes) {
         this.personnes.set(FXCollections.observableArrayList(personnes));
     }
-
-   /* public ObservableSet<Personne> getPersonnes() {
-        return personnes.get();
-    }
-
-    public SetProperty<Personne> personnesProperty() {
-        return personnes;
-    }
-
-    public void setPersonnes(ObservableSet<Personne> personnes) {
-        this.personnes.set(personnes);
-    }*/
+    */
 }

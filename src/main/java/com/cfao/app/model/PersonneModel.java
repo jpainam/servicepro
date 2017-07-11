@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Personne;
+import com.cfao.app.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 
@@ -17,6 +18,7 @@ public class PersonneModel extends Model {
     public List<Personne> select(){
         try {
             session.beginTransaction();
+            //session = HibernateUtil.getSessionFactory().getCurrentSession()
             Criteria criteria = session.createCriteria(Personne.class);
             return criteria.list();
         }catch (Exception ex){
