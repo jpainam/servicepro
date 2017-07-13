@@ -2,7 +2,7 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
-import com.cfao.app.model.Model;
+import com.cfao.app.model.*;
 import com.cfao.app.util.FormatDate;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.SearchFieldClassTool;
@@ -173,16 +173,16 @@ public class CiviliteController implements Initializable {
             @Override
             protected ObservableMap<String, ObservableList> call() throws Exception {
                 map = FXCollections.observableHashMap();
-                map.put("societe", FXCollections.observableList(new Model<Societe>(Model.getBeanPath("Societe")).getList()));
-                map.put("section", FXCollections.observableList(new Model<Section>(Model.getBeanPath("Section")).getList()));
-                map.put("groupe", FXCollections.observableList(new Model<Groupe>(Model.getBeanPath("Groupe")).getList()));
-                map.put("pays", FXCollections.observableList(new Model<Pays>(Model.getBeanPath("Pays")).getList()));
-                map.put("langue", FXCollections.observableList(new Model<Langue>(Model.getBeanPath("Langue")).getList()));
-                map.put("potentiel", FXCollections.observableList(new Model<Potentiel>(Model.getBeanPath("Potentiel")).getList()));
-                map.put("contrat", FXCollections.observableList(new Model<Contrat>(Model.getBeanPath("Contrat")).getList()));
-                map.put("ambition", FXCollections.observableList(new Model<Ambition>(Model.getBeanPath("Ambition")).getList()));
-                map.put("langue", FXCollections.observableList(new Model<Langue>(Model.getBeanPath("Langue")).getList()));
-                map.put("personne", FXCollections.observableList(new Model<Personne>(Model.getBeanPath("Personne")).getList()));
+                map.put("societe", FXCollections.observableList((new SocieteModel()).getList()));
+                map.put("section", FXCollections.observableList((new SectionModel()).getList()));
+                map.put("groupe", FXCollections.observableList((new GroupeModel()).getList()));
+                map.put("pays", FXCollections.observableList((new Model<Pays>("Pays")).getList()));
+                map.put("langue", FXCollections.observableList(new Model<Langue>("Langue").getList()));
+                map.put("potentiel", FXCollections.observableList(new Model<Potentiel>("Potentiel").getList()));
+                map.put("contrat", FXCollections.observableList(new Model<Contrat>("Contrat").getList()));
+                map.put("ambition", FXCollections.observableList(new Model<Ambition>("Ambition").getList()));
+                map.put("langue", FXCollections.observableList(new Model<Langue>("Langue").getList()));
+                map.put("personne", FXCollections.observableList((new PersonneModel()).getList()));
                 return map;
             }
         };

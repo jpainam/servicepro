@@ -3,9 +3,11 @@ package com.cfao.app.model;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.beans.Profilcompetence;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
@@ -16,32 +18,20 @@ import java.util.List;
  */
 public class CompetenceModel extends Model<Competence> {
     public CompetenceModel(){
-        super();
+        super("Competence");
     }
 
     public CompetenceModel(String className){
         super(className);
     }
-    public List<Competence> select(){
-        try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            Criteria criteria = session.createCriteria(Competence.class);
-            return criteria.list();
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }finally {
-            close();
-        }
-        return null;
-    }
+
     public List<Profilcompetence> getCompetenceParProfil(Profil profil){
+        Session session = getCurrentSession();
         try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
             /*Criteria criteria = session.createCriteria(Profilcompetence.class);
             criteria.add(Restrictions.eq("profil", profil));
             return criteria.list();*/
+            session.beginTransaction();
             Query query = session.createQuery(
                     "from Profilcompetence as pc " +
                             "inner join fetch pc.competence co " +
@@ -51,6 +41,7 @@ public class CompetenceModel extends Model<Competence> {
             return query.list();
         }catch (Exception ex){
             ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
         }finally {
             session.close();
         }

@@ -11,6 +11,7 @@ import javafx.scene.paint.*;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.ResourceBundle;
 
@@ -19,6 +20,9 @@ import java.util.ResourceBundle;
  */
 public class Main extends Application {
     public static Stage stage;
+
+    // Directory separator
+    public static final String DS = File.separator;
 
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;

@@ -5,6 +5,7 @@ import com.cfao.app.beans.Personnel;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
@@ -14,24 +15,31 @@ import java.util.List;
  * Created by JP on 7/2/2017.
  */
 public class PersonnelModel extends  Model<Personnel> {
+    protected  String className = "Personnel";
+
     public PersonnelModel(){
-        super(Model.getBeanPath("Personne"));
+        super("Personne");
     }
     public PersonnelModel(String className){
         super(className);
     }
 
     public List<Personne> getPersonneBySociete(Societe societe){
+        Session session = getCurrentSession();
         try{
-            Transaction tx = session.beginTransaction();
+            session.beginTransaction();
             Criteria criteria = session.createCriteria(Personne.class);
             criteria.add(Restrictions.eq("societe", societe));
             List<Personne> list = criteria.list();
-            tx.commit();
+            session.getTransaction().commit();
             return list;
         }catch (Exception ex){
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()) {
+                session.close();
+            }
         }
         return null;
     }

@@ -11,21 +11,11 @@ import java.util.Vector;
 /**
  * Created by JP on 6/10/2017.
  */
-public class PersonneModel extends Model {
+public class PersonneModel extends Model<Personne> {
     public PersonneModel(){
-        super();
+        super("Personne");
     }
-    public List<Personne> select(){
-        try {
-            session.beginTransaction();
-            //session = HibernateUtil.getSessionFactory().getCurrentSession()
-            Criteria criteria = session.createCriteria(Personne.class);
-            return criteria.list();
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }finally {
-            close();
-        }
-        return null;
+    public PersonneModel(String className){
+        super(className);
     }
 }

@@ -18,33 +18,17 @@ import java.util.List;
 /**
  * Created by JP on 6/15/2017.
  */
-public class ProfilModel extends  Model {
+public class ProfilModel extends  Model<Profil> {
     public static final int INITIAL = 1;
     public static final int FONDAMENTAL = 2;
     public static final int AVANCE = 3;
     public static final int EXPERT = 4;
     public ProfilModel(){
-        super();
+        super("Profil");
     }
 
     public ProfilModel(String className){
         super(className);
-    }
-    public List<Profil> select(){
-        try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction tx = session.beginTransaction();
-            Criteria criteria = session.createCriteria(Profil.class);
-            List list = criteria.list();
-            tx.commit();
-
-            return list;
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }finally {
-            //close();
-        }
-        return null;
     }
 
    /* public List getCompetenceParProfil(Profil profil){
@@ -75,7 +59,7 @@ public class ProfilModel extends  Model {
         return list;
     }
    */
-    public List getCompetenceParProfil2(Profil profil){
+   /* public List getCompetenceParProfil2(Profil profil){
         List list = new ArrayList();
         try{
             String sql = "SELECT co.*, IF(co.TYPE='CN' OR co.TYPE='CNP',TRUE,FALSE) AS connaissance, " +
@@ -107,39 +91,8 @@ public class ProfilModel extends  Model {
         }
         return list;
     }
+    */
 
-    public boolean insert(Profil profil) {
-        try{
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction tx = session.beginTransaction();
-            session.save(profil);
-            tx.commit();
-            return true;
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }finally {
-            close();
-        }
-        return false;
-    }
-
-    public boolean insert(ObservableSet<Competence> selectedItems, Profil profil) {
-        try{
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction tx = session.beginTransaction();
-            for(Competence c : selectedItems){
-                Profilcompetence profilcompetence = new Profilcompetence();
-                profilcompetence.setCompetence(c);
-                profilcompetence.setProfil(profil);
-                session.save(profilcompetence);
-            }
-            tx.commit();
-            return true;
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return false;
-    }
 }
 
 

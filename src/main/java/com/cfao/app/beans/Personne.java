@@ -178,15 +178,7 @@ public class Personne {
      */
     @Override
     public String toString() {
-        return "Personne{" +
-                "idPersonne=" + idPersonne +
-                ", matricule=" + matricule +
-                ", nom=" + nom +
-                ", prenom=" + prenom +
-                ", date Naissance =" + naissance +
-                ", Langues =" + langues +
-                ", pays=" + pays +
-                '}';
+        return getNom() + " " + getPrenom();
     }
 
 

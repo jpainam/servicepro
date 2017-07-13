@@ -40,7 +40,7 @@
                         <TextField fx:id="txtTitreSupport" />
                         <HBox alignment="CENTER_RIGHT" prefHeight="55.0" prefWidth="260.0" spacing="10.0">
                            <children>
-                              <Label fx:id="fileStatus" text="Label" />
+                              <Label fx:id="fileStatus" />
                               <Button mnemonicParsing="false" onAction="#choisirFichierAction" text="Choisir un fichier" HBox.hgrow="NEVER" />
                            </children>
                         </HBox>

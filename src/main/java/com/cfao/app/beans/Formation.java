@@ -29,6 +29,7 @@ public class Formation {
     private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
 
     private ListProperty<Personnel> formateurs = new SimpleListProperty<>();
+    private ListProperty<Personne> participants = new SimpleListProperty<>();
     private ListProperty<Support> supports = new SimpleListProperty<>();
 
     public Formation(int idformation, String codeformation, Modele modele, String titre,
@@ -44,7 +45,7 @@ public class Formation {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDFORMATION")
     public int getIdformation() {
         return idformation.get();
@@ -156,7 +157,7 @@ public class Formation {
         this.formateurs.set(FXCollections.observableList(formateurs));
     }
 
-    @ManyToOne()
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "ETATFORMATION")
     public Etatformation getEtatformation() {
         return etatformation.get();
@@ -170,7 +171,7 @@ public class Formation {
         this.etatformation.set(etatformation);
     }
 
-    @ManyToOne()
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "TYPEFORMATION")
     public Typeformation getTypeformation() {
         return typeformation.get();
@@ -184,7 +185,7 @@ public class Formation {
         this.typeformation.set(typeformation);
     }
 
-    @ManyToMany()
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "support_formation", joinColumns = {@JoinColumn(name="FORMATION")},
     inverseJoinColumns = {@JoinColumn(name="SUPPORT")})
     public List<Support> getSupports() {
@@ -197,5 +198,20 @@ public class Formation {
 
     public void setSupports(List<Support> supports) {
         this.supports.set(FXCollections.observableList(supports));
+    }
+
+    @ManyToMany()
+    @JoinTable(name = "formation_personne", joinColumns = {@JoinColumn(name = "FORMATION")},
+            inverseJoinColumns = {@JoinColumn(name = "PERSONNE")})
+    public List<Personne> getParticipants() {
+        return participants.get();
+    }
+
+    public ListProperty<Personne> participantsProperty() {
+        return participants;
+    }
+
+    public void setParticipants(List<Personne> participants) {
+        this.participants.set(FXCollections.observableArrayList(participants));
     }
 }

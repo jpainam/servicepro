@@ -81,7 +81,7 @@ public class ProfilController implements Initializable {
             Profil profil = tableProfilModel.getSelectedItem();
             //ProfilModel profilModel = new ProfilModel(Model.getBeansClass("Profil"));
             CompetenceModel competenceModel = new CompetenceModel();
-            System.out.println(competenceModel.getCompetenceParProfil(profil));
+            //System.out.println(competenceModel.getCompetenceParProfil(profil));
 
             Task<ObservableList<Profilcompetence>> task = new Task<ObservableList<Profilcompetence>>() {
                 @Override

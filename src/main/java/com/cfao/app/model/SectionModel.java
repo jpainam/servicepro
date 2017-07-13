@@ -10,6 +10,6 @@ public class SectionModel extends Model<Section> {
         super(className);
     }
     public SectionModel(){
-        super();
+        super("Section");
     }
 }

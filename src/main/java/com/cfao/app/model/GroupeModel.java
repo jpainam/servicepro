@@ -9,4 +9,7 @@ public class GroupeModel extends Model<Groupe> {
     public GroupeModel(String className){
         super(className);
     }
+    public GroupeModel(){
+        super("Groupe");
+    }
 }

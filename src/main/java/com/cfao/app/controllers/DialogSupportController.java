@@ -1,5 +1,6 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Main;
 import com.cfao.app.beans.Support;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
@@ -38,6 +39,7 @@ public class DialogSupportController extends AnchorPane implements Initializable
     public TableView<Support> supportTable;
     public TextField txtCodeSupport;
     public TextField txtTitreSupport;
+    private String destination = null;
 
     public DialogSupportController() {
         try {
@@ -52,14 +54,21 @@ public class DialogSupportController extends AnchorPane implements Initializable
     }
 
     public Support getSupport() {
-       /*if(txtCodeSupport.getText().isEmpty() || txtTitreSupport.getText().isEmpty()){
+       if(txtCodeSupport.getText().isEmpty() || txtTitreSupport.getText().isEmpty() || fileStatus.getText().isEmpty()){
            if(supportTable.getSelectionModel().getSelectedItem() == null){
                AlertUtil.showSimpleAlert("Information", "Veuillez choisir un support ou remplir tous les champs nécessaires");
+           }else{
+               return supportTable.getSelectionModel().getSelectedItem();
            }
-       }*/
-        if (supportTable.getSelectionModel().getSelectedItem() != null) {
-            return supportTable.getSelectionModel().getSelectedItem();
-        }
+       }else{
+           if(this.destination != null) {
+               Support support = new Support();
+               support.setCode(txtCodeSupport.getText());
+               support.setLien(destination);
+               support.setTitre(txtTitreSupport.getText());
+               return support;
+           }
+       }
         return null;
     }
 
@@ -83,12 +92,7 @@ public class DialogSupportController extends AnchorPane implements Initializable
             }
         };
         task.run();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                supportTable.setItems(task.getValue());
-            }
-        });
+        task.setOnSucceeded(event -> supportTable.setItems(task.getValue()));
     }
 
     public void choisirFichierAction(ActionEvent actionEvent) {
@@ -99,11 +103,15 @@ public class DialogSupportController extends AnchorPane implements Initializable
             );
             Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             File file = fileChooser.showOpenDialog(currentStage);
-            File targetDir = new File("/documents/");
             if (file != null) {
                 Path from = FileSystems.getDefault().getPath(file.getPath());
-                Path to = FileSystems.getDefault().getPath("/documents/" + file.getName());
-                Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                destination = Main.DS + ResourceBundle.getBundle("Bundle").getString("document.dir") + Main.DS + file.getName();
+                Path to = Paths.get(destination);
+                if(to.getParent() == null){
+                    Files.createDirectories(to.getParent());
+                }
+
+                Files.copy(from, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
                 fileStatus.setText(file.getName());
             }
         } catch (Exception ex) {

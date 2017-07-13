@@ -12,118 +12,142 @@ import java.util.List;
 /**
  * Created by JP on 6/9/2017.
  */
-public class Model <T>{
-    protected Session session;
+public class Model<T> {
     protected String table;
     protected String key;
     protected String tmpClass;
-    protected Transaction tx;
+    protected String className;
+    protected static Transaction transaction;
 
-    public Model(){
-        session = HibernateUtil.getSessionFactory().openSession();
+    public Model() {
     }
 
-    public Model(String tmpClass){
+    public static Session getCurrentSession() {
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+           if(session == null){
+                session = HibernateUtil.getSessionFactory().openSession();
+                //transaction = session.beginTransaction();
+                return session;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
+        return session;
+    }
+
+    public Model(String tmpClass) {
         this();
         this.tmpClass = tmpClass;
+        className = getBeanPath(tmpClass);
     }
 
-    public List<T> getList(){
+    public List<T> getList() {
+        Session session = getCurrentSession();
         try {
-            if(!session.isOpen()){
-                session = HibernateUtil.getSessionFactory().openSession();
-            }
-            session.beginTransaction();
             Criteria criteria;
-            criteria = session.createCriteria(Class.forName(tmpClass));
+            session.beginTransaction();
+            criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }finally {
-            //session.close();
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            session.close();
         }
         return null;
     }
 
-    public void saveOrUpdate(T type){
+    public void saveOrUpdate(T type) {
+        Session session = getCurrentSession();
         try {
-            if(!session.isOpen()){
-                session = HibernateUtil.getSessionFactory().openSession();
-            }
-            tx = session.beginTransaction();
+            session.beginTransaction();
             session.saveOrUpdate(type);
-            tx.commit();
-
-        }catch (Exception ex){
+            session.getTransaction().commit();
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }finally {
-            //session.close();
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if(session.isOpen()) {
+                session.close();
+            }
         }
     }
 
 
-    public boolean save(T type){
+    public boolean save(T type) {
+        Session session = getCurrentSession();
         try {
-            if(!session.isOpen()){
-                session = HibernateUtil.getSessionFactory().openSession();
-            }
-            tx = session.beginTransaction();
+            session.beginTransaction();
             session.save(type);
-            tx.commit();
+            session.getTransaction().commit();
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
             return false;
-        }finally {
-            //session.close();
-        }
-    }
-
-
-    public boolean update(T type){
-        try {
-            if(!session.isOpen()){
-                session = HibernateUtil.getSessionFactory().openSession();
+        } finally {
+            if(session.isOpen()) {
+                session.close();
             }
-            tx = session.beginTransaction();
-            session.update(type);
-            tx.commit();
-            return true;
-        }catch (Exception ex){
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex, "", "");
-            return false;
-        }finally {
-            //session.close();
         }
     }
-    public boolean delete(T type){
+
+
+    public boolean update(T type) {
+        Session session = getCurrentSession();
         try {
-            tx = session.beginTransaction();
-            session.delete(type);
-            tx.commit();
+            session.beginTransaction();
+            session.update(type);
+            session.getTransaction().commit();
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
             return false;
-        }finally {
-            //session.close();
+        } finally {
+            if(session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public boolean delete(T type) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.delete(type);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+            return false;
+        } finally {
+            if(session.isOpen()) {
+                session.close();
+            }
         }
     }
 
 
-    public static String getBeanPath(String s){return "com.cfao.app.beans."+s;}
-    public static String getBeansClass(String s){return getBeanPath(s);}
+    public static String getBeanPath(String s) {
+        return "com.cfao.app.beans." + s;
+    }
 
-    public List<T> select(){
+    public static String getBeansClass(String s) {
+        return getBeanPath(s);
+    }
+
+    public List<T> select() {
         return this.getList();
     }
 
-    public void close(){
-        session.flush();
-        session.close();
+    public void close() {
+        getCurrentSession().flush();
+        getCurrentSession().close();
     }
 
 

@@ -1,26 +1,20 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
-import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Personne;
-import com.cfao.app.model.FormationModel;
-import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
-import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.SearchBox;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.chart.*;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -28,7 +22,6 @@ import javafx.scene.layout.*;
 import org.controlsfx.control.CheckListView;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -145,10 +138,11 @@ public class AccueilController implements Initializable {
         participantTable.getColumns().addAll(participantNom, participantMatricule);
         participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         VBox.setVgrow(participantTable, Priority.ALWAYS);
+        PersonneModel personneModel = new PersonneModel();
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
             protected ObservableList<Personne> call() throws Exception {
-                return FXCollections.observableArrayList(new Model<Personne>(Model.getBeanPath("Personne")).getList());
+                return FXCollections.observableArrayList(personneModel.getList());
             }
         };
         new Thread(task).start();

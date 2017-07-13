@@ -1,21 +1,16 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
-import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.Profil;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.model.SocieteModel;
-import com.cfao.app.util.*;
-
+import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.SearchFieldClassTool;
+import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.animation.PauseTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -23,23 +18,13 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.util.Callback;
-import javafx.util.Duration;
-import org.controlsfx.control.NotificationPane;
-import org.controlsfx.control.textfield.CustomTextField;
 
-import java.net.CookieStore;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 /**
  * Created by JP on 6/11/2017.
@@ -230,8 +215,11 @@ public class SocieteController implements Initializable {
     }
 
     public void annulerAction(ActionEvent actionEvent) {
+
         ServiceproUtil.emptyFields(txtNom, txtAdresse, txtTelephone, txtEmail, txtFax, txtContact, txtCode);
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier);
+        stateBtnNouveau = 0;
+        stateBtnModifier = 0;
         btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
         btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
         buildSocieteTable();
