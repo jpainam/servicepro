@@ -1,10 +1,9 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.SearchBox;
-import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.util.Callback;
 import org.controlsfx.control.ListSelectionView;
 
@@ -80,6 +80,12 @@ public class FormationController implements Initializable {
     public TableColumn<Personne, String> prenomParticipantColumn;
     public TableColumn<Personne, Section> sectionParticipantColumn;
     public HBox hboxSearchParticipant;
+    public Button btnPreviousParticipant;
+    public Button btnNextParticipant;
+    public Button btnPrintParticipant;
+    public Button btnAjouterParticipant;
+    public Button btnSupprimerParticipant;
+    public Button btnAnnulerParticipant;
     private SearchBox searchBox = new SearchBox();
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
@@ -89,6 +95,7 @@ public class FormationController implements Initializable {
     public FormationModel formationModel = new FormationModel();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
+    public int stateBtnAjouterParticipant = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -97,19 +104,20 @@ public class FormationController implements Initializable {
         buildCombo();
         buildTable();
     }
+
     private void initComponents() {
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
         datedebutColumn.setCellFactory(new Callback<TableColumn<Formation, LocalDate>, TableCell<Formation, LocalDate>>() {
             @Override
             public TableCell<Formation, LocalDate> call(TableColumn<Formation, LocalDate> param) {
-                TableCell cell = new TableCell<Formation, LocalDate>(){
+                TableCell cell = new TableCell<Formation, LocalDate>() {
                     @Override
                     protected void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
-                        if(item == null || empty){
+                        if (item == null || empty) {
                             setGraphic(null);
-                        }else{
+                        } else {
                             setGraphic(new Label(item.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                         }
                     }
@@ -122,13 +130,13 @@ public class FormationController implements Initializable {
         datefinColumn.setCellFactory(new Callback<TableColumn<Formation, LocalDate>, TableCell<Formation, LocalDate>>() {
             @Override
             public TableCell<Formation, LocalDate> call(TableColumn<Formation, LocalDate> param) {
-                TableCell cell =  new TableCell<Formation, LocalDate>(){
+                TableCell cell = new TableCell<Formation, LocalDate>() {
                     @Override
                     protected void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
-                        if(item == null || empty){
+                        if (item == null || empty) {
                             setGraphic(null);
-                        }else{
+                        } else {
                             setGraphic(new Label(item.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                         }
                     }
@@ -155,14 +163,13 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
         GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
         GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
-        GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
-        GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
-        GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
-        GlyphsDude.setIcon(btnSupprimer, FontAwesomeIcon.TRASH);
-        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
-        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
-        GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
-
+        ButtonUtil.next(btnNext, btnNextParticipant);
+        ButtonUtil.previous(btnPrevious, btnPreviousParticipant);
+        ButtonUtil.print(btnPrint, btnPrintParticipant);
+        ButtonUtil.edit(btnModifier);
+        ButtonUtil.delete(btnSupprimerParticipant, btnSupprimer);
+        ButtonUtil.add(btnNouveau, btnAjouterParticipant);
+        ButtonUtil.cancel(btnAnnuler, btnAnnulerParticipant);
         searchBoxAssocie.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBoxAssocie, Priority.ALWAYS);
         hboxCompetenceAssociee.getChildren().addAll(new Label("Compétences associées : "), searchBoxAssocie);
@@ -430,47 +437,65 @@ public class FormationController implements Initializable {
     }
 
     public void ajouterParticipant(ActionEvent actionEvent) {
-
-        if(formationTable.getSelectionModel().getSelectedItem() == null){
+        if (formationTable.getSelectionModel().getSelectedItem() == null) {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la formation");
             return;
         }
         Formation formation = formationTable.getSelectionModel().getSelectedItem();
-        Dialog<List<Personne>> dialog = new Dialog<>();
-        try {
-            ButtonType validerButton = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        if (stateBtnAjouterParticipant == 0) {
+            Dialog<List<Personne>> dialog = new Dialog<>();
+            dialog.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            dialog.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
+            try {
+                ButtonType validerButton = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
+                ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            dialog.getDialogPane().getButtonTypes().addAll(validerButton, cancelButton);
-            DialogParticipantController dialogParticipantController = new DialogParticipantController(formation);
-            dialog.getDialogPane().setContent(dialogParticipantController);
-            dialog.setResultConverter(new Callback<ButtonType, List<Personne>>() {
-                @Override
-                public List<Personne> call(ButtonType param) {
-                    return dialogParticipantController.getParticipants();
-                }
-            });
-            Optional<List<Personne>> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<List<Personne>>() {
-                @Override
-                public void accept(List<Personne> personnes) {
+                dialog.getDialogPane().getButtonTypes().addAll(validerButton, cancelButton);
+                DialogParticipantController dialogParticipantController = new DialogParticipantController(formation);
+                dialog.getDialogPane().setContent(dialogParticipantController);
+                dialog.setResultConverter(param -> dialogParticipantController.getParticipants());
+                Optional<List<Personne>> result = dialog.showAndWait();
+                result.ifPresent(personnes -> {
                     participantTable.getItems().clear();
                     participantTable.getItems().addAll(FXCollections.observableArrayList(personnes));
-                    /*formation.participantsProperty().bind(participantTable.itemsProperty());
-                    formationModel.update(formation);*/
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex);
+                    formation.setParticipants(participantTable.getItems());
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                AlertUtil.showErrorMessage(ex);
+            }
+            stateBtnAjouterParticipant = 1;
+            btnAjouterParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+        } else {
+            formation.setParticipants(participantTable.getItems());
+            if (formationModel.update(formation)) {
+                ServiceproUtil.notify("Participants ajoutés avec succès");
+            } else {
+                ServiceproUtil.notify("Une erreur est survenue");
+            }
+            stateBtnAjouterParticipant = 0;
         }
     }
 
     public void supprimerParticipant(ActionEvent actionEvent) {
-        if(participantTable.getSelectionModel().getSelectedItem() != null){
+        btnAjouterParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
+        if (participantTable.getSelectionModel().getSelectedItem() != null) {
             Personne personne = participantTable.getSelectionModel().getSelectedItem();
-        }else{
-
+            participantTable.getItems().remove(personne);
+            Formation formation = formationTable.getSelectionModel().getSelectedItem();
+            formation.setParticipants(participantTable.getItems());
+            if (formationModel.update(formation)) {
+                ServiceproUtil.notify("Suppression OK");
+            } else {
+                ServiceproUtil.notify("Une erreur est survenue");
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le participant à supprimer");
         }
+    }
+
+    public void annulerParticipant(ActionEvent actionEvent) {
+        participantTable.getItems().clear();
+        StageManager.loadContent(FXMLView.FORMATION.getFXMLFile());
     }
 }

@@ -3,15 +3,19 @@ package com.cfao.app.beans;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by JP on 7/6/2017.
  */
 
+@Entity
+@Table(name = "formation_personne")
+@AssociationOverrides({
+        @AssociationOverride(name = "pk.personne",
+                joinColumns = @JoinColumn(name = "personne")),
+        @AssociationOverride(name = "pk.formation",
+                joinColumns = @JoinColumn(name = "formation")) })
 public class Formationpersonne {
     private ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
     private ObjectProperty<Formation> formation = new SimpleObjectProperty<>();
@@ -22,6 +26,7 @@ public class Formationpersonne {
     }
     public Formationpersonne(){}
 
+    @ManyToOne
     public Personne getPersonne() {
         return personne.get();
     }
@@ -34,6 +39,7 @@ public class Formationpersonne {
         this.personne.set(personne);
     }
 
+    @ManyToOne
     public Formation getFormation() {
         return formation.get();
     }

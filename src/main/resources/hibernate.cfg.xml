@@ -43,5 +43,6 @@
         <mapping class="com.cfao.app.beans.Support" />
 
 
+
     </session-factory>
 </hibernate-configuration>

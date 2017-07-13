@@ -49,8 +49,12 @@ public class DialogParticipantController extends AnchorPane implements Initializ
         Label selectionnee = new Label("Selectionnés");
         selectionnee.setStyle("-fx-font-weight: bold;");
         participants.setTargetHeader(selectionnee);
-
-        participants.setSourceItems(FXCollections.observableArrayList(personneModel.getList()));
+        if (formation.getParticipants().isEmpty()) {
+            participants.setSourceItems(FXCollections.observableArrayList(personneModel.getList()));
+        } else {
+            participants.setSourceItems(FXCollections.observableArrayList(formationModel.getNonParticipants(formation)));
+        }
         participants.setTargetItems(FXCollections.observableArrayList(formation.getParticipants()));
+
     }
 }
