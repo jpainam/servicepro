@@ -3,6 +3,8 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
+import com.cfao.app.reports.JasperTableExample;
+import com.cfao.app.reports.PrintReport;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -497,5 +499,14 @@ public class FormationController implements Initializable {
     public void annulerParticipant(ActionEvent actionEvent) {
         participantTable.getItems().clear();
         StageManager.loadContent(FXMLView.FORMATION.getFXMLFile());
+    }
+
+    public void printFormation(ActionEvent actionEvent) {
+        try{
+            new JasperTableExample();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
     }
 }
