@@ -85,16 +85,22 @@ public class CompetenceController implements Initializable{
 
     private void buildCompetenceTable() {
 
-        numeroColumn.setCellFactory(col -> {
-            TableCell<Competence, Void> cell = new TableCell<>();
-            cell.textProperty().bind(Bindings.createStringBinding(() -> {
-                if (cell.isEmpty()) {
-                    return null;
-                } else {
-                    return Integer.toString(cell.getIndex() + 1);
-                }
-            }, cell.emptyProperty(), cell.indexProperty()));
-            return cell;
+        numeroColumn.setCellFactory(new Callback<TableColumn<Competence, Void>, TableCell<Competence, Void>>() {
+            @Override
+            public TableCell<Competence, Void> call(TableColumn<Competence, Void> col) {
+                TableCell<Competence, Void> cell = new TableCell<>();
+                cell.textProperty().bind(Bindings.createStringBinding(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        if (cell.isEmpty()) {
+                            return null;
+                        } else {
+                            return Integer.toString(cell.getIndex() + 1);
+                        }
+                    }
+                }, cell.emptyProperty(), cell.indexProperty()));
+                return cell;
+            }
         });
 
         libelleColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
@@ -117,7 +123,7 @@ public class CompetenceController implements Initializable{
                 return new SimpleBooleanProperty(false);
             }
         });
-        Model<Competence> competenceModel = new Model(Model.getBeanPath("Competence"));
+        CompetenceModel competenceModel = new CompetenceModel();
         Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
             @Override
             protected ObservableList<Competence> call() throws Exception {

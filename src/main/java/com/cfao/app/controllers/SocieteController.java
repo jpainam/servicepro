@@ -11,6 +11,7 @@ import com.cfao.app.util.SearchFieldClassTool;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Priority;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * Created by JP on 6/11/2017.
@@ -109,21 +111,24 @@ public class SocieteController implements Initializable {
             FilteredList<Societe> filteredList = new FilteredList<Societe>(task.getValue(), (Societe p) -> {
                 return true;
             });
-            searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredList.setPredicate(societe -> {
-                    if (newValue == null || newValue.isEmpty()) {
-                        return true;
-                    }
-                    // Comparer les champs dans la classe Societe
-                    String valueCompare = newValue.toLowerCase();
-                    if (societe.getNom().toLowerCase().contains(valueCompare)) {
-                        SearchFieldClassTool.updateStateClass(searchBox, false);
-                        return true;
-                    } else if (societe.getAdresse() != null && societe.getAdresse().toLowerCase().contains(valueCompare)) {
-                        SearchFieldClassTool.updateStateClass(searchBox, false);
-                        return true;
-                    } else {
-                        return false;
+            searchBox.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                filteredList.setPredicate(new Predicate<Societe>() {
+                    @Override
+                    public boolean test(Societe societe) {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+                        // Comparer les champs dans la classe Societe
+                        String valueCompare = newValue.toLowerCase();
+                        if (societe.getNom().toLowerCase().contains(valueCompare)) {
+                            SearchFieldClassTool.updateStateClass(searchBox, false);
+                            return true;
+                        } else if (societe.getAdresse() != null && societe.getAdresse().toLowerCase().contains(valueCompare)) {
+                            SearchFieldClassTool.updateStateClass(searchBox, false);
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
                 });
             });

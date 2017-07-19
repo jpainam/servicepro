@@ -3,10 +3,12 @@ package com.cfao.app.beans;
 import com.cfao.app.util.FormatDate;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by JP on 6/10/2017.
@@ -35,6 +37,7 @@ public class Personne {
     // Langue principale
     private ObjectProperty<Langue> langue = new SimpleObjectProperty<>();
 
+    private ListProperty<Profil> profils = new SimpleListProperty<>();
     /**
      * CONSTRUCT
      */
@@ -241,5 +244,20 @@ public class Personne {
 
     public void setLangue(Langue langue) {
         this.langue.set(langue);
+    }
+
+    @ManyToMany()
+    @JoinTable(name = "personne_profil", joinColumns = {@JoinColumn(name = "PERSONNE")},
+            inverseJoinColumns = {@JoinColumn(name = "PROFIL")})
+    public List<Profil> getProfils() {
+        return profils.get();
+    }
+
+    public ListProperty<Profil> profilsProperty() {
+        return profils;
+    }
+
+    public void setProfils(List<Profil> profils) {
+        this.profils.set(FXCollections.observableArrayList(profils));
     }
 }

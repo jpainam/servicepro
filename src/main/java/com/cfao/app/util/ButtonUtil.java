@@ -48,4 +48,24 @@ public class ButtonUtil {
             GlyphsDude.setIcon(button, FontAwesomeIcon.FILE);
         }
     }
+    public static void angle_right(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_RIGHT);
+        }
+    }
+    public static void angle_left(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_LEFT);
+        }
+    }
+    public static void angle_double_right(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_RIGHT);
+        }
+    }
+    public static void angle_double_left(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_LEFT);
+        }
+    }
 }

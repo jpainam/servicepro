@@ -1,10 +1,11 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
-import com.cfao.app.model.*;
+import com.cfao.app.model.FormationModel;
+import com.cfao.app.model.Model;
+import com.cfao.app.model.PersonneModel;
+import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.reports.JasperTableExample;
-import com.cfao.app.reports.PrintReport;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -17,7 +18,6 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -27,18 +27,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.util.Callback;
-import org.controlsfx.control.ListSelectionView;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.sql.Date;
-import java.util.*;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 /**
@@ -68,7 +65,6 @@ public class FormationController implements Initializable {
     public Button btnSupprimer;
     public Button btnAnnuler;
     public ListView<Personnel> listeViewFormateurs;
-    public HBox hboxCompetenceAssociee;
     public ComboBox<Typeformation> comboTypeformation;
     public Button btnAjouterSupport;
     public Button btnSupprimerSupport;
@@ -76,86 +72,46 @@ public class FormationController implements Initializable {
     public TableView<Support> supportTable;
     public TableColumn<Support, String> codeSupportColumn;
     public TableColumn<Support, String> titreSupportColumn;
-    public TableView<Personne> participantTable;
-    public TableColumn<Personne, String> matriculeParticipantColumn;
-    public TableColumn<Personne, String> nomParticipantColumn;
-    public TableColumn<Personne, String> prenomParticipantColumn;
-    public TableColumn<Personne, Section> sectionParticipantColumn;
-    public HBox hboxSearchParticipant;
-    public Button btnPreviousParticipant;
-    public Button btnNextParticipant;
-    public Button btnPrintParticipant;
-    public Button btnAjouterParticipant;
-    public Button btnSupprimerParticipant;
-    public Button btnAnnulerParticipant;
+
     private SearchBox searchBox = new SearchBox();
+
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
     public Tab tabParticipant;
-    SearchBox searchBoxAssocie = new SearchBox();
 
     public FormationModel formationModel = new FormationModel();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
-    public int stateBtnAjouterParticipant = 0;
+    private ParticipantController participantController;
+    private CompetenceFormationController competenceController;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
-        formationTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFormationFields());
+
+        formationTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) -> {
+            fillFormationFields(formationTable.getSelectionModel().getSelectedItem());
+        });
         buildCombo();
         buildTable();
+
     }
 
     private void initComponents() {
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
-        datedebutColumn.setCellFactory(new Callback<TableColumn<Formation, LocalDate>, TableCell<Formation, LocalDate>>() {
-            @Override
-            public TableCell<Formation, LocalDate> call(TableColumn<Formation, LocalDate> param) {
-                TableCell cell = new TableCell<Formation, LocalDate>() {
-                    @Override
-                    protected void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new Label(item.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-                        }
-                    }
-                };
-                cell.setAlignment(Pos.CENTER_RIGHT);
-                return cell;
-            }
-        });
+        datedebutColumn.setCellFactory(new DateTableCellFactory());
         datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
-        datefinColumn.setCellFactory(new Callback<TableColumn<Formation, LocalDate>, TableCell<Formation, LocalDate>>() {
-            @Override
-            public TableCell<Formation, LocalDate> call(TableColumn<Formation, LocalDate> param) {
-                TableCell cell = new TableCell<Formation, LocalDate>() {
-                    @Override
-                    protected void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new Label(item.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-                        }
-                    }
-                };
-                cell.setAlignment(Pos.CENTER_RIGHT);
-                return cell;
-            }
-        });
+        datefinColumn.setCellFactory(new DateTableCellFactory());
         codeSupportColumn.setCellValueFactory(param -> param.getValue().codeProperty());
         titreSupportColumn.setCellValueFactory(param -> param.getValue().titreProperty());
-        matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
-        nomParticipantColumn.setCellValueFactory(param -> param.getValue().nomProperty());
-        prenomParticipantColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
-        sectionParticipantColumn.setCellValueFactory(param -> param.getValue().section());
+
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
         researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
+
+
 
         GlyphsDude.setIcon(btnAjouterFormateur, FontAwesomeIcon.USER_PLUS);
         GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
@@ -165,17 +121,17 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
         GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
         GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
-        ButtonUtil.next(btnNext, btnNextParticipant);
-        ButtonUtil.previous(btnPrevious, btnPreviousParticipant);
-        ButtonUtil.print(btnPrint, btnPrintParticipant);
+        ButtonUtil.next(btnNext);
+        ButtonUtil.previous(btnPrevious);
+        ButtonUtil.print(btnPrint);
         ButtonUtil.edit(btnModifier);
-        ButtonUtil.delete(btnSupprimerParticipant, btnSupprimer);
-        ButtonUtil.add(btnNouveau, btnAjouterParticipant);
-        ButtonUtil.cancel(btnAnnuler, btnAnnulerParticipant);
-        searchBoxAssocie.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(searchBoxAssocie, Priority.ALWAYS);
-        hboxCompetenceAssociee.getChildren().addAll(new Label("Compétences associées : "), searchBoxAssocie);
-
+        ButtonUtil.delete(btnSupprimer);
+        ButtonUtil.add(btnNouveau);
+        ButtonUtil.cancel(btnAnnuler);
+        participantController = new ParticipantController();
+        competenceController = new CompetenceFormationController();
+        tabParticipant.setContent(participantController);
+        tabCompetenceAssociee.setContent(competenceController);
     }
 
     private void buildCombo() {
@@ -220,23 +176,33 @@ public class FormationController implements Initializable {
         listeViewFormateurs.getItems().clear();
     }
 
-    private void fillFormationFields() {
-        if (formationTable.getSelectionModel().getSelectedItem() != null) {
-            Formation formation = formationTable.getSelectionModel().getSelectedItem();
-            txtCode.setText(formation.getCodeformation());
-            txtTitre.setText(formation.getTitre());
-            txtDescription.setText(formation.getDescription());
-            comboModele.setValue(formation.getModele());
-            comboEtatformation.setValue(formation.getEtatformation());
-            comboTypeformation.setValue(formation.getTypeformation());
-            listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
-            dateDebut.setValue(formation.getDatedebut().toLocalDate());
-            dateFin.setValue(formation.getDatefin().toLocalDate());
-            supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
-            System.err.println(formation.getParticipants());
-            participantTable.setItems(FXCollections.observableArrayList(formation.getParticipants()));
-        }
+    private void fillFormationFields(Formation formation) {
+        if(formation == null)
+            return;
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                txtCode.setText(formation.getCodeformation());
+                txtTitre.setText(formation.getTitre());
+                txtDescription.setText(formation.getDescription());
+                comboModele.setValue(formation.getModele());
+                comboEtatformation.setValue(formation.getEtatformation());
+                comboTypeformation.setValue(formation.getTypeformation());
+                listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
+                dateDebut.setValue(formation.getDatedebut().toLocalDate());
+                dateFin.setValue(formation.getDatefin().toLocalDate());
+                supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
+                System.err.println(formation.getParticipants());
+                participantController.setFormation(formation);
+                competenceController.setFormation(formation);
+                participantController.buildTable();
+                competenceController.buildTable();
+                return null;
+            }
+        };
+        task.run();
     }
+
 
     public void clickNouveau(ActionEvent actionEvent) {
         if (stateBtnNouveau == 0) {
@@ -438,75 +404,14 @@ public class FormationController implements Initializable {
         }
     }
 
-    public void ajouterParticipant(ActionEvent actionEvent) {
-        if (formationTable.getSelectionModel().getSelectedItem() == null) {
-            AlertUtil.showSimpleAlert("Information", "Veuillez choisir la formation");
-            return;
-        }
-        Formation formation = formationTable.getSelectionModel().getSelectedItem();
-        if (stateBtnAjouterParticipant == 0) {
-            Dialog<List<Personne>> dialog = new Dialog<>();
-            dialog.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            dialog.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
-            try {
-                ButtonType validerButton = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
-                ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-                dialog.getDialogPane().getButtonTypes().addAll(validerButton, cancelButton);
-                DialogParticipantController dialogParticipantController = new DialogParticipantController(formation);
-                dialog.getDialogPane().setContent(dialogParticipantController);
-                dialog.setResultConverter(param -> dialogParticipantController.getParticipants());
-                Optional<List<Personne>> result = dialog.showAndWait();
-                result.ifPresent(personnes -> {
-                    participantTable.getItems().clear();
-                    participantTable.getItems().addAll(FXCollections.observableArrayList(personnes));
-                    formation.setParticipants(participantTable.getItems());
-                });
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                AlertUtil.showErrorMessage(ex);
-            }
-            stateBtnAjouterParticipant = 1;
-            btnAjouterParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
-        } else {
-            formation.setParticipants(participantTable.getItems());
-            if (formationModel.update(formation)) {
-                ServiceproUtil.notify("Participants ajoutés avec succès");
-            } else {
-                ServiceproUtil.notify("Une erreur est survenue");
-            }
-            stateBtnAjouterParticipant = 0;
-        }
-    }
-
-    public void supprimerParticipant(ActionEvent actionEvent) {
-        btnAjouterParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
-        if (participantTable.getSelectionModel().getSelectedItem() != null) {
-            Personne personne = participantTable.getSelectionModel().getSelectedItem();
-            participantTable.getItems().remove(personne);
-            Formation formation = formationTable.getSelectionModel().getSelectedItem();
-            formation.setParticipants(participantTable.getItems());
-            if (formationModel.update(formation)) {
-                ServiceproUtil.notify("Suppression OK");
-            } else {
-                ServiceproUtil.notify("Une erreur est survenue");
-            }
-        } else {
-            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le participant à supprimer");
-        }
-    }
-
-    public void annulerParticipant(ActionEvent actionEvent) {
-        participantTable.getItems().clear();
-        StageManager.loadContent(FXMLView.FORMATION.getFXMLFile());
-    }
 
     public void printFormation(ActionEvent actionEvent) {
-        try{
+        try {
             new JasperTableExample();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         }
     }
+
 }

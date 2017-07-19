@@ -31,6 +31,7 @@ public class Formation {
     private ListProperty<Personnel> formateurs = new SimpleListProperty<>();
     private ListProperty<Personne> participants = new SimpleListProperty<>();
     private ListProperty<Support> supports = new SimpleListProperty<>();
+    private ListProperty<Competence> competences = new SimpleListProperty<>();
 
     public Formation(int idformation, String codeformation, Modele modele, String titre,
                      String description, LocalDate datedebut,
@@ -213,5 +214,20 @@ public class Formation {
 
     public void setParticipants(List<Personne> participants) {
         this.participants.set(FXCollections.observableArrayList(participants));
+    }
+
+    @ManyToMany()
+    @JoinTable(name = "formation_competence", joinColumns = {@JoinColumn(name = "FORMATION")},
+            inverseJoinColumns = {@JoinColumn(name = "COMPETENCE")})
+    public List<Competence> getCompetences() {
+        return competences.get();
+    }
+
+    public ListProperty<Competence> competencesProperty() {
+        return competences;
+    }
+
+    public void setCompetences(List<Competence> competences) {
+        this.competences.set(FXCollections.observableArrayList(competences));
     }
 }
