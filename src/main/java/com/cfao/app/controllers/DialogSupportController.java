@@ -84,15 +84,16 @@ public class DialogSupportController extends AnchorPane implements Initializable
     }
 
     public void buildSupportTable() {
-        Model<Support> supportModel = new Model<>(Model.getBeanPath("Support"));
+        Model<Support> supportModel = new Model<>("Support");
+
         Task<ObservableList<Support>> task = new Task<ObservableList<Support>>() {
             @Override
             protected ObservableList<Support> call() throws Exception {
                 return FXCollections.observableArrayList(supportModel.getList());
             }
         };
-        task.run();
-        task.setOnSucceeded(event -> supportTable.setItems(task.getValue()));
+        new Thread(task).start();
+        supportTable.itemsProperty().bind(task.valueProperty());
     }
 
     public void choisirFichierAction(ActionEvent actionEvent) {

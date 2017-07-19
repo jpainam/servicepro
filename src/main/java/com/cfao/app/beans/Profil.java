@@ -1,14 +1,12 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.control.ProgressBar;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -16,18 +14,23 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "profils")
-public class Profil {
+public class Profil{
     private SimpleIntegerProperty idprofil = new SimpleIntegerProperty();
     private SimpleStringProperty abbreviation = new SimpleStringProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
+    //private ListProperty<ProfilPersonne> profilpersonne = new SimpleListProperty<ProfilPersonne>();
+    private SetProperty<ProfilPersonne> profilPersonnes = new SimpleSetProperty<>();
 
     private SetProperty<Competence> competences = new SimpleSetProperty<>();
 
-    public Profil(int idprofil, String abbreviation, String libelle) {
-        this.idprofil.set(idprofil);
-        this.abbreviation.set(abbreviation);
-        this.libelle.set(libelle);
+    public Profil(SimpleIntegerProperty idprofil, SimpleStringProperty abbreviation, SimpleStringProperty libelle, SetProperty<ProfilPersonne> profilPersonnes, SetProperty<Competence> competences) {
+        this.idprofil = idprofil;
+        this.abbreviation = abbreviation;
+        this.libelle = libelle;
+        this.profilPersonnes = profilPersonnes;
+        this.competences = competences;
     }
+
     public Profil(){}
 
     public void setIdprofil(int idprofil) {
@@ -43,7 +46,7 @@ public class Profil {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDPROFIL")
     public int getIdprofil() {
         return idprofil.get();
@@ -89,6 +92,14 @@ public class Profil {
         return competences;
     }
 
+    @OneToMany(mappedBy = "pk.profil")
+    public Set<ProfilPersonne> getProfilPersonnes() {
+        return this.profilPersonnes;
+    }
+
+    public void setProfilPersonnes(Set<ProfilPersonne> profilPersonnes) {
+        this.profilPersonnes.set(FXCollections.observableSet(profilPersonnes));
+    }
 
     public void setCompetences(Set<Competence> competences) {
         this.competences.set(FXCollections.observableSet(competences));

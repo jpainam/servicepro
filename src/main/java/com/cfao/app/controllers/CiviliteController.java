@@ -5,7 +5,6 @@ import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
 import com.cfao.app.util.FormatDate;
 import com.cfao.app.util.SearchBox;
-import com.cfao.app.util.SearchFieldClassTool;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -15,10 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,14 +24,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
+import javafx.util.Pair;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
@@ -43,11 +37,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -55,10 +52,29 @@ import java.util.ResourceBundle;
  */
 public class CiviliteController implements Initializable {
 
+    /**
+     * TableView des Personne
+     */
     public Model<Personne> modelPersonne;
     public TableView<Personne> personneTable;
     public TableColumn columnNom;
     public TableColumn columnMatricule;
+
+    /**
+     * TableView des Profils d'une personne
+     */
+    public TableView<ProfilPersonne> tableProfil;
+    public TableColumn columnProfil;
+    public TableColumn columnNiveau;
+
+    /**
+     * TableView des Postes d'une personne
+     */
+    public TableView<Postepersonne> tablePoste;
+    public TableColumn columnPoste;
+    public TableColumn columnSociete;
+    public TableColumn columnDebut;
+    public TableColumn columnFin;
 
     public DatePicker datePicker;
     public TextField txtMatricule;
@@ -112,6 +128,8 @@ public class CiviliteController implements Initializable {
     public Accordion accordeon;
 
     public ObservableMap<String, ObservableList> map;
+    public TextArea txtMemo;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -134,6 +152,7 @@ public class CiviliteController implements Initializable {
         comboLanguesParlees.setMaxWidth(Double.MAX_VALUE);
         //comboLanguesParlees.setDisable(true);
         gridB.add(comboLanguesParlees, 3, 1);
+        datePicker.setValue(LocalDate.now());
         GlyphsDude.setIcon(addPhoto, FontAwesomeIcon.PICTURE_ALT);
         GlyphsDude.setIcon(delPhoto, FontAwesomeIcon.CLOSE);
 
@@ -206,6 +225,11 @@ public class CiviliteController implements Initializable {
         columnMatricule.setCellValueFactory(new PropertyValueFactory<Personne, String>("matricule"));
         columnNom.setCellValueFactory(new PropertyValueFactory<Personne, String>("nom"));
 
+
+        // COLONNE DU TABLEVIEW PROFIL D'UNE PERSONNE
+
+        columnPoste.setCellValueFactory(new PropertyValueFactory<Profil, String>(""));
+
         /*
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
@@ -268,7 +292,6 @@ public class CiviliteController implements Initializable {
         /*
         Affectation de la personne utilisee pour la modification et supression */
         pers = person;
-
         /*
         Activation des buttons modifier et supprimer*/
         btnModifier.setDisable(false);
@@ -293,14 +316,16 @@ public class CiviliteController implements Initializable {
         comboAmbition.setValue(person.getAmbition());
         comboLangue.setValue(person.getLangue());
 
+        /**
+         * MISE A JOUR DE LA TABLE DE PROFIL D'UNE PERSONNE
+         */
 
-        System.out.println("Choix Av Update : "+person.toString());
+
+
         /*
         Necessaire à l'update du component checkcombobox
         des Langues parlées par une personne*/
         updateLangue(person.getLangues());
-
-        System.out.println("Choix : "+person.toString());
 
     }
 
@@ -542,6 +567,22 @@ public class CiviliteController implements Initializable {
             e.printStackTrace();
         }
 
+        Path source = photo.toPath();
+
+        String ds = File.separator;
+        String target = "E:"+ds+"armel"+ds+"projet"+ds+"servicepro"+ds+"target"+ds+"classes"+ds+"documents"+ds+photo.getName();
+
+        Path to = Paths.get(target );
+
+
+
+        try {
+
+            Files.copy(source,Paths.get(target ), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void clicAnnuler(ActionEvent actionEvent) {
@@ -550,35 +591,31 @@ public class CiviliteController implements Initializable {
     }
 
     public void addPoste(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader();
-        Node root = null;
+        Pair<Node, Initializable> pair = templateDialog("DialogPoste.fxml");
+        Node root = pair.getKey();
+        DialogPosteController controller = (DialogPosteController) pair.getValue();
 
-        try {
-            root = loader.load(getClass().getResource("/views/civilite/Dialog/dialogPoste.fxml"));
-            DialogPosteController controller = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Dialog<String> dialogPoste = new Dialog<String>();
-        dialogPoste.setHeaderText("Ajouter un Poste");
-        dialogPoste.getDialogPane().setExpandableContent(root);
+        Dialog<Postepersonne> dialogPoste = new Dialog<Postepersonne>();
+        dialogPoste.setHeaderText("Ajouter un Poste :");
+        dialogPoste.getDialogPane().setContent(root);
 
         ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
         dialogPoste.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
 
-
-
         Button btnOk = (Button) dialogPoste.getDialogPane().lookupButton(btnOkType);
+
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            if(true){
-                System.out.println("reussi");
-                event.consume();
+            event.consume();
+            String valTxtPoste = controller.txtPoste.getText();
+            Societe valComboSociete = controller.comboSociete.getSelectionModel().getSelectedItem();
+            LocalDate valDateFrom = controller.dateFrom.getValue();
+            LocalDate valDateTo = controller.dateTo.getValue();
+
+            if(!valTxtPoste.isEmpty() && valComboSociete != null) {
+                System.out.println(new Postepersonne(valTxtPoste, valComboSociete, valDateFrom, valDateTo).toString());
                 dialogPoste.close();
             }
-
         });
-        dialogPoste.setResizable(false);
         dialogPoste.showAndWait();
     }
 
@@ -593,48 +630,57 @@ public class CiviliteController implements Initializable {
 
     public void addProfil(ActionEvent actionEvent) {
 
-        FXMLLoader loader = new FXMLLoader();
-        Node root = null;
+        Pair<Node, Initializable> pair = templateDialog("DialogProfil.fxml");
+        Node root = pair.getKey();
+        DialogProfilController controller = (DialogProfilController) pair.getValue();
 
-        try {
-            root = loader.load(getClass().getResource("/views/civilite/Dialog/dialogProfil.fxml"));
-            DialogProfilController controller = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Dialog<String> dialogProfil = new Dialog<String>();
+        Dialog<ProfilPersonne> dialogProfil = new Dialog<ProfilPersonne>();
         dialogProfil.setHeaderText("Ajouter un Profil");
         dialogProfil.getDialogPane().setContent(root);
 
         ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
         dialogProfil.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
 
-
-
         Button btnOk = (Button) dialogProfil.getDialogPane().lookupButton(btnOkType);
+
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            if(true){
-                System.out.println("reussi");
-                event.consume();
-                //dialogProfil.close();
+            event.consume();
+            Profil valueComboProfil = controller.comboProfil.getSelectionModel().getSelectedItem();
+            Niveau valueComboLevel= controller.comboLevel.getSelectionModel().getSelectedItem();
+
+            if(valueComboProfil != null && valueComboLevel != null) {
+                ProfilPersonne profilPersonne = new ProfilPersonne();
+                profilPersonne.setNiveau(valueComboLevel);
+                profilPersonne.setProfil(valueComboProfil);
+                profilPersonne.setPersonne(pers);
+                pers.getProfilPersonnes().add(profilPersonne);
+                Model<ProfilPersonne> model = new Model<>("ProfilPersonne");
+                model.save(profilPersonne);
+
+                //System.out.println(pers.getProfilPersonnes());
+                //PersonneModel personneModel = new PersonneModel();
+               // personneModel.update(pers);
+                dialogProfil.close();
             }
-
         });
-        dialogProfil.setResizable(false);
         dialogProfil.showAndWait();
-/*
+
+        /*
         dialogProfil.setResultConverter(btnDialog -> {
-           if(btnDialog == btnOkType){
-               return "test";
-           }
-           return null;
+            if(btnDialog == btnOkType){
+                Profil valueComboProfil = controller.comboProfil.getSelectionModel().getSelectedItem();
+                Niveaucompetence valueComboLevel= controller.comboLevel.getSelectionModel().getSelectedItem();
+                if(valueComboProfil != null && valueComboLevel != null) {
+                    return new ProfilPersonne(valueComboProfil, valueComboLevel);
+                }
+            }
+            return null;
         });
 
-        Optional<String> result = dialogProfil.showAndWait();
-        if(result.isPresent())
-            System.out.println(result.get());
-*/
+        Optional<ProfilPersonne> result = dialogProfil.showAndWait();
+        if(result.isPresent() && result != null)
+            System.out.println(result.get().toString());
+            */
 
     }
 
@@ -647,8 +693,20 @@ public class CiviliteController implements Initializable {
     }
 
 
-    public Dialog<?> templateDialog(){
+    public Pair<Node, Initializable> templateDialog(String fxml){
 
-        return null;
+        Node root = null;
+        Initializable controller = null;
+        String url = "/views/civilite/Dialog/" + fxml;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+            root = loader.load();
+            controller = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Pair(root, controller);
     }
 }

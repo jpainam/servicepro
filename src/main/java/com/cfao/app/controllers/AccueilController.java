@@ -1,7 +1,9 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.PersonneModel;
+import com.cfao.app.util.ProgressIndicatorUtil;
 import com.cfao.app.util.SearchBox;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -144,20 +146,15 @@ public class AccueilController implements Initializable {
             protected ObservableList<Personne> call() throws Exception {
                 return FXCollections.observableArrayList(personneModel.getList());
             }
+
         };
         new Thread(task).start();
-        task.setOnSucceeded(event -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    participantTable.setItems(task.getValue());
-                }
-            });
-
-        });
+        participantTable.itemsProperty().bind(task.valueProperty());
+        StackPane stack = new StackPane(participantTable);
+        new ProgressIndicatorUtil(stack, task);
         participantBox.setPadding(new Insets(5, 5, 5, 5));
         participantBox.setSpacing(10);
-        participantBox.getChildren().addAll(reserchePanel, participantTable);
+        participantBox.getChildren().addAll(reserchePanel, stack);
     }
 
 

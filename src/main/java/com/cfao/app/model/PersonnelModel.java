@@ -1,8 +1,6 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.Personnel;
-import com.cfao.app.beans.Societe;
+import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -42,5 +40,8 @@ public class PersonnelModel extends  Model<Personnel> {
             }
         }
         return null;
+    }
+    public void insertProfilNiveau(Personne personne, Profil profil, Niveau niveau){
+
     }
 }

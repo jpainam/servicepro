@@ -6,6 +6,7 @@ import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.reports.JasperTableExample;
+import com.cfao.app.reports.PrintReport;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -27,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 
 import java.awt.*;
@@ -72,6 +74,7 @@ public class FormationController implements Initializable {
     public TableView<Support> supportTable;
     public TableColumn<Support, String> codeSupportColumn;
     public TableColumn<Support, String> titreSupportColumn;
+    public StackPane formationStackPane;
 
     private SearchBox searchBox = new SearchBox();
 
@@ -112,7 +115,6 @@ public class FormationController implements Initializable {
         researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
 
 
-
         GlyphsDude.setIcon(btnAjouterFormateur, FontAwesomeIcon.USER_PLUS);
         GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
@@ -128,10 +130,17 @@ public class FormationController implements Initializable {
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.add(btnNouveau);
         ButtonUtil.cancel(btnAnnuler);
-        participantController = new ParticipantController();
-        competenceController = new CompetenceFormationController();
-        tabParticipant.setContent(participantController);
-        tabCompetenceAssociee.setContent(competenceController);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                participantController = new ParticipantController();
+                competenceController = new CompetenceFormationController();
+                tabParticipant.setContent(participantController);
+                tabCompetenceAssociee.setContent(competenceController);
+                return null;
+            }
+        };
+        new Thread(task).run();
     }
 
     private void buildCombo() {
@@ -146,7 +155,7 @@ public class FormationController implements Initializable {
                 return map;
             }
         };
-        task.run();
+        new Thread(task).start();
         task.setOnSucceeded(event -> {
             ObservableMap<String, ObservableList> map = task.getValue();
             comboFormateur.setItems(map.get("personnel"));
@@ -169,38 +178,32 @@ public class FormationController implements Initializable {
                 return FXCollections.observableList(formationModel.getList());
             }
         };
-        task.run();
-        task.setOnSucceeded(event -> {
-            formationTable.setItems(task.getValue());
-        });
+        new ProgressIndicatorUtil(formationStackPane, task);
+        formationTable.itemsProperty().bind(task.valueProperty());
         listeViewFormateurs.getItems().clear();
+        new Thread(task).start();
     }
 
     private void fillFormationFields(Formation formation) {
-        if(formation == null)
+        if (formation == null)
             return;
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                txtCode.setText(formation.getCodeformation());
-                txtTitre.setText(formation.getTitre());
-                txtDescription.setText(formation.getDescription());
-                comboModele.setValue(formation.getModele());
-                comboEtatformation.setValue(formation.getEtatformation());
-                comboTypeformation.setValue(formation.getTypeformation());
-                listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
-                dateDebut.setValue(formation.getDatedebut().toLocalDate());
-                dateFin.setValue(formation.getDatefin().toLocalDate());
-                supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
-                System.err.println(formation.getParticipants());
-                participantController.setFormation(formation);
-                competenceController.setFormation(formation);
-                participantController.buildTable();
-                competenceController.buildTable();
-                return null;
-            }
-        };
-        task.run();
+
+        txtCode.setText(formation.getCodeformation());
+        txtTitre.setText(formation.getTitre());
+        txtDescription.setText(formation.getDescription());
+        comboModele.setValue(formation.getModele());
+        comboEtatformation.setValue(formation.getEtatformation());
+        comboTypeformation.setValue(formation.getTypeformation());
+        listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
+        dateDebut.setValue(formation.getDatedebut().toLocalDate());
+        dateFin.setValue(formation.getDatefin().toLocalDate());
+        supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
+        System.err.println(formation.getParticipants());
+        participantController.setFormation(formation);
+        competenceController.setFormation(formation);
+        participantController.buildTable();
+        competenceController.buildTable();
+
     }
 
 
@@ -232,7 +235,7 @@ public class FormationController implements Initializable {
                     return formationModel.save(formation);
                 }
             };
-            task.run();
+            new Thread(task).start();
             task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
@@ -276,7 +279,7 @@ public class FormationController implements Initializable {
                     return formationModel.update(formation);
                 }
             };
-            task.run();
+            new Thread(task).start();
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Modification OK");
@@ -298,7 +301,7 @@ public class FormationController implements Initializable {
                     return formationModel.delete(formation);
                 }
             };
-            task.run();
+            new Thread(task).start();
             task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
@@ -407,7 +410,14 @@ public class FormationController implements Initializable {
 
     public void printFormation(ActionEvent actionEvent) {
         try {
-            new JasperTableExample();
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new PrintReport().showReport();
+                    return null;
+                }
+            };
+            new Thread(task).start();
         } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);

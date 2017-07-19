@@ -20,16 +20,20 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </HBox>
-                        <TableView fx:id="formationTable" layoutX="20.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="618.0" prefWidth="349.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0" VBox.vgrow="ALWAYS">
-                            <columns>
-                                <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre" />
-                                <TableColumn fx:id="datedebutColumn" prefWidth="75.0" text="Date de debut" />
-                                <TableColumn fx:id="datefinColumn" prefWidth="75.0" text="Date de fin" />
-                            </columns>
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
-                        </TableView>
+                  <StackPane fx:id="formationStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                     <children>
+                              <TableView fx:id="formationTable" layoutX="20.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="618.0" prefWidth="349.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0" VBox.vgrow="ALWAYS">
+                                  <columns>
+                                      <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre" />
+                                      <TableColumn fx:id="datedebutColumn" prefWidth="75.0" text="Date de debut" />
+                                      <TableColumn fx:id="datefinColumn" prefWidth="75.0" text="Date de fin" />
+                                  </columns>
+                                  <columnResizePolicy>
+                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                  </columnResizePolicy>
+                              </TableView>
+                     </children>
+                  </StackPane>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" />

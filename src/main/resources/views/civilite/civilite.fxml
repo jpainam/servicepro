@@ -12,12 +12,12 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
-   <children>
-      <SplitPane dividerPositions="0.15239410681399632" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-        <items>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="328.0" spacing="10.0">
-               <children>
-                  <HBox fx:id="hboxSearch" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+    <children>
+        <SplitPane dividerPositions="0.15239410681399632" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+            <items>
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="328.0" spacing="10.0">
+                    <children>
+                        <HBox fx:id="hboxSearch" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <TableView fx:id="personneTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="columnNom" prefWidth="87.0" text="Nom/Name" />
@@ -30,243 +30,243 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </TableView>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-               <children>
-                  <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-                     <tabs>
-                        <Tab fx:id="tabDetails" text="Détails civilité">
-                           <content>
-                              <AnchorPane style="-fx-border-color: #CCC;">
-                                 <children>
-                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="615.0" prefWidth="588.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-                                       <children>
-                                          <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
-                                             <items>
-                                                <Button fx:id="btnPrevious" mnemonicParsing="false" styleClass="onlyIcon" />
-                                                <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
-                                                <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
-                                                <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau / New" textFill="#2920b0" />
-                                                <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier / Edit" />
-                                                <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clicSuppr" styleClass="actionButton" text="Supprimer / Delete" />
-                                                <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clicAnnuler" styleClass="actionButton" text="Annuler / Cancel" />
-                                             </items>
-                                          </ToolBar>
-                                          <HBox prefHeight="120.0" prefWidth="648.0" spacing="10.0">
-                                             <children>
-                                                <VBox prefHeight="129.0" prefWidth="491.0" HBox.hgrow="ALWAYS">
-                                                   <children>
-                                                                    <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
-                                                        </Label>
-                                                                    <TextField fx:id="txtMatricule" maxWidth="1.7976931348623157E308" />
-                                                                    <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Nom / Name">
-                                                        </Label>
-                                                                    <TextField fx:id="txtNom" maxWidth="1.7976931348623157E308" />
-                                                                    <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
-                                                        </Label>
-                                                                    <TextField fx:id="txtPrenom" maxWidth="1.7976931348623157E308" />
-                                                   </children>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </VBox>
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <children>
+                        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                            <tabs>
+                                <Tab fx:id="tabDetails" text="Détails civilité">
+                                    <content>
+                                        <AnchorPane style="-fx-border-color: #CCC;">
+                                            <children>
+                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="615.0" prefWidth="588.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                                    <children>
+                                                        <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
+                                                            <items>
+                                                                <Button fx:id="btnPrevious" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                                <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                                <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                                <Separator orientation="VERTICAL" />
+                                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau / New" textFill="#2920b0" />
+                                                                <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier / Edit" />
+                                                                <Separator orientation="VERTICAL" />
+                                                                <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clicSuppr" styleClass="actionButton" text="Supprimer / Delete" />
+                                                                <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clicAnnuler" styleClass="actionButton" text="Annuler / Cancel" />
+                                                            </items>
+                                                        </ToolBar>
+                                                        <HBox prefHeight="120.0" prefWidth="648.0" spacing="10.0">
+                                                            <children>
+                                                                <VBox prefHeight="129.0" prefWidth="491.0" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
+                                                                        </Label>
+                                                                        <TextField fx:id="txtMatricule" maxWidth="1.7976931348623157E308" />
+                                                                        <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Nom / Name">
+                                                                        </Label>
+                                                                        <TextField fx:id="txtNom" maxWidth="1.7976931348623157E308" />
+                                                                        <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
+                                                                        </Label>
+                                                                        <TextField fx:id="txtPrenom" maxWidth="1.7976931348623157E308" />
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER" prefHeight="115.0" prefWidth="127.0" HBox.hgrow="NEVER">
+                                                                    <children>
+                                                                        <Label fx:id="labelAge" />
+                                                                        <AnchorPane fx:id="paneImage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="114.0" VBox.vgrow="NEVER">
+                                                                            <children>
+                                                                                <ImageView fx:id="imageview" fitHeight="81.0" fitWidth="88.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="0.0">
+                                                                                    <image>
+                                                                                        <Image url="@../../images/civilite/avatar_defaut.png" />
+                                                                                    </image>
+                                                                                </ImageView>
+                                                                            </children></AnchorPane>
+                                                                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="127.0" spacing="10.0" VBox.vgrow="NEVER">
+                                                                            <children>
+                                                                                <Button fx:id="addPhoto" mnemonicParsing="false" onAction="#addPhotoClic" styleClass="onlyIcon" />
+                                                                                <Button fx:id="delPhoto" mnemonicParsing="false" onAction="#delPhotoClic" styleClass="onlyIcon" />
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets left="10.0" right="10.0" />
+                                                            </padding>
+                                                        </HBox>
+                                                        <Separator />
+                                                        <HBox spacing="10.0">
+                                                            <children>
+                                                                <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" text="Date Naiss./Born Date" HBox.hgrow="NEVER">
+                                                                </Label>
+                                                                <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="114.0" HBox.hgrow="NEVER" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" text="Nationalité / Citizen" HBox.hgrow="NEVER">
+                                                                </Label>
+                                                                <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="99.0" HBox.hgrow="ALWAYS" />
+                                                                <Separator orientation="VERTICAL" />
+                                                                <Label minWidth="50.0" prefWidth="50.0" text="Langue" />
+                                                                <ComboBox fx:id="comboLangue" prefHeight="25.0" prefWidth="125.0" />
+                                                            </children>
+                                                            <padding>
+                                                                <Insets left="10.0" right="10.0" />
+                                                            </padding>
+                                                        </HBox>
+                                                        <Separator prefWidth="200.0" />
+                                                        <GridPane fx:id="gridB" hgap="10.0" minHeight="-Infinity" prefHeight="101.0" prefWidth="628.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="203.0" text="Societé / Society">
+                                                                </Label>
+                                                                <ComboBox fx:id="comboSociete" maxWidth="1.7976931348623157E308" prefWidth="203.0" GridPane.rowIndex="1" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Groupe/ Group" GridPane.columnIndex="1">
+                                                                </Label>
+                                                                <ComboBox fx:id="comboGroupe" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Section/ Branch " GridPane.columnIndex="2">
+                                                                </Label>
+                                                                <ComboBox fx:id="comboSection" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                                <Label fx:id="labelPrenom1" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition" GridPane.rowIndex="2" />
+                                                                <ComboBox fx:id="comboAmbition" maxWidth="1.7976931348623157E308" GridPane.rowIndex="3" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <ComboBox fx:id="comboPotentiel" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                                <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                                <DatePicker maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                                                <Label text="Langues parlées" GridPane.columnIndex="3" />
+                                                            </children>
+                                                            <VBox.margin>
+                                                                <Insets left="10.0" right="10.0" />
+                                                            </VBox.margin>
+                                                        </GridPane>
+                                                        <Separator maxWidth="1.7976931348623157E308" prefWidth="200.0" />
+                                                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="237.0" prefWidth="648.0">
+                                                            <content>
+                                                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                                                    <children>
+                                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                            <children>
+                                                                                <Accordion fx:id="accordeon" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                                                                    <panes>
+                                                                                        <TitledPane fx:id="profilAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des profils">
+                                                                                            <content>
+                                                                                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                                    <children>
+                                                                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                                            <children>
+                                                                                                                <TableView fx:id="tableProfil" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
+                                                                                                                    <columns>
+                                                                                                                        <TableColumn fx:id="columnProfil" prefWidth="75.0" text="Titre du profil" />
+                                                                                                                        <TableColumn fx:id="columnNiveau" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Niveau" />
+                                                                                                                    </columns>
+                                                                                                                    <columnResizePolicy>
+                                                                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                                                    </columnResizePolicy>
+                                                                                                                </TableView>
+                                                                                                                <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
+                                                                                                                    <children>
+                                                                                                                        <Button fx:id="btnAjouterProfil" mnemonicParsing="false" onAction="#addProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
+                                                                                                                        <Button fx:id="btnDeleteProfil" mnemonicParsing="false" onAction="#deleteProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
+                                                                                                                    </children>
+                                                                                                                    <padding>
+                                                                                                                        <Insets top="10.0" />
+                                                                                                                    </padding>
+                                                                                                                </VBox>
+                                                                                                            </children>
+                                                                                                        </HBox>
+                                                                                                    </children>
+                                                                                                </AnchorPane>
+                                                                                            </content>
+                                                                                        </TitledPane>
+                                                                                        <TitledPane fx:id="posteAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des postes">
+                                                                                            <content>
+                                                                                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                                    <children>
+                                                                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                                            <children>
+                                                                                                                <TableView fx:id="tablePoste" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
+                                                                                                                    <columnResizePolicy>
+                                                                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                                                    </columnResizePolicy>
+                                                                                                                    <columns>
+                                                                                                                        <TableColumn fx:id="columnPoste" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="-1.0" text="Poste" />
+                                                                                                                        <TableColumn fx:id="columnSociete" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Société" />
+                                                                                                                        <TableColumn fx:id="columnDebut" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Debut" />
+                                                                                                                        <TableColumn fx:id="columnFin" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Fin" />
+                                                                                                                    </columns>
+                                                                                                                </TableView>
+                                                                                                                <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
+                                                                                                                    <children>
+                                                                                                                        <Button fx:id="btnAjouterPoste" mnemonicParsing="false" onAction="#addPoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
+                                                                                                                        <Button fx:id="btnDeletePoste" mnemonicParsing="false" onAction="#deletePoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
+                                                                                                                    </children>
+                                                                                                                    <HBox.margin>
+                                                                                                                        <Insets />
+                                                                                                                    </HBox.margin>
+                                                                                                                    <padding>
+                                                                                                                        <Insets top="10.0" />
+                                                                                                                    </padding>
+                                                                                                                </VBox>
+                                                                                                            </children>
+                                                                                                        </HBox>
+                                                                                                    </children>
+                                                                                                </AnchorPane>
+                                                                                            </content>
+                                                                                        </TitledPane>
+                                                                                    </panes>
+                                                                                </Accordion>
+                                                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                                                    <children>
+                                                                                        <Label text="Memo" />
+                                                                                        <TextArea fx:id="txtMemo" prefHeight="200.0" prefWidth="200.0" promptText="memo" />
+                                                                                    </children>
+                                                                                    <HBox.margin>
+                                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                                    </HBox.margin>
+                                                                                </VBox>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                            </content>
+                                                        </ScrollPane>
+                                                    </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER" prefHeight="115.0" prefWidth="127.0" HBox.hgrow="NEVER">
-                                                   <children>
-                                                      <Label fx:id="labelAge" />
-                                                      <AnchorPane fx:id="paneImage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="114.0" VBox.vgrow="NEVER">
-                                                         <children>
-                                                            <ImageView fx:id="imageview" fitHeight="81.0" fitWidth="88.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="0.0">
-                                                               <image>
-                                                                  <Image url="@../../images/civilite/avatar_defaut.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </children></AnchorPane>
-                                                      <HBox alignment="CENTER" prefHeight="0.0" prefWidth="127.0" spacing="10.0" VBox.vgrow="NEVER">
-                                                         <children>
-                                                                          <Button fx:id="addPhoto" mnemonicParsing="false" onAction="#addPhotoClic" styleClass="onlyIcon" />
-                                                                          <Button fx:id="delPhoto" mnemonicParsing="false" onAction="#delPhotoClic" styleClass="onlyIcon" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets left="10.0" right="10.0" />
-                                             </padding>
-                                          </HBox>
-                                          <Separator />
-                                          <HBox spacing="10.0">
-                                             <children>
-                                                              <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" text="Date Naiss./Born Date" HBox.hgrow="NEVER">
-                                                        </Label>
-                                                              <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="114.0" HBox.hgrow="NEVER" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" text="Nationalité / Citizen" HBox.hgrow="NEVER">
-                                                        </Label>
-                                                              <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="99.0" HBox.hgrow="ALWAYS" />
-                                                <Separator orientation="VERTICAL" />
-                                                <Label minWidth="50.0" prefWidth="50.0" text="Langue" />
-                                                <ComboBox fx:id="comboLangue" prefHeight="25.0" prefWidth="125.0" />
-                                             </children>
-                                             <padding>
-                                                <Insets left="10.0" right="10.0" />
-                                             </padding>
-                                          </HBox>
-                                          <Separator prefWidth="200.0" />
-                                          <GridPane fx:id="gridB" hgap="10.0" prefHeight="101.0" prefWidth="628.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints maxHeight="123.0" minHeight="4.0" prefHeight="11.0" vgrow="SOMETIMES" />
-                                              <RowConstraints maxHeight="119.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="62.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="71.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="203.0" text="Societé / Society">
-                                                        </Label>
-                                                              <ComboBox fx:id="comboSociete" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="203.0" GridPane.rowIndex="1" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Groupe/ Group" GridPane.columnIndex="1">
-                                                        </Label>
-                                                              <ComboBox fx:id="comboGroupe" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Section/ Branch " GridPane.columnIndex="2">
-                                                        </Label>
-                                                              <ComboBox fx:id="comboSection" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                              <Label fx:id="labelPrenom1" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition" GridPane.rowIndex="2" />
-                                                              <ComboBox fx:id="comboAmbition" maxWidth="1.7976931348623157E308" GridPane.rowIndex="3" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                              <ComboBox fx:id="comboPotentiel" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                              <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                                              <DatePicker maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                                <Label text="Langues parlées" GridPane.columnIndex="3" />
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets left="10.0" right="10.0" />
-                                             </VBox.margin>
-                                          </GridPane>
-                                          <Separator maxWidth="1.7976931348623157E308" prefWidth="200.0" />
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="237.0" prefWidth="648.0">
-                                            <content>
-                                              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-                                                   <children>
-                                                      <HBox prefHeight="235.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                         <children>
-                                                            <Accordion fx:id="accordeon" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
-                                                              <panes>
-                                                                <TitledPane fx:id="profilAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des profils">
-                                                                  <content>
-                                                                    <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                           <children>
-                                                                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                                 <children>
-                                                                                    <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
-                                                                                      <columns>
-                                                                                        <TableColumn fx:id="profilTable" prefWidth="75.0" text="Titre du profil" />
-                                                                                        <TableColumn maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Niveau" />
-                                                                                      </columns>
-                                                                                       <columnResizePolicy>
-                                                                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                                                       </columnResizePolicy>
-                                                                                    </TableView>
-                                                                                    <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
-                                                                                       <children>
-                                                                                          <Button fx:id="btnAjouterProfil" mnemonicParsing="false" onAction="#addProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                          <Button fx:id="btnDeleteProfil" mnemonicParsing="false" onAction="#deleteProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                       </children>
-                                                                                       <padding>
-                                                                                          <Insets top="10.0" />
-                                                                                       </padding>
-                                                                                    </VBox>
-                                                                                 </children>
-                                                                              </HBox>
-                                                                           </children>
-                                                                        </AnchorPane>
-                                                                  </content>
-                                                                </TitledPane>
-                                                                <TitledPane fx:id="posteAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des postes">
-                                                                  <content>
-                                                                    <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                           <children>
-                                                                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                                 <children>
-                                                                                    <TableView fx:id="posteTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
-                                                                                       <columnResizePolicy>
-                                                                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                                                       </columnResizePolicy>
-                                                                                       <columns>
-                                                                                          <TableColumn fx:id="posteColumn" prefWidth="75.0" text="Poste" />
-                                                                                          <TableColumn fx:id="sociétéColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Société" />
-                                                                                          <TableColumn fx:id="debutColumn" prefWidth="75.0" text="Debut" />
-                                                                                          <TableColumn fx:id="finColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Fin" />
-                                                                                       </columns>
-                                                                                    </TableView>
-                                                                                    <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
-                                                                                       <children>
-                                                                                          <Button fx:id="btnAjouterPoste" mnemonicParsing="false" onAction="#addPoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                          <Button fx:id="btnDeletePoste" mnemonicParsing="false" onAction="#deletePoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                       </children>
-                                                                                       <HBox.margin>
-                                                                                          <Insets />
-                                                                                       </HBox.margin>
-                                                                                       <padding>
-                                                                                          <Insets top="10.0" />
-                                                                                       </padding>
-                                                                                    </VBox>
-                                                                                 </children>
-                                                                              </HBox>
-                                                                           </children>
-                                                                        </AnchorPane>
-                                                                  </content>
-                                                                </TitledPane>
-                                                              </panes>
-                                                            </Accordion>
-                                                             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                                                <children>
-                                                                    <Label text="Memo" />
-                                                                    <TextArea fx:id="txtMemo" prefHeight="200.0" prefWidth="200.0" promptText="memo" />
-                                                                  </children>
-                                                                 <HBox.margin>
-                                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                </HBox.margin>
-                                                              </VBox>
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </AnchorPane>
-                                            </content>
-                                          </ScrollPane>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="tabFormation" text="Formation">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabTest" text="Test">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
-                        </Tab>
-                     </tabs>
-                  </TabPane>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-        </items>
-      </SplitPane>
-   </children>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="tabFormation" text="Formation">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="tabTest" text="Test">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </VBox>
+            </items>
+        </SplitPane>
+    </children>
 </AnchorPane>

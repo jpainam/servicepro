@@ -41,6 +41,9 @@
         <mapping class="com.cfao.app.beans.Typeformation" />
         <mapping class="com.cfao.app.beans.Societe" />
         <mapping class="com.cfao.app.beans.Support" />
+        <mapping class="com.cfao.app.beans.Niveau" />
+        <mapping class="com.cfao.app.beans.ProfilPersonne" />
+        <mapping class="com.cfao.app.beans.ProfilPersonneId" />
 
 
 

@@ -4,11 +4,13 @@ import com.cfao.app.util.FormatDate;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JP on 6/10/2017.
@@ -38,6 +40,7 @@ public class Personne {
     private ObjectProperty<Langue> langue = new SimpleObjectProperty<>();
 
     private ListProperty<Profil> profils = new SimpleListProperty<>();
+    private SetProperty<ProfilPersonne> profilPersonnes = new SimpleSetProperty<>();
     /**
      * CONSTRUCT
      */
@@ -123,6 +126,16 @@ public class Personne {
     public ObjectProperty<Contrat> contratProperty() {
         return contrat;
     }
+
+    /*private ListProperty<ProfilPersonne> profilPersonne = new SimpleListProperty<ProfilPersonne>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.personne", cascade = CascadeType.ALL)
+    public java.util.List<ProfilPersonne> getProfilPersonne() {
+        return profilPersonne.get();
+    }
+    public void setProfilPersonne(java.util.List<ProfilPersonne> set){
+        this.profilPersonne.set(FXCollections.observableList(set));
+    }*/
 
 
     /**
@@ -259,5 +272,18 @@ public class Personne {
 
     public void setProfils(List<Profil> profils) {
         this.profils.set(FXCollections.observableArrayList(profils));
+    }
+
+    @OneToMany(mappedBy = "pk.personne", cascade=CascadeType.ALL)
+    public Set<ProfilPersonne> getProfilPersonnes() {
+        return profilPersonnes;
+    }
+
+    public SetProperty<ProfilPersonne> profilPersonnesProperty() {
+        return profilPersonnes;
+    }
+
+    public void setProfilPersonnes(Set<ProfilPersonne> profilPersonnes) {
+        this.profilPersonnes.set(FXCollections.observableSet(profilPersonnes));
     }
 }

@@ -115,6 +115,7 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void displayCivilite(ActionEvent actionEvent) {
+        progressBar = new ProgressBar();
         Module.setCivilite(content);
     }
 
@@ -140,6 +141,10 @@ public class TemplateController implements Initializable, Controller {
     @Override
     public NotificationPane getNotificationPane() {
         return notificationPane;
+    }
+    @Override
+    public ProgressBar getProgressBar(){
+        return progressBar;
     }
 
 

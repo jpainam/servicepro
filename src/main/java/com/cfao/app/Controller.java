@@ -17,4 +17,6 @@ import org.controlsfx.control.NotificationPane;
 public interface Controller{
     public void setContent(Node node);
     public NotificationPane getNotificationPane();
+
+    public ProgressBar getProgressBar();
 }

@@ -1,6 +1,5 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.StageManager;
 import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.FormationModel;
@@ -12,19 +11,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import org.controlsfx.control.ListSelectionView;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,6 +51,8 @@ public class ParticipantController extends AnchorPane implements Initializable {
     public HBox hboxSearchParticipant;
     public HBox hboxSearchPersonne;
     public TableView<Personne> personneTable;
+    public StackPane personneStackPane;
+    public StackPane participantStackPane;
 
     public TableColumn<Personne, String> matriculePersonneColumn;
     public TableColumn<Personne, String> nomPersonneColumn;
@@ -70,12 +67,12 @@ public class ParticipantController extends AnchorPane implements Initializable {
     SearchBox searchBox3 = new SearchBox();
 
     public ParticipantController() {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/participant.fxml"));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
             ex.printStackTrace();
         }
@@ -91,39 +88,52 @@ public class ParticipantController extends AnchorPane implements Initializable {
         HBox.setHgrow(searchBox3, Priority.ALWAYS);
         hboxSearchParticipant.getChildren().addAll(new Label("Participants : "), searchBox3);
     }
-    public void setFormation(Formation formation){
+
+    public void setFormation(Formation formation) {
         this.formation = formation;
     }
-    public void buildTable(){
-        if(formation == null)
+
+    public void buildTable() {
+        if (formation == null)
             return;
-        // Participant
-        matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
-        nomParticipantColumn.setCellValueFactory(param -> param.getValue().nomProperty());
-        prenomParticipantColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
-        societeParticipantColumn.setCellValueFactory(param -> param.getValue().getSociete().nomProperty());
-        // Personne
+
         potentielPersonneColumn.setCellValueFactory(param -> {
             Personne personne = param.getValue();
             FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.USER);
-            if(!personne.getProfils().isEmpty()){
+            if (!personne.getProfils().isEmpty()) {
                 if (personne.getProfils().get(0).getCompetences().contains(formation.getCompetences())) {
                     iconView.setFill(Color.FORESTGREEN);
                 }
             }
             return new SimpleObjectProperty<>(iconView);
         });
-        matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
-        nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
-        prenomPersonneColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
-        if (formation.getParticipants().isEmpty()) {
-            personneTable.setItems(FXCollections.observableArrayList(personneModel.getList()));
-        } else {
-            personneTable.setItems(FXCollections.observableArrayList(formationModel.getNonParticipants(formation)));
-        }
-        participantTable.setItems(FXCollections.observableArrayList(formation.getParticipants()));
+
+        Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
+            @Override
+            protected ObservableList<Personne> call() throws Exception {
+                if (formation.getParticipants().isEmpty()) {
+                    return FXCollections.observableArrayList(personneModel.getList());
+                } else {
+                    return FXCollections.observableArrayList(formationModel.getNonParticipants(formation));
+                }
+            }
+        };
+
+        personneTable.itemsProperty().bind(task.valueProperty());
+        new ProgressIndicatorUtil(personneStackPane, task);
+        new Thread(task).start();
+        Task<ObservableList<Personne>> task1 = new Task<ObservableList<Personne>>() {
+            @Override
+            protected ObservableList<Personne> call() throws Exception {
+                return FXCollections.observableArrayList(formation.getParticipants());
+            }
+        };
+        participantTable.itemsProperty().bind(task1.valueProperty());
+        new ProgressIndicatorUtil(participantStackPane, task1);
+        new Thread(task1).start();
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
     }
+
     private void initComponents() {
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
         ButtonUtil.add(btnModifierParticipant);
@@ -135,8 +145,17 @@ public class ParticipantController extends AnchorPane implements Initializable {
         ButtonUtil.next(btnNextParticipant);
         ButtonUtil.previous(btnPreviousParticipant);
         ButtonUtil.print(btnPrintParticipant);
+        // Participant
+        matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
+        nomParticipantColumn.setCellValueFactory(param -> param.getValue().nomProperty());
+        prenomParticipantColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
+        societeParticipantColumn.setCellValueFactory(param -> param.getValue().getSociete().nomProperty());
+        matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
+        nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
+        prenomPersonneColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
 
     }
+
     public void participantDoubleClick(MouseEvent event) {
         if (event.getClickCount() > 1 && stateBtnModifierParticipant == 1) {
             this.move(participantTable, personneTable);
@@ -150,6 +169,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
             personneTable.getSelectionModel().clearSelection();
         }
     }
+
     public void personneToParticipantAction(ActionEvent actionEvent) {
         if (personneTable.getSelectionModel().getSelectedItem() != null) {
             this.move(personneTable, participantTable);
@@ -177,6 +197,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
         this.move(participantTable, personneTable, new ArrayList<>(this.participantTable.getItems()));
         participantTable.getSelectionModel().clearSelection();
     }
+
     private void move(TableView<Personne> viewA, TableView<Personne> viewB) {
         List<Personne> selectedItems = new ArrayList(viewA.getSelectionModel().getSelectedItems());
         this.move(viewA, viewB, selectedItems);
@@ -192,6 +213,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
         }
 
     }
+
     public void modifierParticipant(ActionEvent actionEvent) {
         if (formation == null) {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la formation");
@@ -213,6 +235,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
             stateBtnModifierParticipant = 0;
         }
     }
+
     public void annulerParticipant(ActionEvent actionEvent) {
         participantTable.getSelectionModel().clearSelection();
         personneTable.getSelectionModel().clearSelection();

@@ -4,6 +4,7 @@ package com.cfao.app;
 import com.cfao.app.controllers.TemplateController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.NotificationPane;
@@ -17,6 +18,8 @@ import java.io.IOException;
 public class StageManager {
     private static Controller mainController;
     private static NotificationPane notificationPane;
+    private static ProgressBar progressBar;
+
     public static void setMainController(Controller mainController){
         StageManager.mainController = mainController;
     }
@@ -33,5 +36,9 @@ public class StageManager {
     }
     public static void setNotificationPane(NotificationPane notificationPane){
         StageManager.notificationPane = notificationPane;
+    }
+
+    public static ProgressBar getProgressBar(){
+        return mainController.getProgressBar();
     }
 }
