@@ -20,11 +20,10 @@
         <mapping resource="mapping/pays.hbm.xml" />
 
         <mapping resource="mapping/section.hbm.xml" />
-        <mapping resource="mapping/competence.hbm.xml" />
+
         <mapping resource="mapping/niveaucompetence.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
-        <mapping resource="mapping/profilcompetence.hbm.xml" />
         <mapping resource="mapping/etatformation.hbm.xml" />
         <mapping resource="mapping/personnel.hbm.xml" />
 
@@ -44,6 +43,10 @@
         <mapping class="com.cfao.app.beans.Niveau" />
         <mapping class="com.cfao.app.beans.ProfilPersonne" />
         <mapping class="com.cfao.app.beans.ProfilPersonneId" />
+
+        <mapping class="com.cfao.app.beans.Competence" />
+        <mapping class="com.cfao.app.beans.Profilcompetence" />
+        <mapping class="com.cfao.app.beans.ProfilcompetenceId" />
 
 
 

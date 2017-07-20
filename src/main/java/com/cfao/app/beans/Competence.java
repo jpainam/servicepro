@@ -1,25 +1,33 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+
+import javax.persistence.*;
+import javax.persistence.Transient;
+import java.beans.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JP on 6/14/2017.
  */
-public class Competence {
+@Entity
+@Table(name = "competences")
+public class Competence implements Serializable{
+    private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty idcompetence = new SimpleIntegerProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
-    private Niveaucompetence niveau = new Niveaucompetence();
     private SimpleStringProperty type = new SimpleStringProperty();
+    private ListProperty<Profilcompetence> profilcompetences = new SimpleListProperty<>();
 
-    public Competence(int idcompetence, String description, Niveaucompetence niveau, String type) {
-        this.idcompetence.set(idcompetence);
-        this.description.set(description);
-        this.niveau = niveau;
-        this.type.set(type);
-    }
     public Competence(){}
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IDCOMPETENCE")
     public int getIdcompetence() {
         return idcompetence.get();
     }
@@ -28,6 +36,7 @@ public class Competence {
         this.idcompetence.set(idcompetence);
     }
 
+    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return description.get();
     }
@@ -37,14 +46,7 @@ public class Competence {
         this.description.set(description);
     }
 
-    public Niveaucompetence getNiveau() {
-        return niveau;
-    }
-
-    public void setNiveau(Niveaucompetence niveau) {
-        this.niveau = niveau;
-    }
-
+    @Column(name = "TYPE")
     public String getType() {
         return type.get();
     }
@@ -83,5 +85,18 @@ public class Competence {
     @Override
     public int hashCode() {
         return idcompetence != null ? idcompetence.hashCode() : 0;
+    }
+
+    @OneToMany(mappedBy = "pk.competence")
+    public List<Profilcompetence> getProfilcompetences() {
+        return profilcompetences.get();
+    }
+
+    public ListProperty<Profilcompetence> profilcompetencesProperty() {
+        return profilcompetences;
+    }
+
+    public void setProfilcompetences(List<Profilcompetence> profilcompetences) {
+        this.profilcompetences.set(FXCollections.observableArrayList(profilcompetences));
     }
 }

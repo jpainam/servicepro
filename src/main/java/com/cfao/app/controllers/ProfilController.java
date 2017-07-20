@@ -10,6 +10,8 @@ import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,6 +28,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,7 +48,7 @@ public class ProfilController implements Initializable {
     public TableColumn<Profilcompetence, Competence> listecompetenceColumn;
     public TableColumn<Profilcompetence, Boolean> connaissanceColumn;
     public TableColumn<Profilcompetence, Boolean> competenceColumn;
-    public TableView competenceTable;
+    public TableView<Profilcompetence> competenceTable;
     public HBox researchBox;
     public AnchorPane rootPane1;
     public VBox rootPane2;
@@ -64,7 +67,13 @@ public class ProfilController implements Initializable {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         HBox.setHgrow(profilTable, Priority.ALWAYS);
         tableProfilModel = profilTable.getSelectionModel();
-        tableProfilModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> fillCompetenceTable());
+        tableProfilModel.selectedItemProperty().addListener(new ChangeListener<Profil>() {
+            @Override
+            public void changed(ObservableValue<? extends Profil> observable, Profil oldValue, Profil newValue) {
+                Profil profil = profilTable.getSelectionModel().getSelectedItem();
+                ProfilController.this.fillCompetenceTable(profil);
+            }
+        });
 
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         HBox.setHgrow(searchBox2, Priority.ALWAYS);
@@ -76,61 +85,44 @@ public class ProfilController implements Initializable {
         researchBox2.getChildren().setAll(new Label("Compétences associées au profil : "), searchBox2);
     }
 
-    private void fillCompetenceTable() {
-        if (tableProfilModel.getSelectedItem() != null) {
-            Profil profil = tableProfilModel.getSelectedItem();
-            //ProfilModel profilModel = new ProfilModel(Model.getBeansClass("Profil"));
-            CompetenceModel competenceModel = new CompetenceModel();
-            //System.out.println(competenceModel.getCompetenceParProfil(profil));
+    private void fillCompetenceTable(Profil profil) {
 
-            Task<ObservableList<Profilcompetence>> task = new Task<ObservableList<Profilcompetence>>() {
-                @Override
-                protected ObservableList<Profilcompetence> call() throws Exception {
-                    return FXCollections.observableArrayList(competenceModel.getCompetenceParProfil(profil));
-                }
-            };
-            new Thread(task).start();
-            task.setOnSucceeded((WorkerStateEvent event) -> {
-                if (task.getValue().isEmpty()) {
-                    competenceTable.getItems().clear();
-                    return;
-                }
-                competenceTable.setItems(task.getValue());
-                setColumnProperty(initialColumn, task.getValue(), ProfilModel.INITIAL);
-                setColumnProperty(fondamentalColumn, task.getValue(), ProfilModel.FONDAMENTAL);
-                setColumnProperty(avanceColumn, task.getValue(), ProfilModel.AVANCE);
-                setColumnProperty(expertColumn, task.getValue(), ProfilModel.EXPERT);
-                listecompetenceColumn.setCellValueFactory(param -> {
-                    Competence competence = param.getValue().getCompetence();
-                    return new SimpleObjectProperty<>(competence);
-                });
-                competenceColumn.setCellValueFactory(param -> {
-                    Competence competence = param.getValue().getCompetence();
-                    if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
-                        return new SimpleBooleanProperty(true);
-                    } else {
-                        return new SimpleBooleanProperty(false);
-                    }
-                });
-                competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-                connaissanceColumn.setCellValueFactory(param -> {
-                    Competence competence = param.getValue().getCompetence();
-                    if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
-                        return new SimpleBooleanProperty(true);
-                    } else {
-                        return new SimpleBooleanProperty(false);
-                    }
-                });
-                connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-            });
-        }
+        System.out.println(profil.getProfilcompetences());
+        setColumnProperty(initialColumn,  ProfilModel.INITIAL);
+        setColumnProperty(fondamentalColumn,  ProfilModel.FONDAMENTAL);
+        setColumnProperty(avanceColumn, ProfilModel.AVANCE);
+        setColumnProperty(expertColumn,  ProfilModel.EXPERT);
+        competenceColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue().getCompetence();
+            if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                return new SimpleBooleanProperty(true);
+            } else {
+                return new SimpleBooleanProperty(false);
+            }
+        });
+        competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        connaissanceColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue().getCompetence();
+            if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                return new SimpleBooleanProperty(true);
+            } else {
+                return new SimpleBooleanProperty(false);
+            }
+        });
+        connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        listecompetenceColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue().getCompetence();
+            return new SimpleObjectProperty<>(competence);
+        });
+        competenceTable.setItems(profil.profilcompetencesProperty());
+
     }
 
-    private void setColumnProperty(TableColumn<Profilcompetence, Boolean> tableColumn, ObservableList<Profilcompetence> list, int niveau) {
+    private void setColumnProperty(TableColumn<Profilcompetence, Boolean> tableColumn, int niveau) {
         tableColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         tableColumn.setCellValueFactory(param -> {
-            Competence competence = param.getValue().getCompetence();
-            if (competence.getNiveau().getIdniveaucompetence() == niveau) {
+            Profilcompetence profilcompetence = param.getValue();
+            if (profilcompetence.getNiveau().getIdniveau() == niveau) {
                 return new SimpleBooleanProperty(true);
             } else {
                 return new SimpleBooleanProperty(false);
@@ -195,12 +187,9 @@ public class ProfilController implements Initializable {
 
     public void clickNouveau(ActionEvent actionEvent) {
         try {
-            ProfilAddEditController profilAddEditController = new ProfilAddEditController();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/profil/add.fxml"));
-            loader.setController(profilAddEditController);
             Tab tab = new Tab("Nouveau profil");
             tab.setClosable(true);
-            tab.setContent(loader.load());
+            tab.setContent(new ProfilAddEditController());
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
         } catch (Exception ex) {
@@ -214,11 +203,8 @@ public class ProfilController implements Initializable {
         if (profilTable.getSelectionModel().getSelectedItem() != null) {
             try {
                 Profil profil = profilTable.getSelectionModel().getSelectedItem();
-                ProfilAddEditController profilAddEditController = new ProfilAddEditController(profil);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/profil/add.fxml"));
-                loader.setController(profilAddEditController);
                 Tab tab = new Tab("Modification du profil " + profil.getLibelle());
-                tab.setContent(loader.load());
+                tab.setContent(new ProfilAddEditController(profil));
                 tab.setClosable(true);
                 tabPane.getTabs().add(tab);
                 tabPane.getSelectionModel().select(tab);
@@ -253,4 +239,6 @@ public class ProfilController implements Initializable {
         Tab tab = tabPane.getTabs().get(1);
         tabPane.getSelectionModel().select(tab);
     }
+
+
 }

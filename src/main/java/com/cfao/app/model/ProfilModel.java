@@ -1,12 +1,15 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Competence;
+import com.cfao.app.beans.Niveau;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.beans.Profilcompetence;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
 import javafx.collections.ObservableSet;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -31,6 +34,21 @@ public class ProfilModel extends  Model<Profil> {
         super(className);
     }
 
+    public List<Profilcompetence> getCompetenceByProfil(Profil profil, Niveau niveau){
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Profilcompetence.class);
+            criteria.add(Restrictions.eq("profil", profil)).add(Restrictions.eq("niveau", niveau));
+            return criteria.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            session.close();
+        }
+        return null;
+    }
    /* public List getCompetenceParProfil(Profil profil){
         List list = new ArrayList();
         try{
