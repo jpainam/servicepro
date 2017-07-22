@@ -18,6 +18,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javafx.util.Pair;
 import org.controlsfx.control.CheckComboBox;
 
@@ -70,7 +72,7 @@ public class CiviliteController implements Initializable {
     /**
      * TableView des Postes d'une personne
      */
-    public TableView<Postepersonne> tablePoste;
+    public TableView<Poste> tablePoste;
     public TableColumn columnPoste;
     public TableColumn columnSociete;
     public TableColumn columnDebut;
@@ -101,7 +103,7 @@ public class CiviliteController implements Initializable {
     public Button delPhoto;
     public ImageView imageview;
     public AnchorPane paneImage;
-    public File photo;
+    public File photo = null;
     public final String defaultImage = "/images/civilite/avatar_defaut.png";
 
     public Personne pers;
@@ -129,6 +131,11 @@ public class CiviliteController implements Initializable {
 
     public ObservableMap<String, ObservableList> map;
     public TextArea txtMemo;
+    public DatePicker dateFincontrat;
+    public TableColumn<Personne, String> columnTelephone;
+    public TableColumn<Personne, Societe> columnPersonneSociete;
+    public TextField txtTelephone;
+    public TextField txtEmail;
 
 
     @Override
@@ -205,7 +212,7 @@ public class CiviliteController implements Initializable {
                 return map;
             }
         };
-        task.run();
+        new Thread(task).run();
         task.setOnSucceeded(event -> {
             map = task.getValue();
             comboPays.setItems(map.get("pays"));
@@ -224,11 +231,18 @@ public class CiviliteController implements Initializable {
 
         columnMatricule.setCellValueFactory(new PropertyValueFactory<Personne, String>("matricule"));
         columnNom.setCellValueFactory(new PropertyValueFactory<Personne, String>("nom"));
-
+        columnPersonneSociete.setCellValueFactory(param -> param.getValue().societe());
+        columnTelephone.setCellValueFactory(param -> param.getValue().telephoneProperty());
 
         // COLONNE DU TABLEVIEW PROFIL D'UNE PERSONNE
 
-        columnPoste.setCellValueFactory(new PropertyValueFactory<Profil, String>(""));
+        columnProfil.setCellValueFactory(new PropertyValueFactory<ProfilPersonne, String>("profil"));
+        columnNiveau.setCellValueFactory(new PropertyValueFactory<ProfilPersonne, String>("niveau"));
+
+        columnPoste.setCellValueFactory(new PropertyValueFactory<Poste, String>("titre"));
+        columnSociete.setCellValueFactory(new PropertyValueFactory<Poste, String>("societe"));
+        columnDebut.setCellValueFactory(new PropertyValueFactory<Poste, Date>("dateDebut"));
+        columnFin.setCellValueFactory(new PropertyValueFactory<Poste, Date>("datefin"));
 
         /*
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
@@ -302,11 +316,19 @@ public class CiviliteController implements Initializable {
         txtMatricule.setText(person.getMatricule());
         txtNom.setText(person.getNom());
         txtPrenom.setText(person.getPrenom());
+        txtMemo.setText(person.getMemo());
+        txtTelephone.setText(person.getTelephone());
+        txtEmail.setText(person.getEmail());
 
-        LocalDate date = person.getNaissance().toLocalDate();
-        datePicker.getEditor().setText(date.format(FormatDate.currentForme));
-        datePicker.setValue(date);
-        labelAge.setText(age(date));
+        LocalDate date1 = person.getNaissance().toLocalDate();
+        datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
+        datePicker.setValue(date1);
+        labelAge.setText(age(date1));
+
+
+        LocalDate date2 = person.getFincontrat().toLocalDate();
+        dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
+        dateFincontrat.setValue(date2);
 
         comboSection.setValue(person.getSection());
         comboSociete.setValue(person.getSociete());
@@ -315,6 +337,8 @@ public class CiviliteController implements Initializable {
         comboContrat.setValue(person.getContrat());
         comboAmbition.setValue(person.getAmbition());
         comboLangue.setValue(person.getLangue());
+        comboPotentiel.setValue(person.getPotentiel());
+
 
         /**
          * MISE A JOUR DE LA TABLE DE PROFIL D'UNE PERSONNE
@@ -326,6 +350,9 @@ public class CiviliteController implements Initializable {
         Necessaire à l'update du component checkcombobox
         des Langues parlées par une personne*/
         updateLangue(person.getLangues());
+
+        tableProfil.setItems(FXCollections.observableArrayList(person.getProfilPersonne()));
+        tablePoste.setItems(FXCollections.observableArrayList(person.getPostePersonne()));
 
     }
 
@@ -350,23 +377,36 @@ public class CiviliteController implements Initializable {
     }
 
     public void disableComponent(Node component, boolean b) {
+        if (component instanceof Button) {
+            ((Button) component).setDisable(b);
+        } else if (component instanceof TextField) {
+            ((TextField) component).setEditable(!b);
+        } else if (component instanceof ComboBox) {
+            ((ComboBox) component).setDisable(b);
+        }else if (component instanceof CheckComboBox) {
+            ((CheckComboBox) component).setDisable(b);
+        } else if (component instanceof DatePicker) {
+            ((DatePicker) component).setEditable(!b);
+        } else if (component instanceof TextArea) {
+            ((TextArea) component).setEditable(!b);
+        }
 
-        component.setDisable(b);
-
-        if (this.stateBtnNouveau == 0 && !btnNouveau.isDisable())
+        if (this.stateBtnNouveau == 0 && !btnNouveau.isDisable()) {
             if (component instanceof TextField) {
                 ((TextField) component).setText("");
-                ((TextField) component).setEditable(!b);
             } else if (component instanceof ComboBox) {
                 ((ComboBox) component).setValue(null);
-                component.setDisable(b);
             } else if (component instanceof DatePicker) {
                 ((DatePicker) component).getEditor().setText("");
                 ((DatePicker) component).setValue(null);
-            }
-            else if (component instanceof CheckComboBox)
+            } else if (component instanceof CheckComboBox) {
                 ((CheckComboBox) component).getCheckModel().clearChecks();
-
+            } else if (component instanceof TableView) {
+                ((TableView) component).setItems(FXCollections.observableArrayList());
+            } else if (component instanceof TextArea) {
+                ((TextArea) component).setText("");
+            }
+        }
     }
 
 
@@ -375,12 +415,20 @@ public class CiviliteController implements Initializable {
         disableComponent(txtMatricule, bool);
         disableComponent(txtNom, bool);
         disableComponent(txtPrenom, bool);
+        disableComponent(txtMemo, bool);
         disableComponent(comboGroupe, bool);
         disableComponent(comboPays, bool);
         disableComponent(comboSociete, bool);
         disableComponent(comboSection, bool);
+        disableComponent(comboPotentiel, bool);
+        disableComponent(comboAmbition, bool);
+        disableComponent(comboLangue, bool);
+        disableComponent(comboContrat, bool);
         disableComponent(datePicker, bool);
+        disableComponent(dateFincontrat, bool);
         disableComponent(comboLanguesParlees, bool);
+        disableComponent(tablePoste, bool);
+        disableComponent(tableProfil, bool );
     }
 
     public String age(LocalDate date) {
@@ -409,7 +457,11 @@ public class CiviliteController implements Initializable {
                     personne.setMatricule(txtMatricule.getText());
                     personne.setNom(txtNom.getText());
                     personne.setPrenom(txtPrenom.getText());
+                    personne.setMemo(txtMemo.getText());
+                    personne.setTelephone(txtTelephone.getText());
+                    personne.setEmail(txtEmail.getText());
                     personne.setNaissance(Date.valueOf(datePicker.getValue()));
+                    personne.setFincontrat(Date.valueOf(dateFincontrat.getValue()));
                     personne.setPays(comboPays.getValue());
 
                     /*
@@ -423,7 +475,7 @@ public class CiviliteController implements Initializable {
                     personne.setContrat(comboContrat.getValue());
                     personne.setLangue(comboLangue.getValue());
                     personne.setAmbition(comboAmbition.getValue());
-
+                    personne.setPotentiel(comboPotentiel.getValue());
                     savePersonne(personne);
                     personneTable.getItems().add(personne);
 
@@ -444,11 +496,24 @@ public class CiviliteController implements Initializable {
         Task<Personne> task = new Task<Personne>() {
             @Override
             protected Personne call() throws Exception {
-                new Model<Personne>().saveOrUpdate(personne);
+                if(tableProfil.getItems().size() > 0){
+                    for (ProfilPersonne p : tableProfil.getItems())
+                        p.setPersonne(personne);
+                }
+                personne.setProfilPersonne(tableProfil.getItems());
+
+                if(tablePoste.getItems().size() > 0){
+                    for (Poste p : tablePoste.getItems())
+                        p.setPersonne(personne);
+                }
+                personne.setPostePersonne(tablePoste.getItems());
+
+                new Model<Personne>().save(personne);
+
                 return personne;
             }
         };
-        task.run();
+        new Thread(task).run();
         task.setOnSucceeded(event -> {
 
             Platform.runLater(() -> {
@@ -475,7 +540,7 @@ public class CiviliteController implements Initializable {
                 case 1:
 
                     bindPersonne(pers, false);
-                    savePersonne(pers);
+                    updatePersonne(pers);
                     disableAllComponents(true);
                     btnModifier.setText("Modifier / New");
                     disableComponent(btnNouveau, false);
@@ -484,6 +549,28 @@ public class CiviliteController implements Initializable {
                     break;
             }
     }
+
+    private void updatePersonne(Personne personne) {
+        Task<Personne> task = new Task<Personne>() {
+            @Override
+            protected Personne call() throws Exception {
+                personne.setProfilPersonne(FXCollections.observableList(tableProfil.getItems()));
+                personne.setPostePersonne(FXCollections.observableList(tablePoste.getItems()));
+                new Model<Personne>().update(personne);
+                return personne;
+            }
+        };
+        new Thread(task).run();
+        task.setOnSucceeded(event -> {
+
+            Platform.runLater(() -> {
+                personneTable.getSelectionModel().select(task.getValue());
+                System.out.println("Good");
+            });
+        });
+    }
+
+
 
     private void bindPersonne(Personne personne, boolean bind) {
         if (bind) {
@@ -496,6 +583,11 @@ public class CiviliteController implements Initializable {
             personne.section().bind(comboSection.valueProperty());
             personne.groupe().bind(comboGroupe.valueProperty());
             personne.langues().bindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
+            personne.fincontratProperty().bind(dateFincontrat.valueProperty());
+            personne.memoProperty().bind(txtMemo.textProperty());
+            personne.telephoneProperty().bind(txtTelephone.textProperty());
+            personne.emailProperty().bind(txtEmail.textProperty());
+            personne.potentielProperty().bind(comboPotentiel.valueProperty());
         } else {
             personne.matriculeProperty().unbind();
             personne.nomProperty().unbind();
@@ -506,6 +598,11 @@ public class CiviliteController implements Initializable {
             personne.section().unbind();
             personne.groupe().unbind();
             personne.langues().unbindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
+            personne.fincontratProperty().unbind();
+            personne.memoProperty().unbind();
+            personne.telephoneProperty().unbind();
+            personne.emailProperty().unbind();
+            personne.potentielProperty().unbind();
         }
     }
 
@@ -551,36 +648,40 @@ public class CiviliteController implements Initializable {
     }
 
     public void delPhotoClic(ActionEvent actionEvent) {
-        imageview.setImage(new Image(defaultImage));
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            imageview.setImage(new Image(defaultImage));
+        }
     }
 
     public void addPhotoClic(ActionEvent actionEvent) {
-        FileChooser choosePic = new FileChooser();
-        choosePic.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichiers Image", "*.png", "*.jpg", "*.gif", "*.jpeg")
-        );
-        photo = choosePic.showOpenDialog(Main.stage);
-        try {
-            FileInputStream image = new FileInputStream(photo);
-            imageview.setImage(new Image(image));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        if(true){
+            //if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            FileChooser choosePic = new FileChooser();
+            choosePic.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichiers Image", "*.png", "*.jpg", "*.gif", "*.jpeg")
+            );
+            photo = choosePic.showOpenDialog(Main.stage);
+            try {
+                FileInputStream image = new FileInputStream(photo);
+                imageview.setImage(new Image(image));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-        Path source = photo.toPath();
+            Path source = photo.toPath();
 
-        String ds = File.separator;
-        String target = "E:"+ds+"armel"+ds+"projet"+ds+"servicepro"+ds+"target"+ds+"classes"+ds+"documents"+ds+photo.getName();
+            String ds = File.separator;
+            String target = "E:" + ds + "armel" + ds + "projet" + ds + "servicepro" + ds + "target" + ds + "classes" + ds + "documents" + ds + photo.getName();
 
-        Path to = Paths.get(target );
+            Path to = Paths.get(target);
 
 
+            try {
 
-        try {
-
-            Files.copy(source,Paths.get(target ), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
+                Files.copy(source, Paths.get(target), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -591,107 +692,133 @@ public class CiviliteController implements Initializable {
     }
 
     public void addPoste(ActionEvent actionEvent) {
-        Pair<Node, Initializable> pair = templateDialog("DialogPoste.fxml");
-        Node root = pair.getKey();
-        DialogPosteController controller = (DialogPosteController) pair.getValue();
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            Pair<Node, Initializable> pair = templateDialog("DialogPoste.fxml");
+            Node root = pair.getKey();
+            DialogPosteController controller = (DialogPosteController) pair.getValue();
 
-        Dialog<Postepersonne> dialogPoste = new Dialog<Postepersonne>();
-        dialogPoste.setHeaderText("Ajouter un Poste :");
-        dialogPoste.getDialogPane().setContent(root);
+            Dialog<Poste> dialogPoste = new Dialog<Poste>();
+            dialogPoste.setHeaderText("Ajouter un Poste :");
+            dialogPoste.getDialogPane().setContent(root);
 
-        ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
-        dialogPoste.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
+            ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
+            dialogPoste.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
 
-        Button btnOk = (Button) dialogPoste.getDialogPane().lookupButton(btnOkType);
+            Button btnOk = (Button) dialogPoste.getDialogPane().lookupButton(btnOkType);
 
-        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            event.consume();
-            String valTxtPoste = controller.txtPoste.getText();
-            Societe valComboSociete = controller.comboSociete.getSelectionModel().getSelectedItem();
-            LocalDate valDateFrom = controller.dateFrom.getValue();
-            LocalDate valDateTo = controller.dateTo.getValue();
+            btnOk.addEventFilter(ActionEvent.ACTION, event -> {
+                event.consume();
+                String valTxtPoste = controller.txtPoste.getText();
+                Societe valComboSociete = controller.comboSociete.getSelectionModel().getSelectedItem();
+                LocalDate valDateFrom = controller.dateFrom.getValue();
+                LocalDate valDateTo = controller.dateTo.getValue();
 
-            if(!valTxtPoste.isEmpty() && valComboSociete != null) {
-                System.out.println(new Postepersonne(valTxtPoste, valComboSociete, valDateFrom, valDateTo).toString());
-                dialogPoste.close();
-            }
-        });
-        dialogPoste.showAndWait();
+                if (!valTxtPoste.isEmpty() && valComboSociete != null) {
+                    Poste poste = new Poste();
+                    poste.setTitre(valTxtPoste);
+                    poste.setSociete(valComboSociete);
+                    poste.setDateDebut(Date.valueOf(valDateFrom));
+                    poste.setDatefin(Date.valueOf(valDateTo));
+
+                    if(stateBtnNouveau == 0) {
+                        poste.setPersonne(pers);
+                        new Model<Poste>().save(poste);
+                    }
+                    tablePoste.getItems().add(poste);
+                    dialogPoste.close();
+                }
+            });
+            dialogPoste.showAndWait();
+        }
     }
 
     public void deletePoste(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Titre du dialog");
-        alert.setHeaderText("");
-        alert.setContentText("Suppression d'un poste");
-        alert.showAndWait();
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            if(tablePoste.getItems().size() > 0 && tablePoste.getSelectionModel().getSelectedIndex()!= -1) {
+                Poste p = tablePoste.getSelectionModel().getSelectedItem();
+                deletePosteBd(p);
+                tablePoste.getItems().remove(p);
+            }
+        }
     }
+
+    private void deletePosteBd(Poste p) {
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                Model<Poste> model = new Model<Poste>("Poste");
+                model.delete(p);
+                return true;
+            }
+        };
+        new Thread(task).run();
+    }
+
 
 
     public void addProfil(ActionEvent actionEvent) {
 
-        Pair<Node, Initializable> pair = templateDialog("DialogProfil.fxml");
-        Node root = pair.getKey();
-        DialogProfilController controller = (DialogProfilController) pair.getValue();
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            Pair<Node, Initializable> pair = templateDialog("DialogProfil.fxml");
+            Node root = pair.getKey();
+            DialogProfilController controller = (DialogProfilController) pair.getValue();
 
-        Dialog<ProfilPersonne> dialogProfil = new Dialog<ProfilPersonne>();
-        dialogProfil.setHeaderText("Ajouter un Profil");
-        dialogProfil.getDialogPane().setContent(root);
+            Dialog<ProfilPersonne> dialogProfil = new Dialog<ProfilPersonne>();
+            dialogProfil.setHeaderText("Ajouter un Profil");
+            dialogProfil.getDialogPane().setContent(root);
 
-        ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
-        dialogProfil.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
+            ButtonType btnOkType = new ButtonType("Ajouter / Add", ButtonBar.ButtonData.OK_DONE);
+            dialogProfil.getDialogPane().getButtonTypes().addAll(btnOkType, ButtonType.CANCEL);
 
-        Button btnOk = (Button) dialogProfil.getDialogPane().lookupButton(btnOkType);
+            Button btnOk = (Button) dialogProfil.getDialogPane().lookupButton(btnOkType);
 
-        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            event.consume();
-            Profil valueComboProfil = controller.comboProfil.getSelectionModel().getSelectedItem();
-            Niveau valueComboLevel= controller.comboLevel.getSelectionModel().getSelectedItem();
-
-            if(valueComboProfil != null && valueComboLevel != null) {
-                ProfilPersonne profilPersonne = new ProfilPersonne();
-                profilPersonne.setNiveau(valueComboLevel);
-                profilPersonne.setProfil(valueComboProfil);
-                profilPersonne.setPersonne(pers);
-                pers.getProfilPersonnes().add(profilPersonne);
-                Model<Personne> model = new Model<>("Personne");
-                model.update(pers);
-
-                //System.out.println(pers.getProfilPersonnes());
-                //PersonneModel personneModel = new PersonneModel();
-               // personneModel.update(pers);
-                dialogProfil.close();
-            }
-        });
-        dialogProfil.showAndWait();
-
-        /*
-        dialogProfil.setResultConverter(btnDialog -> {
-            if(btnDialog == btnOkType){
+            btnOk.addEventFilter(ActionEvent.ACTION, event -> {
+                event.consume();
                 Profil valueComboProfil = controller.comboProfil.getSelectionModel().getSelectedItem();
-                Niveaucompetence valueComboLevel= controller.comboLevel.getSelectionModel().getSelectedItem();
-                if(valueComboProfil != null && valueComboLevel != null) {
-                    return new ProfilPersonne(valueComboProfil, valueComboLevel);
-                }
-            }
-            return null;
-        });
+                Niveau valueComboLevel = controller.comboLevel.getSelectionModel().getSelectedItem();
 
-        Optional<ProfilPersonne> result = dialogProfil.showAndWait();
-        if(result.isPresent() && result != null)
-            System.out.println(result.get().toString());
-            */
+                if (valueComboProfil != null && valueComboLevel != null) {
+
+                    ProfilPersonne profilPersonne = new ProfilPersonne();
+                    profilPersonne.setNiveau(valueComboLevel);
+                    profilPersonne.setProfil(valueComboProfil);
+
+                    if (stateBtnNouveau == 0) {
+                        profilPersonne.setPersonne(pers);
+                        Model<ProfilPersonne> model = new Model<>("ProfilPersonne");
+                        model.save(profilPersonne);
+                    }
+
+                    tableProfil.getItems().add(profilPersonne);
+                    dialogProfil.close();
+                }
+            });
+            dialogProfil.showAndWait();
+        }
 
     }
 
     public void deleteProfil(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Titre du dialog");
-        alert.setHeaderText("");
-        alert.setContentText("Suppression d'un profil");
-        alert.showAndWait();
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            if(tableProfil.getItems().size() > 0 && tableProfil.getSelectionModel().getSelectedIndex()!= -1) {
+                ProfilPersonne p = tableProfil.getSelectionModel().getSelectedItem();
+                deleteProfilBd(p);
+                tableProfil.getItems().remove(p);
+            }
+        }
     }
 
+    private void deleteProfilBd(ProfilPersonne p) {
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                Model<ProfilPersonne> model = new Model<ProfilPersonne>("ProfilPersonne");
+                model.delete(p);
+                return true;
+            }
+        };
+        new Thread(task).run();
+    }
 
     public Pair<Node, Initializable> templateDialog(String fxml){
 
@@ -708,5 +835,15 @@ public class CiviliteController implements Initializable {
         }
 
         return new Pair(root, controller);
+    }
+
+    public void clicPrev(ActionEvent actionEvent) {
+        if(personneTable.getSelectionModel().getSelectedIndex() >= 0)
+            personneTable.getSelectionModel().selectPrevious();
+    }
+
+    public void clicNext(ActionEvent actionEvent) {
+        if(personneTable.getSelectionModel().getSelectedIndex() <= personneTable.getItems().size() - 1)
+            personneTable.getSelectionModel().selectNext();
     }
 }

@@ -13,22 +13,15 @@ import java.io.Serializable;
 @Table(name = "niveau")
 public class Niveau implements Serializable{
     private static final long serialVersionUID = 1L;
-    private IntegerProperty id = new SimpleIntegerProperty();
+    private IntegerProperty idniveau = new SimpleIntegerProperty();
     private StringProperty libelle = new SimpleStringProperty();
    // private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<ProfilPersonne>();
 
 
-    public int getId() {
-        return id.get();
+    public IntegerProperty idniveauProperty() {
+        return idniveau;
     }
 
-    public IntegerProperty idProperty() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
-    }
 
     public StringProperty libelleProperty() {
         return libelle;
@@ -38,10 +31,10 @@ public class Niveau implements Serializable{
     @GeneratedValue
     @Column(name = "IDNIVEAU")
     public int getIdniveau (){
-        return this.id.get();
+        return this.idniveau.get();
     }
     public void setIdniveau(int niveau){
-        this.id.set(niveau);
+        this.idniveau.set(niveau);
     }
 
     @Column(name = "LIBELLE")
@@ -74,7 +67,7 @@ public class Niveau implements Serializable{
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = idniveau != null ? idniveau.hashCode() : 0;
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
         return result;
     }

@@ -16,7 +16,6 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </HBox>
-   
                <TableView fx:id="personneTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                    <columns>
                        <TableColumn fx:id="nomPersonneColumn" prefWidth="75.0" text="Noms et Prénoms" />

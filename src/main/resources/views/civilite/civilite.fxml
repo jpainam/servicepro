@@ -13,15 +13,17 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
     <children>
-        <SplitPane dividerPositions="0.15239410681399632" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+        <SplitPane dividerPositions="0.40436590436590436" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
             <items>
                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="328.0" spacing="10.0">
                     <children>
                         <HBox fx:id="hboxSearch" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <TableView fx:id="personneTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="columnNom" prefWidth="87.0" text="Nom/Name" />
                                 <TableColumn fx:id="columnMatricule" prefWidth="91.0" text="Matricule" />
+                                <TableColumn fx:id="columnNom" prefWidth="87.0" text="Nom/Name" />
+                        <TableColumn fx:id="columnPersonneSociete" prefWidth="75.0" text="Société" />
+                        <TableColumn fx:id="columnTelephone" prefWidth="75.0" text="Téléphone" />
                             </columns>
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -47,8 +49,8 @@
                                                     <children>
                                                         <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
                                                             <items>
-                                                                <Button fx:id="btnPrevious" mnemonicParsing="false" styleClass="onlyIcon" />
-                                                                <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                                <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#clicPrev" styleClass="onlyIcon" />
+                                                                <Button fx:id="btnNext" mnemonicParsing="false" onAction="#clicNext" styleClass="onlyIcon" />
                                                                 <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
                                                                 <Separator orientation="VERTICAL" />
                                                                 <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau / New" textFill="#2920b0" />
@@ -64,13 +66,41 @@
                                                                     <children>
                                                                         <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
                                                                         </Label>
-                                                                        <TextField fx:id="txtMatricule" maxWidth="1.7976931348623157E308" />
-                                                                        <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Nom / Name">
+                                                                        <TextField fx:id="txtMatricule" editable="false" maxWidth="1.7976931348623157E308" />
+                                                      <HBox maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
+                                                         <children>
+                                                            <VBox HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                                    <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
                                                                         </Label>
-                                                                        <TextField fx:id="txtNom" maxWidth="1.7976931348623157E308" />
-                                                                        <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
+                                                                                    <TextField fx:id="txtPrenom" editable="false" maxWidth="1.7976931348623157E308" />
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                                    <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Nom / Name">
                                                                         </Label>
-                                                                        <TextField fx:id="txtPrenom" maxWidth="1.7976931348623157E308" />
+                                                                                    <TextField fx:id="txtNom" editable="false" maxWidth="1.7976931348623157E308" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                                         <children>
+                                                            <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <Label text="Téléphone" />
+                                                                  <TextField fx:id="txtTelephone" />
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <Label text="Email" />
+                                                                  <TextField fx:id="txtEmail" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER" prefHeight="115.0" prefWidth="127.0" HBox.hgrow="NEVER">
@@ -100,15 +130,27 @@
                                                         <Separator />
                                                         <HBox spacing="10.0">
                                                             <children>
-                                                                <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" text="Date Naiss./Born Date" HBox.hgrow="NEVER">
+                                                <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                                      <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" text="Date Naiss./Born Date" HBox.hgrow="NEVER">
                                                                 </Label>
-                                                                <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="114.0" HBox.hgrow="NEVER" />
-                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" text="Nationalité / Citizen" HBox.hgrow="NEVER">
+                                                                      <DatePicker fx:id="datePicker" editable="false" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" prefHeight="25.0" prefWidth="114.0" HBox.hgrow="NEVER" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                                      <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" text="Nationalité / Citizen" HBox.hgrow="NEVER">
                                                                 </Label>
-                                                                <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="99.0" HBox.hgrow="ALWAYS" />
+                                                                      <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="99.0" HBox.hgrow="ALWAYS" />
+                                                   </children>
+                                                </VBox>
                                                                 <Separator orientation="VERTICAL" />
-                                                                <Label minWidth="50.0" prefWidth="50.0" text="Langue" />
-                                                                <ComboBox fx:id="comboLangue" prefHeight="25.0" prefWidth="125.0" />
+                                                <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                                      <Label minWidth="50.0" prefWidth="50.0" text="Langue" />
+                                                                      <ComboBox fx:id="comboLangue" prefHeight="25.0" prefWidth="125.0" />
+                                                   </children>
+                                                </VBox>
                                                             </children>
                                                             <padding>
                                                                 <Insets left="10.0" right="10.0" />
@@ -145,7 +187,7 @@
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                                 <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                                                <DatePicker maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                                                <DatePicker fx:id="dateFincontrat" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                                                                 <Label text="Langues parlées" GridPane.columnIndex="3" />
                                                             </children>
                                                             <VBox.margin>
@@ -231,7 +273,7 @@
                                                                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                                                                     <children>
                                                                                         <Label text="Memo" />
-                                                                                        <TextArea fx:id="txtMemo" prefHeight="200.0" prefWidth="200.0" promptText="memo" />
+                                                                                        <TextArea fx:id="txtMemo" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="memo" />
                                                                                     </children>
                                                                                     <HBox.margin>
                                                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
