@@ -17,6 +17,23 @@ public class Niveau implements Serializable{
     private StringProperty libelle = new SimpleStringProperty();
    // private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<ProfilPersonne>();
 
+
+    public int getId() {
+        return id.get();
+    }
+
+    public IntegerProperty idProperty() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
+
+    public StringProperty libelleProperty() {
+        return libelle;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "IDNIVEAU")

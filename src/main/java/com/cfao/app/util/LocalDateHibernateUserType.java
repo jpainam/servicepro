@@ -57,12 +57,13 @@ public class LocalDateHibernateUserType implements EnhancedUserType, Serializabl
         return arg0.hashCode();
     }
 
+
     @Override
     public boolean isMutable() {
         return false;
     }
 
-    @Override
+
     public Object nullSafeGet(ResultSet rs, String[] params,
                               SessionImplementor session, Object owner) throws HibernateException,
             SQLException {
@@ -79,7 +80,7 @@ public class LocalDateHibernateUserType implements EnhancedUserType, Serializabl
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
     }
 
-    @Override
+
     public void nullSafeSet(PreparedStatement ps, Object value, int index,
                             SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {

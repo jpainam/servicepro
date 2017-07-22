@@ -132,7 +132,7 @@
                   </StackPane>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
                      <children>
-                        <ToolBar fx:id="breadCrumbContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" minWidth="-Infinity" prefHeight="40.0" />
+                        <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" VBox.vgrow="NEVER" />
                          <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
                      </children>
 

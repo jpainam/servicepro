@@ -15,22 +15,26 @@
    <items>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
                <children>
-                  <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" VBox.vgrow="NEVER">
+                  <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="662.0" VBox.vgrow="NEVER">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-            <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="609.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="numeroColumn" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
-                  <TableColumn fx:id="libelleColumn" minWidth="-1.0" prefWidth="-1.0" text="Libellé" />
-                  <TableColumn fx:id="connaissanceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Connaissance" />
-                  <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
+                  <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                     <children>
+                  <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="609.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="numeroColumn" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
+                        <TableColumn fx:id="libelleColumn" minWidth="-1.0" prefWidth="-1.0" text="Libellé" />
+                        <TableColumn fx:id="connaissanceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Connaissance" />
+                        <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                     </children>
+                  </StackPane>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
@@ -40,7 +44,7 @@
                <children>
                   <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                      <tabs>
-                        <Tab text="Détails sur la compétence">
+                        <Tab fx:id="competenceTabDetails" text="Détails sur la compétence">
                            <content>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-border-color: #CCC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
@@ -57,48 +61,57 @@
                                           <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
                                        </items>
                                     </ToolBar>
-                                    <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                    <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                    <TableView fx:id="prerequisTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="Formation prérequis" />
-                                      </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                       <HBox.margin>
-                                          <Insets right="10.0" />
-                                       </HBox.margin>
-                                    </TableView>
-                                    <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </TableView>
+                                          <StackPane fx:id="profilStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                             <children>
+                                          <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                            <columns>
+                                              <TableColumn fx:id="libelleProfilColumn" prefWidth="75.0" text="Profils" />
+                                              <TableColumn fx:id="niveauProfilColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Niveau" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </TableView>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane fx:id="formationStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                             <children>
+                                          <TableView fx:id="formationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                            <columns>
+                                              <TableColumn fx:id="titreFormationColumn" prefWidth="75.0" text="Formations" />
+                                                      <TableColumn fx:id="datedebutFormationColumn" maxWidth="100.0" minWidth="100.0" prefWidth="75.0" text="Date debut" />
+                                                      <TableColumn fx:id="datefinFormationColumn" maxWidth="1000.0" minWidth="100.0" prefWidth="75.0" text="Date fin" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </TableView>
+                                             </children>
+                                          </StackPane>
                                        </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
                                     </HBox>
                                  </children>
                               </VBox>
                            </content>
                         </Tab>
-                        <Tab text="Personne possédant cette compétence">
-                          <content>
-                            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
-                        </Tab>
+                        <Tab fx:id="competenceTabPersonne" text="Détais sur les personnes" />
                      </tabs>
                   </TabPane>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" />
-               </padding>
             </VBox>
    </items>
 </SplitPane>

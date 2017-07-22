@@ -114,7 +114,7 @@ public class ProfilController implements Initializable {
             Competence competence = param.getValue().getCompetence();
             return new SimpleObjectProperty<>(competence);
         });
-        competenceTable.setItems(profil.profilcompetencesProperty());
+        competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilcompetences()));
 
     }
 

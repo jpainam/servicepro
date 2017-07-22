@@ -49,6 +49,7 @@ public class Model<T> {
         try {
             Criteria criteria;
             session.beginTransaction();
+
             criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
         } catch (Exception ex) {

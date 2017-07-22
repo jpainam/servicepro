@@ -4,8 +4,12 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.control.ProgressBar;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,7 @@ public class Profil implements  Serializable{
     private SimpleStringProperty libelle = new SimpleStringProperty();
     //private ListProperty<ProfilPersonne> profilpersonne = new SimpleListProperty<ProfilPersonne>();
     private SetProperty<ProfilPersonne> profilPersonnes = new SimpleSetProperty<>();
-    private ListProperty<Profilcompetence> profilcompetences = new SimpleListProperty<>();
+    private SetProperty<Profilcompetence> profilcompetences = new SimpleSetProperty<>();
 
    // private SetProperty<Competence> competences = new SimpleSetProperty<>();
 
@@ -96,7 +100,8 @@ public class Profil implements  Serializable{
         return competences;
     }
     */
-    @OneToMany(mappedBy = "pk.profil",  cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "pk.profil")
+    @Cascade({CascadeType.PERSIST, CascadeType.DELETE})
     public Set<ProfilPersonne> getProfilPersonnes() {
         return this.profilPersonnes;
     }
@@ -109,17 +114,18 @@ public class Profil implements  Serializable{
         this.competences.set(FXCollections.observableSet(competences));
     }
     */
-    @OneToMany(mappedBy = "pk.profil", cascade=CascadeType.ALL)
-    public List<Profilcompetence> getProfilcompetences() {
+    @OneToMany(mappedBy = "pk.profil", fetch = FetchType.LAZY)
+    @Cascade({CascadeType.ALL})
+    public Set<Profilcompetence> getProfilcompetences() {
         return profilcompetences.get();
     }
 
-    public ListProperty<Profilcompetence> profilcompetencesProperty() {
+    public SetProperty<Profilcompetence> profilcompetencesProperty() {
         return profilcompetences;
     }
 
-    public void setProfilcompetences(List<Profilcompetence> profilcompetences) {
-        this.profilcompetences.set(FXCollections.observableList(profilcompetences));
+    public void setProfilcompetences(Set<Profilcompetence> profilcompetences) {
+        this.profilcompetences.set(FXCollections.observableSet(profilcompetences));
     }
 
     @Transient

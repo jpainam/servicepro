@@ -36,7 +36,7 @@ public class PrintReport extends Report{
         parameters.put("receipt_for", "EMI Payment");
         parameters.put("date", "20-12-2016");
         parameters.put("contact", "98763178".toString());
-        showReport("reports/test.jrxml", parameters);
+        showReport("views/formation/formation.jrxml", parameters);
 
         /*ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
         list.add(parameters);

@@ -1,6 +1,7 @@
 package com.cfao.app.util;
 
 import org.controlsfx.control.Notifications;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -38,4 +39,13 @@ public class HibernateUtil {
     public static void shutdown(){
         getSessionFactory().close();
     }
+
+    /*public static void main(String args[]){
+        try{
+            Session session = getSessionFactory().openSession();
+            System.out.println("Session oppened");
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }*/
 }

@@ -100,11 +100,11 @@ public class ParticipantController extends AnchorPane implements Initializable {
         potentielPersonneColumn.setCellValueFactory(param -> {
             Personne personne = param.getValue();
             FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.USER);
-            if (!personne.getProfils().isEmpty()) {
-                /*if (personne.getProfils().get(0).getCompetences().contains(formation.getCompetences())) {
+            /*if (!personne.getProfils().isEmpty()) {
+                *if (personne.getProfils().get(0).getCompetences().contains(formation.getCompetences())) {
                     iconView.setFill(Color.FORESTGREEN);
-                }*/
-            }
+                }
+            }*/
             return new SimpleObjectProperty<>(iconView);
         });
 

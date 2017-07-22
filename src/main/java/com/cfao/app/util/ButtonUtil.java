@@ -3,6 +3,7 @@ package com.cfao.app.util;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 
 /**
  * Created by JP on 7/13/2017.
@@ -66,6 +67,11 @@ public class ButtonUtil {
     public static void angle_double_left(Button ... buttons){
         for(Button button : buttons){
             GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_LEFT);
+        }
+    }
+    public static void detailsTab(Tab... tabs){
+        for(Tab tab : tabs){
+            GlyphsDude.setIcon(tab, FontAwesomeIcon.BUILDING_ALT);
         }
     }
 }

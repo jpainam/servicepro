@@ -654,8 +654,8 @@ public class CiviliteController implements Initializable {
                 profilPersonne.setProfil(valueComboProfil);
                 profilPersonne.setPersonne(pers);
                 pers.getProfilPersonnes().add(profilPersonne);
-                Model<ProfilPersonne> model = new Model<>("ProfilPersonne");
-                model.save(profilPersonne);
+                Model<Personne> model = new Model<>("Personne");
+                model.update(pers);
 
                 //System.out.println(pers.getProfilPersonnes());
                 //PersonneModel personneModel = new PersonneModel();

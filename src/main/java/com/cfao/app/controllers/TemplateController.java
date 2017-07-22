@@ -65,7 +65,7 @@ public class TemplateController implements Initializable, Controller {
 
         breadCrumbContainer.getItems().add(createBreadCrumbBar());
         try {
-            cfaoLogo.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
+            cfaoLogo.setImage(new Image(getClass().getResourceAsStream(ResourceBundle.getBundle("Application").getString("app.logo"))));
 
             GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
 

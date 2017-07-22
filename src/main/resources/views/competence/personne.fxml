@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+           <children>
+            <HBox maxWidth="1.7976931348623157E308" prefHeight="32.0" prefWidth="600.0" spacing="10.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </HBox>
+   
+               <TableView fx:id="personneTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                   <columns>
+                       <TableColumn fx:id="nomPersonneColumn" prefWidth="75.0" text="Noms et Prénoms" />
+                       <TableColumn fx:id="telephonePersonneColumn" prefWidth="75.0" text="Téléphone" />
+                       <TableColumn fx:id="societePersonneColumn" prefWidth="75.0" text="Société" />
+                       <TableColumn fx:id="encoursColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="En cours" />
+                       <TableColumn fx:id="acertifierColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="A certifier" />
+                       <TableColumn fx:id="certifieColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Certifié" />
+                   </columns>
+                   <columnResizePolicy>
+                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                   </columnResizePolicy>
+               </TableView>
+           </children>
+       </VBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+
+</fx:root>

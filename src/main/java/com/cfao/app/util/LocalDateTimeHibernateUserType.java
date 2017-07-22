@@ -60,7 +60,7 @@ public class LocalDateTimeHibernateUserType implements EnhancedUserType, Seriali
         return false;
     }
 
-    @Override
+
     public Object nullSafeGet(ResultSet rs, String[] params,
                               SessionImplementor session, Object owner) throws HibernateException,
             SQLException {
@@ -77,7 +77,7 @@ public class LocalDateTimeHibernateUserType implements EnhancedUserType, Seriali
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
-    @Override
+
     public void nullSafeSet(PreparedStatement ps, Object value, int index,
                             SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {

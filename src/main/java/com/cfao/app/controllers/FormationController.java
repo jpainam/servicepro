@@ -6,6 +6,7 @@ import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.reports.JasperTableExample;
+import com.cfao.app.reports.PrintFormation;
 import com.cfao.app.reports.PrintReport;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -410,18 +411,11 @@ public class FormationController implements Initializable {
 
     public void printFormation(ActionEvent actionEvent) {
         try {
-            Task<Void> task = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    new PrintReport().showReport();
-                    return null;
-                }
-            };
-            new Thread(task).start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex);
+            new PrintFormation().showReport();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 }

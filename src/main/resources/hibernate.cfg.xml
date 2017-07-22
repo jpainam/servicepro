@@ -47,8 +47,5 @@
         <mapping class="com.cfao.app.beans.Competence" />
         <mapping class="com.cfao.app.beans.Profilcompetence" />
         <mapping class="com.cfao.app.beans.ProfilcompetenceId" />
-
-
-
-    </session-factory>
+          </session-factory>
 </hibernate-configuration>

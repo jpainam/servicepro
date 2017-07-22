@@ -65,8 +65,8 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         txtAbbreviation.setText(profil.getAbbreviation());
         txtProfil.setText(profil.getLibelle());
         if (profil != null && !profil.getProfilcompetences().isEmpty()) {
-            comboNiveau.setValue(profil.getProfilcompetences().get(0).getNiveau());
-            buildCompetenceTable(profil.getProfilcompetences().get(0).getNiveau());
+            comboNiveau.setValue(profil.getProfilcompetences().iterator().next().getNiveau());
+            buildCompetenceTable(profil.getProfilcompetences().iterator().next().getNiveau());
         }
     }
 
@@ -128,9 +128,9 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
             @Override
             protected ObservableList<Competence> call() throws Exception {
-                if(profil != null) {
+                if (profil != null) {
                     return FXCollections.observableArrayList(new CompetenceModel().getNonCompetences(profil.getCompetences(niveau)));
-                }else{
+                } else {
                     return FXCollections.observableArrayList(new CompetenceModel().getList());
                 }
             }
@@ -138,48 +138,49 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         comboCompetence.itemsProperty().bind(task.valueProperty());
         new ProgressIndicatorUtil(competenceStackPane, task);
         new Thread(task).start();
-        if(profil != null) {
-            competenceTable.itemsProperty().bind(profil.profilcompetencesProperty());
+        if (profil != null) {
+            //competenceTable.itemsProperty().bind(FXCollections.observableArrayList(profil.getProfilcompetences()));
+            competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilcompetences()));
         }
 
     }
 
     public void validerAction(ActionEvent actionEvent) {
-        boolean edit = true;
-        if (profil == null) {
-            profil = new Profil();
-            profil.setProfilcompetences(competenceTable.getItems());
-            edit = false;
+        try {
+            boolean edit = true;
+            if (profil == null) {
+                profil = new Profil();
+                edit = false;
+            }
+            /*Model<Profilcompetence> model = new Model<>("Profilcompetence");
+            for (Profilcompetence competence : profil.getProfilcompetences()) {
+                model.saveOrUpdate(competence);
+            }*/
+            //profil.getProfilcompetences().clear();
+            profil.setAbbreviation(txtAbbreviation.getText());
+            profil.setLibelle(txtProfil.getText());
+            ProfilModel profilModel = new ProfilModel();
+
+            boolean bool;
+            String sms = "";
+            if (edit) {
+                //System.exit(0);
+                bool = profilModel.update(profil);
+                sms = "Modification OK";
+            } else {
+                sms = "Enregistrement OK";
+                bool = profilModel.save(profil);
+            }
+            if (bool) {
+                ServiceproUtil.notify(sms);
+            } else {
+                ServiceproUtil.notify("Une erreur est survenu");
+            }
+            StageManager.loadContent("/views/profil/profil.fxml");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
         }
-        //Niveau niveau = comboNiveau.getSelectionModel().getSelectedItem();
-        /*profil.getProfilcompetences().clear();
-        ObservableList<Profilcompetence> profilcompetences = FXCollections.observableArrayList(new HashSet<>());
-        for (Competence competence : selectedItems) {
-            Profilcompetence profilcompetence = new Profilcompetence(profil, competence, niveau);
-            profilcompetences.add(profilcompetence);
-            //model.save(profilcompetence);
-        }
-        */
-        profil.setAbbreviation(txtAbbreviation.getText());
-        profil.setLibelle(txtProfil.getText());
-        ProfilModel profilModel = new ProfilModel();
-        boolean bool;
-        String sms = "";
-        if (edit) {
-            System.out.println(profil.getProfilcompetences().size());
-            System.exit(0);
-            bool = profilModel.update(profil);
-            sms = "Modification OK";
-        } else {
-            sms = "Enregistrement OK";
-            bool = profilModel.save(profil);
-        }
-        if (bool) {
-            ServiceproUtil.notify(sms);
-        } else {
-            ServiceproUtil.notify("Une erreur est survenu");
-        }
-        StageManager.loadContent("/views/profil/profil.fxml");
     }
 
     public void annulerAction(ActionEvent event) {

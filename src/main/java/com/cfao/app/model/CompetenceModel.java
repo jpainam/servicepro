@@ -1,9 +1,6 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Competence;
-import com.cfao.app.beans.Niveau;
-import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.Profilcompetence;
+import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
 import org.hibernate.*;
@@ -85,6 +82,59 @@ public class CompetenceModel extends Model<Competence> {
             sqlQuery.setParameter("profil", profil.getIdprofil());
             sqlQuery.setParameter("niveau", niveau.getIdniveau());
             return sqlQuery.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            session.close();
+        }
+        return null;
+    }
+
+    /*
+     Quand le mapping de Formationcompetence va marcher
+    public List<Formationcompetence> getFormationByCompetence(Competence competence) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Formationcompetence.class).add(
+                    Restrictions.eq("competence", competence));
+            return criteria.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            session.close();
+        }
+        return null;
+    }
+    */
+    public List<Formation> getFormationByCompetence(Competence competence) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            SQLQuery query = session.createSQLQuery("select formation from formation_competence where competence = :competence");
+            query.setParameter("competence", competence.getIdcompetence());
+           Criteria criteria = session.createCriteria(Formation.class).add(
+                   Restrictions.in("idformation", query.list()));
+            return criteria.list();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            session.close();
+        }
+        return null;
+
+    }
+
+    public List<Profilcompetence> getProfilByCompetence(Competence competence) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Profilcompetence.class).add(
+                    Restrictions.eq("pk.competence", competence));
+            return criteria.list();
         }catch (Exception ex){
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
