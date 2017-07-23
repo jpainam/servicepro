@@ -838,12 +838,12 @@ public class CiviliteController implements Initializable {
     }
 
     public void clicPrev(ActionEvent actionEvent) {
-        if(personneTable.getSelectionModel().getSelectedIndex() >= 0)
+        if(personneTable.getSelectionModel().getSelectedIndex() > 0)
             personneTable.getSelectionModel().selectPrevious();
     }
 
     public void clicNext(ActionEvent actionEvent) {
-        if(personneTable.getSelectionModel().getSelectedIndex() <= personneTable.getItems().size() - 1)
+        if(personneTable.getSelectionModel().getSelectedIndex() < personneTable.getItems().size())
             personneTable.getSelectionModel().selectNext();
     }
 }

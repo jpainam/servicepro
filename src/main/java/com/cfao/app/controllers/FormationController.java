@@ -409,13 +409,28 @@ public class FormationController implements Initializable {
     }
 
 
-    public void printFormation(ActionEvent actionEvent) {
+    public void previousAction(ActionEvent event) {
+        if(formationTable.getSelectionModel().getSelectedIndex() > 0){
+            formationTable.getSelectionModel().selectPrevious();
+        }
+    }
+
+    public void nextAction(ActionEvent event) {
+        if(formationTable.getSelectionModel().getSelectedIndex() < formationTable.getItems().size()){
+            formationTable.getSelectionModel().selectNext();
+        }
+    }
+
+    public void printAction(ActionEvent event) {
+        PrintFormation print = new PrintFormation();
         try {
-            new PrintFormation().showReport();
+            if(formationTable.getSelectionModel().getSelectedItem() != null){
+                print.showReport(formationTable.getSelectionModel().getSelectedItem());
+            }else{
+                print.showReport();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }

@@ -11,6 +11,7 @@ public class Personnel {
     private SimpleStringProperty nom = new SimpleStringProperty();
     private SimpleStringProperty prenom = new SimpleStringProperty();
     private  SimpleStringProperty adresse = new SimpleStringProperty();
+    private  SimpleStringProperty telephone = new SimpleStringProperty();
 
     @Override
     public String toString() {
@@ -88,5 +89,17 @@ public class Personnel {
     @Override
     public int hashCode() {
         return idpersonnel.hashCode();
+    }
+
+    public String getTelephone() {
+        return telephone.get();
+    }
+
+    public SimpleStringProperty telephoneProperty() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone.set(telephone);
     }
 }

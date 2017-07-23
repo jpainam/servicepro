@@ -72,6 +72,9 @@ public class CompetenceController implements Initializable{
     public TableColumn<Profilcompetence, String> niveauProfilColumn;
     public TableView<Profilcompetence> profilTable;
     public StackPane profilStackPane;
+    public Button btnPrevious;
+    public Button btnNext;
+    public Button btnPrint;
 
     CompetencePersonneController personneController;
 
@@ -85,6 +88,9 @@ public class CompetenceController implements Initializable{
         ButtonUtil.edit(btnModifier);
         ButtonUtil.add(btnNouveau);
         ButtonUtil.cancel(btnAnnuler);
+        ButtonUtil.print(btnPrint);
+        ButtonUtil.next(btnNext);
+        ButtonUtil.previous(btnPrevious);
         personneController = new CompetencePersonneController();
         competenceTabPersonne.setContent(personneController);
         ButtonUtil.detailsTab(competenceTabDetails);
@@ -226,5 +232,21 @@ public class CompetenceController implements Initializable{
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
+    }
+
+    public void previousAction(ActionEvent event) {
+        if(competenceTable.getSelectionModel().getSelectedIndex() > 0){
+            competenceTable.getSelectionModel().selectPrevious();
+        }
+    }
+
+    public void nextAction(ActionEvent event) {
+        if(competenceTable.getSelectionModel().getSelectedIndex() < competenceTable.getItems().size()){
+            competenceTable.getSelectionModel().selectNext();
+        }
+    }
+
+    public void printAction(ActionEvent event) {
+
     }
 }

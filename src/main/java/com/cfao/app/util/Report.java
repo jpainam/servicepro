@@ -9,9 +9,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 /**
  * Created by JP on 7/13/2017.
@@ -19,6 +22,7 @@ import java.util.HashMap;
 public class Report {
     protected JasperDesign jasperDesign;
     protected JasperReport jasperReport;
+    protected  BufferedImage logo;
     static{
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -33,7 +37,14 @@ public class Report {
         }
     }
 
-    public Report(){ }
+    public Report(){
+        try {
+            logo = ImageIO.read(getClass().getResource(ResourceBundle.getBundle("Application").getString("app.logo")));
+        }catch (Exception ex){
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
 
     public void showReport(String jrxmlFile, HashMap<String, Object> parameters){
         try {

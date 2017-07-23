@@ -21,16 +21,32 @@ import java.util.*;
  * Created by JP on 7/13/2017.
  */
 public class PrintFormation extends Report {
+    FormationModel formationModel;
+    HashMap<String, Object> parameters;
+    public PrintFormation(){
+        super();
+        formationModel = new FormationModel();
+        parameters = new HashMap<>();
+        parameters.put("logo", logo);
+    }
     public void showReport() throws Exception {
-        FormationModel formationModel = new FormationModel();
         List<Formation> formations = formationModel.getList();
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(formations);
-        HashMap<String, Object> parameters = new HashMap<>();
-        BufferedImage logo = ImageIO.read(getClass().getResource(ResourceBundle.getBundle("Application").getString("app.logo")));
-        parameters.put("logo", logo);
         parameters.put("DS1", formations);
-
         jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("views/formation/formation.jrxml"));
+        jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JasperViewer.viewReport(print, false);
+
+    }
+
+    public void showReport(Formation formation) throws Exception{
+        parameters.put("formation", formation);
+        parameters.put("DSFormateurs", formation.getFormateurs());
+        parameters.put("DSCompetences", formation.getCompetences());
+        parameters.put("DSParticipants", formation.getParticipants());
+        parameters.put("today", new Date());
+        jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("views/formation/details.jrxml"));
         jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
         JasperViewer.viewReport(print, false);
