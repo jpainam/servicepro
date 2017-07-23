@@ -54,7 +54,9 @@ public class CompetenceModel extends Model<Competence> {
                 competencesIds.add(c.getIdcompetence());
             }
             Criteria criteria = session.createCriteria(Competence.class);
-           criteria.add(Restrictions.not(Restrictions.in("idcompetence", competencesIds)));
+            if(!competencesIds.isEmpty()) {
+                criteria.add(Restrictions.not(Restrictions.in("idcompetence", competencesIds)));
+            }
             return criteria.list();
         }catch (Exception ex){
             ex.printStackTrace();

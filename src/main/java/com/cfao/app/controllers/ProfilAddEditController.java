@@ -3,10 +3,7 @@ package com.cfao.app.controllers;
 import antlr.collections.Stack;
 import com.cfao.app.Module;
 import com.cfao.app.StageManager;
-import com.cfao.app.beans.Competence;
-import com.cfao.app.beans.Niveau;
-import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.Profilcompetence;
+import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
@@ -32,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import javax.jws.WebParam;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
@@ -152,24 +150,24 @@ public class ProfilAddEditController extends StackPane implements Initializable 
                 profil = new Profil();
                 edit = false;
             }
-            /*Model<Profilcompetence> model = new Model<>("Profilcompetence");
-            for (Profilcompetence competence : profil.getProfilcompetences()) {
-                model.saveOrUpdate(competence);
-            }*/
-            //profil.getProfilcompetences().clear();
+            if (competenceTable.getItems().size() > 0) {
+                for (Profilcompetence pc : competenceTable.getItems()) {
+                    pc.setProfil(profil);
+                }
+            }
             profil.setAbbreviation(txtAbbreviation.getText());
             profil.setLibelle(txtProfil.getText());
-            ProfilModel profilModel = new ProfilModel();
-
-            boolean bool;
+            profil.setProfilcompetences(FXCollections.observableList(competenceTable.getItems()));
+            Model<Profil> model = new Model<>("Profil");
+            boolean bool = false;
             String sms = "";
             if (edit) {
-                //System.exit(0);
-                bool = profilModel.update(profil);
+                bool = model.update(profil);
                 sms = "Modification OK";
             } else {
                 sms = "Enregistrement OK";
-                bool = profilModel.save(profil);
+                bool = model.save(profil);
+                bool = true;
             }
             if (bool) {
                 ServiceproUtil.notify(sms);
@@ -200,7 +198,10 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         if (comboCompetence.getSelectionModel().getSelectedItem() != null) {
             Competence competence = comboCompetence.getSelectionModel().getSelectedItem();
             Niveau niveau = comboNiveau.getSelectionModel().getSelectedItem();
-            Profilcompetence profilcompetence = new Profilcompetence(profil, competence, niveau);
+            Profilcompetence profilcompetence = new Profilcompetence();
+            profilcompetence.setNiveau(niveau);
+            profilcompetence.setCompetence(competence);
+
             competenceTable.getItems().add(profilcompetence);
             comboCompetence.getItems().remove(competence);
         }

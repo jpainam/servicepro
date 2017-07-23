@@ -3,6 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.FormatDate;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.ServiceproUtil;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -439,16 +441,13 @@ public class CiviliteController implements Initializable {
     public void clickNouveau(ActionEvent actionEvent) {
         if (!btnNouveau.isDisable())
             switch (stateBtnNouveau) {
-
                 case 0:
-
                     disableComponent(btnModifier, true);
                     disableComponent(btnSuppr, true);
                     disableAllComponents(false);
                     btnNouveau.setText("Enregistrer / Save");
                     this.stateBtnNouveau = 1;
                     break;
-
                 case 1:
                     /**
                      * Creation d'une nouvel personne
@@ -460,8 +459,12 @@ public class CiviliteController implements Initializable {
                     personne.setMemo(txtMemo.getText());
                     personne.setTelephone(txtTelephone.getText());
                     personne.setEmail(txtEmail.getText());
-                    personne.setNaissance(Date.valueOf(datePicker.getValue()));
-                    personne.setFincontrat(Date.valueOf(dateFincontrat.getValue()));
+                    if(datePicker.getValue() != null) {
+                        personne.setNaissance(Date.valueOf(datePicker.getValue()));
+                    }
+                    if(dateFincontrat.getValue() != null) {
+                        personne.setFincontrat(Date.valueOf(dateFincontrat.getValue()));
+                    }
                     personne.setPays(comboPays.getValue());
 
                     /*
@@ -570,8 +573,6 @@ public class CiviliteController implements Initializable {
         });
     }
 
-
-
     private void bindPersonne(Personne personne, boolean bind) {
         if (bind) {
             personne.matriculeProperty().bind(txtMatricule.textProperty());
@@ -671,16 +672,13 @@ public class CiviliteController implements Initializable {
             Path source = photo.toPath();
 
             String ds = File.separator;
-            String target = "E:" + ds + "armel" + ds + "projet" + ds + "servicepro" + ds + "target" + ds + "classes" + ds + "documents" + ds + photo.getName();
-
-            Path to = Paths.get(target);
-
-
             try {
-
-                Files.copy(source, Paths.get(target), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
+                URI uri = new URI(getClass().getResource(ResourceBundle.getBundle("Bundle").getString("photo.dir") + ds + photo.getName()).toExternalForm());
+                Path to = Paths.get(uri);
+                Files.copy(source, to, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+            }catch (Exception ex){
+                ex.printStackTrace();
+                AlertUtil.showErrorMessage(ex);
             }
         }
 

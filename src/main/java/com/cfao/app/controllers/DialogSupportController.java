@@ -25,6 +25,7 @@ import javafx.util.Callback;
 
 import javax.persistence.Table;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.ResourceBundle;
@@ -106,13 +107,13 @@ public class DialogSupportController extends AnchorPane implements Initializable
             File file = fileChooser.showOpenDialog(currentStage);
             if (file != null) {
                 Path from = FileSystems.getDefault().getPath(file.getPath());
-                destination = Main.DS + ResourceBundle.getBundle("Bundle").getString("document.dir") + Main.DS + file.getName();
-                Path to = Paths.get(destination);
+                destination = ResourceBundle.getBundle("Bundle").getString("document.dir");
+                URI uri = new URI(destination + Main.DS + file.getName());
+                Path to = Paths.get(uri.getPath());
                 if(to.getParent() == null){
                     Files.createDirectories(to.getParent());
                 }
-
-                Files.copy(from, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
                 fileStatus.setText(file.getName());
             }
         } catch (Exception ex) {
