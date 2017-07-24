@@ -2,8 +2,6 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import javafx.scene.control.ProgressBar;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
 
@@ -13,7 +11,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by JP on 6/11/2017.
@@ -27,7 +24,7 @@ public class Profil implements  Serializable{
     private SimpleStringProperty libelle = new SimpleStringProperty();
     //private ListProperty<ProfilPersonne> profilpersonne = new SimpleListProperty<ProfilPersonne>();
     private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<>();
-    private ListProperty<Profilcompetence> profilcompetences = new SimpleListProperty<>();
+    private ListProperty<ProfilCompetence> profilCompetences = new SimpleListProperty<>();
 
    // private SetProperty<Competence> competences = new SimpleSetProperty<>();
 
@@ -116,23 +113,23 @@ public class Profil implements  Serializable{
     */
     @OneToMany(mappedBy = "pk.profil")
     @Cascade({CascadeType.ALL})
-    public List<Profilcompetence> getProfilcompetences() {
-        return profilcompetences.get();
+    public List<ProfilCompetence> getProfilCompetences() {
+        return profilCompetences.get();
     }
 
-    public ListProperty<Profilcompetence> profilcompetencesProperty() {
-        return profilcompetences;
+    public ListProperty<ProfilCompetence> profilCompetencesProperty() {
+        return profilCompetences;
     }
 
-    public void setProfilcompetences(List<Profilcompetence> profilcompetences) {
-        this.profilcompetences.set(FXCollections.observableList(profilcompetences));
+    public void setProfilCompetences(List<ProfilCompetence> profilCompetences) {
+        this.profilCompetences.set(FXCollections.observableList(profilCompetences));
     }
 
     @Transient
     public List<Competence> getCompetences(Niveau niveau){
         List<Competence> competenceList = new ArrayList<>();
-        if(!this.getProfilcompetences().isEmpty()){
-            for(Profilcompetence pc : this.getProfilcompetences()){
+        if(!this.getProfilCompetences().isEmpty()){
+            for(ProfilCompetence pc : this.getProfilCompetences()){
                 if(pc.getNiveau().equals(niveau)){
                     competenceList.add(pc.getCompetence());
                 }

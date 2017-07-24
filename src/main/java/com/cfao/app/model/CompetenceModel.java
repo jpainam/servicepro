@@ -2,9 +2,7 @@ package com.cfao.app.model;
 
 import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.HibernateUtil;
 import org.hibernate.*;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
@@ -22,15 +20,15 @@ public class CompetenceModel extends Model<Competence> {
         super(className);
     }
 
-    public List<Profilcompetence> getCompetenceParProfil(Profil profil){
+    public List<ProfilCompetence> getCompetenceParProfil(Profil profil){
         Session session = getCurrentSession();
         try {
-            /*Criteria criteria = session.createCriteria(Profilcompetence.class);
+            /*Criteria criteria = session.createCriteria(ProfilCompetence.class);
             criteria.add(Restrictions.eq("profil", profil));
             return criteria.list();*/
             session.beginTransaction();
             Query query = session.createQuery(
-                    "from Profilcompetence as pc " +
+                    "from ProfilCompetence as pc " +
                             "inner join fetch pc.competence co " +
                             "left join fetch co.niveau " +
                             "where pc.profil = :profil");
@@ -70,7 +68,7 @@ public class CompetenceModel extends Model<Competence> {
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
-            /*Query query1 = session.createQuery("select pc.competence from ProfilcompetenceId pc where pc.profil = :profil and pc.niveau = :niveau");
+            /*Query query1 = session.createQuery("select pc.competence from ProfilCompetenceId pc where pc.profil = :profil and pc.niveau = :niveau");
             query1.setParameter("profil", profil);
             query1.setParameter("niveau", niveau);
             Query query2 = session.createQuery("from Competence where idcomptence not in (:competences)");
@@ -130,11 +128,11 @@ public class CompetenceModel extends Model<Competence> {
 
     }
 
-    public List<Profilcompetence> getProfilByCompetence(Competence competence) {
+    public List<ProfilCompetence> getProfilByCompetence(Competence competence) {
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(Profilcompetence.class).add(
+            Criteria criteria = session.createCriteria(ProfilCompetence.class).add(
                     Restrictions.eq("pk.competence", competence));
             return criteria.list();
         }catch (Exception ex){

@@ -1,17 +1,14 @@
 package com.cfao.app.beans;
 
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.awt.datatransfer.FlavorEvent;
 import java.io.Serializable;
 
 /**
  * Created by JP on 7/19/2017.
  */
 @Embeddable
-public class ProfilcompetenceId implements Serializable {
+public class ProfilCompetenceId implements Serializable {
     private Competence competence;
     private Profil profil; // type corresponds to Profil's id
     private Niveau niveau;
@@ -49,7 +46,7 @@ public class ProfilcompetenceId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProfilcompetenceId that = (ProfilcompetenceId) o;
+        ProfilCompetenceId that = (ProfilCompetenceId) o;
 
         if (competence != null ? !competence.equals(that.competence) : that.competence != null) return false;
         if (profil != null ? !profil.equals(that.profil) : that.profil != null) return false;
@@ -66,7 +63,7 @@ public class ProfilcompetenceId implements Serializable {
 
     @Override
     public String toString() {
-        return "ProfilcompetenceId{" +
+        return "ProfilCompetenceId{" +
                 "competence=" + competence +
                 ", profil=" + profil +
                 ", niveau=" + niveau +

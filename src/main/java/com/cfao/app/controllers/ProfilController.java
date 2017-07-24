@@ -3,8 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.Profilcompetence;
-import com.cfao.app.model.CompetenceModel;
+import com.cfao.app.beans.ProfilCompetence;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
@@ -17,9 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -28,7 +25,6 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,14 +37,14 @@ public class ProfilController implements Initializable {
     public TableColumn libelleColumn;
     public TableView<Profil> profilTable;
 
-    public TableColumn<Profilcompetence, Boolean> fondamentalColumn;
-    public TableColumn<Profilcompetence, Boolean> initialColumn;
-    public TableColumn<Profilcompetence, Boolean> avanceColumn;
-    public TableColumn<Profilcompetence, Boolean> expertColumn;
-    public TableColumn<Profilcompetence, Competence> listecompetenceColumn;
-    public TableColumn<Profilcompetence, Boolean> connaissanceColumn;
-    public TableColumn<Profilcompetence, Boolean> competenceColumn;
-    public TableView<Profilcompetence> competenceTable;
+    public TableColumn<ProfilCompetence, Boolean> fondamentalColumn;
+    public TableColumn<ProfilCompetence, Boolean> initialColumn;
+    public TableColumn<ProfilCompetence, Boolean> avanceColumn;
+    public TableColumn<ProfilCompetence, Boolean> expertColumn;
+    public TableColumn<ProfilCompetence, Competence> listecompetenceColumn;
+    public TableColumn<ProfilCompetence, Boolean> connaissanceColumn;
+    public TableColumn<ProfilCompetence, Boolean> competenceColumn;
+    public TableView<ProfilCompetence> competenceTable;
     public HBox researchBox;
     public AnchorPane rootPane1;
     public VBox rootPane2;
@@ -87,7 +83,7 @@ public class ProfilController implements Initializable {
 
     private void fillCompetenceTable(Profil profil) {
 
-        System.out.println(profil.getProfilcompetences());
+        System.out.println(profil.getProfilCompetences());
         setColumnProperty(initialColumn,  ProfilModel.INITIAL);
         setColumnProperty(fondamentalColumn,  ProfilModel.FONDAMENTAL);
         setColumnProperty(avanceColumn, ProfilModel.AVANCE);
@@ -114,15 +110,15 @@ public class ProfilController implements Initializable {
             Competence competence = param.getValue().getCompetence();
             return new SimpleObjectProperty<>(competence);
         });
-        competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilcompetences()));
+        competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilCompetences()));
 
     }
 
-    private void setColumnProperty(TableColumn<Profilcompetence, Boolean> tableColumn, int niveau) {
+    private void setColumnProperty(TableColumn<ProfilCompetence, Boolean> tableColumn, int niveau) {
         tableColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         tableColumn.setCellValueFactory(param -> {
-            Profilcompetence profilcompetence = param.getValue();
-            if (profilcompetence.getNiveau().getIdniveau() == niveau) {
+            ProfilCompetence profilCompetence = param.getValue();
+            if (profilCompetence.getNiveau().getIdniveau() == niveau) {
                 return new SimpleBooleanProperty(true);
             } else {
                 return new SimpleBooleanProperty(false);

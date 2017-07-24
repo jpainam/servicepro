@@ -1,21 +1,13 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Niveau;
 import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.Profilcompetence;
+import com.cfao.app.beans.ProfilCompetence;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.HibernateUtil;
-import javafx.collections.ObservableSet;
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,11 +26,11 @@ public class ProfilModel extends  Model<Profil> {
         super(className);
     }
 
-    public List<Profilcompetence> getCompetenceByProfil(Profil profil, Niveau niveau){
+    public List<ProfilCompetence> getCompetenceByProfil(Profil profil, Niveau niveau){
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(Profilcompetence.class);
+            Criteria criteria = session.createCriteria(ProfilCompetence.class);
             criteria.add(Restrictions.eq("profil", profil)).add(Restrictions.eq("niveau", niveau));
             return criteria.list();
         }catch (Exception ex){
@@ -54,7 +46,7 @@ public class ProfilModel extends  Model<Profil> {
         try{
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             Transaction tx = session.beginTransaction();
-            /*Criteria criteria = session.createCriteria(Profilcompetence.class, "pc");
+            /*Criteria criteria = session.createCriteria(ProfilCompetence.class, "pc");
             criteria.add(Restrictions.eq("PROFIL", profil.getIdprofil()))
                     .createCriteria("competence", JoinType.INNER_JOIN)
                     .createCriteria("niveau", JoinType.INNER_JOIN)

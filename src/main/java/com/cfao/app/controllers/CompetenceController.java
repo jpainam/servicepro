@@ -1,49 +1,30 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.Profilcompetence;
-import com.cfao.app.beans.Societe;
+import com.cfao.app.beans.ProfilCompetence;
 import com.cfao.app.model.CompetenceModel;
-import com.cfao.app.model.FormationModel;
-import com.cfao.app.model.Model;
-import com.cfao.app.model.SocieteModel;
 import com.cfao.app.util.*;
-import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
-import org.controlsfx.control.textfield.CustomTextField;
 
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 /**
  * Created by JP on 6/14/2017.
@@ -68,9 +49,9 @@ public class CompetenceController implements Initializable{
     public TableColumn<Formation, String> titreFormationColumn;
     public TableColumn<Formation, LocalDate> datedebutFormationColumn;
     public TableColumn<Formation, LocalDate> datefinFormationColumn;
-    public TableColumn<Profilcompetence, String> libelleProfilColumn;
-    public TableColumn<Profilcompetence, String> niveauProfilColumn;
-    public TableView<Profilcompetence> profilTable;
+    public TableColumn<ProfilCompetence, String> libelleProfilColumn;
+    public TableColumn<ProfilCompetence, String> niveauProfilColumn;
+    public TableView<ProfilCompetence> profilTable;
     public StackPane profilStackPane;
     public Button btnPrevious;
     public Button btnNext;
@@ -201,9 +182,9 @@ public class CompetenceController implements Initializable{
             return;
         System.out.println(competence);
 
-        Task<ObservableList<Profilcompetence>> task = new Task<ObservableList<Profilcompetence>>() {
+        Task<ObservableList<ProfilCompetence>> task = new Task<ObservableList<ProfilCompetence>>() {
             @Override
-            protected ObservableList<Profilcompetence> call() throws Exception {
+            protected ObservableList<ProfilCompetence> call() throws Exception {
                 return FXCollections.observableArrayList(new CompetenceModel().getProfilByCompetence(competence));
             }
         };

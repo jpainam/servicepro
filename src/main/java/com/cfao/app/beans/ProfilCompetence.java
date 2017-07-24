@@ -1,8 +1,5 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableSet;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,13 +13,13 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.profil", joinColumns = @JoinColumn(name = "PROFIL")),
         @AssociationOverride(name = "pk.competence", joinColumns = @JoinColumn(name = "COMPETENCE")),
         @AssociationOverride(name = "pk.niveau", joinColumns = @JoinColumn(name = "NIVEAU"))  })
-public class Profilcompetence implements Serializable {
+public class ProfilCompetence implements Serializable {
 
-    private ProfilcompetenceId pk = new ProfilcompetenceId();
+    private ProfilCompetenceId pk = new ProfilCompetenceId();
 
-    public Profilcompetence() {
+    public ProfilCompetence() {
     }
-   public Profilcompetence(Profil profil, Competence competence, Niveau niveau){
+   public ProfilCompetence(Profil profil, Competence competence, Niveau niveau){
         this.pk.setProfil(profil);
         this.pk.setCompetence(competence);
         this.pk.setNiveau(niveau);
@@ -30,11 +27,11 @@ public class Profilcompetence implements Serializable {
 
 
     @EmbeddedId
-    public ProfilcompetenceId getPk() {
+    public ProfilCompetenceId getPk() {
         return pk;
     }
 
-    public void setPk(ProfilcompetenceId pk) {
+    public void setPk(ProfilCompetenceId pk) {
         this.pk = pk;
     }
 
@@ -71,7 +68,7 @@ public class Profilcompetence implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Profilcompetence that = (Profilcompetence) o;
+        ProfilCompetence that = (ProfilCompetence) o;
 
         if (getPk() != null ? !getPk().equals(that.getPk())
                 : that.getPk() != null)
@@ -82,7 +79,7 @@ public class Profilcompetence implements Serializable {
 
     @Override
     public String toString() {
-        return "Profilcompetence{" +
+        return "ProfilCompetence{" +
                 "pk=" + pk +
                 '}';
     }

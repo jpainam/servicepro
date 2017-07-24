@@ -1,5 +1,6 @@
 package com.cfao.app.util;
 
+import javafx.application.Platform;
 import org.controlsfx.control.Notifications;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,9 +24,15 @@ public class HibernateUtil {
             configuration.configure(HIBERNATE_CONFIG);
             serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             return configuration.buildSessionFactory(serviceRegistry);
-        }catch (Throwable ex){
-            Notifications.create().title("Connexion à la Base de données")
-                    .text("Impossible d'ouvrir une connexion à la Base de données ").showError();
+        }catch (Exception ex){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Notifications.create().title("Connexion à la Base de données")
+                            .text("Impossible d'ouvrir une connexion à la Base de données ").showError();
+                }
+            });
+            ex.printStackTrace();
             throw new ExceptionInInitializerError(ex);
         }
     }

@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.cfao.app.beans.Profil" table="profils">
+    <class name="com.cfao.app.beans.Profil" table="profil">
         <id name="idprofil" type="int" column="idprofil">
             <generator class="assigned"/>
         </id>

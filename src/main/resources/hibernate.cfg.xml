@@ -7,6 +7,7 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/servicepro</property>
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -20,8 +21,6 @@
         <mapping resource="mapping/pays.hbm.xml" />
 
         <mapping resource="mapping/section.hbm.xml" />
-
-        <mapping resource="mapping/niveaucompetence.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
         <mapping resource="mapping/etatformation.hbm.xml" />
@@ -46,7 +45,7 @@
         <mapping class="com.cfao.app.beans.Poste" />
         <mapping class="com.cfao.app.beans.PosteId" />
         <mapping class="com.cfao.app.beans.Competence" />
-        <mapping class="com.cfao.app.beans.Profilcompetence" />
-        <mapping class="com.cfao.app.beans.ProfilcompetenceId" />
+        <mapping class="com.cfao.app.beans.ProfilCompetence" />
+        <mapping class="com.cfao.app.beans.ProfilCompetenceId" />
           </session-factory>
 </hibernate-configuration>

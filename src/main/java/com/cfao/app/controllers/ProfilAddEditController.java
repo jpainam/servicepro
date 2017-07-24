@@ -1,49 +1,33 @@
 package com.cfao.app.controllers;
 
-import antlr.collections.Stack;
-import com.cfao.app.Module;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
-import com.jfoenix.controls.JFXButton;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
-import javax.jws.WebParam;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by JP on 6/29/2017.
  */
 public class ProfilAddEditController extends StackPane implements Initializable {
-    public TableView<Profilcompetence> competenceTable;
+    public TableView<ProfilCompetence> competenceTable;
 
-    public TableColumn<Profilcompetence, Profilcompetence> intituleColumn;
-    public TableColumn<Profilcompetence, Boolean> possedeColumn;
-    public TableColumn<Profilcompetence, Boolean> competenceColumn;
-    public TableColumn<Profilcompetence, Boolean> connaissanceColumn;
+    public TableColumn<ProfilCompetence, ProfilCompetence> intituleColumn;
+    public TableColumn<ProfilCompetence, Boolean> possedeColumn;
+    public TableColumn<ProfilCompetence, Boolean> competenceColumn;
+    public TableColumn<ProfilCompetence, Boolean> connaissanceColumn;
     public TextField txtProfil;
     public TextField txtAbbreviation;
     public Button btnAnnuler;
@@ -62,9 +46,9 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         this.profil = profil;
         txtAbbreviation.setText(profil.getAbbreviation());
         txtProfil.setText(profil.getLibelle());
-        if (profil != null && !profil.getProfilcompetences().isEmpty()) {
-            comboNiveau.setValue(profil.getProfilcompetences().iterator().next().getNiveau());
-            buildCompetenceTable(profil.getProfilcompetences().iterator().next().getNiveau());
+        if (profil != null && !profil.getProfilCompetences().isEmpty()) {
+            comboNiveau.setValue(profil.getProfilCompetences().iterator().next().getNiveau());
+            buildCompetenceTable(profil.getProfilCompetences().iterator().next().getNiveau());
         }
     }
 
@@ -138,7 +122,7 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         new Thread(task).start();
         if (profil != null) {
             //competenceTable.itemsProperty().bind(FXCollections.observableArrayList(profil.getProfilcompetences()));
-            competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilcompetences()));
+            competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilCompetences()));
         }
 
     }
@@ -151,13 +135,13 @@ public class ProfilAddEditController extends StackPane implements Initializable 
                 edit = false;
             }
             if (competenceTable.getItems().size() > 0) {
-                for (Profilcompetence pc : competenceTable.getItems()) {
+                for (ProfilCompetence pc : competenceTable.getItems()) {
                     pc.setProfil(profil);
                 }
             }
             profil.setAbbreviation(txtAbbreviation.getText());
             profil.setLibelle(txtProfil.getText());
-            profil.setProfilcompetences(FXCollections.observableList(competenceTable.getItems()));
+            profil.setProfilCompetences(FXCollections.observableList(competenceTable.getItems()));
             Model<Profil> model = new Model<>("Profil");
             boolean bool = false;
             String sms = "";
@@ -198,20 +182,20 @@ public class ProfilAddEditController extends StackPane implements Initializable 
         if (comboCompetence.getSelectionModel().getSelectedItem() != null) {
             Competence competence = comboCompetence.getSelectionModel().getSelectedItem();
             Niveau niveau = comboNiveau.getSelectionModel().getSelectedItem();
-            Profilcompetence profilcompetence = new Profilcompetence();
-            profilcompetence.setNiveau(niveau);
-            profilcompetence.setCompetence(competence);
+            ProfilCompetence profilCompetence = new ProfilCompetence();
+            profilCompetence.setNiveau(niveau);
+            profilCompetence.setCompetence(competence);
 
-            competenceTable.getItems().add(profilcompetence);
+            competenceTable.getItems().add(profilCompetence);
             comboCompetence.getItems().remove(competence);
         }
     }
 
     public void supprimerAction(ActionEvent event) {
         if (competenceTable.getSelectionModel().getSelectedItem() != null) {
-            Profilcompetence profilcompetence = competenceTable.getSelectionModel().getSelectedItem();
-            competenceTable.getItems().remove(profilcompetence);
-            comboCompetence.getItems().add(profilcompetence.getCompetence());
+            ProfilCompetence profilCompetence = competenceTable.getSelectionModel().getSelectedItem();
+            competenceTable.getItems().remove(profilCompetence);
+            comboCompetence.getItems().add(profilCompetence.getCompetence());
         }
     }
 

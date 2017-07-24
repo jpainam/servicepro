@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.cfao.app.beans.Profilcompetence" table="profil_competence">
+    <class name="com.cfao.app.beans.ProfilCompetence" table="profil_competence">
         <composite-id>
             <key-many-to-one name="competence" class="com.cfao.app.beans.Competence">
                 <column name="competence"/>

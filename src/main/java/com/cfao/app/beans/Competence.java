@@ -21,7 +21,7 @@ public class Competence implements Serializable{
     private SimpleIntegerProperty idcompetence = new SimpleIntegerProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
     private SimpleStringProperty type = new SimpleStringProperty();
-    private ListProperty<Profilcompetence> profilcompetences = new SimpleListProperty<>();
+    private ListProperty<ProfilCompetence> profilcompetences = new SimpleListProperty<>();
 
     public Competence(){}
 
@@ -88,15 +88,15 @@ public class Competence implements Serializable{
     }
 
     @OneToMany(mappedBy = "pk.competence")
-    public List<Profilcompetence> getProfilcompetences() {
+    public List<ProfilCompetence> getProfilcompetences() {
         return profilcompetences.get();
     }
 
-    public ListProperty<Profilcompetence> profilcompetencesProperty() {
+    public ListProperty<ProfilCompetence> profilcompetencesProperty() {
         return profilcompetences;
     }
 
-    public void setProfilcompetences(List<Profilcompetence> profilcompetences) {
+    public void setProfilcompetences(List<ProfilCompetence> profilcompetences) {
         this.profilcompetences.set(FXCollections.observableArrayList(profilcompetences));
     }
 }
