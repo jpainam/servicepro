@@ -22,15 +22,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by JP on 7/13/2017.
  */
-public class ParticipantController extends AnchorPane implements Initializable {
+public class FormationParticipantController extends AnchorPane implements Initializable {
     private Formation formation = null;
     private FormationModel formationModel = new FormationModel();
     private PersonneModel personneModel = new PersonneModel();
@@ -66,7 +63,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
     // search participant
     SearchBox searchBox3 = new SearchBox();
 
-    public ParticipantController() {
+    public FormationParticipantController() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/participant.fxml"));
             loader.setController(this);
@@ -111,7 +108,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
             protected ObservableList<Personne> call() throws Exception {
-                if (formation.getParticipants().isEmpty()) {
+                if (formation.getPersonnes().isEmpty()) {
                     return FXCollections.observableArrayList(personneModel.getList());
                 } else {
                     return FXCollections.observableArrayList(formationModel.getNonParticipants(formation));
@@ -125,7 +122,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
         Task<ObservableList<Personne>> task1 = new Task<ObservableList<Personne>>() {
             @Override
             protected ObservableList<Personne> call() throws Exception {
-                return FXCollections.observableArrayList(formation.getParticipants());
+                return FXCollections.observableArrayList(formation.getPersonnes());
             }
         };
         participantTable.itemsProperty().bind(task1.valueProperty());
@@ -205,7 +202,6 @@ public class ParticipantController extends AnchorPane implements Initializable {
 
     private void move(TableView<Personne> viewA, TableView<Personne> viewB, List<Personne> items) {
         Iterator<Personne> var4 = items.iterator();
-
         while (var4.hasNext()) {
             Personne item = var4.next();
             viewA.getItems().remove(item);
@@ -226,7 +222,7 @@ public class ParticipantController extends AnchorPane implements Initializable {
         } else {
             btnModifierParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
             ServiceproUtil.setDisable(true, participantToPersonneAll, participantToPersonne, personneToParticipantAll, personneToParticipant);
-            formation.setParticipants(participantTable.getItems());
+            formation.setPersonnes(participantTable.getItems());
             if (formationModel.update(formation)) {
                 ServiceproUtil.notify("Participants ajoutés avec succès");
             } else {

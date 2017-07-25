@@ -153,7 +153,7 @@ public class Societe {
     }
 
     /*@OneToMany(mappedBy = "societe")
-    public List<Personne> getPersonnes() {
+    public List<Personne> getPersonne() {
         return FXCollections.observableArrayList(personnes.get());
     }
 
@@ -161,7 +161,7 @@ public class Societe {
         return personnes;
     }
 
-    public void setPersonnes(List<Personne> personnes) {
+    public void setPersonne(List<Personne> personnes) {
         this.personnes.set(FXCollections.observableArrayList(personnes));
     }
     */

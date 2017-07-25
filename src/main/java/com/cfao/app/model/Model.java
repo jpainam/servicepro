@@ -49,24 +49,8 @@ public class Model<T> {
         try {
             Criteria criteria;
             session.beginTransaction();
-
             criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex);
-        } finally {
-            session.close();
-        }
-        return null;
-    }
-
-    public void saveOrUpdate(T type) {
-        Session session = getCurrentSession();
-        try {
-            session.beginTransaction();
-            session.saveOrUpdate(type);
-            session.getTransaction().commit();
         } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
@@ -75,6 +59,25 @@ public class Model<T> {
                 session.close();
             }
         }
+        return null;
+    }
+
+    public boolean saveOrUpdate(T type) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(type);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if(session.isOpen()) {
+                session.close();
+            }
+        }
+        return false;
     }
 
 
@@ -103,6 +106,7 @@ public class Model<T> {
             session.beginTransaction();
             session.update(type);
             session.getTransaction().commit();
+
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();

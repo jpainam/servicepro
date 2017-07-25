@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 7/18/2017.
  */
-public class CompetenceFormationController extends AnchorPane implements Initializable {
+public class FormationCompetenceController extends AnchorPane implements Initializable {
     private Formation formation = null;
     public HBox hboxCompetenceAssociee;
     // Search competences
@@ -34,7 +34,7 @@ public class CompetenceFormationController extends AnchorPane implements Initial
     public Button btnPreviousCompetence;
     public Button btnPrintCompetence;
 
-    public CompetenceFormationController() {
+    public FormationCompetenceController() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/competence.fxml"));
             loader.setController(this);

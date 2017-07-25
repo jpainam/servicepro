@@ -1,12 +1,13 @@
 package com.cfao.app.beans;
 
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,19 +24,21 @@ public class Formation {
     private ObjectProperty<Modele> modele = new SimpleObjectProperty<>();
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
-    private ObjectProperty<Etatformation> etatformation = new SimpleObjectProperty<>();
-    private ObjectProperty<Typeformation> typeformation = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<LocalDate> datedebut = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<LocalDate> datefin = new SimpleObjectProperty<>();
+    private ObjectProperty<EtatFormation> etatFormation = new SimpleObjectProperty<>();
+    private ObjectProperty<Typeformation> typeFormation = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<Date> datedebut = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<Date> datefin = new SimpleObjectProperty<>();
 
-    private ListProperty<Personnel> formateurs = new SimpleListProperty<>();
-    private ListProperty<Personne> participants = new SimpleListProperty<>();
-    private ListProperty<Support> supports = new SimpleListProperty<>();
+    private ListProperty<Personnel> personnels = new SimpleListProperty<>();
+    private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
     private ListProperty<Competence> competences = new SimpleListProperty<>();
+    //private SetProperty<Competence> prerequis = new SimpleSetProperty<>();
+    private ListProperty<Personne> personnes = new SimpleListProperty<>();
 
+    public Formation(){}
     public Formation(int idformation, String codeformation, Modele modele, String titre,
-                     String description, LocalDate datedebut,
-                     LocalDate datefin) {
+                     String description, Date datedebut,
+                     Date datefin) {
         this.idformation.set(idformation);
         this.codeformation.set(codeformation);
         this.modele.set(modele);
@@ -45,189 +48,167 @@ public class Formation {
         this.datefin.set(datefin);
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IDFORMATION")
-    public int getIdformation() {
-        return idformation.get();
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name="IDFORMATION", unique=true, nullable=false)
+    public Integer getIdformation() {
+        return this.idformation.get();
     }
 
-    public SimpleIntegerProperty idformationProperty() {
-        return idformation;
-    }
-
-    public void setIdformation(int idformation) {
+    public void setIdformation(Integer idformation) {
         this.idformation.set(idformation);
     }
 
-    @Column(name = "CODEFORMATION")
-    public String getCodeformation() {
-        return codeformation.get();
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ETATFORMATION")
+    public EtatFormation getEtatFormation() {
+        return this.etatFormation.get();
     }
 
-    public SimpleStringProperty codeformationProperty() {
-        return codeformation;
+    public void setEtatFormation(EtatFormation etatFormation) {
+        this.etatFormation.set(etatFormation);
     }
 
-    public void setCodeformation(String codeformation) {
-        this.codeformation.set(codeformation);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "MODELE")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="MODELE")
     public Modele getModele() {
-        return modele.get();
+        return this.modele.get();
     }
 
     public void setModele(Modele modele) {
         this.modele.set(modele);
     }
 
-    @Column(name = "TITRE")
-    public String getTitre() {
-        return titre.get();
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TYPEFORMATION")
+    public Typeformation getTypeFormation() {
+        return this.typeFormation.get();
     }
 
-    public SimpleStringProperty titreProperty() {
-        return titre;
+    public void setTypeFormation(Typeformation typeFormation) {
+        this.typeFormation.set(typeFormation);
+    }
+
+
+    @Column(name="CODEFORMATION", nullable=false, length=15)
+    public String getCodeformation() {
+        return this.codeformation.get();
+    }
+
+    public void setCodeformation(String codeformation) {
+        this.codeformation.set(codeformation);
+    }
+
+
+    @Column(name="TITRE", nullable=false, length=150)
+    public String getTitre() {
+        return this.titre.get();
     }
 
     public void setTitre(String titre) {
         this.titre.set(titre);
     }
 
-    @Column(name = "DESCRIPTION")
-    public String getDescription() {
-        return description.get();
-    }
 
-    public SimpleStringProperty descriptionProperty() {
-        return description;
+    @Column(name="DESCRIPTION", length=65535)
+    public String getDescription() {
+        return this.description.get();
     }
 
     public void setDescription(String description) {
         this.description.set(description);
     }
 
-    @Column(name = "DATEDEBUT")
+    @Temporal(TemporalType.DATE)
+    @Column(name="DATEDEBUT", length=10)
     public Date getDatedebut() {
-        return Date.valueOf(datedebut.get());
-    }
-
-    public SimpleObjectProperty<LocalDate> datedebutProperty() {
-        return datedebut;
+        return this.datedebut.get();
     }
 
     public void setDatedebut(Date datedebut) {
-        this.datedebut.set(datedebut.toLocalDate());
+        this.datedebut.set(datedebut);
     }
 
-    @Column(name = "DATEFIN")
+    @Temporal(TemporalType.DATE)
+    @Column(name="DATEFIN", length=10)
     public Date getDatefin() {
-        return Date.valueOf(datefin.get());
-    }
-
-    public SimpleObjectProperty<LocalDate> datefinProperty() {
-        return datefin;
+        return this.datefin.get();
     }
 
     public void setDatefin(Date datefin) {
-        this.datefin.set(datefin.toLocalDate());
+        this.datefin.set(datefin);
     }
 
-    public Formation(){}
-
-    @Override
-    public String toString() {
-        return getTitre();
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="formateurs", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) })
+    public List<Personnel> getPersonnels() {
+        return this.personnels;
     }
 
-
-    @ManyToMany()
-    @JoinTable(name = "formateurs", joinColumns = {@JoinColumn(name = "FORMATION")},
-            inverseJoinColumns = {@JoinColumn(name = "PERSONNEL")})
-    public java.util.List<Personnel> getFormateurs() {
-        return formateurs.get();
+    public void setPersonnels(List<Personnel> personnels) {
+        this.personnels.set(FXCollections.observableArrayList(personnels));
     }
 
-    public ListProperty<Personnel> formateursProperty() {
-        return formateurs;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
+    public List<SupportFormation> getSupportFormations() {
+        return this.supportFormations.get();
     }
 
-    public void setFormateurs(List<Personnel> formateurs) {
-        this.formateurs.set(FXCollections.observableList(formateurs));
+    public void setSupportFormations(List<SupportFormation> supportFormations) {
+        this.supportFormations.set(FXCollections.observableArrayList(supportFormations));
     }
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "ETATFORMATION")
-    public Etatformation getEtatformation() {
-        return etatformation.get();
+    /*@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="prerequis", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) })
+    public Set<Competence> getCompetenceses() {
+        return this.competenceses;
     }
 
-    public ObjectProperty<Etatformation> etatformationProperty() {
-        return etatformation;
+    public void setCompetences(Set<Competences> competenceses) {
+        this.competenceses = competenceses;
     }
+    */
 
-    public void setEtatformation(Etatformation etatformation) {
-        this.etatformation.set(etatformation);
-    }
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "TYPEFORMATION")
-    public Typeformation getTypeformation() {
-        return typeformation.get();
-    }
-
-    public ObjectProperty<Typeformation> typeformationProperty() {
-        return typeformation;
-    }
-
-    public void setTypeformation(Typeformation typeformation) {
-        this.typeformation.set(typeformation);
-    }
-
-    @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "support_formation", joinColumns = {@JoinColumn(name="FORMATION")},
-    inverseJoinColumns = {@JoinColumn(name="SUPPORT")})
-    public List<Support> getSupports() {
-        return supports.get();
-    }
-
-    public ListProperty<Support> supportsProperty() {
-        return supports;
-    }
-
-    public void setSupports(List<Support> supports) {
-        this.supports.set(FXCollections.observableList(supports));
-    }
-
-    @ManyToMany()
-    @JoinTable(name = "formation_personne", joinColumns = {@JoinColumn(name = "FORMATION")},
-            inverseJoinColumns = {@JoinColumn(name = "PERSONNE")})
-    public List<Personne> getParticipants() {
-        return participants.get();
-    }
-
-    public ListProperty<Personne> participantsProperty() {
-        return participants;
-    }
-
-    public void setParticipants(List<Personne> participants) {
-        this.participants.set(FXCollections.observableArrayList(participants));
-    }
-
-    @ManyToMany()
-    @JoinTable(name = "formation_competence", joinColumns = {@JoinColumn(name = "FORMATION")},
-            inverseJoinColumns = {@JoinColumn(name = "COMPETENCE")})
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="formation_competence", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) })
     public List<Competence> getCompetences() {
-        return competences.get();
-    }
-
-    public ListProperty<Competence> competencesProperty() {
-        return competences;
+        return this.competences.get();
     }
 
     public void setCompetences(List<Competence> competences) {
         this.competences.set(FXCollections.observableArrayList(competences));
     }
+
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="PERSONNE", nullable=false, updatable=false) })
+    public List<Personne> getPersonnes() {
+        return this.personnes;
+    }
+
+    public void setPersonnes(List<Personne> personnes) {
+        this.personnes.set(FXCollections.observableArrayList(personnes));
+    }
+
+
+    public SimpleStringProperty titreProperty() {
+        return titre;
+    }
+
+    public ObjectProperty<LocalDate> datedebutProperty() {
+        return new SimpleObjectProperty<>(new java.sql.Date(datedebut.get().getTime()).toLocalDate());
+
+    }
+
+    public ObjectProperty<LocalDate> datefinProperty() {
+        return new SimpleObjectProperty<>(new java.sql.Date(datefin.get().getTime()).toLocalDate());
+    }
 }
+
+

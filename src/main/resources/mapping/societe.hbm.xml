@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.cfao.app.beans.Societe" table="societes">
+    <class name="com.cfao.app.beans.Societe" table="societe">
         <id name="idsociete" type="int" column="idsociete">
             <generator class="assigned"/>
         </id>

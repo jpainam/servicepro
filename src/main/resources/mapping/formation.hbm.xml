@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.cfao.app.beans.Formation" table="formations">
+    <class name="com.cfao.app.beans.Formation" table="formation">
         <id name="idformation" type="int" column="idformation">
             <generator class="assigned"/>
         </id>

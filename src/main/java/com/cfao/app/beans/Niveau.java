@@ -28,7 +28,7 @@ public class Niveau implements Serializable{
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IDNIVEAU")
     public int getIdniveau (){
         return this.idniveau.get();

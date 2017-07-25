@@ -3,7 +3,6 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.ProfilCompetence;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
@@ -37,14 +36,14 @@ public class ProfilController implements Initializable {
     public TableColumn libelleColumn;
     public TableView<Profil> profilTable;
 
-    public TableColumn<ProfilCompetence, Boolean> fondamentalColumn;
-    public TableColumn<ProfilCompetence, Boolean> initialColumn;
-    public TableColumn<ProfilCompetence, Boolean> avanceColumn;
-    public TableColumn<ProfilCompetence, Boolean> expertColumn;
-    public TableColumn<ProfilCompetence, Competence> listecompetenceColumn;
-    public TableColumn<ProfilCompetence, Boolean> connaissanceColumn;
-    public TableColumn<ProfilCompetence, Boolean> competenceColumn;
-    public TableView<ProfilCompetence> competenceTable;
+    public TableColumn<Competence, Boolean> fondamentalColumn;
+    public TableColumn<Competence, Boolean> initialColumn;
+    public TableColumn<Competence, Boolean> avanceColumn;
+    public TableColumn<Competence, Boolean> expertColumn;
+    public TableColumn<Competence, Competence> listecompetenceColumn;
+    public TableColumn<Competence, Boolean> connaissanceColumn;
+    public TableColumn<Competence, Boolean> competenceColumn;
+    public TableView<Competence> competenceTable;
     public HBox researchBox;
     public AnchorPane rootPane1;
     public VBox rootPane2;
@@ -83,13 +82,13 @@ public class ProfilController implements Initializable {
 
     private void fillCompetenceTable(Profil profil) {
 
-        System.out.println(profil.getProfilCompetences());
+        System.out.println(profil.getCompetences());
         setColumnProperty(initialColumn,  ProfilModel.INITIAL);
         setColumnProperty(fondamentalColumn,  ProfilModel.FONDAMENTAL);
         setColumnProperty(avanceColumn, ProfilModel.AVANCE);
         setColumnProperty(expertColumn,  ProfilModel.EXPERT);
         competenceColumn.setCellValueFactory(param -> {
-            Competence competence = param.getValue().getCompetence();
+            Competence competence = param.getValue();
             if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
                 return new SimpleBooleanProperty(true);
             } else {
@@ -98,7 +97,7 @@ public class ProfilController implements Initializable {
         });
         competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         connaissanceColumn.setCellValueFactory(param -> {
-            Competence competence = param.getValue().getCompetence();
+            Competence competence = param.getValue();
             if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
                 return new SimpleBooleanProperty(true);
             } else {
@@ -107,22 +106,23 @@ public class ProfilController implements Initializable {
         });
         connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         listecompetenceColumn.setCellValueFactory(param -> {
-            Competence competence = param.getValue().getCompetence();
+            Competence competence = param.getValue();
             return new SimpleObjectProperty<>(competence);
         });
-        competenceTable.setItems(FXCollections.observableArrayList(profil.getProfilCompetences()));
+        competenceTable.setItems(FXCollections.observableArrayList(profil.getCompetences()));
 
     }
 
-    private void setColumnProperty(TableColumn<ProfilCompetence, Boolean> tableColumn, int niveau) {
+    private void setColumnProperty(TableColumn<Competence, Boolean> tableColumn, int niveau) {
         tableColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         tableColumn.setCellValueFactory(param -> {
-            ProfilCompetence profilCompetence = param.getValue();
-            if (profilCompetence.getNiveau().getIdniveau() == niveau) {
-                return new SimpleBooleanProperty(true);
-            } else {
-                return new SimpleBooleanProperty(false);
+            Competence competence = param.getValue();
+            if(competence.getNiveau() != null) {
+                if (competence.getNiveau().getIdniveau() == niveau) {
+                    return new SimpleBooleanProperty(true);
+                }
             }
+            return new SimpleBooleanProperty(false);
         });
 
     }

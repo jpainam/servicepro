@@ -62,7 +62,7 @@ public class Formationpersonne {
         if(obj instanceof Formationpersonne){
             Formationpersonne fp = (Formationpersonne)obj;
             if(fp.getFormation().getIdformation() == this.getFormation().getIdformation() &&
-                    fp.getPersonne().getIdPersonne() == this.getPersonne().getIdPersonne()){
+                    fp.getPersonne().getIdpersonne() == this.getPersonne().getIdpersonne()){
                 return true;
             }
         }

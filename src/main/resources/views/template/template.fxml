@@ -48,7 +48,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Formations">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#showFormation" text="Liste des formations" />
+                                <MenuItem mnemonicParsing="false" onAction="#showFormation" text="Liste des formation" />
                                 <MenuItem mnemonicParsing="false" text="Nouvelle formation" />
                             </items>
                         </Menu>

@@ -42,9 +42,9 @@ public class PrintFormation extends Report {
 
     public void showReport(Formation formation) throws Exception{
         parameters.put("formation", formation);
-        parameters.put("DSFormateurs", formation.getFormateurs());
+        parameters.put("DSFormateurs", formation.getPersonnels());
         parameters.put("DSCompetences", formation.getCompetences());
-        parameters.put("DSParticipants", formation.getParticipants());
+        parameters.put("DSParticipants", formation.getPersonnes());
         parameters.put("today", new Date());
         jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("views/formation/details.jrxml"));
         jasperReport = JasperCompileManager.compileReport(jasperDesign);

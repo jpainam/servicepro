@@ -1,136 +1,130 @@
 package com.cfao.app.beans;
 
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by JP on 6/10/2017.
  */
+@Entity
+@Table(name="pays"
+        ,catalog="servicepro"
+)
 public class Pays {
-    private SimpleIntegerProperty idPays = new SimpleIntegerProperty();
+    private SimpleIntegerProperty idpays = new SimpleIntegerProperty();
     private SimpleStringProperty iso = new SimpleStringProperty();
-    private SimpleStringProperty nameFr = new SimpleStringProperty();
-    private SimpleStringProperty nameEn = new SimpleStringProperty();
+    private SimpleStringProperty namefr = new SimpleStringProperty();
+    private SimpleStringProperty nameen = new SimpleStringProperty();
     private SimpleStringProperty iso3 = new SimpleStringProperty();
-    private SimpleIntegerProperty numCode = new SimpleIntegerProperty();
-    private SimpleIntegerProperty phoneCode = new SimpleIntegerProperty();
+    private SimpleIntegerProperty numcode = new SimpleIntegerProperty();
+    private SimpleIntegerProperty phonecode = new SimpleIntegerProperty();
+    private SetProperty<Personne> personnes = new SimpleSetProperty<>();
+
 
     public Pays(int idPays, String iso, String nameFr, String nameEn, String iso3,
                 int numCode, int phoneCode) {
-        this.idPays.set(idPays);
+        this.idpays.set(idPays);
         this.iso.set(iso);
-        this.nameFr.set(nameFr);
-        this.nameEn.set(nameEn);
+        this.namefr.set(nameFr);
+        this.nameen.set(nameEn);
         this.iso3.set(iso3);
-        this.numCode.set(numCode);
-        this.phoneCode.set(phoneCode);
+        this.numcode.set(numCode);
+        this.phonecode.set(phoneCode);
     }
     public Pays(){
 
     }
 
-    public int getIdpays() {
-        return idPays.get();
+    @Id @GeneratedValue(strategy= GenerationType.AUTO)
+
+
+    @Column(name="IDPAYS", unique=true, nullable=false)
+    public Integer getIdpays() {
+        return this.idpays.get();
     }
 
+    public void setIdpays(Integer idpays) {
+        this.idpays.set(idpays);
+    }
+
+
+    @Column(name="ISO", nullable=false, length=2)
     public String getIso() {
-        return iso.get();
-    }
-
-
-    public String getNameFr() {
-        return nameFr.get();
-    }
-
-
-    public String getNameEn() {
-        return nameEn.get();
-    }
-
-    public int getIdPays() {
-        return idPays.get();
-    }
-
-    public SimpleIntegerProperty idPaysProperty() {
-        return idPays;
-    }
-
-    public void setIdPays(int idPays) {
-        this.idPays.set(idPays);
-    }
-
-    public SimpleStringProperty isoProperty() {
-        return iso;
-    }
-
-    public SimpleStringProperty nameFrProperty() {
-        return nameFr;
-    }
-
-    public SimpleStringProperty nameEnProperty() {
-        return nameEn;
-    }
-
-    public SimpleStringProperty iso3Property() {
-        return iso3;
-    }
-
-    public SimpleIntegerProperty numCodeProperty() {
-        return numCode;
-    }
-
-    public SimpleIntegerProperty phoneCodeProperty() {
-        return phoneCode;
-    }
-
-    public String getIso3() {
-        return iso3.get();
-    }
-
-
-    public int getNumCode() {
-        return numCode.get();
-    }
-
-    public int getPhoneCode() {
-        return phoneCode.get();
-    }
-
-    public void setIdpays(int idPays) {
-        this.idPays.set(idPays);
+        return this.iso.get();
     }
 
     public void setIso(String iso) {
         this.iso.set(iso);
     }
 
-    public void setNameFr(String nameFr) {
-        this.nameFr.set(nameFr);
+
+    @Column(name="NAMEFR", nullable=false, length=80)
+    public String getNamefr() {
+        return this.namefr.get();
     }
 
-    public void setNameEn(String nameEn) {
-        this.nameEn.set(nameEn);
+    public void setNamefr(String namefr) {
+        this.namefr.set(namefr);
+    }
+
+
+    @Column(name="NAMEEN", nullable=false, length=80)
+    public String getNameen() {
+        return this.nameen.get();
+    }
+
+    public void setNameen(String nameen) {
+        this.nameen.set(nameen);
+    }
+
+
+    @Column(name="ISO3", length=3)
+    public String getIso3() {
+        return this.iso3.get();
     }
 
     public void setIso3(String iso3) {
         this.iso3.set(iso3);
     }
 
-    public void setNumCode(Integer numCode)
-    {
-        if(numCode != null)
-                       this.numCode.set(numCode);
-             else
-                    this.numCode.set(0);
 
+    @Column(name="NUMCODE")
+    public int getNumcode() {
+        return this.numcode.get();
     }
 
-    public void setPhoneCode(Integer phoneCode) {
-        this.phoneCode.set(phoneCode);
+    public void setNumcode(int numcode) {
+        this.numcode.set(numcode);
     }
 
-    @Override
-    public String toString() {
-        return  getNameFr() ;
+
+    @Column(name="PHONECODE", nullable=false)
+    public int getPhonecode() {
+        return this.phonecode.get();
     }
+
+    public void setPhonecode(int phonecode) {
+        this.phonecode.set(phonecode);
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="pays")
+    public Set<Personne> getPersonnes() {
+        return this.personnes;
+    }
+
+    public void setPersonnes(Set<Personne> personnes) {
+        this.personnes.set(FXCollections.observableSet(personnes));
+    }
+
+
+
+
 }
+
+

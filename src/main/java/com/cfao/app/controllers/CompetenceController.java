@@ -2,7 +2,8 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.ProfilCompetence;
+
+import com.cfao.app.beans.Profil;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -49,13 +50,13 @@ public class CompetenceController implements Initializable{
     public TableColumn<Formation, String> titreFormationColumn;
     public TableColumn<Formation, LocalDate> datedebutFormationColumn;
     public TableColumn<Formation, LocalDate> datefinFormationColumn;
-    public TableColumn<ProfilCompetence, String> libelleProfilColumn;
-    public TableColumn<ProfilCompetence, String> niveauProfilColumn;
-    public TableView<ProfilCompetence> profilTable;
+    public TableColumn<Profil, String> libelleProfilColumn;
+    public TableView<Profil> profilTable;
     public StackPane profilStackPane;
     public Button btnPrevious;
     public Button btnNext;
     public Button btnPrint;
+    public TableColumn<Competence, String> niveauCompetenceColumn;
 
     CompetencePersonneController personneController;
 
@@ -90,8 +91,8 @@ public class CompetenceController implements Initializable{
         datefinFormationColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
         datefinFormationColumn.setCellFactory(new DateTableCellFactory());
 
-        libelleProfilColumn.setCellValueFactory(param -> param.getValue().getProfil().libelleProperty());
-        niveauProfilColumn.setCellValueFactory(param -> param.getValue().getNiveau().libelleProperty());
+        //libelleProfilColumn.setCellValueFactory(param -> param.getValue().);
+        niveauCompetenceColumn.setCellValueFactory(param -> param.getValue().getNiveau().libelleProperty());
     }
 
     private void buildCompetenceTable() {
@@ -178,11 +179,11 @@ public class CompetenceController implements Initializable{
         new Thread(task).start();
     }
     public void buildProfilTable(Competence competence){
-        if(competence == null)
+        /*if(competence == null)
             return;
         System.out.println(competence);
 
-        Task<ObservableList<ProfilCompetence>> task = new Task<ObservableList<ProfilCompetence>>() {
+        Task<ObservableList<Profil>> task = new Task<ObservableList<ProfilCompetence>>() {
             @Override
             protected ObservableList<ProfilCompetence> call() throws Exception {
                 return FXCollections.observableArrayList(new CompetenceModel().getProfilByCompetence(competence));
@@ -197,6 +198,8 @@ public class CompetenceController implements Initializable{
                 System.out.println(task.getValue());
             }
         });
+        */
+
 
     }
     private  void buildPersonneTable(Competence competence){

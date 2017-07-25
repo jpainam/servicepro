@@ -1,58 +1,74 @@
 package com.cfao.app.beans;
 
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import org.hibernate.annotations.MetaValue;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by JP on 6/11/2017.
  */
 @Entity
-@Table(name = "groupes")
-public class Groupe {
+@Table(name="groupes"
+        ,catalog="servicepro"
+)
+public class Groupe  implements java.io.Serializable {
+
 
     private SimpleIntegerProperty idgroupe = new SimpleIntegerProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
+    private SetProperty<Personne> personnes = new SimpleSetProperty<>();
 
-    public Groupe(int idgroupe, String libelle) {
-        this.idgroupe.set(idgroupe);
+    public Groupe() {
+    }
+
+
+    public Groupe(String libelle) {
         this.libelle.set(libelle);
     }
-
-    public Groupe(){}
-
-    @Id
-    @GeneratedValue
-    @Column(name = "IDGROUPE")
-    public int getIdgroupe() {
-        return idgroupe.get();
+    public Groupe(String libelle, Set<Personne> personnes) {
+        this.libelle.set(libelle);
+        this.personnes.set(FXCollections.observableSet(personnes));
     }
 
-    @Column(name = "LIBELLE")
-    public String getLibelle() {
-        return libelle.get();
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name="IDGROUPE", unique=true, nullable=false)
+    public Integer getIdgroupe() {
+        return this.idgroupe.get();
     }
 
-    public void setIdgroupe(int idgroupe) {
+    public void setIdgroupe(Integer idgroupe) {
         this.idgroupe.set(idgroupe);
+    }
+
+
+    @Column(name="LIBELLE", nullable=false, length=50)
+    public String getLibelle() {
+        return this.libelle.get();
     }
 
     public void setLibelle(String libelle) {
         this.libelle.set(libelle);
     }
 
-    @Override
-    public String toString() {
-        return getLibelle();
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="groupe")
+    public Set<Personne> getPersonnes() {
+        return this.personnes;
     }
 
-    public SimpleIntegerProperty idgroupeProperty() {
-        return idgroupe;
+    public void setPersonnes(Set<Personne> personnes) {
+        this.personnes.set(FXCollections.observableSet(personnes));
     }
 
-    public SimpleStringProperty libelleProperty() {
-        return libelle;
-    }
+
+
+
 }
+
+

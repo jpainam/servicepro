@@ -17,18 +17,18 @@
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
-        <mapping resource="mapping/user.hbm.xml" />
-        <mapping resource="mapping/pays.hbm.xml" />
-
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
-        <mapping resource="mapping/etatformation.hbm.xml" />
         <mapping resource="mapping/personnel.hbm.xml" />
 
 
 
         <mapping class="com.cfao.app.beans.Personne" />
+        <mapping class="com.cfao.app.beans.Personnel" />
+        <mapping class="com.cfao.app.beans.EtatFormation" />
+        <mapping class="com.cfao.app.beans.Pays" />
+        <mapping class="com.cfao.app.beans.User" />
         <mapping class="com.cfao.app.beans.Groupe" />
         <mapping class="com.cfao.app.beans.Langue" />
         <mapping class="com.cfao.app.beans.Potentiel" />
@@ -38,14 +38,16 @@
         <mapping class="com.cfao.app.beans.Profil" />
         <mapping class="com.cfao.app.beans.Typeformation" />
         <mapping class="com.cfao.app.beans.Societe" />
-        <mapping class="com.cfao.app.beans.Support" />
+
         <mapping class="com.cfao.app.beans.Niveau" />
         <mapping class="com.cfao.app.beans.ProfilPersonne" />
         <mapping class="com.cfao.app.beans.ProfilPersonneId" />
         <mapping class="com.cfao.app.beans.Poste" />
         <mapping class="com.cfao.app.beans.PosteId" />
         <mapping class="com.cfao.app.beans.Competence" />
-        <mapping class="com.cfao.app.beans.ProfilCompetence" />
-        <mapping class="com.cfao.app.beans.ProfilCompetenceId" />
+
+        <mapping class="com.cfao.app.beans.Support" />
+        <mapping class="com.cfao.app.beans.SupportFormation" />
+        <mapping class="com.cfao.app.beans.SupportFormationId" />
           </session-factory>
 </hibernate-configuration>

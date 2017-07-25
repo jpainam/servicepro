@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +32,17 @@ public class FormationModel extends Model<Formation> {
     public List<Personne> getNonParticipants(Formation formation) {
         Session session = getCurrentSession();
         try{
+            List<Integer> personneIds = new ArrayList<>();
+            for(Personne p : formation.getPersonnes()){
+                personneIds.add(p.getIdpersonne());
+            }
             session.beginTransaction();
-            Query query = session.createQuery("from Personne where idpersonne not in :formation");
-            query.setParameterList("formation", formation.getParticipants());
-            return query.list();
+            Criteria criteria = session.createCriteria(Personne.class);
+            criteria.add(Restrictions.not(Restrictions.in("idpersonne", personneIds)));
+            return criteria.list();
+            /*Query query = session.createQuery("from Personne where idpersonne not in :formation");
+            query.setParameterList("formation", formation.getParticipants());*/
+            //return query.list();
         }catch (Exception ex){
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);

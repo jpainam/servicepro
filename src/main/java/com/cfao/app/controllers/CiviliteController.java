@@ -320,13 +320,14 @@ public class CiviliteController implements Initializable {
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
 
-        LocalDate date1 = person.getNaissance().toLocalDate();
+
+        LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
         datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
         datePicker.setValue(date1);
         labelAge.setText(age(date1));
 
 
-        LocalDate date2 = person.getFincontrat().toLocalDate();
+        LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
         dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
         dateFincontrat.setValue(date2);
 
@@ -351,8 +352,8 @@ public class CiviliteController implements Initializable {
         des Langues parlées par une personne*/
         updateLangue(person.getLangues());
 
-        tableProfil.setItems(FXCollections.observableArrayList(person.getProfilPersonne()));
-        tablePoste.setItems(FXCollections.observableArrayList(person.getPostePersonne()));
+        tableProfil.setItems(FXCollections.observableArrayList(person.getProfilPersonnes()));
+        tablePoste.setItems(FXCollections.observableArrayList(person.getPostes()));
 
     }
 
@@ -458,10 +459,10 @@ public class CiviliteController implements Initializable {
                     personne.setTelephone(txtTelephone.getText());
                     personne.setEmail(txtEmail.getText());
                     if(datePicker.getValue() != null) {
-                        personne.setNaissance(Date.valueOf(datePicker.getValue()));
+                        personne.setDatenaiss(java.sql.Date.valueOf(datePicker.getValue()));
                     }
                     if(dateFincontrat.getValue() != null) {
-                        personne.setFincontrat(Date.valueOf(dateFincontrat.getValue()));
+                        personne.setDatecontrat(java.sql.Date.valueOf(dateFincontrat.getValue()));
                     }
                     personne.setPays(comboPays.getValue());
 
@@ -501,13 +502,13 @@ public class CiviliteController implements Initializable {
                     for (ProfilPersonne p : tableProfil.getItems())
                         p.setPersonne(personne);
                 }
-                personne.setProfilPersonne(tableProfil.getItems());
+                personne.setProfilPersonnes(tableProfil.getItems());
 
                 if(tablePoste.getItems().size() > 0){
                     for (Poste p : tablePoste.getItems())
                         p.setPersonne(personne);
                 }
-                personne.setPostePersonne(tablePoste.getItems());
+                personne.setPostes(tablePoste.getItems());
 
                 new Model<Personne>().save(personne);
 
@@ -555,8 +556,8 @@ public class CiviliteController implements Initializable {
         Task<Personne> task = new Task<Personne>() {
             @Override
             protected Personne call() throws Exception {
-                personne.setProfilPersonne(FXCollections.observableList(tableProfil.getItems()));
-                personne.setPostePersonne(FXCollections.observableList(tablePoste.getItems()));
+                personne.setProfilPersonnes(FXCollections.observableList(tableProfil.getItems()));
+                personne.setPostes(FXCollections.observableList(tablePoste.getItems()));
                 new Model<Personne>().update(personne);
                 return personne;
             }
@@ -576,17 +577,18 @@ public class CiviliteController implements Initializable {
             personne.matriculeProperty().bind(txtMatricule.textProperty());
             personne.nomProperty().bind(txtNom.textProperty());
             personne.prenomProperty().bind(txtPrenom.textProperty());
-            personne.naissance().bind(datePicker.valueProperty());
+            java.util.Date date = java.sql.Date.valueOf(datePicker.getValue());
+            //personne.naissance().bind(ObservableValue<java.util.Date>(date));
             personne.pays().bind(comboPays.valueProperty());
             personne.societe().bind(comboSociete.valueProperty());
             personne.section().bind(comboSection.valueProperty());
             personne.groupe().bind(comboGroupe.valueProperty());
             personne.langues().bindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
-            personne.fincontratProperty().bind(dateFincontrat.valueProperty());
+            //personne.datecontratProperty().bind(dateFincontrat.valueProperty());
             personne.memoProperty().bind(txtMemo.textProperty());
             personne.telephoneProperty().bind(txtTelephone.textProperty());
             personne.emailProperty().bind(txtEmail.textProperty());
-            personne.potentielProperty().bind(comboPotentiel.valueProperty());
+            personne.potentiel().bind(comboPotentiel.valueProperty());
         } else {
             personne.matriculeProperty().unbind();
             personne.nomProperty().unbind();
@@ -597,11 +599,11 @@ public class CiviliteController implements Initializable {
             personne.section().unbind();
             personne.groupe().unbind();
             personne.langues().unbindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
-            personne.fincontratProperty().unbind();
+            personne.datecontratProperty().unbind();
             personne.memoProperty().unbind();
             personne.telephoneProperty().unbind();
             personne.emailProperty().unbind();
-            personne.potentielProperty().unbind();
+            personne.potentiel().unbind();
         }
     }
 
@@ -713,7 +715,7 @@ public class CiviliteController implements Initializable {
                     Poste poste = new Poste();
                     poste.setTitre(valTxtPoste);
                     poste.setSociete(valComboSociete);
-                    poste.setDateDebut(Date.valueOf(valDateFrom));
+                    poste.setDatedebut(Date.valueOf(valDateFrom));
                     poste.setDatefin(Date.valueOf(valDateTo));
 
                     if(stateBtnNouveau == 0) {

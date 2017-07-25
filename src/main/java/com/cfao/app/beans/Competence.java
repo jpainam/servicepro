@@ -2,69 +2,96 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
+import javafx.fxml.FXMLLoader;
 
-import javax.persistence.*;
-import javax.persistence.Transient;
-import java.beans.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.*;
 
-/**
- * Created by JP on 6/14/2017.
- */
 @Entity
-@Table(name = "competences")
-public class Competence implements Serializable{
-    private static final long serialVersionUID = 1L;
+@Table(name = "competences"
+        , catalog = "servicepro"
+)
+public class Competence implements java.io.Serializable {
+
+
     private SimpleIntegerProperty idcompetence = new SimpleIntegerProperty();
     private SimpleStringProperty description = new SimpleStringProperty();
     private SimpleStringProperty type = new SimpleStringProperty();
-    private ListProperty<ProfilCompetence> profilcompetences = new SimpleListProperty<>();
+    private ObjectProperty<Niveau> niveau = new SimpleObjectProperty<>();
+    private ListProperty<Profil> profils = new SimpleListProperty<>();
+    private ListProperty<Formation> formations = new SimpleListProperty<>();
 
-    public Competence(){}
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IDCOMPETENCE")
-    public int getIdcompetence() {
-        return idcompetence.get();
+    public Competence() {
     }
 
-    public void setIdcompetence(int idcompetence) {
+    public Competence(String description, String type, Niveau niveau, List<Profil> profils, List<Formation> formations) {
+        this.description.set(description);
+        this.type.set(type);
+        this.profils.set(FXCollections.observableArrayList(profils));
+        this.formations.set(FXCollections.observableArrayList(formations));
+        this.niveau.set(niveau);
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "IDCOMPETENCE", unique = true, nullable = false)
+    public Integer getIdcompetence() {
+        return this.idcompetence.get();
+    }
+
+    public void setIdcompetence(Integer idcompetence) {
         this.idcompetence.set(idcompetence);
     }
 
-    @Column(name = "DESCRIPTION")
-    public String getDescription() {
-        return description.get();
-    }
 
+    @Column(name = "DESCRIPTION", length = 65535)
+    public String getDescription() {
+        return this.description.get();
+    }
 
     public void setDescription(String description) {
         this.description.set(description);
     }
 
-    @Column(name = "TYPE")
+
+    @Column(name = "TYPE", length = 3)
     public String getType() {
-        return type.get();
+        return this.type.get();
     }
 
     public void setType(String type) {
         this.type.set(type);
     }
 
-    public SimpleIntegerProperty idcompetenceProperty() {
-        return idcompetence;
+
+    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+    @JoinTable(name="profil_competence", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="PROFIL", nullable=false, updatable=false) })
+    public List<Profil> getProfils() {
+        return this.profils;
     }
+
+    public void setProfils(List<Profil> profils) {
+        this.profils.set(FXCollections.observableArrayList(profils));
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "formation_competence", catalog = "servicepro", joinColumns = {
+            @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)}, inverseJoinColumns = {
+            @JoinColumn(name = "FORMATION", nullable = false, updatable = false)})
+    public List<Formation> getFormations() {
+        return this.formations.get();
+    }
+
+    public void setFormations(List<Formation> formations) {
+        this.formations.set(FXCollections.observableArrayList(formations));
+    }
+
 
     public SimpleStringProperty descriptionProperty() {
         return description;
-    }
-
-    public SimpleStringProperty typeProperty() {
-        return type;
     }
 
     @Override
@@ -72,31 +99,43 @@ public class Competence implements Serializable{
         return getDescription();
     }
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="NIVEAU")
+    public Niveau getNiveau() {
+        return niveau.get();
+    }
+
+    public ObjectProperty<Niveau> niveauProperty() {
+        return niveau;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if(o instanceof Competence){
-            Competence competence = (Competence)o;
-            if(competence.getIdcompetence() == this.getIdcompetence())
-                return true;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Competence that = (Competence) o;
+
+        if (idcompetence != null) {
+            return (idcompetence.get() == that.idcompetence.get());
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return idcompetence != null ? idcompetence.hashCode() : 0;
+        int result = idcompetence != null ? idcompetence.hashCode() : 0;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (niveau != null ? niveau.hashCode() : 0);
+        result = 31 * result + (profils != null ? profils.hashCode() : 0);
+        result = 31 * result + (formations != null ? formations.hashCode() : 0);
+        return result;
     }
 
-    @OneToMany(mappedBy = "pk.competence")
-    public List<ProfilCompetence> getProfilcompetences() {
-        return profilcompetences.get();
-    }
-
-    public ListProperty<ProfilCompetence> profilcompetencesProperty() {
-        return profilcompetences;
-    }
-
-    public void setProfilcompetences(List<ProfilCompetence> profilcompetences) {
-        this.profilcompetences.set(FXCollections.observableArrayList(profilcompetences));
+    public void setNiveau(Niveau niveau) {
+        this.niveau.set(niveau);
     }
 }
+
+

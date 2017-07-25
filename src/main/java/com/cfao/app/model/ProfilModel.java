@@ -2,7 +2,7 @@ package com.cfao.app.model;
 
 import com.cfao.app.beans.Niveau;
 import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.ProfilCompetence;
+
 import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -26,7 +26,7 @@ public class ProfilModel extends  Model<Profil> {
         super(className);
     }
 
-    public List<ProfilCompetence> getCompetenceByProfil(Profil profil, Niveau niveau){
+    /*public List<ProfilCompetence> getCompetenceByProfil(Profil profil, Niveau niveau){
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
@@ -40,7 +40,7 @@ public class ProfilModel extends  Model<Profil> {
             session.close();
         }
         return null;
-    }
+    }*/
    /* public List getCompetenceParProfil(Profil profil){
         List list = new ArrayList();
         try{

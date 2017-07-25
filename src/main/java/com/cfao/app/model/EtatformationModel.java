@@ -1,11 +1,11 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Etatformation;
+import com.cfao.app.beans.EtatFormation;
 
 /**
  * Created by JP on 7/2/2017.
  */
-public class EtatformationModel extends  Model<Etatformation> {
+public class EtatformationModel extends  Model<EtatFormation> {
     public EtatformationModel(){
         super();
     }

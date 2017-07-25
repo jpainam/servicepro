@@ -3,11 +3,8 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.model.PersonneModel;
 import com.cfao.app.model.PersonnelModel;
-import com.cfao.app.reports.JasperTableExample;
 import com.cfao.app.reports.PrintFormation;
-import com.cfao.app.reports.PrintReport;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -37,6 +34,7 @@ import java.io.File;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -55,7 +53,7 @@ public class FormationController implements Initializable {
     public DatePicker dateFin;
     public TextArea txtDescription;
     public ComboBox<Modele> comboModele;
-    public ComboBox<Etatformation> comboEtatformation;
+    public ComboBox<EtatFormation> comboEtatformation;
     public ComboBox<Personnel> comboFormateur;
     public Button btnAjouterFormateur;
     public Button btnSupprimerFormateur;
@@ -72,9 +70,9 @@ public class FormationController implements Initializable {
     public Button btnAjouterSupport;
     public Button btnSupprimerSupport;
     public Button btnAfficherSupport;
-    public TableView<Support> supportTable;
-    public TableColumn<Support, String> codeSupportColumn;
-    public TableColumn<Support, String> titreSupportColumn;
+    public TableView<SupportFormation> supportTable;
+    public TableColumn<SupportFormation, String> codeSupportColumn;
+    public TableColumn<SupportFormation, String> titreSupportColumn;
     public StackPane formationStackPane;
 
     private SearchBox searchBox = new SearchBox();
@@ -86,8 +84,8 @@ public class FormationController implements Initializable {
     public FormationModel formationModel = new FormationModel();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
-    private ParticipantController participantController;
-    private CompetenceFormationController competenceController;
+    private FormationParticipantController formationParticipantController;
+    private FormationCompetenceController competenceController;
 
 
     @Override
@@ -108,8 +106,18 @@ public class FormationController implements Initializable {
         datedebutColumn.setCellFactory(new DateTableCellFactory());
         datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
         datefinColumn.setCellFactory(new DateTableCellFactory());
-        codeSupportColumn.setCellValueFactory(param -> param.getValue().codeProperty());
-        titreSupportColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+        codeSupportColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SupportFormation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<SupportFormation, String> param) {
+                return param.getValue().getSupport().titreProperty();
+            }
+        });
+        titreSupportColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SupportFormation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<SupportFormation, String> param) {
+                return param.getValue().getSupport().titreProperty();
+            }
+        });
 
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -134,9 +142,9 @@ public class FormationController implements Initializable {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                participantController = new ParticipantController();
-                competenceController = new CompetenceFormationController();
-                tabParticipant.setContent(participantController);
+                formationParticipantController = new FormationParticipantController();
+                competenceController = new FormationCompetenceController();
+                tabParticipant.setContent(formationParticipantController);
                 tabCompetenceAssociee.setContent(competenceController);
                 return null;
             }
@@ -151,7 +159,7 @@ public class FormationController implements Initializable {
                 ObservableMap<String, ObservableList> map = FXCollections.observableHashMap();
                 map.put("personnel", FXCollections.observableArrayList((new PersonnelModel()).getList()));
                 map.put("modele", FXCollections.observableList((new Model<Modele>("Modele")).getList()));
-                map.put("etatformation", FXCollections.observableList((new Model<Etatformation>("Etatformation")).getList()));
+                map.put("etatformation", FXCollections.observableList((new Model<EtatFormation>("Etatformation")).getList()));
                 map.put("typeformation", FXCollections.observableList((new Model<Typeformation>("Typeformation")).getList()));
                 return map;
             }
@@ -193,16 +201,16 @@ public class FormationController implements Initializable {
         txtTitre.setText(formation.getTitre());
         txtDescription.setText(formation.getDescription());
         comboModele.setValue(formation.getModele());
-        comboEtatformation.setValue(formation.getEtatformation());
-        comboTypeformation.setValue(formation.getTypeformation());
-        listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getFormateurs()));
-        dateDebut.setValue(formation.getDatedebut().toLocalDate());
-        dateFin.setValue(formation.getDatefin().toLocalDate());
-        supportTable.setItems(FXCollections.observableArrayList(formation.getSupports()));
-        System.err.println(formation.getParticipants());
-        participantController.setFormation(formation);
+        comboEtatformation.setValue(formation.getEtatFormation());
+        comboTypeformation.setValue(formation.getTypeFormation());
+        listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getPersonnels()));
+        dateDebut.setValue(new java.sql.Date(formation.getDatedebut().getTime()).toLocalDate());
+        dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
+        supportTable.setItems(FXCollections.observableArrayList(formation.getSupportFormations()));
+        System.err.println(formation.getPersonnes());
+        formationParticipantController.setFormation(formation);
         competenceController.setFormation(formation);
-        participantController.buildTable();
+        formationParticipantController.buildTable();
         competenceController.buildTable();
 
     }
@@ -220,16 +228,16 @@ public class FormationController implements Initializable {
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
-            formation.setEtatformation(comboEtatformation.getValue());
+            formation.setEtatFormation(comboEtatformation.getValue());
             formation.setModele(comboModele.getValue());
-            formation.setFormateurs(listeViewFormateurs.getItems());
-            formation.setSupports(supportTable.getItems());
+            formation.setPersonnels(listeViewFormateurs.getItems());
+            formation.setSupportFormations(supportTable.getItems());
             formation.setTitre(txtTitre.getText());
             formation.setDescription(txtDescription.getText());
             formation.setCodeformation(txtCode.getText());
             formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
             formation.setDatefin(Date.valueOf(dateFin.getValue()));
-            formation.setTypeformation(comboTypeformation.getValue());
+            formation.setTypeFormation(comboTypeformation.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -270,10 +278,10 @@ public class FormationController implements Initializable {
             formation.setDatefin(Date.valueOf(dateFin.getValue()));
             formation.setTitre(txtTitre.getText());
             formation.setDescription(txtDescription.getText());
-            formation.setEtatformation(comboEtatformation.getValue());
-            formation.setFormateurs(listeViewFormateurs.getItems());
-            formation.setSupports(supportTable.getItems());
-            formation.setTypeformation(comboTypeformation.getValue());
+            formation.setEtatFormation(comboEtatformation.getValue());
+            formation.setPersonnels(listeViewFormateurs.getItems());
+            formation.setSupportFormations(supportTable.getItems());
+            formation.setTypeFormation(comboTypeformation.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -372,8 +380,11 @@ public class FormationController implements Initializable {
             result.ifPresent(new Consumer<Support>() {
                 @Override
                 public void accept(Support support) {
-                    if (!supportTable.getItems().contains(support)) {
-                        supportTable.getItems().add(support);
+                    Formation formation = formationTable.getSelectionModel().getSelectedItem();
+                    if (!formation.getSupportFormations().contains(support)) {
+                        SupportFormation sp = new SupportFormation();
+                        sp.setSupport(support);
+                        supportTable.getItems().add(sp);
                     }
                 }
             });
@@ -385,7 +396,7 @@ public class FormationController implements Initializable {
 
     public void supprimerSupportAction(ActionEvent actionEvent) {
         if (supportTable.getSelectionModel().getSelectedItem() != null) {
-            Support support = supportTable.getSelectionModel().getSelectedItem();
+            SupportFormation support = supportTable.getSelectionModel().getSelectedItem();
             supportTable.getItems().remove(support);
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir le support à supprimer de la formation");
@@ -395,7 +406,7 @@ public class FormationController implements Initializable {
     public void afficherSupportAction(ActionEvent actionEvent) {
         if (supportTable.getSelectionModel().getSelectedItem() != null) {
             try {
-                Support support = supportTable.getSelectionModel().getSelectedItem();
+                Support support = supportTable.getSelectionModel().getSelectedItem().getSupport();
                 Desktop desktop = Desktop.getDesktop();
                 desktop.open(new File(support.getLien()));
                 System.out.println((new File(support.getLien())).getAbsolutePath());

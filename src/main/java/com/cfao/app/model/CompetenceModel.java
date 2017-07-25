@@ -20,13 +20,13 @@ public class CompetenceModel extends Model<Competence> {
         super(className);
     }
 
-    public List<ProfilCompetence> getCompetenceParProfil(Profil profil){
+    /*public List<ProfilCompetence> getCompetenceParProfil(Profil profil){
         Session session = getCurrentSession();
         try {
             /*Criteria criteria = session.createCriteria(ProfilCompetence.class);
             criteria.add(Restrictions.eq("profil", profil));
             return criteria.list();*/
-            session.beginTransaction();
+           /* session.beginTransaction();
             Query query = session.createQuery(
                     "from ProfilCompetence as pc " +
                             "inner join fetch pc.competence co " +
@@ -41,7 +41,7 @@ public class CompetenceModel extends Model<Competence> {
             session.close();
         }
         return null;
-    }
+    }*/
 
     public List<Competence> getNonCompetences(List<Competence> competences) {
         Session session = getCurrentSession();
@@ -128,7 +128,7 @@ public class CompetenceModel extends Model<Competence> {
 
     }
 
-    public List<ProfilCompetence> getProfilByCompetence(Competence competence) {
+    /*public List<ProfilCompetence> getProfilByCompetence(Competence competence) {
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
@@ -142,5 +142,5 @@ public class CompetenceModel extends Model<Competence> {
             session.close();
         }
         return null;
-    }
+    }*/
 }

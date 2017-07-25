@@ -8,21 +8,20 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.*?>
 
-<fx:root fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="StackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="560.0" prefWidth="603.0" spacing="5.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="560.0" prefWidth="603.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ToolBar maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="NEVER">
               <items>
                 <Button fx:id="btnValider" mnemonicParsing="false" onAction="#validerAction" styleClass="actionButton" text="Enregistrer/Save" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#annulerAction" styleClass="actionButton" text="Annuler/Cancel" />
-                  <Button fx:id="btnSupprimerCompetence" onAction="#supprimerAction" mnemonicParsing="false" styleClass="actionButton" text="Supprimer/Delete" />
               </items>
             </ToolBar>
-            <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <GridPane alignment="CENTER" hgap="10.0" prefHeight="46.0" prefWidth="603.0" HBox.hgrow="ALWAYS">
+                  <GridPane alignment="CENTER" hgap="10.0" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="603.0" HBox.hgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
@@ -34,35 +33,34 @@
                     </rowConstraints>
                      <children>
                         <Label text="Titre du profil" GridPane.columnIndex="1" />
-                        <TextField fx:id="txtProfil" alignment="TOP_LEFT" promptText="Entrer le titre du profil" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtProfil" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" promptText="Entrer le titre du profil" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                         <Label text="Abbréviation" GridPane.columnIndex="2" />
-                        <TextField fx:id="txtAbbreviation" promptText="Entrer une abbréviation du profil" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtAbbreviation" maxWidth="1.7976931348623157E308" promptText="Entrer une abbréviation du profil" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                         <Label text="Niveau" />
-                        <ComboBox fx:id="comboNiveau" maxWidth="1.7976931348623157E308" onAction="#comboNiveauAction" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="comboNiveau" maxWidth="1.7976931348623157E308" onAction="#comboNiveauAction" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                   <HBox alignment="BOTTOM_LEFT" prefHeight="38.0" prefWidth="583.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <VBox alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label text="Compétences" />
-                              <ComboBox fx:id="comboCompetence" maxWidth="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="NEVER" />
-                           </children>
-                        </VBox>
-                        <Button fx:id="btnAjouterCompetence" alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#ajouterCompetenceAction" text="Ajouter" />
+                        <VBox fx:id="vboxRechercheCompetence" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="competenceColumn" maxWidth="80.0" minWidth="80.0" text="Compétence" />
-                        <TableColumn fx:id="connaissanceColumn" maxWidth="80.0" minWidth="80.0" text="Connaissance" />
-                      <TableColumn fx:id="intituleColumn" prefWidth="75.0" text="Intitulé" />
-                        <TableColumn fx:id="possedeColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Possède" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                     <children>
+                        <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                          <columns>
+                              <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
+                              <TableColumn fx:id="connaissanceColumn" maxWidth="80.0" minWidth="80.0" text="Connaissance" />
+                            <TableColumn fx:id="intituleColumn" prefWidth="75.0" text="Intitulé" />
+                              <TableColumn fx:id="niveauColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Niveau" />
+                              <TableColumn fx:id="possedeColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Possède" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </StackPane>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
