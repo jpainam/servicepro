@@ -1,12 +1,10 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +22,7 @@ public class Pays {
     private SimpleStringProperty iso3 = new SimpleStringProperty();
     private SimpleIntegerProperty numcode = new SimpleIntegerProperty();
     private SimpleIntegerProperty phonecode = new SimpleIntegerProperty();
-    private SetProperty<Personne> personnes = new SimpleSetProperty<>();
+    private ListProperty<Personne> personnes = new SimpleListProperty<>();
 
 
     public Pays(int idPays, String iso, String nameFr, String nameEn, String iso3,
@@ -95,31 +93,33 @@ public class Pays {
 
 
     @Column(name="NUMCODE")
-    public int getNumcode() {
+    public Integer getNumcode() {
         return this.numcode.get();
     }
 
-    public void setNumcode(int numcode) {
-        this.numcode.set(numcode);
+    public void setNumcode(Integer numcode) {
+        if(numcode != null) {
+            this.numcode.set(numcode);
+        }
     }
 
 
     @Column(name="PHONECODE", nullable=false)
-    public int getPhonecode() {
+    public Integer getPhonecode() {
         return this.phonecode.get();
     }
 
-    public void setPhonecode(int phonecode) {
+    public void setPhonecode(Integer phonecode) {
         this.phonecode.set(phonecode);
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="pays")
-    public Set<Personne> getPersonnes() {
+    public List<Personne> getPersonnes() {
         return this.personnes;
     }
 
-    public void setPersonnes(Set<Personne> personnes) {
-        this.personnes.set(FXCollections.observableSet(personnes));
+    public void setPersonnes(List<Personne> personnes) {
+        this.personnes.set(FXCollections.observableList(personnes));
     }
 
 

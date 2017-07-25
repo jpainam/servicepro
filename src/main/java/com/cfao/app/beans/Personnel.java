@@ -111,9 +111,10 @@ public class Personnel implements java.io.Serializable {
         this.formations.set(FXCollections.observableArrayList(formations));
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return getNom() + " " + getPrenom();
+    }
 }
 
 

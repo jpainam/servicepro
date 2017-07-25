@@ -3,10 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.FormatDate;
-import com.cfao.app.util.SearchBox;
-import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
@@ -137,10 +134,13 @@ public class CiviliteController implements Initializable {
     public TextField txtTelephone;
     public TextField txtEmail;
 
+    CiviliteFormationController formationController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildcontent();
+        formationController = new CiviliteFormationController();
+        tabFormation.setContent(formationController);
         searchBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         hboxSearch.getChildren().setAll(new Label("Civilités :" ), searchBox);
@@ -175,18 +175,15 @@ public class CiviliteController implements Initializable {
         GlyphsDude.setIcon(tabDetails, FontAwesomeIcon.USER);
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
-
-        GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
-        GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
-        GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
-        GlyphsDude.setIcon(btnSuppr, FontAwesomeIcon.TRASH);
-        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
-        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
-        GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
-        GlyphsDude.setIcon(btnAjouterPoste, FontAwesomeIcon.PLUS_SQUARE);
-        GlyphsDude.setIcon(btnAjouterProfil, FontAwesomeIcon.PLUS_SQUARE);
-        GlyphsDude.setIcon(btnDeletePoste, FontAwesomeIcon.MINUS_SQUARE);
-        GlyphsDude.setIcon(btnDeleteProfil, FontAwesomeIcon.MINUS_SQUARE);
+        ButtonUtil.add(btnNouveau);
+        ButtonUtil.edit(btnModifier);
+        ButtonUtil.cancel(btnAnnuler);
+        ButtonUtil.delete(btnSuppr);
+        ButtonUtil.print(btnPrint);
+        ButtonUtil.previous(btnPrevious);
+        ButtonUtil.next(btnNext);
+        ButtonUtil.plusIcon(btnNouveau, btnAjouterProfil);
+        ButtonUtil.minusIcon(btnDeletePoste, btnDeleteProfil);
 
         /*DESACTIVATION DES BUTTON MODIF ET SUPPR*/
         btnModifier.setDisable(true);
@@ -320,16 +317,18 @@ public class CiviliteController implements Initializable {
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
 
+        if(person.getDatenaiss() != null) {
+            LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
+            datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
+            datePicker.setValue(date1);
+            labelAge.setText(age(date1));
+        }
 
-        LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
-        datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
-        datePicker.setValue(date1);
-        labelAge.setText(age(date1));
-
-
-        LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
-        dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
-        dateFincontrat.setValue(date2);
+        if(person.getDatecontrat() != null) {
+            LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
+            dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
+            dateFincontrat.setValue(date2);
+        }
 
         comboSection.setValue(person.getSection());
         comboSociete.setValue(person.getSociete());

@@ -106,18 +106,8 @@ public class FormationController implements Initializable {
         datedebutColumn.setCellFactory(new DateTableCellFactory());
         datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
         datefinColumn.setCellFactory(new DateTableCellFactory());
-        codeSupportColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SupportFormation, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SupportFormation, String> param) {
-                return param.getValue().getSupport().titreProperty();
-            }
-        });
-        titreSupportColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SupportFormation, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SupportFormation, String> param) {
-                return param.getValue().getSupport().titreProperty();
-            }
-        });
+        codeSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
+        titreSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
 
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);

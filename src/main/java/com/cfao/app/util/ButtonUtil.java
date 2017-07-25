@@ -74,4 +74,14 @@ public class ButtonUtil {
             GlyphsDude.setIcon(tab, FontAwesomeIcon.BUILDING_ALT);
         }
     }
+    public static void plusIcon(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.PLUS_SQUARE);
+        }
+    }
+    public static void minusIcon(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.MINUS_SQUARE);
+        }
+    }
 }

@@ -72,6 +72,10 @@ public class EtatFormation  implements java.io.Serializable {
         this.formations.set(FXCollections.observableArrayList(formations));
     }
 
+    @Override
+    public String toString() {
+        return getLibelle();
+    }
 }
 
 

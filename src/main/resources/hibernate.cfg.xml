@@ -46,5 +46,9 @@
         <mapping class="com.cfao.app.beans.Support" />
         <mapping class="com.cfao.app.beans.SupportFormation" />
         <mapping class="com.cfao.app.beans.SupportFormationId" />
+
+        <mapping class="com.cfao.app.beans.PersonneCompetence" />
+        <mapping class="com.cfao.app.beans.PersonneCompetenceId" />
+        <mapping class="com.cfao.app.beans.CompetenceStatut" />
           </session-factory>
 </hibernate-configuration>

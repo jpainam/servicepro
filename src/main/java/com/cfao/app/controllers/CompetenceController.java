@@ -82,7 +82,6 @@ public class CompetenceController implements Initializable{
         researchBox.getChildren().setAll(new Label("Liste des compétences : "), searchBox);
         competenceTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             buildFormationTable(newValue);
-            buildProfilTable(newValue);
             buildPersonneTable(newValue);
         });
         titreFormationColumn.setCellValueFactory(param -> param.getValue().titreProperty());
@@ -139,30 +138,6 @@ public class CompetenceController implements Initializable{
         competenceTable.itemsProperty().bind(task.valueProperty());
         new ProgressIndicatorUtil(competenceStackPane, task);
         new Thread(task).start();
-
-        /*task.setOnSucceeded(event -> {
-            FilteredList<Competence> filteredList = new FilteredList<Competence>(task.getValue(), p -> true);
-
-            searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredList.setPredicate((Competence competence) -> {
-                    if (newValue == null || newValue.isEmpty()) {
-                        return true;
-                    }
-                    // Comparer les champs dans la classe Competence
-                    String valueCompare = newValue.toLowerCase();
-                    if (competence.getDescription().toLowerCase().contains(valueCompare)) {
-                        return true;
-                    } else if (competence.getType().toLowerCase().contains(valueCompare)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
-            });
-            SortedList<Competence> sortedList = new SortedList<Competence>(filteredList);
-            sortedList.comparatorProperty().bind(competenceTable.comparatorProperty());
-            competenceTable.setItems(sortedList);
-        });*/
     }
 
     public void buildFormationTable(Competence competence){
@@ -178,30 +153,7 @@ public class CompetenceController implements Initializable{
         formationTable.itemsProperty().bind(task.valueProperty());
         new Thread(task).start();
     }
-    public void buildProfilTable(Competence competence){
-        /*if(competence == null)
-            return;
-        System.out.println(competence);
 
-        Task<ObservableList<Profil>> task = new Task<ObservableList<ProfilCompetence>>() {
-            @Override
-            protected ObservableList<ProfilCompetence> call() throws Exception {
-                return FXCollections.observableArrayList(new CompetenceModel().getProfilByCompetence(competence));
-            }
-        };
-        profilTable.itemsProperty().bind(task.valueProperty());
-        new ProgressIndicatorUtil(profilStackPane, task);
-        new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                System.out.println(task.getValue());
-            }
-        });
-        */
-
-
-    }
     private  void buildPersonneTable(Competence competence){
         personneController.setCompetence(competence);
         personneController.buildTable();

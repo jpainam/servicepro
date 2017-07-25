@@ -108,7 +108,7 @@
                               </VBox>
                            </content>
                         </Tab>
-                        <Tab fx:id="competenceTabPersonne" text="Détais sur les personne" />
+                        <Tab fx:id="competenceTabPersonne" text="Détails sur les personne" />
                      </tabs>
                   </TabPane>
                </children>

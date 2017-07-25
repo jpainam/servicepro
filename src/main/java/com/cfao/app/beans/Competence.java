@@ -2,6 +2,7 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class Competence implements java.io.Serializable {
     private ObjectProperty<Niveau> niveau = new SimpleObjectProperty<>();
     private ListProperty<Profil> profils = new SimpleListProperty<>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
+    private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
 
     public Competence() {
     }
@@ -65,7 +67,7 @@ public class Competence implements java.io.Serializable {
     }
 
 
-    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name="profil_competence", catalog="servicepro", joinColumns = {
             @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PROFIL", nullable=false, updatable=false) })
@@ -135,6 +137,19 @@ public class Competence implements java.io.Serializable {
 
     public void setNiveau(Niveau niveau) {
         this.niveau.set(niveau);
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="competence")
+    public List<PersonneCompetence> getPersonneCompetences() {
+        return personneCompetences.get();
+    }
+
+    public ListProperty<PersonneCompetence> personneCompetencesProperty() {
+        return personneCompetences;
+    }
+
+    public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
+        this.personneCompetences.set(FXCollections.observableList(personneCompetences));
     }
 }
 

@@ -16,7 +16,7 @@ public class PersonnelModel extends  Model<Personnel> {
     protected  String className = "Personnel";
 
     public PersonnelModel(){
-        super("Personne");
+        super("Personnel");
     }
     public PersonnelModel(String className){
         super(className);

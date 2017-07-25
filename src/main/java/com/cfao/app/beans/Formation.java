@@ -167,7 +167,7 @@ public class Formation {
         return this.competenceses;
     }
 
-    public void setCompetences(Set<Competences> competenceses) {
+    public void setCompetence(Set<Competences> competenceses) {
         this.competenceses = competenceses;
     }
     */

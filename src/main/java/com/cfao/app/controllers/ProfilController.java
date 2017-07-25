@@ -236,5 +236,4 @@ public class ProfilController implements Initializable {
         tabPane.getSelectionModel().select(tab);
     }
 
-
 }

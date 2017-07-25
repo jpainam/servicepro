@@ -10,6 +10,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Created by JP on 6/10/2017.
@@ -45,6 +46,7 @@ public class Personne implements java.io.Serializable {
     private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<ProfilPersonne>();
     private ListProperty<Poste> postes = new SimpleListProperty<Poste>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
+    private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
 
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -334,4 +336,21 @@ public class Personne implements java.io.Serializable {
         return datenaiss;
     }
 
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    public List<PersonneCompetence> getPersonneCompetences() {
+        return personneCompetences.get();
+    }
+
+    public ListProperty<PersonneCompetence> personneCompetencesProperty() {
+        return personneCompetences;
+    }
+
+    @Override
+    public String toString() {
+        return getNom() + " " + getPrenom();
+    }
+
+    public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
+        this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+    }
 }

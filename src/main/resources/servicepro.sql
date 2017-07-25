@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2017 at 01:20 AM
+-- Generation Time: Jul 25, 2017 at 11:47 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -51,20 +51,43 @@ CREATE TABLE IF NOT EXISTS `competences` (
   `IDCOMPETENCE` int(11) NOT NULL AUTO_INCREMENT,
   `DESCRIPTION` text,
   `TYPE` char(3) DEFAULT NULL COMMENT 'CN = Connaissance, CP = Competence, CNP = les deux',
-  PRIMARY KEY (`IDCOMPETENCE`)
+  `NIVEAU` int(11) DEFAULT NULL,
+  PRIMARY KEY (`IDCOMPETENCE`),
+  KEY `NIVEAU` (`NIVEAU`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `competences`
 --
 
-INSERT INTO `competences` (`IDCOMPETENCE`, `DESCRIPTION`, `TYPE`) VALUES
-(1, 'Connaissance de CFAO, histoire, domaines d''activité', 'CN'),
-(2, 'Connaissance de Renault Trucks, histoire, domaines d''activité', 'CP'),
-(3, 'Connaitre et appliquer les règles de sécurité sur le lieu de travail', 'CN'),
-(4, 'Connaitre et appliquer les procédures "5S" sur le lieu de travail', 'CNP'),
-(5, 'Maitiser les bases de la mécanique', 'CNP'),
-(6, 'Maitriser les principes des systèmes de base, moteur, électricité, transmission', 'CNP');
+INSERT INTO `competences` (`IDCOMPETENCE`, `DESCRIPTION`, `TYPE`, `NIVEAU`) VALUES
+(1, 'Connaissance de CFAO, histoire, domaines d''activité', 'CN', 2),
+(2, 'Connaissance de Renault Trucks, histoire, domaines d''activité', 'CP', 3),
+(3, 'Connaitre et appliquer les règles de sécurité sur le lieu de travail', 'CN', 4),
+(4, 'Connaitre et appliquer les procédures "5S" sur le lieu de travail', 'CNP', 3),
+(5, 'Maitiser les bases de la mécanique', 'CNP', 1),
+(6, 'Maitriser les principes des systèmes de base, moteur, électricité, transmission', 'CNP', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `competence_statut`
+--
+
+CREATE TABLE IF NOT EXISTS `competence_statut` (
+  `STATUT` char(2) NOT NULL COMMENT 'EC = En cours, AC = A certifier; CE = certifie',
+  `LIBELLE` varchar(15) NOT NULL,
+  PRIMARY KEY (`STATUT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `competence_statut`
+--
+
+INSERT INTO `competence_statut` (`STATUT`, `LIBELLE`) VALUES
+('AC', 'A certifier'),
+('CE', 'Certifié'),
+('EC', 'En cours');
 
 -- --------------------------------------------------------
 
@@ -226,21 +249,26 @@ CREATE TABLE IF NOT EXISTS `formation_personne` (
 --
 
 INSERT INTO `formation_personne` (`FORMATION`, `PERSONNE`) VALUES
-(1, 1),
-(3, 2),
-(4, 2),
+(2, 1),
+(2, 2),
 (1, 3),
+(2, 3),
 (3, 3),
-(4, 3),
 (1, 4),
+(2, 4),
+(4, 4),
 (1, 5),
+(2, 5),
 (3, 5),
 (1, 8),
+(2, 8),
 (3, 8),
-(4, 8),
 (1, 10),
+(3, 10),
 (4, 10),
 (1, 11),
+(3, 11),
+(4, 11),
 (1, 12),
 (3, 12),
 (4, 12),
@@ -249,25 +277,29 @@ INSERT INTO `formation_personne` (`FORMATION`, `PERSONNE`) VALUES
 (4, 13),
 (1, 14),
 (3, 14),
+(4, 14),
 (1, 17),
+(3, 17),
 (4, 17),
 (1, 18),
 (3, 18),
 (1, 19),
 (3, 19),
-(4, 19),
 (3, 20),
 (3, 21),
 (1, 22),
-(4, 23),
+(3, 22),
+(3, 23),
 (1, 24),
+(3, 24),
 (1, 25),
 (3, 26),
 (1, 27),
 (1, 31),
 (1, 33),
 (1, 36),
-(1, 38);
+(1, 38),
+(4, 1786);
 
 -- --------------------------------------------------------
 
@@ -330,9 +362,10 @@ CREATE TABLE IF NOT EXISTS `langue_parlee` (
 --
 
 INSERT INTO `langue_parlee` (`IDPERS`, `IDLANGUE`) VALUES
-(1, 2),
-(2, 2),
-(1, 3),
+(1786, 1),
+(1787, 1),
+(1786, 2),
+(1787, 2),
 (3, 3);
 
 -- --------------------------------------------------------
@@ -383,18 +416,6 @@ INSERT INTO `niveau` (`IDNIVEAU`, `LIBELLE`, `id`) VALUES
 (2, 'Fondamental', 0),
 (3, 'Avancé', 0),
 (4, 'Expert', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `niveau_competence`
---
-
-CREATE TABLE IF NOT EXISTS `niveau_competence` (
-  `idniveaucompetence` int(11) NOT NULL,
-  `libelle` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`idniveaucompetence`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -972,6 +993,7 @@ CREATE TABLE IF NOT EXISTS `personnels` (
   `NOM` varchar(30) NOT NULL,
   `PRENOM` varchar(30) DEFAULT NULL,
   `ADRESSE` varchar(50) DEFAULT NULL,
+  `TELEPHONE` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`IDPERSONNEL`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
@@ -979,10 +1001,10 @@ CREATE TABLE IF NOT EXISTS `personnels` (
 -- Dumping data for table `personnels`
 --
 
-INSERT INTO `personnels` (`IDPERSONNEL`, `NOM`, `PRENOM`, `ADRESSE`) VALUES
-(1, 'Ainam', 'Jean-Paul', 'Nanga-Eboko'),
-(2, 'Armel', 'Kadje', 'Une adresse'),
-(3, 'Un Personnel', 'prenom personnel', 'adresse du personne');
+INSERT INTO `personnels` (`IDPERSONNEL`, `NOM`, `PRENOM`, `ADRESSE`, `TELEPHONE`) VALUES
+(1, 'Ainam', 'Jean-Paul', 'Nanga-Eboko', NULL),
+(2, 'Armel', 'Kadje', 'Une adresse', NULL),
+(3, 'Un Personnel', 'prenom personnel', 'adresse du personne', NULL);
 
 -- --------------------------------------------------------
 
@@ -1018,7 +1040,7 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   KEY `LANGUE` (`LANGUE`),
   KEY `AMBITION` (`AMBITION`),
   KEY `FK_sn7joh98p4rajw7bflfj6fx91` (`POTENTIEL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1786 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1788 ;
 
 --
 -- Dumping data for table `personnes`
@@ -2561,19 +2583,25 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (1782, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1783, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1784, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(1785, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
+(1785, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
+(1786, 'matric', 'nom', 'preonm', NULL, '2017-07-04', 'tele', 'emai', 3, 2, 3, 3, 1, 1, 2, '2017-07-05', '', 2),
+(1787, 'test', 'tetwe', 'tetess', NULL, '2017-06-29', 'tele', 'emaigreg', 2, 3, 5, 2, 1, 2, 2, '2017-07-04', '', 3);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personne_profil`
+-- Table structure for table `personne_competence`
 --
 
-CREATE TABLE IF NOT EXISTS `personne_profil` (
+CREATE TABLE IF NOT EXISTS `personne_competence` (
   `PERSONNE` int(11) NOT NULL,
-  `PROFIL` int(11) NOT NULL,
-  KEY `FK_a69ynewcuo5t8evxmhmedcowu` (`PROFIL`),
-  KEY `FK_oyl1kb84x8m0r6tbv1k8yp3d7` (`PERSONNE`)
+  `COMPETENCE` int(11) NOT NULL,
+  `CERTIFICATION` char(2) NOT NULL DEFAULT 'AC' COMMENT 'AC = a certifier; CE = certifier; EN = encours',
+  `FORMATION` int(11) DEFAULT NULL,
+  KEY `PERSONNE` (`PERSONNE`),
+  KEY `COMPETENCE` (`COMPETENCE`),
+  KEY `FORMATION` (`FORMATION`),
+  KEY `CERTIFICATION` (`CERTIFICATION`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2648,7 +2676,7 @@ CREATE TABLE IF NOT EXISTS `profils` (
   `ABBREVIATION` varchar(15) DEFAULT NULL,
   `LIBELLE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDPROFIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `profils`
@@ -2661,7 +2689,8 @@ INSERT INTO `profils` (`IDPROFIL`, `ABBREVIATION`, `LIBELLE`) VALUES
 (4, 'Tech GE', 'Technicien Groupes Electrogène JCB'),
 (5, 'Recep Admin RT', 'Réceptionnaire atelier RT'),
 (6, 'Recep Admin Ens', 'Réceptionnaire Engins RT'),
-(7, 'Tech OTIS', 'Technicien OTIS');
+(7, 'Tech OTIS', 'Technicien OTIS'),
+(8, 'abreviation', 'test');
 
 -- --------------------------------------------------------
 
@@ -2672,9 +2701,7 @@ INSERT INTO `profils` (`IDPROFIL`, `ABBREVIATION`, `LIBELLE`) VALUES
 CREATE TABLE IF NOT EXISTS `profil_competence` (
   `COMPETENCE` int(11) NOT NULL,
   `PROFIL` int(11) NOT NULL,
-  `NIVEAU` int(11) NOT NULL,
-  PRIMARY KEY (`COMPETENCE`,`PROFIL`,`NIVEAU`),
-  KEY `NIVEAU` (`NIVEAU`),
+  PRIMARY KEY (`COMPETENCE`,`PROFIL`),
   KEY `PROFIL` (`PROFIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2682,32 +2709,32 @@ CREATE TABLE IF NOT EXISTS `profil_competence` (
 -- Dumping data for table `profil_competence`
 --
 
-INSERT INTO `profil_competence` (`COMPETENCE`, `PROFIL`, `NIVEAU`) VALUES
-(1, 2, 1),
-(1, 3, 1),
-(1, 4, 1),
-(1, 5, 1),
-(1, 6, 1),
-(2, 1, 1),
-(2, 2, 1),
-(2, 4, 1),
-(2, 5, 1),
-(2, 6, 1),
-(3, 1, 1),
-(3, 4, 1),
-(3, 5, 1),
-(3, 6, 1),
-(4, 1, 1),
-(4, 2, 1),
-(4, 3, 1),
-(4, 5, 1),
-(5, 2, 1),
-(5, 3, 1),
-(5, 4, 1),
-(6, 1, 1),
-(6, 2, 1),
-(6, 3, 1),
-(6, 4, 1);
+INSERT INTO `profil_competence` (`COMPETENCE`, `PROFIL`) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(6, 1),
+(1, 2),
+(4, 2),
+(5, 2),
+(6, 2),
+(1, 3),
+(4, 3),
+(5, 3),
+(6, 3),
+(1, 4),
+(2, 4),
+(3, 4),
+(5, 4),
+(6, 4),
+(1, 5),
+(2, 5),
+(3, 5),
+(4, 5),
+(1, 6),
+(2, 6),
+(3, 6);
 
 -- --------------------------------------------------------
 
@@ -2735,6 +2762,8 @@ INSERT INTO `profil_personne` (`PERSONNE`, `PROFIL`, `NIVEAU`) VALUES
 (3, 2, 2),
 (19, 2, 2),
 (21, 2, 2),
+(1787, 2, 4),
+(1787, 3, 2),
 (19, 4, 3),
 (19, 5, 4);
 
@@ -2898,6 +2927,12 @@ INSERT INTO `users` (`IDUSER`, `LOGIN`, `PASSWORD`, `PROFILE`) VALUES
 --
 
 --
+-- Constraints for table `competences`
+--
+ALTER TABLE `competences`
+  ADD CONSTRAINT `competences_ibfk_1` FOREIGN KEY (`NIVEAU`) REFERENCES `niveau` (`IDNIVEAU`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Constraints for table `formateurs`
 --
 ALTER TABLE `formateurs`
@@ -2947,11 +2982,13 @@ ALTER TABLE `personnes`
   ADD CONSTRAINT `personnes_ibfk_6` FOREIGN KEY (`LANGUE`) REFERENCES `langue` (`IDLANGUE`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `personne_profil`
+-- Constraints for table `personne_competence`
 --
-ALTER TABLE `personne_profil`
-  ADD CONSTRAINT `FK_a69ynewcuo5t8evxmhmedcowu` FOREIGN KEY (`PROFIL`) REFERENCES `profils` (`IDPROFIL`),
-  ADD CONSTRAINT `FK_oyl1kb84x8m0r6tbv1k8yp3d7` FOREIGN KEY (`PERSONNE`) REFERENCES `personnes` (`IDPERSONNE`);
+ALTER TABLE `personne_competence`
+  ADD CONSTRAINT `personne_competence_ibfk_4` FOREIGN KEY (`CERTIFICATION`) REFERENCES `competence_statut` (`STATUT`),
+  ADD CONSTRAINT `personne_competence_ibfk_1` FOREIGN KEY (`PERSONNE`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `personne_competence_ibfk_2` FOREIGN KEY (`COMPETENCE`) REFERENCES `competences` (`IDCOMPETENCE`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `personne_competence_ibfk_3` FOREIGN KEY (`FORMATION`) REFERENCES `formations` (`IDFORMATION`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `postes`
@@ -2972,8 +3009,7 @@ ALTER TABLE `prerequis`
 --
 ALTER TABLE `profil_competence`
   ADD CONSTRAINT `profil_competence_ibfk_1` FOREIGN KEY (`COMPETENCE`) REFERENCES `competences` (`IDCOMPETENCE`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profil_competence_ibfk_2` FOREIGN KEY (`PROFIL`) REFERENCES `profils` (`IDPROFIL`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profil_competence_ibfk_3` FOREIGN KEY (`NIVEAU`) REFERENCES `niveau` (`IDNIVEAU`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `profil_competence_ibfk_2` FOREIGN KEY (`PROFIL`) REFERENCES `profils` (`IDPROFIL`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `profil_personne`
