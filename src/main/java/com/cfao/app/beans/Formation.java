@@ -181,7 +181,7 @@ public class Formation {
     }
 
     public void setCompetences(List<Competence> competences) {
-        this.competences.set(FXCollections.observableArrayList(competences));
+        this.competences.set(FXCollections.observableList(competences));
     }
 
     @ManyToMany(fetch=FetchType.LAZY)

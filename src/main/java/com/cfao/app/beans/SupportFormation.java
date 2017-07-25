@@ -1,5 +1,9 @@
 package com.cfao.app.beans;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -21,16 +25,16 @@ public class SupportFormation  implements java.io.Serializable {
 
 
     private SupportFormationId id;
-    private Formation formation;
-    private Support support;
+    private ObjectProperty<Formation> formation = new SimpleObjectProperty<>();
+    private ObjectProperty<Support> support =  new SimpleObjectProperty<>();
 
     public SupportFormation() {
     }
 
     public SupportFormation(SupportFormationId id, Formation formation, Support support) {
         this.id = id;
-        this.formation = formation;
-        this.support = support;
+        this.formation.set(formation);
+        this.support.set(support);
     }
 
     @EmbeddedId
@@ -50,21 +54,21 @@ public class SupportFormation  implements java.io.Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="FORMATION", nullable=false, insertable=false, updatable=false)
     public Formation getFormation() {
-        return this.formation;
+        return this.formation.get();
     }
 
     public void setFormation(Formation formation) {
-        this.formation = formation;
+        this.formation.set(formation);
     }
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="SUPPORT", nullable=false, insertable=false, updatable=false)
     public Support getSupport() {
-        return this.support;
+        return this.support.get();
     }
 
     public void setSupport(Support support) {
-        this.support = support;
+        this.support.set(support);
     }
 
 

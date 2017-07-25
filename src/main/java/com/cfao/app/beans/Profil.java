@@ -1,9 +1,6 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
@@ -11,7 +8,6 @@ import org.hibernate.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -32,8 +28,8 @@ public class Profil implements java.io.Serializable {
     private SimpleIntegerProperty idprofil = new SimpleIntegerProperty();
     private SimpleStringProperty abbreviation = new SimpleStringProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
-    private SetProperty<Competence> competences = new SimpleSetProperty<>();
-    private SetProperty<ProfilPersonne> profilPersonnes = new SimpleSetProperty<>();
+    private ListProperty<Competence> competences = new SimpleListProperty<>();
+    private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<>();
 
     public Profil() {
     }
@@ -43,11 +39,11 @@ public class Profil implements java.io.Serializable {
         this.libelle.set(libelle);
     }
 
-    public Profil(String abbreviation, String libelle, Set<Competence> competences, Set<ProfilPersonne> profilPersonne) {
+    public Profil(String abbreviation, String libelle, List<Competence> competences, List<ProfilPersonne> profilPersonne) {
         this.abbreviation.set(abbreviation);
         this.libelle.set(libelle);
-        this.competences.set(FXCollections.observableSet(competences));
-        this.profilPersonnes.set(FXCollections.observableSet(profilPersonne));
+        this.competences.set(FXCollections.observableArrayList(competences));
+        this.profilPersonnes.set(FXCollections.observableArrayList(profilPersonne));
     }
 
     @Id
@@ -85,12 +81,12 @@ public class Profil implements java.io.Serializable {
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profil", cascade = CascadeType.ALL)
-    public Set<ProfilPersonne> getProfilPersonnes() {
+    public List<ProfilPersonne> getProfilPersonnes() {
         return this.profilPersonnes.get();
     }
 
-    public void setProfilPersonnes(Set<ProfilPersonne> profilPersonne) {
-       this.profilPersonnes.set(FXCollections.observableSet(profilPersonne));
+    public void setProfilPersonnes(List<ProfilPersonne> profilPersonne) {
+       this.profilPersonnes.set(FXCollections.observableArrayList(profilPersonne));
     }
 
 
@@ -103,16 +99,16 @@ public class Profil implements java.io.Serializable {
     @JoinTable(name = "profil_competence", catalog = "servicepro", joinColumns = {
             @JoinColumn(name = "PROFIL", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)})
-    public Set<Competence> getCompetences() {
+    public List<Competence> getCompetences() {
         return competences.get();
     }
 
-    public SetProperty<Competence> competencesProperty() {
+    public ListProperty<Competence> competencesProperty() {
         return competences;
     }
 
-    public void setCompetences(Set<Competence> competences) {
-        this.competences.set(FXCollections.observableSet(competences));
+    public void setCompetences(List<Competence> competences) {
+        this.competences.set(FXCollections.observableList(competences));
     }
     @Transient
     public Competence getOriginalCompetence(Competence competence){

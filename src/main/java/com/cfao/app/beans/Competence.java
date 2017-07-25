@@ -74,7 +74,7 @@ public class Competence implements java.io.Serializable {
     }
 
     public void setProfils(List<Profil> profils) {
-        this.profils.set(FXCollections.observableArrayList(profils));
+        this.profils.set(FXCollections.observableList(profils));
     }
 
     @ManyToMany(fetch = FetchType.LAZY)

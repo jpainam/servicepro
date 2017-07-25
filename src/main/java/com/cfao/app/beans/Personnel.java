@@ -1,12 +1,10 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +32,7 @@ public class Personnel implements java.io.Serializable {
     private SimpleStringProperty prenom = new SimpleStringProperty();
     private SimpleStringProperty adresse = new SimpleStringProperty();
     private SimpleStringProperty telephone = new SimpleStringProperty();
-    private SetProperty<Formation> formations = new SimpleSetProperty<>();
+    private ListProperty<Formation> formations = new SimpleListProperty<>();
 
     public Personnel() {
     }
@@ -43,12 +41,12 @@ public class Personnel implements java.io.Serializable {
     public Personnel(String nom) {
         this.nom.set(nom);
     }
-    public Personnel(String nom, String prenom, String adresse, String telephone, Set<Formation> formations) {
+    public Personnel(String nom, String prenom, String adresse, String telephone, List<Formation> formations) {
         this.nom.set(nom);
         this.prenom.set(prenom);
         this.adresse.set(adresse);
         this.telephone.set(telephone);
-        this.formations.set(FXCollections.observableSet(formations));
+        this.formations.set(FXCollections.observableArrayList(formations));
     }
 
     @Id @GeneratedValue(strategy=IDENTITY)
@@ -105,12 +103,12 @@ public class Personnel implements java.io.Serializable {
     @JoinTable(name="formateurs", catalog="servicepro", joinColumns = {
             @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) })
-    public Set<Formation> getFormations() {
+    public List<Formation> getFormations() {
         return this.formations;
     }
 
-    public void setFormations(Set<Formation> formations) {
-        this.formations.set(FXCollections.observableSet(formations));
+    public void setFormations(List<Formation> formations) {
+        this.formations.set(FXCollections.observableArrayList(formations));
     }
 
 

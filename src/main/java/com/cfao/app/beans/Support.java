@@ -1,11 +1,9 @@
 package com.cfao.app.beans;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +27,7 @@ public class Support  implements java.io.Serializable {
     private SimpleStringProperty code = new SimpleStringProperty();
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty lien = new SimpleStringProperty();
-    private SetProperty<SupportFormation> supportFormations = new SimpleSetProperty<>();
+    private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
 
     public Support() {
     }
@@ -39,11 +37,11 @@ public class Support  implements java.io.Serializable {
         this.code.set(code);
         this.lien.set(lien);
     }
-    public Support(String code, String titre, String lien, Set<SupportFormation> supportFormations) {
+    public Support(String code, String titre, String lien, List<SupportFormation> supportFormations) {
         this.code.set(code);
         this.titre.set(titre);
         this.lien.set(lien);
-        this.supportFormations.set(FXCollections.observableSet(supportFormations));
+        this.supportFormations.set(FXCollections.observableArrayList(supportFormations));
     }
 
     @Id @GeneratedValue(strategy=AUTO)
@@ -87,12 +85,12 @@ public class Support  implements java.io.Serializable {
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="support")
-    public Set<SupportFormation> getSupportFormations() {
+    public List<SupportFormation> getSupportFormations() {
         return this.supportFormations;
     }
 
-    public void setSupportFormations(Set<SupportFormation> supportFormations) {
-        this.supportFormations.set(FXCollections.observableSet(supportFormations));
+    public void setSupportFormations(List<SupportFormation> supportFormations) {
+        this.supportFormations.set(FXCollections.observableArrayList(supportFormations));
     }
 
     public SimpleStringProperty codeProperty() {

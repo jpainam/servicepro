@@ -44,7 +44,7 @@ public class Personne implements java.io.Serializable {
     private ObjectProperty<Langue> langue = new SimpleObjectProperty<>();
     private ListProperty<ProfilPersonne> profilPersonnes = new SimpleListProperty<ProfilPersonne>();
     private ListProperty<Poste> postes = new SimpleListProperty<Poste>();
-    private SetProperty<Formation> formations = new SimpleSetProperty<>();
+    private ListProperty<Formation> formations = new SimpleListProperty<>();
 
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -264,12 +264,12 @@ public class Personne implements java.io.Serializable {
     @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
             @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) })
-    public Set<Formation> getFormations() {
+    public List<Formation> getFormations() {
         return this.formations;
     }
 
-    public void setFormations(Set<Formation> formations) {
-        this.formations.set(FXCollections.observableSet(formations));
+    public void setFormations(List<Formation> formations) {
+        this.formations.set(FXCollections.observableList(formations));
     }
 
 

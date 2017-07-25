@@ -20,9 +20,6 @@
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
-        <mapping resource="mapping/personnel.hbm.xml" />
-
-
 
         <mapping class="com.cfao.app.beans.Personne" />
         <mapping class="com.cfao.app.beans.Personnel" />
