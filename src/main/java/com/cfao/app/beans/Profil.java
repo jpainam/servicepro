@@ -118,6 +118,11 @@ public class Profil implements java.io.Serializable {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return getLibelle();
+    }
 }
 
 

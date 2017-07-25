@@ -66,9 +66,10 @@ public class Groupe  implements java.io.Serializable {
         this.personnes.set(FXCollections.observableSet(personnes));
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return getLibelle();
+    }
 }
 
 

@@ -110,7 +110,7 @@ public class TemplateController implements Initializable, Controller {
         root.getChildren().addAll(personne, formation, competence);
 
         breadCrumb.selectedCrumbProperty().set(nouveau);
-        breadCrumb.setAutoNavigationEnabled(false);
+        breadCrumb.setAutoNavigationEnabled(true);
         return breadCrumb;
     }
 

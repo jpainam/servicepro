@@ -122,9 +122,10 @@ public class Pays {
         this.personnes.set(FXCollections.observableList(personnes));
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return getNamefr();
+    }
 }
 
 
