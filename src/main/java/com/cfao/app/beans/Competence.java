@@ -2,12 +2,9 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 
-import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "competences"
@@ -36,7 +33,7 @@ public class Competence implements java.io.Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDCOMPETENCE", unique = true, nullable = false)
     public Integer getIdcompetence() {
         return this.idcompetence.get();
@@ -67,7 +64,7 @@ public class Competence implements java.io.Serializable {
     }
 
 
-    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="profil_competence", catalog="servicepro", joinColumns = {
             @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PROFIL", nullable=false, updatable=false) })

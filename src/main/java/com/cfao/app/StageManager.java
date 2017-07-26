@@ -5,11 +5,9 @@ import com.cfao.app.controllers.TemplateController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.NotificationPane;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -30,6 +28,9 @@ public class StageManager {
         }catch(IOException ex){
             ex.printStackTrace();
         }
+    }
+    public static StackPane getContentLayout(){
+        return mainController.getContentLayout();
     }
     public static void setSelectedCrumb(String key){
         mainController.setSelectedCrumb(key);

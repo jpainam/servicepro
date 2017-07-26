@@ -16,14 +16,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.controlsfx.control.BreadCrumbBar;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.action.Action;
@@ -35,7 +40,6 @@ import java.util.ResourceBundle;
  * Created by JP on 6/9/2017.
  */
 public class TemplateController implements Initializable, Controller {
-    private static TemplateController instance;
 
     @FXML
     public AnchorPane content;
@@ -47,7 +51,7 @@ public class TemplateController implements Initializable, Controller {
     public Button exitButton;
 
     public NotificationPane notificationPane = new NotificationPane(new StackPane());
-    public HBox highlightPane;
+
     public StackPane notificationStack;
 
     public ToolBar breadCrumbContainer;
@@ -56,6 +60,8 @@ public class TemplateController implements Initializable, Controller {
     public Label caretLabel;
     public Label userNameLabel;
     public Label currentLogTimeLabel;
+    public StackPane contentPane;
+    public StackPane principalLayout;
 
     BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
     PopOver profilPopOver = new PopOver();
@@ -108,6 +114,15 @@ public class TemplateController implements Initializable, Controller {
     public void setContent(Node node) {
         content.getChildren().setAll(node);
     }
+
+    /**
+     * Utiliser pour rendre les fond gris en cas d'alert
+     * @return
+     */
+    @Override
+    public StackPane getContentLayout(){
+        return principalLayout;
+    }
     /*
     @Override
     public ProgressBar getProgressBar() {
@@ -119,11 +134,6 @@ public class TemplateController implements Initializable, Controller {
         return highlightPane;
     }
 */
-
-    @Override
-    public NotificationPane getNotificationPane() {
-        return notificationPane;
-    }
     @Override
     public ProgressBar getProgressBar(){
         return progressBar;

@@ -229,7 +229,6 @@ public class CompetenceController implements Initializable{
             return;
         if(stateBtnModifier == 0) {
             btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
-            ServiceproUtil.emptyFields(txtLibelleCompetence);
             chkConnaissance.setSelected(false);
             chkCompetence.setSelected(false);
             ServiceproUtil.setEditable(true, txtLibelleCompetence);
@@ -277,10 +276,7 @@ public class CompetenceController implements Initializable{
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
-        stateBtnModifier = 0;
-        stateBtnAjouter = 0;
-        btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
-        btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+        StageManager.loadContent("/views/competence/competence.fxml");
     }
 
     public void previousAction(ActionEvent event) {

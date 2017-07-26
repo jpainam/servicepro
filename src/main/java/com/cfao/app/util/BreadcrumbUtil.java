@@ -64,7 +64,7 @@ public class BreadcrumbUtil extends BreadCrumbBar<BreadCrumbItem> {
         root.getChildren().setAll(personne, competence, formation, profil);
 
 
-        setSelectedCrumb(editcompetence);
+        setSelectedCrumb(root);
     }
 
     public void setSelectedCrumb(String key) {

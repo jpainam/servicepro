@@ -1,15 +1,21 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Module;
 import com.cfao.app.StageManager;
-import com.cfao.app.beans.*;
+import com.cfao.app.beans.Competence;
+import com.cfao.app.beans.Niveau;
+import com.cfao.app.beans.Profil;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.*;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -19,10 +25,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
-import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ResourceBundle;
 
 /**
  * Created by JP on 6/29/2017.
@@ -201,8 +208,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         boolean bool = false;
         String sms = "";
         if (edit) {
-            //bool = model.update(profil);
-            new Model<Profil>().update(profil);
+            bool = model.update(profil);
             sms = "Modification OK";
         } else {
             sms = "Enregistrement OK";

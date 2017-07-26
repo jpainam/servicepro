@@ -1,14 +1,9 @@
 package com.cfao.app;
 
 
-import com.cfao.app.util.FXMLView;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import org.controlsfx.control.NotificationPane;
 
 
 /**
@@ -16,8 +11,7 @@ import org.controlsfx.control.NotificationPane;
  */
 public interface Controller{
      void setContent(Node node);
-     NotificationPane getNotificationPane();
-
+     StackPane getContentLayout();
      ProgressBar getProgressBar();
 
     void setSelectedCrumb(String key);

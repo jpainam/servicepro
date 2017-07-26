@@ -53,7 +53,7 @@ public class ProfilPersonne  implements java.io.Serializable {
         this.niveau.set(niveau);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="PERSONNE", nullable=false, insertable=false, updatable=false)
     public Personne getPersonne() {
         return this.personne.get();
@@ -63,7 +63,7 @@ public class ProfilPersonne  implements java.io.Serializable {
         this.personne.set(personne);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="PROFIL", nullable=false, insertable=false, updatable=false)
     public Profil getProfil() {
         return this.profil.get();

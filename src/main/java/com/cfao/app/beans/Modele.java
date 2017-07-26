@@ -50,4 +50,22 @@ public class Modele {
     public String toString() {
         return getLibelle();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Modele modele = (Modele) o;
+
+        if (idmodele != null ? !idmodele.equals(modele.idmodele) : modele.idmodele != null) return false;
+        return libelle != null ? libelle.equals(modele.libelle) : modele.libelle == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idmodele != null ? idmodele.hashCode() : 0;
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+        return result;
+    }
 }

@@ -1,29 +1,24 @@
 package com.cfao.app.util;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Optional;
-
-import javafx.scene.control.Alert.AlertType;
+import com.cfao.app.StageManager;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.stage.Modality;
-import javafx.stage.Screen;
-import javafx.stage.StageStyle;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Optional;
 
 public class AlertUtil {
 
     public static void showSimpleAlert(String title, String content) {
         Alert alert = new Alert(AlertType.INFORMATION);
-        Region region = new Region();
-        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
-        region.setVisible(false);
-
+        grayBackground(alert);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -33,6 +28,7 @@ public class AlertUtil {
 
     public static void showErrorMessage(String title, String content) {
         Alert alert = new Alert(AlertType.ERROR);
+        grayBackground(alert);
         alert.setTitle("Error");
         alert.setHeaderText(title);
         alert.setContentText(content);
@@ -42,6 +38,7 @@ public class AlertUtil {
 
     public static void showErrorMessage(Exception ex) {
         Alert alert = new Alert(AlertType.ERROR);
+        grayBackground(alert);
         alert.setTitle("Error occured");
         alert.setHeaderText("Error Occured");
         alert.setContentText(ex.getLocalizedMessage());
@@ -73,6 +70,7 @@ public class AlertUtil {
 
     public static void showErrorMessage(Exception ex, String title, String content) {
         Alert alert = new Alert(AlertType.ERROR);
+        grayBackground(alert);
         alert.setTitle("Error occured");
         alert.setHeaderText(title);
         alert.setContentText(content);
@@ -101,14 +99,17 @@ public class AlertUtil {
         alert.getDialogPane().setExpandableContent(expContent);
         alert.showAndWait();
     }
-
-    public static boolean showConfirmationMessage(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Suppression");
+    private static void grayBackground(Alert alert){
         Region region = new Region();
         region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
         region.setVisible(false);
+        StageManager.getContentLayout().getChildren().add(region);
         region.visibleProperty().bind(alert.showingProperty());
+    }
+    public static boolean showConfirmationMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Suppression");
+        grayBackground(alert);
         alert.setHeaderText("");
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
@@ -121,12 +122,8 @@ public class AlertUtil {
     public static boolean showConfirmationMessage(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
-        Region region = new Region();
-        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
-        region.setVisible(false);
-        region.visibleProperty().bind(alert.showingProperty());
+       grayBackground(alert);
         alert.setHeaderText("");
-
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

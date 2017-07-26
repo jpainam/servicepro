@@ -1,17 +1,12 @@
 package com.cfao.app.beans;
 
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by JP on 6/21/2017.
@@ -181,7 +176,9 @@ public class Formation {
     }
 
     public void setCompetences(List<Competence> competences) {
-        this.competences.set(FXCollections.observableList(competences));
+        if(competences != null) {
+            this.competences.set(FXCollections.observableList(competences));
+        }
     }
 
     @ManyToMany(fetch=FetchType.LAZY)
@@ -208,6 +205,11 @@ public class Formation {
 
     public ObjectProperty<LocalDate> datefinProperty() {
         return new SimpleObjectProperty<>(new java.sql.Date(datefin.get().getTime()).toLocalDate());
+    }
+
+    @Override
+    public String toString() {
+        return getTitre();
     }
 }
 
