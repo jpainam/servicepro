@@ -239,7 +239,7 @@ public class FormationController implements Initializable {
                 @Override
                 public void handle(WorkerStateEvent event) {
                     if (task.getValue()) {
-                        ServiceproUtil.notify("Ajouter avec succees");
+                        ServiceproUtil.notify("Ajout OK");
                         buildTable();
                     } else {
                         ServiceproUtil.notify("Erreur d'ajout");

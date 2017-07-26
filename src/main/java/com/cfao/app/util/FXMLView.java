@@ -51,16 +51,6 @@ public enum FXMLView {
         public String getFXMLFile() {
             return "/views/competence/competence.fxml";
         }
-
-    }, ADDCOMPETENCE {
-        public String getTitle() {
-            return getStringFromResourceBundle("competence.title");
-        }
-
-        public String getFXMLFile() {
-            return "/views/competence/add.fxml";
-        }
-
     }, PROFIL {
         public String getTitle() {
             return getStringFromResourceBundle("profil.title");

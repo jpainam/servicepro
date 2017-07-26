@@ -4,6 +4,7 @@ import com.cfao.app.Controller;
 import com.cfao.app.Module;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.BreadcrumbUtil;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -56,14 +57,13 @@ public class TemplateController implements Initializable, Controller {
     public Label userNameLabel;
     public Label currentLogTimeLabel;
 
-    BreadCrumbBar breadCrumb = new BreadCrumbBar();
+    BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
     PopOver profilPopOver = new PopOver();
 
 
     public void initialize(URL location, ResourceBundle resources) {
         StageManager.setMainController(this);
-
-        breadCrumbContainer.getItems().add(createBreadCrumbBar());
+        breadCrumbContainer.getItems().add(breadCrumb);
         try {
             cfaoLogo.setImage(new Image(getClass().getResourceAsStream(ResourceBundle.getBundle("Application").getString("app.logo"))));
 
@@ -94,24 +94,6 @@ public class TemplateController implements Initializable, Controller {
             AlertUtil.showErrorMessage(ex);
         }
         //content.getChildren().setAll(button);
-    }
-
-
-    private BreadCrumbBar createBreadCrumbBar() {
-        TreeItem<String> root = new TreeItem<String>("Accueil");
-
-        TreeItem<String> personne = new TreeItem<String>("Personne");
-        TreeItem<String> formation = new TreeItem<String>("Formation");
-        TreeItem<String> competence = new TreeItem<String>("Competence");
-        TreeItem<String> nouveau = new TreeItem<>("Nouveau");
-
-        personne.getChildren().add(nouveau);
-
-        root.getChildren().addAll(personne, formation, competence);
-
-        breadCrumb.selectedCrumbProperty().set(nouveau);
-        breadCrumb.setAutoNavigationEnabled(true);
-        return breadCrumb;
     }
 
     public void displayCivilite(ActionEvent actionEvent) {
@@ -145,6 +127,11 @@ public class TemplateController implements Initializable, Controller {
     @Override
     public ProgressBar getProgressBar(){
         return progressBar;
+    }
+
+    @Override
+    public void setSelectedCrumb(String key) {
+        breadCrumb.setSelectedCrumb(key);
     }
 
 
@@ -199,19 +186,22 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void showAction(ActionEvent actionEvent) {
+        breadCrumb.setSelectedCrumb("competence");
         Module.setCompetence(content);
     }
 
     public void addAction(ActionEvent actionEvent) {
-        StageManager.loadContent(FXMLView.ADDCOMPETENCE.getFXMLFile());
+        StageManager.loadContent("/views/competence/competence.fxml");
     }
 
     public void showProfil(ActionEvent actionEvent) {
+        breadCrumb.setSelectedCrumb("profil");
         Module.setProfil(content);
     }
 
     @FXML
     public void showFormation(ActionEvent actionEvent) {
+        breadCrumb.setSelectedCrumb("formation");
         Module.setFormation(content);
     }
 

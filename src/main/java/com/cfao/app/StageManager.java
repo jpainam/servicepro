@@ -31,6 +31,9 @@ public class StageManager {
             ex.printStackTrace();
         }
     }
+    public static void setSelectedCrumb(String key){
+        mainController.setSelectedCrumb(key);
+    }
     public static NotificationPane getNotificationPane(){
         return notificationPane;
     }

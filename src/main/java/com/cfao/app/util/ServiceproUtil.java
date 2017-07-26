@@ -1,9 +1,6 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
-import com.cfao.app.beans.Etatformation;
-import com.cfao.app.beans.Modele;
-import com.cfao.app.beans.Personnel;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;

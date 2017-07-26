@@ -15,8 +15,10 @@ import org.controlsfx.control.NotificationPane;
  * Created by JP on 6/9/2017.
  */
 public interface Controller{
-    public void setContent(Node node);
-    public NotificationPane getNotificationPane();
+     void setContent(Node node);
+     NotificationPane getNotificationPane();
 
-    public ProgressBar getProgressBar();
+     ProgressBar getProgressBar();
+
+    void setSelectedCrumb(String key);
 }

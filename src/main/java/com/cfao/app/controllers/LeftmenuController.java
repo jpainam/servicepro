@@ -47,12 +47,15 @@ public class LeftmenuController implements Initializable{
         button.setGraphic(icon);
     }
     public void personneAction(ActionEvent event) {
+        StageManager.setSelectedCrumb("personne");
         StageManager.loadContent("/views/civilite/civilite.fxml");
     }
     public void formationAction(ActionEvent event) {
+        StageManager.setSelectedCrumb("formation");
         StageManager.loadContent("/views/formation/formation.fxml");
     }
     public void competenceAction(ActionEvent event) {
+        StageManager.setSelectedCrumb("competence");
         StageManager.loadContent("/views/competence/competence.fxml");
     }
     public void testAction(ActionEvent event) {

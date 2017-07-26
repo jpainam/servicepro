@@ -1,15 +1,19 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Formation;
 
+import com.cfao.app.beans.Niveau;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.model.CompetenceModel;
+import com.cfao.app.model.Model;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -22,6 +26,9 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -41,7 +48,7 @@ public class CompetenceController implements Initializable{
     public TableColumn<Competence, Boolean> competenceColumn;
     public Button btnAnnuler;
     public SearchBox searchBox = new SearchBox();
-    public HBox researchBox;
+    public VBox researchBox;
     public StackPane competenceStackPane;
     public Tab competenceTabDetails;
     public Tab competenceTabPersonne;
@@ -57,6 +64,12 @@ public class CompetenceController implements Initializable{
     public Button btnNext;
     public Button btnPrint;
     public TableColumn<Competence, String> niveauCompetenceColumn;
+    public TextField txtLibelleCompetence;
+    public ComboBox<Niveau> comboNiveau;
+    public CheckBox chkCompetence;
+    public CheckBox chkConnaissance;
+    public int stateBtnModifier = 0;
+    public int stateBtnAjouter = 0;
 
     CompetencePersonneController personneController;
 
@@ -73,6 +86,8 @@ public class CompetenceController implements Initializable{
         ButtonUtil.print(btnPrint);
         ButtonUtil.next(btnNext);
         ButtonUtil.previous(btnPrevious);
+        ServiceproUtil.setEditable(false, txtLibelleCompetence);
+        ServiceproUtil.setDisable(true,chkCompetence,chkConnaissance, comboNiveau);
         personneController = new CompetencePersonneController();
         competenceTabPersonne.setContent(personneController);
         ButtonUtil.detailsTab(competenceTabDetails);
@@ -89,9 +104,10 @@ public class CompetenceController implements Initializable{
         datedebutFormationColumn.setCellFactory(new DateTableCellFactory());
         datefinFormationColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
         datefinFormationColumn.setCellFactory(new DateTableCellFactory());
-
-        //libelleProfilColumn.setCellValueFactory(param -> param.getValue().);
         niveauCompetenceColumn.setCellValueFactory(param -> param.getValue().getNiveau().libelleProperty());
+
+        libelleProfilColumn.setCellValueFactory(param -> param.getValue().libelleProperty());
+
     }
 
     private void buildCompetenceTable() {
@@ -138,11 +154,28 @@ public class CompetenceController implements Initializable{
         competenceTable.itemsProperty().bind(task.valueProperty());
         new ProgressIndicatorUtil(competenceStackPane, task);
         new Thread(task).start();
+        Task<ObservableList<Niveau>> task1 = new Task<ObservableList<Niveau>>() {
+            @Override
+            protected ObservableList<Niveau> call() throws Exception {
+                return FXCollections.observableArrayList(new Model<Niveau>("Niveau").getList());
+            }
+        };
+        comboNiveau.itemsProperty().bind(task1.valueProperty());
+        new Thread(task1).start();
     }
 
     public void buildFormationTable(Competence competence){
         if(competence == null)
             return;
+        txtLibelleCompetence.setText(competence.getDescription());
+        comboNiveau.setValue(competence.getNiveau());
+        chkCompetence.setSelected(false);
+        chkConnaissance.setSelected(false);
+        if(competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)){
+            chkConnaissance.setSelected(true);
+        }else if(competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)){
+            chkCompetence.setSelected(true);
+        }
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
             protected ObservableList<Formation> call() throws Exception {
@@ -151,6 +184,7 @@ public class CompetenceController implements Initializable{
         };
         new ProgressIndicatorUtil(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
+        profilTable.setItems(FXCollections.observableArrayList(competence.getProfils()));
         new Thread(task).start();
     }
 
@@ -159,15 +193,94 @@ public class CompetenceController implements Initializable{
         personneController.buildTable();
     }
     public void clickNouveau(ActionEvent actionEvent) {
+        if(stateBtnAjouter == 0) {
+            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+            ServiceproUtil.emptyFields(txtLibelleCompetence);
+            chkConnaissance.setSelected(false);
+            chkCompetence.setSelected(false);
+            ServiceproUtil.setEditable(true, txtLibelleCompetence);
+            ServiceproUtil.setDisable(false, comboNiveau, chkConnaissance, chkCompetence);
+            stateBtnAjouter = 1;
+        }else{
+            Competence competence = new Competence();
+            if(chkCompetence.isSelected() && chkConnaissance.isSelected()){
+                competence.setType(Constante.CONNAISSANCE_COMPETENCE);
+            }else if(chkConnaissance.isSelected()) {
+                competence.setType(Constante.CONNAISSANCE);
+            }else if(chkCompetence.isSelected()){
+                competence.setType(Constante.COMPETENCE);
+            }
+            competence.setDescription(txtLibelleCompetence.getText());
+            competence.setNiveau(comboNiveau.getValue());
+            CompetenceModel model = new CompetenceModel();
+            if(model.save(competence)){
+                ServiceproUtil.notify("Ajout OK");
+                StageManager.loadContent("/views/competence/competence.fxml");
+            }else{
+                ServiceproUtil.notify("Une erreur s'est produite");
+            }
+            stateBtnAjouter = 0;
+            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
+        }
     }
 
     public void clickModifier(ActionEvent actionEvent) {
+        if(competenceTable.getSelectionModel().getSelectedItem() == null)
+            return;
+        if(stateBtnModifier == 0) {
+            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+            ServiceproUtil.emptyFields(txtLibelleCompetence);
+            chkConnaissance.setSelected(false);
+            chkCompetence.setSelected(false);
+            ServiceproUtil.setEditable(true, txtLibelleCompetence);
+            ServiceproUtil.setDisable(false, comboNiveau, chkConnaissance, chkCompetence);
+            stateBtnModifier = 1;
+        }else{
+            Competence competence = competenceTable.getSelectionModel().getSelectedItem();
+            if(chkCompetence.isSelected() && chkConnaissance.isSelected()){
+                competence.setType(Constante.CONNAISSANCE_COMPETENCE);
+            }else if(chkConnaissance.isSelected()) {
+                competence.setType(Constante.CONNAISSANCE);
+            }else if(chkCompetence.isSelected()){
+                competence.setType(Constante.COMPETENCE);
+            }
+            competence.setDescription(txtLibelleCompetence.getText());
+            competence.setNiveau(comboNiveau.getValue());
+            CompetenceModel model = new CompetenceModel();
+            if(model.update(competence)){
+                ServiceproUtil.notify("Modification OK");
+                StageManager.loadContent("/views/competence/competence.fxml");
+            }else{
+                ServiceproUtil.notify("Une erreur s'est produite");
+            }
+            stateBtnModifier = 0;
+            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+        }
     }
 
     public void clickSupprimer(ActionEvent actionEvent) {
+        if(competenceTable.getSelectionModel().getSelectedItem() != null) {
+            Competence competence = competenceTable.getSelectionModel().getSelectedItem();
+            boolean okay = AlertUtil.showConfirmationMessage("Suppression", "Etes vous sûr de vouloir supprimer " + competence);
+            if(okay){
+               CompetenceModel model = new CompetenceModel();
+               if(model.delete(competence)){
+                   ServiceproUtil.notify("Suppression OK");
+                   StageManager.loadContent("/views/competence/competence.fxml");
+               }else{
+                   ServiceproUtil.notify("Erreur de suppression");
+               }
+            }
+        }else{
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir la compétence à supprimer");
+        }
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
+        stateBtnModifier = 0;
+        stateBtnAjouter = 0;
+        btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
+        btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
     }
 
     public void previousAction(ActionEvent event) {
