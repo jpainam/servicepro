@@ -1,16 +1,28 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Formation;
+import com.cfao.app.beans.Niveau;
+import com.cfao.app.model.CompetenceModel;
+import com.cfao.app.model.FormationModel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.ServiceproUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -22,17 +34,24 @@ import java.util.ResourceBundle;
  * Created by JP on 7/18/2017.
  */
 public class FormationCompetenceController extends AnchorPane implements Initializable {
+    public TableColumn<Competence, Void> numeroCompetence;
+    public TableColumn<Competence, String> libelleCompetence;
+    public TableColumn<Competence, Niveau> niveauCompetence;
+    public TableColumn<Competence, Competence> possedeCompetence;
     private Formation formation = null;
     public HBox hboxCompetenceAssociee;
     // Search competences
     SearchBox searchBox1 = new SearchBox();
     SearchBox searchBoxAssocie = new SearchBox();
-    private TableView<Competence> competenceTable;
+    public TableView<Competence> competenceTable;
     public Button btnModifierCompetence;
     public Button btnAnnulerCompetence;
     public Button btnNextCompetence;
     public Button btnPreviousCompetence;
     public Button btnPrintCompetence;
+
+    private boolean stateBtnModifier = false;
+    private ObservableList<Competence> selectedItems;
 
     public FormationCompetenceController() {
         try {
@@ -58,21 +77,105 @@ public class FormationCompetenceController extends AnchorPane implements Initial
         initComponents();
     }
 
-    private void initComponents(){
+    private void initComponents() {
         ButtonUtil.add(btnModifierCompetence);
         ButtonUtil.cancel(btnAnnulerCompetence);
         ButtonUtil.next(btnNextCompetence);
         ButtonUtil.previous(btnPreviousCompetence);
         ButtonUtil.print(btnPrintCompetence);
+        libelleCompetence.setCellValueFactory(param -> param.getValue().descriptionProperty());
+        niveauCompetence.setCellValueFactory(param -> param.getValue().niveauProperty());
+        possedeCompetence.setCellFactory(param -> new CheckBoxTableCell<>());
+        numeroCompetence.setCellFactory(col -> {
+            TableCell<Competence, Void> cell = new TableCell<>();
+            cell.textProperty().bind(Bindings.createStringBinding(() -> {
+                if (cell.isEmpty()) {
+                    return null;
+                } else {
+                    return Integer.toString(cell.getIndex() + 1);
+                }
+            }, cell.emptyProperty(), cell.indexProperty()));
+            return cell;
+        });
     }
-    public void buildTable() {
 
+    public void buildTable() {
+        possedeCompetence.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>());
+        competenceTable.setItems(FXCollections.observableArrayList(formation.getCompetences()));
+        possedeCompetence.setCellFactory(param -> {
+            SimpleBooleanProperty selected = new SimpleBooleanProperty(true);
+            CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
+            return cell;
+        });
     }
 
     public void annulerCompetence(ActionEvent actionEvent) {
+        //StageManager.loadContent("/views/formation/formation.fxml");
+        stateBtnModifier = false;
+        competenceTable.setEditable(false);
+        competenceTable.itemsProperty().unbind();
+        buildTable();
+        btnModifierCompetence.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
     }
 
     public void modifierCompetence(ActionEvent actionEvent) {
+        if (stateBtnModifier == false) {
+            competenceTable.setEditable(true);
+            btnModifierCompetence.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+            selectedItems = FXCollections.observableArrayList();
+            possedeCompetence.setCellFactory(param -> {
+                BooleanProperty selected = new SimpleBooleanProperty();
+                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
+                selected.addListener((obs, wasSelected, isNowSelected) -> {
+                    if (isNowSelected) {
+                        selectedItems.add(cell.getItem());
+                        competenceTable.getSelectionModel().select(cell.getItem());
+                    } else {
+                        selectedItems.remove(cell.getItem());
+                        competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                    }
+                });
+
+                selectedItems.addListener((ListChangeListener<Competence>) change -> selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem())));
+                cell.itemProperty().addListener((observable, oldValue, newValue) -> selected.set(newValue != null && selectedItems.contains(newValue)));
+                return cell;
+            });
+            Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+                @Override
+                protected ObservableList<Competence> call() throws Exception {
+                    return FXCollections.observableArrayList(new CompetenceModel().getList());
+                }
+            };
+            competenceTable.itemsProperty().bind(task.valueProperty());
+            new Thread(task).start();
+            stateBtnModifier = true;
+        } else {
+            FormationModel formationModel = new FormationModel();
+            formation.setCompetences(selectedItems);
+            if (formationModel.update(formation)) {
+                ServiceproUtil.notify("Modification OK");
+                StageManager.loadContent("/views/formation/formation.fxml");
+            } else {
+                ServiceproUtil.notify("Erreur de modification");
+            }
+            competenceTable.setEditable(false);
+            stateBtnModifier = false;
+        }
     }
 
+    public void previousCompetence(ActionEvent event) {
+        if (competenceTable.getSelectionModel().getSelectedIndex() > 0) {
+            competenceTable.getSelectionModel().selectPrevious();
+        }
+    }
+
+    public void nextCompetence(ActionEvent event) {
+        if (competenceTable.getSelectionModel().getSelectedIndex() < competenceTable.getItems().size()) {
+            competenceTable.getSelectionModel().selectNext();
+        }
+    }
+
+
+    public void printCompetence(ActionEvent event) {
+    }
 }

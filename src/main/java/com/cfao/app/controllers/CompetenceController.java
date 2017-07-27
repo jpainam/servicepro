@@ -23,10 +23,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 
 /**
  * Created by JP on 6/14/2017.
@@ -106,16 +108,22 @@ public class CompetenceController implements Initializable{
 
     private void buildCompetenceTable() {
 
-        numeroColumn.setCellFactory(col -> {
-            TableCell<Competence, Void> cell = new TableCell<>();
-            cell.textProperty().bind(Bindings.createStringBinding(() -> {
-                if (cell.isEmpty()) {
-                    return null;
-                } else {
-                    return Integer.toString(cell.getIndex() + 1);
-                }
-            }, cell.emptyProperty(), cell.indexProperty()));
-            return cell;
+        numeroColumn.setCellFactory(new Callback<TableColumn<Competence, Void>, TableCell<Competence, Void>>() {
+            @Override
+            public TableCell<Competence, Void> call(TableColumn<Competence, Void> col) {
+                TableCell<Competence, Void> cell = new TableCell<>();
+                cell.textProperty().bind(Bindings.createStringBinding(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        if (cell.isEmpty()) {
+                            return null;
+                        } else {
+                            return Integer.toString(cell.getIndex() + 1);
+                        }
+                    }
+                }, cell.emptyProperty(), cell.indexProperty()));
+                return cell;
+            }
         });
 
         libelleColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());

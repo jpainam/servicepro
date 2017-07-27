@@ -14,15 +14,18 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by JP on 7/13/2017.
@@ -119,15 +122,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
         personneTable.itemsProperty().bind(task.valueProperty());
         new ProgressIndicatorUtil(personneStackPane, task);
         new Thread(task).start();
-        Task<ObservableList<Personne>> task1 = new Task<ObservableList<Personne>>() {
-            @Override
-            protected ObservableList<Personne> call() throws Exception {
-                return FXCollections.observableArrayList(formation.getPersonnes());
-            }
-        };
-        participantTable.itemsProperty().bind(task1.valueProperty());
-        new ProgressIndicatorUtil(participantStackPane, task1);
-        new Thread(task1).start();
+        participantTable.setItems(FXCollections.observableArrayList(formation.getPersonnes()));
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
     }
 

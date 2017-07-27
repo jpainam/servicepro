@@ -36,7 +36,7 @@ public class LeftmenuController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLeftMenuSettings();
-        btnPersonne.setUserData("/views/civilite/civilite.fxml");
+        //btnPersonne.setUserData("/views/civilite/civilite.fxml");
         toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
@@ -47,7 +47,7 @@ public class LeftmenuController implements Initializable{
                     oldValue.setSelected(true);
                 }else{
                     ((FontAwesomeIconView)((ToggleButton)newValue).getGraphic()).setFill(Color.WHITE);
-                    ((ToggleButton)(newValue)).getStyleClass().add("toggle-button1");
+                    //Resolu avec les onAction sur le toggleButton
                     //StageManager.loadContent(toggleGroup.getSelectedToggle().getUserData().toString());
                 }
             }
@@ -93,63 +93,4 @@ public class LeftmenuController implements Initializable{
     public void profilAction(ActionEvent event) {
         StageManager.loadContent("/views/profil/profil.fxml");
     }
-
-   /* @FXML
-    public Accordion Leftmenu;
-
-    @FXML
-    public ListView listPersonnes;
-    @FXML
-    public ListView listFormations;
-    @FXML
-    public ListView listCompetences;
-    @FXML
-    public ListView listProfils;
-    @FXML
-    public ListView listTests;
-    @FXML
-    public ListView listParametres;
-    @FXML
-    public ListView listRapports;
-    public TitledPane personnePane;
-
-    public AnchorPane container;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        buildleftMenu();
-        ServiceproUtil.setAccordionExpanded(Leftmenu, personnePane);
-    }
-
-    public void setContainer(AnchorPane container){
-        this.container = container;
-    }
-    private void buildleftMenu() {
-
-        ObservableList<Label> data ;
-        data = FXCollections.observableArrayList();
-        Label labelmenu1 = GlyphsDude.createIconLabel(FontAwesomeIcon.CLOUD_UPLOAD, "Importer", "11",
-                "", ContentDisplay.LEFT);
-        Label labelmenu2 = GlyphsDude.createIconLabel(FontAwesomeIcon.BED, "Exporter", "11",
-                "", ContentDisplay.LEFT);
-        data.addAll(labelmenu1, labelmenu2);
-        listPersonnes.setItems(data);
-        listPersonnes.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue observable, Object oldValue, Object newValue) -> {
-                    switch (listPersonnes.getSelectionModel().getSelectedIndex()){
-                        case 0:
-                                Module.setImportPersonne(container);
-                            break;
-                        case 1:
-                            Notifications.create().title("Implémentation")
-                                    .text("Fonctionnalité non encore implémentée")
-                                    .showInformation();
-
-                            break;
-                    }
-                });
-
-    }
-*/
-
 }

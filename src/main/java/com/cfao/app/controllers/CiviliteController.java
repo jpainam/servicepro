@@ -3,7 +3,9 @@ package com.cfao.app.controllers;
 import com.cfao.app.Main;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
-import com.cfao.app.util.*;
+import com.cfao.app.util.FormatDate;
+import com.cfao.app.util.SearchBox;
+import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
@@ -133,14 +135,11 @@ public class CiviliteController implements Initializable {
     public TableColumn<Personne, Societe> columnPersonneSociete;
     public TextField txtTelephone;
     public TextField txtEmail;
-
-    CiviliteFormationController formationController;
+    public ObservableMap<String, String> mapFoto;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildcontent();
-        formationController = new CiviliteFormationController();
-        tabFormation.setContent(formationController);
         searchBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         hboxSearch.getChildren().setAll(new Label("Civilités :" ), searchBox);
@@ -175,15 +174,18 @@ public class CiviliteController implements Initializable {
         GlyphsDude.setIcon(tabDetails, FontAwesomeIcon.USER);
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
-        ButtonUtil.add(btnNouveau);
-        ButtonUtil.edit(btnModifier);
-        ButtonUtil.cancel(btnAnnuler);
-        ButtonUtil.delete(btnSuppr);
-        ButtonUtil.print(btnPrint);
-        ButtonUtil.previous(btnPrevious);
-        ButtonUtil.next(btnNext);
-        ButtonUtil.plusIcon(btnNouveau, btnAjouterProfil);
-        ButtonUtil.minusIcon(btnDeletePoste, btnDeleteProfil);
+
+        GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
+        GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
+        GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
+        GlyphsDude.setIcon(btnSuppr, FontAwesomeIcon.TRASH);
+        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
+        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
+        GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
+        GlyphsDude.setIcon(btnAjouterPoste, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnAjouterProfil, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnDeletePoste, FontAwesomeIcon.MINUS_SQUARE);
+        GlyphsDude.setIcon(btnDeleteProfil, FontAwesomeIcon.MINUS_SQUARE);
 
         /*DESACTIVATION DES BUTTON MODIF ET SUPPR*/
         btnModifier.setDisable(true);
@@ -191,10 +193,23 @@ public class CiviliteController implements Initializable {
     }
 
     private void buildCombo() {
-
+        System.out.println("je suis dans le build Combo");
         Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
             @Override
             protected ObservableMap<String, ObservableList> call() throws Exception {
+
+                /* MAP PHOTOS */
+                mapFoto = FXCollections.observableHashMap();
+                File f = new File(URI.create(getClass().getResource("/documents/photos").toExternalForm()));
+                if (f.exists() && f.isDirectory())
+                    if(f.listFiles().length > 0)
+                        for (File fils : f.listFiles() ){
+                            if(fils.isFile()){
+                                String [] tab = getSplitNameImage(fils.getName());
+                                mapFoto.put(tab[0], tab[1]);
+                            }
+                        }
+                /* END MAP PHOTOS */
                 map = FXCollections.observableHashMap();
                 map.put("societe", FXCollections.observableList((new SocieteModel()).getList()));
                 map.put("section", FXCollections.observableList((new SectionModel()).getList()));
@@ -308,6 +323,9 @@ public class CiviliteController implements Initializable {
         btnModifier.setDisable(false);
         btnSuppr.setDisable(false);
 
+        /* Chargement Photo */
+        chargementPhoto(person.getIdpersonne());
+
         /*
         Mise à jour du formalaire fonction des choix sur la table*/
         txtMatricule.setText(person.getMatricule());
@@ -317,18 +335,16 @@ public class CiviliteController implements Initializable {
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
 
-        if(person.getDatenaiss() != null) {
-            LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
-            datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
-            datePicker.setValue(date1);
-            labelAge.setText(age(date1));
-        }
 
-        if(person.getDatecontrat() != null) {
-            LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
-            dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
-            dateFincontrat.setValue(date2);
-        }
+        LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
+        datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
+        datePicker.setValue(date1);
+        labelAge.setText(age(date1));
+
+
+        //LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
+        //dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
+        //dateFincontrat.setValue(date2);
 
         comboSection.setValue(person.getSection());
         comboSociete.setValue(person.getSociete());
@@ -354,6 +370,32 @@ public class CiviliteController implements Initializable {
         tableProfil.setItems(FXCollections.observableArrayList(person.getProfilPersonnes()));
         tablePoste.setItems(FXCollections.observableArrayList(person.getPostes()));
 
+    }
+
+    private void chargementPhoto(int idpersonne) {
+        if(mapFoto.containsKey(String.valueOf(idpersonne))) {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        String namefile = idpersonne + "." + mapFoto.get(String.valueOf(idpersonne));
+                        Path path = Paths.get(URI.create(getClass().getResource("/documents/photos/" + namefile).toExternalForm()));
+                        imageview.setImage(new Image(new FileInputStream(path.toFile())));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            };
+            new Thread(task).run();
+        }else
+            try {
+                imageview.setImage(new Image(getClass().getResource(defaultImage).openStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     private void updateLangue(List<Langue> listLangue) {
@@ -511,12 +553,15 @@ public class CiviliteController implements Initializable {
 
                 new Model<Personne>().save(personne);
 
+                if(photo != null){
+                    savePhoto(personne.getIdpersonne());
+                }
+
                 return personne;
             }
         };
         new Thread(task).run();
         task.setOnSucceeded(event -> {
-
             Platform.runLater(() -> {
                 personneTable.getSelectionModel().select(task.getValue());
                 System.out.println("Good");
@@ -529,7 +574,6 @@ public class CiviliteController implements Initializable {
         if (!btnModifier.isDisable() && pers != null)
             switch (stateBtnModifier) {
                 case 0:
-                    System.out.println("Avant bind - " + pers.toString());
                     bindPersonne(pers, true);
                     disableComponent(btnNouveau, true);
                     disableComponent(btnSuppr, true);
@@ -555,6 +599,9 @@ public class CiviliteController implements Initializable {
         Task<Personne> task = new Task<Personne>() {
             @Override
             protected Personne call() throws Exception {
+                if(photo != null){
+                    savePhoto(personne.getIdpersonne());
+                }
                 personne.setProfilPersonnes(FXCollections.observableList(tableProfil.getItems()));
                 personne.setPostes(FXCollections.observableList(tablePoste.getItems()));
                 new Model<Personne>().update(personne);
@@ -563,12 +610,21 @@ public class CiviliteController implements Initializable {
         };
         new Thread(task).run();
         task.setOnSucceeded(event -> {
-
             Platform.runLater(() -> {
                 personneTable.getSelectionModel().select(task.getValue());
-                System.out.println("Good");
+                System.out.println("Good ---------------------------------------------------------------");
             });
         });
+    }
+
+    private void savePhoto(int idpersonne) throws IOException {
+        String namefile = idpersonne + "." + getExtentionImg(photo.getName());
+        Path src = photo.toPath();
+        String chemin = getClass().getResource("/documents/photos/").toExternalForm() + namefile;
+        Path cible = Paths.get(URI.create(chemin));
+        Files.copy(src, cible, StandardCopyOption.REPLACE_EXISTING);
+        mapFoto.put(String.valueOf(idpersonne), getExtentionImg(photo.getName()));
+        photo = null;
     }
 
     private void bindPersonne(Personne personne, boolean bind) {
@@ -650,37 +706,57 @@ public class CiviliteController implements Initializable {
     public void delPhotoClic(ActionEvent actionEvent) {
         if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
             imageview.setImage(new Image(defaultImage));
+            if(mapFoto.containsKey(String.valueOf(pers.getIdpersonne()))) {
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+
+                        String name = pers.getIdpersonne() + "." + mapFoto.get(String.valueOf(pers.getIdpersonne()));
+                        mapFoto.remove(String.valueOf(pers.getIdpersonne()));
+                        /*
+                        try {
+                            String chemin = getClass().getResource("/documents/photos/").toExternalForm() + name;
+                            Files.deleteIfExists(Paths.get(URI.create(chemin)));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }*/
+                        return null;
+                    }
+                };
+                new Thread(task).run();
+            }
         }
     }
 
     public void addPhotoClic(ActionEvent actionEvent) {
-        if(true){
-            //if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
+        if(stateBtnNouveau == 1 || stateBtnModifier == 1) {
             FileChooser choosePic = new FileChooser();
             choosePic.getExtensionFilters().add(
                     new FileChooser.ExtensionFilter("Fichiers Image", "*.png", "*.jpg", "*.gif", "*.jpeg")
             );
             photo = choosePic.showOpenDialog(Main.stage);
             try {
-                FileInputStream image = new FileInputStream(photo);
-                imageview.setImage(new Image(image));
+                if(photo != null){
+                    FileInputStream image = new FileInputStream(photo);
+                    imageview.setImage(new Image(image  ));
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
-
-            Path source = photo.toPath();
-
-            String ds = File.separator;
-            try {
-                URI uri = new URI(getClass().getResource(ResourceBundle.getBundle("Bundle").getString("photo.dir") + ds + photo.getName()).toExternalForm());
-                Path to = Paths.get(uri);
-                Files.copy(source, to, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-            }catch (Exception ex){
-                ex.printStackTrace();
-                AlertUtil.showErrorMessage(ex);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
+    }
+
+    public String [] getSplitNameImage(String name) {
+        String[] tab = name.split("\\.");
+        return tab;
+    }
+
+    public String getExtentionImg(String name){
+        String[] tab = name.split("\\.");
+        return tab[tab.length - 1];
     }
 
     public void clicAnnuler(ActionEvent actionEvent) {

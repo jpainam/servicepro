@@ -192,7 +192,6 @@ public class FormationController implements Initializable {
     private void fillFormationFields(Formation formation) {
         if (formation == null)
             return;
-
         txtCode.setText(formation.getCodeformation());
         txtTitre.setText(formation.getTitre());
         txtDescription.setText(formation.getDescription());
@@ -206,6 +205,7 @@ public class FormationController implements Initializable {
         System.err.println(formation.getPersonnes());
         formationParticipantController.setFormation(formation);
         competenceController.setFormation(formation);
+
         formationParticipantController.buildTable();
         competenceController.buildTable();
 

@@ -162,7 +162,7 @@ JFOenix CSS
      -fx-border-width: 1;
     -fx-background-color: white;
 }
-.toggle-button1:selected{
+.toggle-button:selected{
     -fx-text-fill: white;
      -fx-background-color: #ee543a, #373e48;
       -fx-background-insets: 0, 0 0 0 6;
