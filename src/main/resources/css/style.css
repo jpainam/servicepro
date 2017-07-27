@@ -156,9 +156,14 @@ JFOenix CSS
 .toggle-button{
     /*-fx-outer-border-color: darkblue;
     -fx-outer-border-width: 1;*/
-    -fx-border-radius:none;
+    /*-fx-border-radius:none;*/
+    -fx-background-radius:0;
+     -fx-border-color: #e2e2e2;
+     -fx-border-width: 1;
+    -fx-background-color: white;
 }
 .toggle-button1:selected{
-    /*-fx-font: 20 arial;*/
-    -fx-base: #080c50;
+    -fx-text-fill: white;
+     -fx-background-color: #ee543a, #373e48;
+      -fx-background-insets: 0, 0 0 0 6;
 }
