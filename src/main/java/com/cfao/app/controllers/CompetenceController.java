@@ -3,7 +3,6 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Formation;
-
 import com.cfao.app.beans.Niveau;
 import com.cfao.app.beans.Profil;
 import com.cfao.app.model.CompetenceModel;
@@ -13,13 +12,10 @@ import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -27,8 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -229,8 +223,6 @@ public class CompetenceController implements Initializable{
             return;
         if(stateBtnModifier == 0) {
             btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
-            chkConnaissance.setSelected(false);
-            chkCompetence.setSelected(false);
             ServiceproUtil.setEditable(true, txtLibelleCompetence);
             ServiceproUtil.setDisable(false, comboNiveau, chkConnaissance, chkCompetence);
             stateBtnModifier = 1;

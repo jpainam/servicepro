@@ -4,13 +4,17 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.paint.Color;
 
-import javafx.scene.control.*;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -19,17 +23,35 @@ import java.util.ResourceBundle;
  */
 public class LeftmenuController implements Initializable{
 
-    public Button btnPersonne;
-    public Button btnCompetence;
-    public Button btnProfil;
-    public Button btnTest;
-    public Button btnRapport;
-    public Button btnParametre;
-    public Button btnFormation;
+    public ToggleButton btnPersonne;
+    public ToggleButton btnCompetence;
+    public ToggleButton btnProfil;
+    public ToggleButton btnTest;
+    public ToggleButton btnRapport;
+    public ToggleButton btnParametre;
+    public ToggleButton btnFormation;
+    public final ToggleGroup toggleGroup = new ToggleGroup();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLeftMenuSettings();
+        btnPersonne.setUserData("/views/civilite/civilite.fxml");
+        toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(oldValue != null){
+                    ((FontAwesomeIconView)((ToggleButton)oldValue).getGraphic()).setFill(Color.BLACK);
+                }
+                if(newValue == null){
+                    oldValue.setSelected(true);
+                }else{
+                    ((FontAwesomeIconView)((ToggleButton)newValue).getGraphic()).setFill(Color.WHITE);
+                    ((ToggleButton)(newValue)).getStyleClass().add("toggle-button1");
+                    //StageManager.loadContent(toggleGroup.getSelectedToggle().getUserData().toString());
+                }
+            }
+        });
     }
     public void setLeftMenuSettings() {
         setLeftMenuSetting(btnPersonne, FontAwesomeIcon.USERS);
@@ -40,7 +62,8 @@ public class LeftmenuController implements Initializable{
         setLeftMenuSetting(btnTest, FontAwesomeIcon.BALANCE_SCALE);
         setLeftMenuSetting(btnProfil, FontAwesomeIcon.TAGS);
     }
-    public void setLeftMenuSetting(Button button, FontAwesomeIcon fontAwesomeIcon) {
+    public void setLeftMenuSetting(ToggleButton button, FontAwesomeIcon fontAwesomeIcon) {
+        button.setToggleGroup(toggleGroup);
         FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
         icon.setGlyphSize(35);
         button.setContentDisplay(ContentDisplay.TOP);

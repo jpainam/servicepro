@@ -1,40 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.menu.LeftMenuController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
    <children>
-      <ScrollPane hbarPolicy="NEVER" layoutY="60.0" pannable="true" prefViewportHeight="710.0" prefViewportWidth="220.0" styleClass="scroll" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
-         <content>
-            <VBox maxWidth="1.7976931348623157E308" prefHeight="130.0" prefWidth="223.0" spacing="5.0">
-               <children>
-                  <ToggleButton alignment="CENTER_LEFT" layoutX="10.0" layoutY="20.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Accueil">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="grupoMenus" />
-                     </toggleGroup>
-                     <styleClass>
-                        <String fx:value="menus" />
-                        <String fx:value="menu-catalogacao" />
-                        <String fx:value="menu-grupo" />
-                     </styleClass>
-                  </ToggleButton>
-                  <VBox fx:id="boxCatalogacao" styleClass="box-submenus">
-                     <children>
-                        <ToggleButton fx:id="btCatalogar" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="submenus" text="Catalogar">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="grupoCatalogacao" />
-                           </toggleGroup>
-                        </ToggleButton>
-                        <ToggleButton fx:id="btDesginacao" alignment="CENTER_LEFT" layoutX="10.0" layoutY="50.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="submenus" text="Designação" toggleGroup="$grupoCatalogacao" />
-                        <ToggleButton fx:id="btEstratigrafia" alignment="CENTER_LEFT" layoutX="40.0" layoutY="40.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="submenus" text="Estratigrafia" toggleGroup="$grupoCatalogacao" />
-                        <ToggleButton fx:id="btColecao" alignment="CENTER_LEFT" layoutX="40.0" layoutY="70.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="submenus" text="Coleção" toggleGroup="$grupoCatalogacao" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
+      <Button fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
    </children>
-</AnchorPane>
+</VBox>

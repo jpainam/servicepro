@@ -134,7 +134,7 @@ JFOenix CSS
   -fx-padding: 1 ;
 }
 .onlyIcon{
-     -fx-background-color: transparent;
+     /*-fx-background-color: transparent;*/
      -fx-cursor: hand;
 }
 .actionButton{
@@ -149,4 +149,16 @@ JFOenix CSS
 }
 .combo-box:disabled, .combo-box:disabled > * {
     -fx-opacity: 1.0 ;
+}
+.check-box:disabled, .check-box:disabled > * {
+    -fx-opacity: 1.0 ;
+}
+.toggle-button{
+    /*-fx-outer-border-color: darkblue;
+    -fx-outer-border-width: 1;*/
+    -fx-border-radius:none;
+}
+.toggle-button1:selected{
+    /*-fx-font: 20 arial;*/
+    -fx-base: #080c50;
 }

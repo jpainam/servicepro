@@ -10,43 +10,43 @@
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
     <children>
-        <Button fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
+        <ToggleButton fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
-            </cursor></Button>
-        <Button fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations">
+            </cursor></ToggleButton>
+        <ToggleButton fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
-            </cursor></Button>
-        <Button fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences">
+            </cursor></ToggleButton>
+        <ToggleButton fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
-            </cursor></Button>
-        <Button fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils">
+            </cursor></ToggleButton>
+        <ToggleButton fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
-            </cursor></Button>
-        <Button fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests">
+            </cursor></ToggleButton>
+        <ToggleButton fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
-        </Button>
-        <Button fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+        </ToggleButton>
+        <ToggleButton fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                 mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports">
             <font>
                 <Font size="14.0" />
@@ -54,13 +54,13 @@
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
-        </Button>
-        <Button fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres">
+        </ToggleButton>
+        <ToggleButton fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres">
             <font>
                 <Font size="14.0" />
             </font>
             <cursor>
                 <Cursor fx:constant="HAND" />
-            </cursor></Button>
+            </cursor></ToggleButton>
     </children>
 </VBox>

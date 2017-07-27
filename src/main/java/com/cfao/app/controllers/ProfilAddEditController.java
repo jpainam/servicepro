@@ -13,9 +13,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -27,7 +26,6 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -51,7 +49,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
     public VBox vboxRechercheCompetence;
     public SearchBox searchBox = new SearchBox();
     public TableColumn<Competence, String> niveauColumn;
-    private ObservableSet<Competence> selectedItems;
+    private ObservableList<Competence> selectedItems;
 
 
     private Profil profil = null;
@@ -139,7 +137,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
             }
         });
         niveauColumn.setCellValueFactory(param -> param.getValue().getNiveau().libelleProperty());
-        selectedItems = FXCollections.observableSet(new HashSet<>());
+        selectedItems = FXCollections.observableArrayList();
         task1.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
@@ -167,7 +165,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
                         }
                     });
 
-                    selectedItems.addListener(new SetChangeListener<Competence>() {
+                    selectedItems.addListener(new ListChangeListener<Competence>() {
                         @Override
                         public void onChanged(Change<? extends Competence> change) {
                             selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
@@ -194,16 +192,19 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         boolean edit = true;
         if (profil == null) {
             profil = new Profil();
+            profil.setCompetences(selectedItems);
             edit = false;
+        }else{
+            for(Competence competence : selectedItems){
+                if(profil.getOriginalCompetence(competence) == null){
+                    profil.getCompetences().add(competence);
+                }
+            }
         }
 
         profil.setAbbreviation(txtAbbreviation.getText());
         profil.setLibelle(txtProfil.getText());
-        for(Competence competence : selectedItems){
-            if(profil.getOriginalCompetence(competence) == null){
-                profil.getCompetences().add(competence);
-            }
-        }
+
         Model<Profil> model = new Model<>("Profil");
         boolean bool = false;
         String sms = "";

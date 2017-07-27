@@ -4,13 +4,10 @@ import com.cfao.app.Main;
 import com.cfao.app.beans.Support;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -21,9 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import javax.persistence.Table;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -33,7 +28,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 7/11/2017.
  */
-public class DialogSupportController extends AnchorPane implements Initializable {
+public class FormationSupportDialogController extends AnchorPane implements Initializable {
     public Label fileStatus;
     public TableColumn<Support, String> codeSupportColumn;
     public TableColumn<Support, String> titreSupportColumn;
@@ -42,7 +37,7 @@ public class DialogSupportController extends AnchorPane implements Initializable
     public TextField txtTitreSupport;
     private String destination = null;
 
-    public DialogSupportController() {
+    public FormationSupportDialogController() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/addSupportDialog.fxml"));
             loader.setRoot(this);

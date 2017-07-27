@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.*?>
 
-<AnchorPane fx:id="rootPane1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="493.0" prefWidth="757.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilController">
+<AnchorPane fx:id="rootPane1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="579.0" prefWidth="853.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilController">
    <children>
       <SplitPane dividerPositions="0.362" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -43,14 +43,14 @@
                                  <children>
                                     <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
                                        <items>
-                                          <Button fx:id="btnPrevious" mnemonicParsing="false" styleClass="onlyIcon" />
-                                          <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
-                                          <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
+                                          <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#previousAction" />
+                                          <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextAction" />
+                                          <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printAction" />
                                           <Separator orientation="VERTICAL" />
                                           <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
-                                          <Button fx:id="btnModifier1" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
+                                          <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
                                           <Separator orientation="VERTICAL" />
-                                          <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
+                                          <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
                                           <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
                                        </items>
                                     </ToolBar>

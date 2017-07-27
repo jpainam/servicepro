@@ -80,7 +80,9 @@ public class Profil implements java.io.Serializable {
     }
 
     public void setProfilPersonnes(List<ProfilPersonne> profilPersonne) {
-       this.profilPersonnes.set(FXCollections.observableArrayList(profilPersonne));
+        if(profilPersonne != null) {
+            this.profilPersonnes.set(FXCollections.observableArrayList(profilPersonne));
+        }
     }
 
 

@@ -374,13 +374,13 @@ public class FormationController implements Initializable {
             ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
 
             dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
-            DialogSupportController dialogSupportController = new DialogSupportController();
-            dialog.getDialogPane().setContent(dialogSupportController);
+            FormationSupportDialogController formationSupportDialogController = new FormationSupportDialogController();
+            dialog.getDialogPane().setContent(formationSupportDialogController);
             dialog.setResultConverter(new Callback<ButtonType, Support>() {
                 @Override
                 public Support call(ButtonType param) {
                     if(param.getButtonData() == ButtonBar.ButtonData.OK_DONE)
-                        return dialogSupportController.getSupport();
+                        return formationSupportDialogController.getSupport();
                     else
                         return null;
                 }

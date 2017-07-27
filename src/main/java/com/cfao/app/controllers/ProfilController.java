@@ -50,12 +50,20 @@ public class ProfilController implements Initializable {
     public HBox researchBox2;
     public TabPane tabPane;
     public Tab firstTab;
+    public Button btnPrevious;
+    public Button btnNext;
+    public Button btnPrint;
+    public Button btnNouveau;
+    public Button btnModifier;
+    public Button btnSupprimer;
+    public Button btnAnnuler;
     private TableView.TableViewSelectionModel<Profil> tableProfilModel;
     private SearchBox searchBox = new SearchBox();
     private SearchBox searchBox2 = new SearchBox();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initComponents();
         setColumnSettings();
         buildProfilTable();
         firstTab.setClosable(false);
@@ -69,7 +77,8 @@ public class ProfilController implements Initializable {
                 ProfilController.this.fillCompetenceTable(profil);
             }
         });
-
+    }
+    private void initComponents(){
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         HBox.setHgrow(searchBox2, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -78,6 +87,13 @@ public class ProfilController implements Initializable {
         researchBox2.setMaxWidth(Double.MAX_VALUE);
         researchBox.getChildren().setAll(new Label("Profils : "), searchBox);
         researchBox2.getChildren().setAll(new Label("Compétences associées au profil : "), searchBox2);
+        ButtonUtil.print(btnPrint);
+        ButtonUtil.previous(btnPrevious);
+        ButtonUtil.next(btnNext);
+        ButtonUtil.add(btnNouveau);
+        ButtonUtil.edit(btnModifier);
+        ButtonUtil.cancel(btnAnnuler);
+        ButtonUtil.delete(btnSupprimer);
     }
 
     private void fillCompetenceTable(Profil profil) {
@@ -236,4 +252,19 @@ public class ProfilController implements Initializable {
         tabPane.getSelectionModel().select(tab);
     }
 
+    public void previousAction(ActionEvent event) {
+        if(profilTable.getSelectionModel().getSelectedIndex() > 0){
+            profilTable.getSelectionModel().selectPrevious();
+        }
+    }
+
+    public void nextAction(ActionEvent event) {
+        if(profilTable.getSelectionModel().getSelectedIndex() < profilTable.getItems().size()){
+            profilTable.getSelectionModel().selectNext();
+        }
+    }
+
+
+    public void printAction(ActionEvent event) {
+    }
 }
