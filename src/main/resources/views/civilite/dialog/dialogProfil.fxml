@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="431.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.DialogProfilController">
+<fx:root prefHeight="108.0" prefWidth="266.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane layoutX="20.0" layoutY="65.0" prefHeight="241.0" prefWidth="391.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <GridPane layoutX="20.0" layoutY="65.0" prefHeight="276.0" prefWidth="431.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="375.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="Profil /">
+                  <Label text="Profil / Profile">
                      <VBox.margin>
                         <Insets left="5.0" />
                      </VBox.margin>
@@ -37,8 +36,10 @@
                   <ComboBox fx:id="comboLevel" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
                </children>
             </VBox>
-            <Separator prefWidth="200.0" valignment="TOP" GridPane.rowIndex="2" GridPane.valignment="TOP" />
          </children>
       </GridPane>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets left="10.0" right="10.0" />
+   </padding>
+</fx:root>

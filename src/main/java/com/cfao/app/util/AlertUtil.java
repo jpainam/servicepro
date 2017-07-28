@@ -37,6 +37,7 @@ public class AlertUtil {
     }
 
     public static void showErrorMessage(Exception ex) {
+        ex.printStackTrace();
         Alert alert = new Alert(AlertType.ERROR);
         grayBackground(alert);
         alert.setTitle("Error occured");
@@ -66,6 +67,7 @@ public class AlertUtil {
 
         alert.getDialogPane().setExpandableContent(expContent);
         alert.showAndWait();
+
     }
 
     public static void showErrorMessage(Exception ex, String title, String content) {

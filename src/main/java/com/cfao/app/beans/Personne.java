@@ -1,16 +1,11 @@
 package com.cfao.app.beans;
 
-import java.time.LocalDate;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import javax.persistence.*;
-
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  * Created by JP on 6/10/2017.
@@ -351,6 +346,8 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
-        this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+        if(personneCompetences != null) {
+            this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+        }
     }
 }
