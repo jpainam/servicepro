@@ -2,13 +2,9 @@ package com.cfao.app.beans;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -73,6 +69,26 @@ public class CompetenceStatut  implements java.io.Serializable {
     @Override
     public String toString() {
         return getLibelle();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompetenceStatut that = (CompetenceStatut) o;
+
+        if(statut != null){
+            return statut.equals(that.getStatut());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = statut != null ? statut.hashCode() : 0;
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+        return result;
     }
 }
 

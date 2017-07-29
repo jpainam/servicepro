@@ -203,71 +203,8 @@
                                                                             <children>
                                                                                 <Accordion fx:id="accordeon" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                                                                                     <panes>
-                                                                                        <TitledPane fx:id="profilAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des profil">
-                                                                                            <content>
-                                                                                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                                                    <children>
-                                                                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                                                            <children>
-                                                                                                                <TableView fx:id="tableProfil" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
-                                                                                                                    <columns>
-                                                                                                                        <TableColumn fx:id="columnProfil" prefWidth="75.0" text="Titre du profil" />
-                                                                                                                        <TableColumn fx:id="columnNiveau" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Niveau" />
-                                                                                                                    </columns>
-                                                                                                                    <columnResizePolicy>
-                                                                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                                                                                    </columnResizePolicy>
-                                                                                                                </TableView>
-                                                                                                                <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
-                                                                                                                    <children>
-                                                                                                                        <Button fx:id="btnAjouterProfil" mnemonicParsing="false" onAction="#addProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                                                        <Button fx:id="btnDeleteProfil" mnemonicParsing="false" onAction="#deleteProfil" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                                                    </children>
-                                                                                                                    <padding>
-                                                                                                                        <Insets top="10.0" />
-                                                                                                                    </padding>
-                                                                                                                </VBox>
-                                                                                                            </children>
-                                                                                                        </HBox>
-                                                                                                    </children>
-                                                                                                </AnchorPane>
-                                                                                            </content>
-                                                                                        </TitledPane>
-                                                                                        <TitledPane fx:id="posteAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des postes">
-                                                                                            <content>
-                                                                                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                                                    <children>
-                                                                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                                                            <children>
-                                                                                                                <TableView fx:id="tablePoste" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="352.0" HBox.hgrow="ALWAYS">
-                                                                                                                    <columnResizePolicy>
-                                                                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                                                                                    </columnResizePolicy>
-                                                                                                                    <columns>
-                                                                                                                        <TableColumn fx:id="columnPoste" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="-1.0" text="Poste" />
-                                                                                                                        <TableColumn fx:id="columnSociete" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Société" />
-                                                                                                                        <TableColumn fx:id="columnDebut" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Debut" />
-                                                                                                                        <TableColumn fx:id="columnFin" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Fin" />
-                                                                                                                    </columns>
-                                                                                                                </TableView>
-                                                                                                                <VBox alignment="TOP_CENTER" prefHeight="128.0" prefWidth="57.0" spacing="10.0" HBox.hgrow="NEVER">
-                                                                                                                    <children>
-                                                                                                                        <Button fx:id="btnAjouterPoste" mnemonicParsing="false" onAction="#addPoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                                                        <Button fx:id="btnDeletePoste" mnemonicParsing="false" onAction="#deletePoste" styleClass="onlyIcon" VBox.vgrow="NEVER" />
-                                                                                                                    </children>
-                                                                                                                    <HBox.margin>
-                                                                                                                        <Insets />
-                                                                                                                    </HBox.margin>
-                                                                                                                    <padding>
-                                                                                                                        <Insets top="10.0" />
-                                                                                                                    </padding>
-                                                                                                                </VBox>
-                                                                                                            </children>
-                                                                                                        </HBox>
-                                                                                                    </children>
-                                                                                                </AnchorPane>
-                                                                                            </content>
-                                                                                        </TitledPane>
+                                                                                        <TitledPane fx:id="profilAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des profil" />
+                                                                                        <TitledPane fx:id="posteAccordeon" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Liste des postes" />
                                                                                     </panes>
                                                                                 </Accordion>
                                                                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">

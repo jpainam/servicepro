@@ -1,13 +1,13 @@
 package com.cfao.app.util;
 
 
+import com.cfao.app.StageManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -193,6 +193,19 @@ public class DialogUtil {
             centerOnScreen();
             showAndWait();
         }
+    }
+
+    public static  <R> javafx.scene.control.Dialog<R> dialogTemplate() {
+        javafx.scene.control.Dialog<R> dialog = new javafx.scene.control.Dialog<>();
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+        StageManager.getContentLayout().getChildren().add(region);
+        region.visibleProperty().bind(dialog.showingProperty());
+        ButtonType okButton = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+        return dialog;
     }
 
 }

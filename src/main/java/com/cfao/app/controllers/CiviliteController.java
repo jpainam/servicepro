@@ -22,10 +22,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
@@ -38,13 +40,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 /**
  * Created by JP on 6/9/2017.
@@ -58,22 +57,6 @@ public class CiviliteController implements Initializable {
     public TableView<Personne> personneTable;
     public TableColumn columnNom;
     public TableColumn columnMatricule;
-
-    /**
-     * TableView des Profils d'une personne
-     */
-    public TableView<ProfilPersonne> tableProfil;
-    public TableColumn columnProfil;
-    public TableColumn columnNiveau;
-
-    /**
-     * TableView des Postes d'une personne
-     */
-    public TableView<Poste> tablePoste;
-    public TableColumn columnPoste;
-    public TableColumn columnSociete;
-    public TableColumn columnDebut;
-    public TableColumn columnFin;
 
     public DatePicker datePicker;
     public TextField txtMatricule;
@@ -102,9 +85,6 @@ public class CiviliteController implements Initializable {
     public AnchorPane paneImage;
     public File photo = null;
     public final String defaultImage = "/images/civilite/avatar_defaut.png";
-
-    public Personne pers;
-
     public Button btnPrevious;
     public Button btnPrint;
     public GridPane gridB;
@@ -118,10 +98,8 @@ public class CiviliteController implements Initializable {
     public ComboBox<Langue> comboLangue;
     public HBox hboxSearch;
     public SearchBox searchBox = new SearchBox();
-    public Button btnAjouterProfil;
-    public Button btnDeleteProfil;
-    public Button btnAjouterPoste;
-    public Button btnDeletePoste;
+
+
     public TitledPane posteAccordeon;
     public TitledPane profilAccordeon;
     public Accordion accordeon;
@@ -134,6 +112,9 @@ public class CiviliteController implements Initializable {
     public TextField txtTelephone;
     public TextField txtEmail;
     public ObservableMap<String, String> mapFoto;
+    public CiviliteFormationController formationController;
+    public CiviliteProfilController profilController;
+    public CivilitePosteController posteController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -145,6 +126,12 @@ public class CiviliteController implements Initializable {
     }
 
     private void buildcontent() {
+        formationController = new CiviliteFormationController();
+        tabFormation.setContent(formationController);
+        profilController = new CiviliteProfilController();
+        profilAccordeon.setContent(profilController);
+        posteController = new CivilitePosteController();
+        posteAccordeon.setContent(posteController);
         initComponents();
         buildCombo();
         buildtablePersonne();
@@ -180,13 +167,24 @@ public class CiviliteController implements Initializable {
         GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
         GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
         GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
-        GlyphsDude.setIcon(btnAjouterPoste, FontAwesomeIcon.PLUS_SQUARE);
-        GlyphsDude.setIcon(btnAjouterProfil, FontAwesomeIcon.PLUS_SQUARE);
-        GlyphsDude.setIcon(btnDeletePoste, FontAwesomeIcon.MINUS_SQUARE);
-        GlyphsDude.setIcon(btnDeleteProfil, FontAwesomeIcon.MINUS_SQUARE);
+
+
+        personneTable.setRowFactory(param -> {
+            final TableRow<Personne> row = new TableRow<>();
+            final Tooltip tooltip = new Tooltip();
+            row.hoverProperty().addListener(observable -> {
+
+                final Personne personne = row.getItem();
+                if(row.isHover() && personne != null){
+                    tooltip.setText(personne.getNom() + " " +personne.getPrenom() + " => " + personne.getSociete());
+                    row.setTooltip(tooltip);
+                }
+            });
+            return row;
+        });
 
         /*DESACTIVATION DES BUTTON MODIF ET SUPPR*/
-        ServiceproUtil.setDisable(true, btnModifier, btnSuppr, btnAjouterPoste, btnAjouterProfil, btnDeletePoste, btnDeleteProfil);
+        ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
     }
 
     private void buildCombo() {
@@ -247,7 +245,7 @@ public class CiviliteController implements Initializable {
     private void disableAllComponents(boolean bool) {
         ServiceproUtil.setEditable(bool, txtMatricule, txtNom, txtPrenom, txtMemo);
         ServiceproUtil.setDisable(bool, comboGroupe, comboPays, comboSociete, comboSection, comboPotentiel, comboAmbition,
-                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees, tablePoste, tableProfil);
+                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees);
     }
 
     private void buildtablePersonne() {
@@ -256,16 +254,6 @@ public class CiviliteController implements Initializable {
         columnNom.setCellValueFactory(new PropertyValueFactory<Personne, String>("nom"));
         columnPersonneSociete.setCellValueFactory(param -> param.getValue().societe());
         columnTelephone.setCellValueFactory(param -> param.getValue().telephoneProperty());
-
-        // COLONNE DU TABLEVIEW PROFIL D'UNE PERSONNE
-
-        columnProfil.setCellValueFactory(new PropertyValueFactory<ProfilPersonne, String>("profil"));
-        columnNiveau.setCellValueFactory(new PropertyValueFactory<ProfilPersonne, String>("niveau"));
-
-        columnPoste.setCellValueFactory(new PropertyValueFactory<Poste, String>("titre"));
-        columnSociete.setCellValueFactory(new PropertyValueFactory<Poste, String>("societe"));
-        columnDebut.setCellValueFactory(new PropertyValueFactory<Poste, Date>("dateDebut"));
-        columnFin.setCellValueFactory(new PropertyValueFactory<Poste, Date>("datefin"));
 
         personneTable.setItems(map.get("personne"));
         personneTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Personne>() {
@@ -284,26 +272,17 @@ public class CiviliteController implements Initializable {
                 if (newValue == null) {
                     btnModifier.setDisable(true);
                     btnSuppr.setDisable(true);
-                    pers = null;
                 }
             }
         });
     }
 
     private void renduFormulaire(Personne person) {
-        /*
-        Affectation de la personne utilisee pour la modification et supression */
-        pers = person;
-        /*
-        Activation des buttons modifier et supprimer*/
-        btnModifier.setDisable(false);
-        btnSuppr.setDisable(false);
-
+        ServiceproUtil.setDisable(false, btnModifier, btnSuppr);
         /* Chargement Photo */
         chargementPhoto(person.getIdpersonne());
 
-        /*
-        Mise à jour du formalaire fonction des choix sur la table*/
+        /* Mise à jour du formalaire fonction des choix sur la table*/
         txtMatricule.setText(person.getMatricule());
         txtNom.setText(person.getNom());
         txtPrenom.setText(person.getPrenom());
@@ -311,12 +290,10 @@ public class CiviliteController implements Initializable {
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
 
-
         LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
         datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
         datePicker.setValue(date1);
         labelAge.setText(age(date1));
-
 
         //LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
         //dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
@@ -330,17 +307,16 @@ public class CiviliteController implements Initializable {
         comboAmbition.setValue(person.getAmbition());
         comboLangue.setValue(person.getLangue());
         comboPotentiel.setValue(person.getPotentiel());
-        /**
-         * MISE A JOUR DE LA TABLE DE PROFIL D'UNE PERSONNE
-         */
 
-        /*
-        Necessaire à l'update du component checkcombobox
-        des Langues parlées par une personne*/
+        /*Necessaire à l'update du component checkcombobox des Langues parlées par une personne*/
         updateLangue(person.getLangues());
 
-        tableProfil.setItems(FXCollections.observableArrayList(person.getProfilPersonnes()));
-        tablePoste.setItems(FXCollections.observableArrayList(person.getPostes()));
+        formationController.setPersonne(person);
+        formationController.buildFormation();
+        profilController.setPersonne(person);
+        profilController.buildProfil();
+        posteController.setPersonne(person);
+        posteController.buildPoste();
 
     }
 
@@ -397,6 +373,32 @@ public class CiviliteController implements Initializable {
         int a = LocalDate.now().getYear() - date.getYear();
         return a + (a > 1 ? " ans" : " an");
     }
+    private void setPersonneParameters(Personne personne){
+        personne.setMatricule(txtMatricule.getText());
+        personne.setNom(txtNom.getText());
+        personne.setPrenom(txtPrenom.getText());
+        personne.setMemo(txtMemo.getText());
+        personne.setTelephone(txtTelephone.getText());
+        personne.setEmail(txtEmail.getText());
+        if (datePicker.getValue() != null) {
+            personne.setDatenaiss(java.sql.Date.valueOf(datePicker.getValue()));
+        }
+        if (dateFincontrat.getValue() != null) {
+            personne.setDatecontrat(java.sql.Date.valueOf(dateFincontrat.getValue()));
+        }
+        personne.setPays(comboPays.getValue());
+        /*
+        * comboLanguesParlees.getCheckModel().getCheckedItems() renvoi une ReadOnlyObserverList
+        * */
+        personne.setLangues(FXCollections.observableArrayList(comboLanguesParlees.getCheckModel().getCheckedItems()));
+        personne.setGroupe(comboGroupe.getValue());
+        personne.setSection(comboSection.getValue());
+        personne.setSociete(comboSociete.getValue());
+        personne.setContrat(comboContrat.getValue());
+        personne.setLangue(comboLangue.getValue());
+        personne.setAmbition(comboAmbition.getValue());
+        personne.setPotentiel(comboPotentiel.getValue());
+    }
 
     public void clickNouveau(ActionEvent actionEvent) {
         if (!btnNouveau.isDisable())
@@ -406,44 +408,23 @@ public class CiviliteController implements Initializable {
                     disableAllComponents(false);
                     btnNouveau.setText("Enregistrer / Save");
                     this.stateBtnNouveau = 1;
+                    profilController.setActive(true);
+                    posteController.setActive(true);
                     break;
                 case 1:
                     /**
                      * Creation d'une nouvel personne
                      */
                     Personne personne = new Personne();
-                    personne.setMatricule(txtMatricule.getText());
-                    personne.setNom(txtNom.getText());
-                    personne.setPrenom(txtPrenom.getText());
-                    personne.setMemo(txtMemo.getText());
-                    personne.setTelephone(txtTelephone.getText());
-                    personne.setEmail(txtEmail.getText());
-                    if (datePicker.getValue() != null) {
-                        personne.setDatenaiss(java.sql.Date.valueOf(datePicker.getValue()));
-                    }
-                    if (dateFincontrat.getValue() != null) {
-                        personne.setDatecontrat(java.sql.Date.valueOf(dateFincontrat.getValue()));
-                    }
-                    personne.setPays(comboPays.getValue());
-
-                    /*
-                    * comboLanguesParlees.getCheckModel().getCheckedItems() renvoi une ReadOnlyObserverList
-                    * */
-                    personne.setLangues(FXCollections.observableArrayList(comboLanguesParlees.getCheckModel().getCheckedItems()));
-
-                    personne.setGroupe(comboGroupe.getValue());
-                    personne.setSection(comboSection.getValue());
-                    personne.setSociete(comboSociete.getValue());
-                    personne.setContrat(comboContrat.getValue());
-                    personne.setLangue(comboLangue.getValue());
-                    personne.setAmbition(comboAmbition.getValue());
-                    personne.setPotentiel(comboPotentiel.getValue());
+                    setPersonneParameters(personne);
                     savePersonne(personne);
                     personneTable.getItems().add(personne);
                     ServiceproUtil.setDisable(false, btnModifier, btnSuppr);
                     disableAllComponents(true);
                     btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("buttion.add"));
                     this.stateBtnNouveau = 0;
+                    profilController.setActive(false);
+                    posteController.setActive(false);
                     break;
             }
     }
@@ -456,17 +437,17 @@ public class CiviliteController implements Initializable {
         Task<Personne> task = new Task<Personne>() {
             @Override
             protected Personne call() throws Exception {
-                if (tableProfil.getItems().size() > 0) {
-                    for (ProfilPersonne p : tableProfil.getItems())
+                if (profilController.getItems().size() > 0) {
+                    for (ProfilPersonne p : profilController.getItems())
                         p.setPersonne(personne);
                 }
-                personne.setProfilPersonnes(tableProfil.getItems());
+                personne.setProfilPersonnes(profilController.getItems());
 
-                if (tablePoste.getItems().size() > 0) {
-                    for (Poste p : tablePoste.getItems())
+                if (posteController.getItems().size() > 0) {
+                    for (Poste p : posteController.getItems())
                         p.setPersonne(personne);
                 }
-                personne.setPostes(tablePoste.getItems());
+                personne.setPostes(posteController.getItems());
 
                 new Model<Personne>().save(personne);
 
@@ -487,24 +468,27 @@ public class CiviliteController implements Initializable {
     }
 
     public void clicModifier(ActionEvent actionEvent) {
-
-        if (!btnModifier.isDisable() && pers != null)
+        Personne personne = personneTable.getSelectionModel().getSelectedItem();
+        if (!btnModifier.isDisable() && personne != null)
             switch (stateBtnModifier) {
                 case 0:
-                    bindPersonne(pers, true);
-                    ServiceproUtil.setDisable(false, btnAjouterPoste, btnAjouterProfil, btnDeletePoste, btnDeleteProfil);
+                    ServiceproUtil.setEditable(true, txtEmail, txtMatricule, txtMemo, txtNom, txtPrenom, txtTelephone);
                     ServiceproUtil.setDisable(true, btnNouveau, btnSuppr);
                     disableAllComponents(false);
                     btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
                     this.stateBtnModifier = 1;
+                    profilController.setActive(true);
+                    posteController.setActive(true);
                     break;
                 case 1:
-                    bindPersonne(pers, false);
-                    updatePersonne(pers);
+                    setPersonneParameters(personne);
+                    updatePersonne(personne);
                     disableAllComponents(true);
                     btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
-                    ServiceproUtil.setDisable(false);
+                    ServiceproUtil.setDisable(false, btnNouveau);
                     this.stateBtnModifier = 0;
+                    profilController.setActive(false);
+                    posteController.setActive(false);
                     break;
             }
     }
@@ -516,8 +500,8 @@ public class CiviliteController implements Initializable {
                 if (photo != null) {
                     savePhoto(personne.getIdpersonne());
                 }
-                personne.setProfilPersonnes(tableProfil.getItems());
-                personne.setPostes(tablePoste.getItems());
+                personne.setProfilPersonnes(profilController.getItems());
+                personne.setPostes(posteController.getItems());
                 PersonneModel personneModel = new PersonneModel();
                 if (personneModel.update(personne)) {
                     return true;
@@ -538,6 +522,8 @@ public class CiviliteController implements Initializable {
 
     private void savePhoto(int idpersonne) throws IOException {
         String namefile = idpersonne + "." + getExtentionImg(photo.getName());
+        String fileName = photo.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, photo.getName().length());
         Path src = photo.toPath();
         String chemin = getClass().getResource("/photos/").toExternalForm() + namefile;
         Path cible = Paths.get(URI.create(chemin));
@@ -545,42 +531,6 @@ public class CiviliteController implements Initializable {
         mapFoto.put(String.valueOf(idpersonne), getExtentionImg(photo.getName()));
         photo = null;
     }
-
-    private void bindPersonne(Personne personne, boolean bind) {
-        if (bind) {
-            personne.matriculeProperty().bind(txtMatricule.textProperty());
-            personne.nomProperty().bind(txtNom.textProperty());
-            personne.prenomProperty().bind(txtPrenom.textProperty());
-            java.util.Date date = java.sql.Date.valueOf(datePicker.getValue());
-            //personne.naissance().bind(ObservableValue<java.util.Date>(date));
-            personne.pays().bind(comboPays.valueProperty());
-            personne.societe().bind(comboSociete.valueProperty());
-            personne.section().bind(comboSection.valueProperty());
-            personne.groupe().bind(comboGroupe.valueProperty());
-            personne.langues().bindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
-            //personne.datecontratProperty().bind(dateFincontrat.valueProperty());
-            personne.memoProperty().bind(txtMemo.textProperty());
-            personne.telephoneProperty().bind(txtTelephone.textProperty());
-            personne.emailProperty().bind(txtEmail.textProperty());
-            personne.potentiel().bind(comboPotentiel.valueProperty());
-        } else {
-            personne.matriculeProperty().unbind();
-            personne.nomProperty().unbind();
-            personne.prenomProperty().unbind();
-            personne.naissance().unbind();
-            personne.pays().unbind();
-            personne.societe().unbind();
-            personne.section().unbind();
-            personne.groupe().unbind();
-            personne.langues().unbindContent(comboLanguesParlees.getCheckModel().getCheckedItems());
-            personne.datecontratProperty().unbind();
-            personne.memoProperty().unbind();
-            personne.telephoneProperty().unbind();
-            personne.emailProperty().unbind();
-            personne.potentiel().unbind();
-        }
-    }
-
     public void clicSuppr(ActionEvent actionEvent) {
         if (!btnSuppr.isDisable() && personneTable.getSelectionModel().getSelectedItem() != null) {
             Personne p = personneTable.getSelectionModel().getSelectedItem();
@@ -609,6 +559,7 @@ public class CiviliteController implements Initializable {
     }
 
     public void delPhotoClic(ActionEvent actionEvent) {
+        Personne pers = personneTable.getSelectionModel().getSelectedItem();
         if (stateBtnNouveau == 1 || stateBtnModifier == 1) {
             imageview.setImage(new Image(defaultImage));
             if (mapFoto.containsKey(String.valueOf(pers.getIdpersonne()))) {
@@ -651,7 +602,6 @@ public class CiviliteController implements Initializable {
                 e.printStackTrace();
             }
         }
-
     }
 
     public String[] getSplitNameImage(String name) {
@@ -668,92 +618,7 @@ public class CiviliteController implements Initializable {
         StageManager.loadContent("/views/civilite/civilite.fxml");
     }
 
-    public void addPoste(ActionEvent actionEvent) {
-        if (stateBtnNouveau == 1 || stateBtnModifier == 1) {
-            Dialog<Poste> dialog = dialogTemplate();
-            dialog.setTitle("Ajouter un Poste:");
-            dialog.setHeaderText("Associer des postes à la personne");
-            DialogPosteController controller = new DialogPosteController(personneTable.getSelectionModel().getSelectedItem());
-            dialog.getDialogPane().setContent(controller);
-            dialog.setResultConverter(new Callback<ButtonType, Poste>() {
-                @Override
-                public Poste call(ButtonType param) {
-                    if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                        return controller.getPoste();
-                    } else {
-                        return null;
-                    }
-                }
-            });
-            Optional<Poste> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<Poste>() {
-                @Override
-                public void accept(Poste poste) {
-                    if (poste != null) {
-                        tablePoste.getItems().add(poste);
-                    } else {
-                        ServiceproUtil.notify("Erreur d'ajout de poste");
-                    }
-                }
-            });
-        }
-    }
 
-    public void deletePoste(ActionEvent actionEvent) {
-        if (tablePoste.getSelectionModel().getSelectedItem() != null) {
-            tablePoste.getItems().remove(tablePoste.getSelectionModel().getSelectedItem());
-        }
-    }
-
-    public <R> Dialog<R> dialogTemplate() {
-        Dialog<R> dialog = new Dialog<>();
-        Region region = new Region();
-        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
-        region.setVisible(false);
-        StageManager.getContentLayout().getChildren().add(region);
-        region.visibleProperty().bind(dialog.showingProperty());
-        ButtonType okButton = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
-        return dialog;
-    }
-
-    public void addProfil(ActionEvent actionEvent) {
-        if (stateBtnNouveau == 1 || stateBtnModifier == 1) {
-            Dialog<ProfilPersonne> dialog = dialogTemplate();
-            dialog.setHeaderText("Ajouter un Profil");
-            DialogProfilController controller = new DialogProfilController(personneTable.getSelectionModel().getSelectedItem());
-            dialog.getDialogPane().setContent(controller);
-            dialog.setResultConverter(new Callback<ButtonType, ProfilPersonne>() {
-                @Override
-                public ProfilPersonne call(ButtonType param) {
-                    if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                        return controller.getData();
-                    } else {
-                        return null;
-                    }
-                }
-            });
-            Optional<ProfilPersonne> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<ProfilPersonne>() {
-                @Override
-                public void accept(ProfilPersonne profilPersonne) {
-                    if (profilPersonne != null) {
-                        tableProfil.getItems().add(profilPersonne);
-                    } else {
-                        ServiceproUtil.notify("Erreur d'ajout de profil");
-                    }
-
-                }
-            });
-        }
-    }
-
-    public void deleteProfil(ActionEvent actionEvent) {
-        if (tableProfil.getSelectionModel().getSelectedItem() != null) {
-            tableProfil.getItems().remove(tableProfil.getSelectionModel().getSelectedItem());
-        }
-    }
 
     public void clicPrev(ActionEvent actionEvent) {
         personneTable.getSelectionModel().selectPrevious();

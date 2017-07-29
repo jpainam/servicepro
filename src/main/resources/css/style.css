@@ -167,3 +167,10 @@ JFOenix CSS
      -fx-background-color: #ee543a, #373e48;
       -fx-background-insets: 0, 0 0 0 6;
 }
+/* Row hovered */
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: brown;
+       -fx-background-insets: 0, 1, 2;
+       -fx-background: -fx-accent;
+       -fx-text-fill: -fx-selection-bar-text;
+}

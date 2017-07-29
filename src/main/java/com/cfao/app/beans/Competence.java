@@ -116,7 +116,7 @@ public class Competence implements java.io.Serializable {
         Competence that = (Competence) o;
 
         if (idcompetence != null) {
-            return (getIdcompetence().intValue() == that.getIdcompetence().intValue());
+            return this.getIdcompetence().equals(that.getIdcompetence());
         }
         return false;
     }

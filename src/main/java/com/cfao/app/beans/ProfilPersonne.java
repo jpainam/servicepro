@@ -74,8 +74,13 @@ public class ProfilPersonne  implements java.io.Serializable {
     }
 
 
+    public ObjectProperty<Profil> profil() {
+        return this.profil;
+    }
 
-
+    public ObjectProperty<Niveau> niveau() {
+        return this.niveau;
+    }
 }
 
 

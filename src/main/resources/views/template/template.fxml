@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
+<StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="973.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
           <children>
@@ -101,29 +101,32 @@
                   </HBox>
                </right>
             </BorderPane>
-             
-              <StackPane fx:id="mainContent" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
-                  <children>
-                      <SplitPane dividerPositions="0.12665198237885464, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                          <items>
-                        <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="363.0" prefWidth="118.0">
-                           <children>
+             <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                <content>
+                 <StackPane fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
+                     <children>
+                         <SplitPane dividerPositions="0.12665198237885464, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                             <items>
+                           <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="363.0" prefWidth="118.0">
+                              <children>
 
                      </children>
-                        </StackPane>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
-                           <children>
-                              <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" VBox.vgrow="NEVER" />
-                               <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
-                           </children>
-      
-                        </VBox>
-                        <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
+                           </StackPane>
+                           <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
+                              <children>
+                                 <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" VBox.vgrow="NEVER" />
+                                  <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
+                              </children>
+         
+                           </VBox>
+                           <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
                   </StackPane>
-                          </items>
-                      </SplitPane>
-                  </children>
-              </StackPane>
+                             </items>
+                         </SplitPane>
+                     </children>
+                 </StackPane>
+                </content>
+             </ScrollPane>
               <HBox fx:id="highlightPane" alignment="TOP_RIGHT" prefHeight="11.0" prefWidth="910.0" style="-fx-background-color: #2f4f4f;" VBox.vgrow="SOMETIMES">
                   <children>
                   <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />

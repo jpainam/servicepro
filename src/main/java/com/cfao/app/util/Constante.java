@@ -9,4 +9,7 @@ public class Constante {
     public static final String COMPETENCE = "CP";
     public static final String CONNAISSANCE = "CN";
     public static final String CONNAISSANCE_COMPETENCE = "CNP";
+    public static final String COMPETENCE_ENCOURS = "EN";
+    public static final String COMPETENCE_CERTIFIEE = "CE";
+    public static final String COMPETENCE_ACERTIFIER = "AC";
 }

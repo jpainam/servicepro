@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -266,7 +267,9 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setFormations(List<Formation> formations) {
-        this.formations.set(FXCollections.observableList(formations));
+        if(formations != null) {
+            this.formations.set(FXCollections.observableList(formations));
+        }
     }
 
 
@@ -349,5 +352,13 @@ public class Personne implements java.io.Serializable {
         if(personneCompetences != null) {
             this.personneCompetences.set(FXCollections.observableList(personneCompetences));
         }
+    }
+    @Transient
+    public List<Competence> getCompetences(){
+        List<Competence> competenceList = new ArrayList<>();
+        for(PersonneCompetence co : personneCompetences){
+            competenceList.add(co.getCompetence());
+        }
+        return competenceList;
     }
 }
