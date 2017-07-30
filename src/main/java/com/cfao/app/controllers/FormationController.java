@@ -309,15 +309,12 @@ public class FormationController implements Initializable {
                     }
                 };
                 new Thread(task).start();
-                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-                        if (task.getValue()) {
-                            ServiceproUtil.notify("Suppression OK");
-                            buildTable();
-                        } else {
-                            ServiceproUtil.notify("Erreur de suppression");
-                        }
+                task.setOnSucceeded(event -> {
+                    if (task.getValue()) {
+                        ServiceproUtil.notify("Suppression OK");
+                        buildTable();
+                    } else {
+                        ServiceproUtil.notify("Erreur de suppression");
                     }
                 });
             }

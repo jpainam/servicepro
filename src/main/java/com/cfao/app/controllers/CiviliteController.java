@@ -16,7 +16,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -441,9 +443,9 @@ public class CiviliteController implements Initializable {
      */
     private void savePersonne(Personne personne) {
 
-        Task<Personne> task = new Task<Personne>() {
+        Task<Boolean> task = new Task<Boolean>() {
             @Override
-            protected Personne call() throws Exception {
+            protected Boolean call() throws Exception {
                 if (profilController.getItems().size() > 0) {
                     for (ProfilPersonne p : profilController.getItems())
                         p.setPersonne(personne);
@@ -455,21 +457,27 @@ public class CiviliteController implements Initializable {
                         p.setPersonne(personne);
                 }
                 personne.setPostes(posteController.getItems());
-
-                new Model<Personne>().save(personne);
+                boolean bool;
+                PersonneModel model = new PersonneModel();
+                bool = model.save(personne);
 
                 if (photo != null) {
                     savePhoto(personne.getIdpersonne());
                 }
 
-                return personne;
+                return  bool;
             }
         };
-        new Thread(task).run();
+        new Thread(task).start();
         task.setOnSucceeded(event -> {
             Platform.runLater(() -> {
-                personneTable.getSelectionModel().select(task.getValue());
-                System.out.println("Good");
+                if(task.getValue()) {
+                    personneTable.getSelectionModel().select(personne);
+                    ServiceproUtil.notify("Ajout OK");
+                    System.out.println("Good");
+                }else{
+                    ServiceproUtil.notify("Erreur d'ajout");
+                }
             });
         });
     }
@@ -516,13 +524,21 @@ public class CiviliteController implements Initializable {
                 return false;
             }
         };
-        new Thread(task).run();
+        new Thread(task).start();
         task.setOnSucceeded(event -> {
             if (task.getValue()) {
                 ServiceproUtil.notify("Modification OK");
                 StageManager.loadContent("/views/civilite/civilite.fxml");
             } else {
                 ServiceproUtil.notify("Erreur de modification");
+            }
+        });
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                ServiceproUtil.notify("Modification Thread failed");
+                System.err.println(task.getException());
+
             }
         });
     }

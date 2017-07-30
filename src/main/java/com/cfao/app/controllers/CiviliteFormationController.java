@@ -3,7 +3,10 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.*;
+import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ButtonUtil;
+import com.cfao.app.util.Constante;
+import com.cfao.app.util.ProgressIndicatorUtil;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +28,7 @@ import javafx.util.Callback;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Locale;
@@ -81,10 +85,13 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         byte[] data = null;
         try {
             // readFileToByteArray() comes from commons-io library
-            data = FileUtil.readFileToByteArray(new File("src/main/resources/documents/Final2016.pdf"));
+            File f = new File("src/main/resources/documents/Final2016.pdf");
+            //File f = new File(URI.create(getClass().getResource("/views/documents/Final2016.pdf").toExternalForm()));
+            data = Files.readAllBytes(f.toPath());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         String base64 = Base64.getEncoder().encodeToString(data);
         engine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
             if(newState == Worker.State.SUCCEEDED){
