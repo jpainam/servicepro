@@ -1,16 +1,18 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.beans.Niveau;
-import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.Profil;
-import com.cfao.app.beans.ProfilPersonne;
+import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.Constante;
 import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -20,10 +22,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.controlsfx.control.PopOver;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -38,6 +46,11 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     public TableView<ProfilPersonne> tableProfil;
     public TableColumn<ProfilPersonne, Profil> columnProfil;
     public TableColumn<ProfilPersonne, Niveau> columnNiveau;
+    TableColumn<Competence, Competence> intituleColum = new TableColumn<>("Libellé de la compétence");
+    TableView<Competence> competenceTable = new TableView<>();
+    TableColumn<Competence, Boolean> encoursColumn = new TableColumn<>("En cours");
+    TableColumn<Competence, Boolean> acertifierColumn = new TableColumn<>("A certifier");
+    TableColumn<Competence, Boolean> certifierColumn = new TableColumn<>("Certifiée");
     public Button btnAjouterProfil;
     public Button btnDeleteProfil;
 
@@ -45,6 +58,8 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     public ObservableMap<String, ObservableList> map;
 
     public boolean btnActive = false;
+
+    PopOver profilPopOver = new PopOver();
 
     public CiviliteProfilController(Personne personne){
         this();
@@ -68,6 +83,67 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         GlyphsDude.setIcon(btnAjouterProfil, FontAwesomeIcon.PLUS_SQUARE);
         GlyphsDude.setIcon(btnDeleteProfil, FontAwesomeIcon.MINUS_SQUARE);
         ServiceproUtil.setDisable(true, btnDeleteProfil, btnAjouterProfil);
+        profilPopOver.setCornerRadius(4);
+        profilPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
+        competenceTable.setMinSize(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        profilPopOver.setMinWidth(Double.NEGATIVE_INFINITY);
+        VBox.setVgrow(competenceTable, Priority.ALWAYS);
+        HBox.setHgrow(competenceTable, Priority.ALWAYS);
+        competenceTable.getColumns().addAll(intituleColum, encoursColumn, acertifierColumn, certifierColumn);
+
+        intituleColum.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
+        encoursColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        acertifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        certifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        tableProfil.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfilPersonne>() {
+            @Override
+            public void changed(ObservableValue<? extends ProfilPersonne> observable, ProfilPersonne oldValue, ProfilPersonne newValue) {
+                buildCompetencePopover(newValue);
+            }
+        });
+    }
+
+    private void buildCompetencePopover(ProfilPersonne profilPersonne) {
+        if(profilPersonne != null){
+            List<PersonneCompetence> competences = personne.getPersonneCompetences();
+            encoursColumn.setCellValueFactory(param -> {
+                Competence competence = param.getValue();
+                int i = 0;
+                while(i < competences.size()){
+                    PersonneCompetence co = competences.get(i);
+                    if(co.equals(competence) && co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)){
+                        return  new SimpleBooleanProperty(true);
+                    }
+                    i++;
+                }
+                return new SimpleBooleanProperty(false);
+            });
+            acertifierColumn.setCellValueFactory(param -> {
+                Competence competence = param.getValue();
+                int i = 0;
+                while(i < competences.size()){
+                    PersonneCompetence co = competences.get(i);
+                    if(co.equals(competence) && !co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ACERTIFIER)){
+                        return new SimpleBooleanProperty(false);
+                    }
+                }
+                return new SimpleBooleanProperty(true);
+            });
+            certifierColumn.setCellValueFactory(param -> {
+                Competence competence = param.getValue();
+                int i = 0;
+                while(i < competences.size()){
+                    PersonneCompetence co = competences.get(i);
+                    if(co.equals(competence) && co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_CERTIFIEE)){
+                        return new SimpleBooleanProperty(true);
+                    }
+                }
+                return new SimpleBooleanProperty(false);
+            });
+            competenceTable.setItems(FXCollections.observableArrayList(profilPersonne.getProfil().getCompetences()));
+            profilPopOver.setContentNode(competenceTable);
+            profilPopOver.show(tableProfil);
+        }
     }
 
     public ObservableList<ProfilPersonne> getItems(){
@@ -178,4 +254,5 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         }
 
     }
+
 }

@@ -18,7 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.Date;
@@ -94,14 +93,11 @@ public class CivilitePosteController extends AnchorPane implements Initializable
             dialog.setHeaderText("Associer des postes à la personne");
             DialogPosteController controller = new DialogPosteController();
             dialog.getDialogPane().setContent(controller);
-            dialog.setResultConverter(new Callback<ButtonType, Poste>() {
-                @Override
-                public Poste call(ButtonType param) {
-                    if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                        return controller.getPoste();
-                    } else {
-                        return null;
-                    }
+            dialog.setResultConverter(param -> {
+                if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                    return controller.getPoste();
+                } else {
+                    return null;
                 }
             });
             Optional<Poste> result = dialog.showAndWait();
