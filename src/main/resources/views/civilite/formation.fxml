@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,7 +10,7 @@
 
 <fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="730.0" prefWidth="908.0" type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <SplitPane dividerPositions="0.434878587196468" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
@@ -19,56 +20,36 @@
                                 <Button fx:id="btnNextCompetence" mnemonicParsing="false" onAction="#nextCompetenceAction" />
                                 <Separator orientation="VERTICAL" />
                                 <Button fx:id="btnPrintCompetence" mnemonicParsing="false" onAction="#printCompetenceAction" />
+                                <ComboBox fx:id="comboStatut" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
                             </items>
                         </ToolBar>
-                        <VBox prefHeight="49.0" prefWidth="450.0">
-                            <children>
-                                <Label text="Filtrer par statut de la compétence" />
-                                <ComboBox fx:id="comboStatut" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="NEVER" />
-                            </children>
-                            <VBox.margin>
-                                <Insets left="5.0" right="5.0" top="5.0" />
-                            </VBox.margin>
-                        </VBox>
-                        <VBox VBox.vgrow="ALWAYS">
-                            <children>
-                                <Label text="Compétences" />
-                        <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                           <children>
-                                      <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                                          <columns>
-                                              <TableColumn fx:id="intituleCompetenceColumn" prefWidth="75.0" text="Intitulé de la compétence" />
-                                              <TableColumn fx:id="acertifierCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="A certifier" />
-                                              <TableColumn fx:id="encoursCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="En cours" />
-                                              <TableColumn fx:id="certifieCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="Certifié" />
-                                          </columns>
-                                          <columnResizePolicy>
-                                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                          </columnResizePolicy>
-                                      </TableView>
-                           </children>
-                        </StackPane>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" />
-                            </VBox.margin>
-                        </VBox>
-                    </children>
-                </VBox>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
-                    <children>
-                        <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
-                            <items>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                           <children>
-                              <ToolBar prefHeight="40.0" prefWidth="200.0">
-                                <items>
-                                  <Button fx:id="btnPreviousFormation" mnemonicParsing="false" onAction="#previousFormationAction" />
-                                    <Button fx:id="btnNextFormation" mnemonicParsing="false" />
-                                    <Separator orientation="VERTICAL" />
-                                    <Button fx:id="btnPrintFormation" mnemonicParsing="false" />
-                                </items>
-                              </ToolBar>
+                  <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+                     <items>
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                  <children>
+                                      <Label text="Compétences" />
+                              <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                 <children>
+                                            <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <columns>
+                                                    <TableColumn fx:id="intituleCompetenceColumn" prefWidth="75.0" text="Intitulé de la compétence" />
+                                                    <TableColumn fx:id="acertifierCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="A certifier" />
+                                                    <TableColumn fx:id="encoursCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="En cours" />
+                                                    <TableColumn fx:id="certifieCompetenceColumn" maxWidth="80.0" minWidth="80.0" text="Certifié" />
+                                                </columns>
+                                                <columnResizePolicy>
+                                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                </columnResizePolicy>
+                                            </TableView>
+                                 </children>
+                              </StackPane>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="5.0" left="5.0" right="5.0" />
+                                  </VBox.margin>
+                              </VBox>
+                            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
+                                <children>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label text="Historique des formation" />
@@ -88,43 +69,27 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>
                               </VBox>
-                           </children>
-                        </VBox>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                           <children>
-                              <ToolBar prefHeight="40.0" prefWidth="200.0">
-                                 <items>
-                                    <Button fx:id="btnPreviousSouhait" mnemonicParsing="false" onAction="#previousSouhaitAction" />
-                                    <Button fx:id="btnNextSouhait" mnemonicParsing="false" onAction="#nextSouhaitAction" />
-                                    <Separator orientation="VERTICAL" />
-                                    <Button fx:id="btnPrintSouhait" mnemonicParsing="false" onAction="#printSouhaitAction" />
-                                 </items>
-                              </ToolBar>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <Label text="Souhait de formation" />
-                                    <TableView fx:id="souhaitTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                       <columns>
-                                          <TableColumn fx:id="codeSouhaitColumn" maxWidth="75.0" minWidth="71.0" prefWidth="71.0" text="Code" />
-                                          <TableColumn fx:id="titreSouhaitColumn" maxWidth="1.7976931348623157E308" prefWidth="215.0" text="Titre" />
-                                          <TableColumn fx:id="datedebutSouhaitColumn" maxWidth="80.0" minWidth="80.0" text="Date de debut" />
-                                          <TableColumn fx:id="datefinSouhaitColumn" maxWidth="80.0" minWidth="80.0" text="Date de fin" />
-                                       </columns>
-                                    </TableView>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </VBox>
-                           </children>
-                        </VBox>
-                            </items>
-                        </SplitPane>
+                                </children>
+                            </VBox>
+                     </items>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </SplitPane>
                     </children>
                 </VBox>
+            <VBox fx:id="pdfViewer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children></VBox>
             </items>
         </SplitPane>
     </children>

@@ -123,6 +123,13 @@ public class CiviliteController implements Initializable {
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         hboxSearch.getChildren().setAll(new Label("Civilités :"), searchBox);
         ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
+        Platform.runLater(() -> {
+            personneTable.requestFocus();
+            if(personneTable.getItems().size() > 0) {
+                personneTable.getSelectionModel().select(0);
+                personneTable.getFocusModel().focus(0);
+            }
+        });
     }
 
     private void buildcontent() {
@@ -239,6 +246,7 @@ public class CiviliteController implements Initializable {
             comboContrat.setItems(map.get("contrat"));
             comboAmbition.setItems(map.get("ambition"));
             comboLangue.setItems(map.get("langue"));
+            personneTable.setItems(map.get("personne"));
         });
     }
 
@@ -255,7 +263,6 @@ public class CiviliteController implements Initializable {
         columnPersonneSociete.setCellValueFactory(param -> param.getValue().societe());
         columnTelephone.setCellValueFactory(param -> param.getValue().telephoneProperty());
 
-        personneTable.setItems(map.get("personne"));
         personneTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Personne>() {
             @Override
             public void changed(ObservableValue<? extends Personne> observable, Personne oldValue, Personne newValue) {

@@ -3,16 +3,14 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.ButtonUtil;
-import com.cfao.app.util.Constante;
-import com.cfao.app.util.ProgressIndicatorUtil;
+import com.cfao.app.util.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -21,10 +19,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Base64;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -39,25 +42,16 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public Button btnPreviousCompetence;
     public Button btnNextCompetence;
     public Button btnPrintCompetence;
-    public Button btnPreviousFormation;
-    public Button btnNextFormation;
-    public Button btnPrintFormation;
-    public Button btnNextSouhait;
-    public Button btnPreviousSouhait;
-    public Button btnPrintSouhait;
+
     public TableView<Formation> formationTable;
     public TableColumn<Formation, String> codeFormationColumn;
     public TableColumn<Formation, String> titreFormationColumn;
     public TableColumn<Formation, LocalDate> datedebutFormationColumn;
     public TableColumn<Formation, LocalDate> datefinFormationColumn;
-    public TableColumn<Formation, String> codeSouhaitColumn;
-    public TableColumn<Formation, String> titreSouhaitColumn;
-    public TableColumn<Formation, LocalDate> datedebutSouhaitColumn;
-    public TableColumn<Formation, LocalDate> datefinSouhaitColumn;
-    public TableView<Formation> souhaitTable;
     public ComboBox<CompetenceStatut> comboStatut;
     private Personne personne = null;
     public StackPane competenceStackPane;
+    public WebView webView;
 
     public CiviliteFormationController() {
         try {
@@ -79,12 +73,31 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
+        WebEngine engine = webView.getEngine();
+        String url = getClass().getResource("/pdfjs/web/viewer.html").toExternalForm();
+        engine.setUserStyleSheetLocation(getClass().getResource("/pdfjs/web/viewer.css").toExternalForm());
+
+        engine.setJavaScriptEnabled(true);
+        byte[] data = null;
+        try {
+            // readFileToByteArray() comes from commons-io library
+            data = FileUtil.readFileToByteArray(new File("src/main/resources/documents/Final2016.pdf"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String base64 = Base64.getEncoder().encodeToString(data);
+        engine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+            if(newState == Worker.State.SUCCEEDED){
+                webView.getEngine().executeScript("openFileFromBase64('" + base64 + "')");
+            }
+        });
+        engine.load(url);
     }
 
     private void initComponents() {
-        ButtonUtil.next(btnNextCompetence, btnNextFormation, btnNextSouhait);
-        ButtonUtil.previous(btnPreviousCompetence, btnPreviousFormation, btnPreviousSouhait);
-        ButtonUtil.print(btnPrintCompetence, btnPrintFormation, btnPrintSouhait);
+        ButtonUtil.next(btnNextCompetence);
+        ButtonUtil.previous(btnPreviousCompetence);
+        ButtonUtil.print(btnPrintCompetence);
         Task<ObservableList<CompetenceStatut>> task = new Task<ObservableList<CompetenceStatut>>() {
             @Override
             protected ObservableList<CompetenceStatut> call() throws Exception {
@@ -186,19 +199,11 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public void printCompetenceAction(ActionEvent event) {
     }
 
-    public void previousFormationAction(ActionEvent event) {
-    }
-
-    public void previousSouhaitAction(ActionEvent event) {
-    }
-
-    public void nextSouhaitAction(ActionEvent event) {
-    }
-
-    public void printSouhaitAction(ActionEvent event) {
-    }
-
     public void setPersonne(Personne personne) {
         this.personne = personne;
+    }
+
+    public void changeLanguage(Locale locale) {
+        webView.getEngine().executeScript("changeLanguage('" + locale.toLanguageTag() + "')");
     }
 }

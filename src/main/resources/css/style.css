@@ -174,3 +174,6 @@ JFOenix CSS
        -fx-background: -fx-accent;
        -fx-text-fill: -fx-selection-bar-text;
 }
+#toolbarViewerRight {
+    display:none;
+}
