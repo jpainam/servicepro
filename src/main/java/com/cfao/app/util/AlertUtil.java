@@ -36,6 +36,9 @@ public class AlertUtil {
         alert.showAndWait();
     }
 
+    public static void showErrorMessage(Throwable throwable){
+        showErrorMessage(throwable);
+    }
     public static void showErrorMessage(Exception ex) {
         ex.printStackTrace();
         Alert alert = new Alert(AlertType.ERROR);

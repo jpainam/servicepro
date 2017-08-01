@@ -9,7 +9,6 @@ import com.cfao.app.util.Constante;
 import com.cfao.app.util.ProgressIndicatorUtil;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -168,17 +167,14 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         new ProgressIndicatorUtil(competenceStackPane, task);
         new Thread(task).start();
         task.setOnSucceeded((WorkerStateEvent event) -> {
-            encoursCompetenceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Competence, Boolean>, ObservableValue<Boolean>>() {
-                @Override
-                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Competence, Boolean> param) {
-                    Competence competence = param.getValue();
-                    for(PersonneCompetence pc : personne.getPersonneCompetences()){
-                        if(pc.getCompetence().equals(competence) && pc.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)){
-                            return new SimpleBooleanProperty(true);
-                        }
+            encoursCompetenceColumn.setCellValueFactory(param -> {
+                Competence competence = param.getValue();
+                for(PersonneCompetence pc : personne.getPersonneCompetences()){
+                    if(pc.getCompetence().equals(competence) && pc.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)){
+                        return new SimpleBooleanProperty(true);
                     }
-                    return new SimpleBooleanProperty(false);
                 }
+                return new SimpleBooleanProperty(false);
             });
             certifieCompetenceColumn.setCellValueFactory(param -> {
                 Competence competence = param.getValue();

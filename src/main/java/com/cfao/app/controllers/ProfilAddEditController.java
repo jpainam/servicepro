@@ -10,15 +10,12 @@ import com.cfao.app.util.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -26,7 +23,6 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
@@ -138,73 +134,64 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         });
         niveauColumn.setCellValueFactory(param -> param.getValue().getNiveau().libelleProperty());
         selectedItems = FXCollections.observableArrayList();
-        task1.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                if(profil != null) {
-                    for (Competence competence : task1.getValue()) {
-                        Iterator<Competence> iterator = profil.getCompetences().iterator();
-                        while (iterator.hasNext()) {
-                            if (iterator.next().getIdcompetence().equals(competence.getIdcompetence())) {
-                                competenceTable.getSelectionModel().select(competence);
-                                selectedItems.add(competence);
-                            }
+
+        task1.setOnSucceeded((WorkerStateEvent event) -> {
+            possedeColumn.setCellFactory(param -> {
+                BooleanProperty selected = new SimpleBooleanProperty();
+                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
+                    if(profil != null) {
+                        Competence competence = task1.getValue().get(index);
+                        if (profil.getCompetences().contains(competence)) {
+                            selected.set(true);
                         }
                     }
-                }
-                possedeColumn.setCellFactory(param -> {
-                    BooleanProperty selected = new SimpleBooleanProperty();
-                    CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
-                    selected.addListener((obs, wasSelected, isNowSelected) -> {
-                        if (isNowSelected) {
-                            selectedItems.add(cell.getItem());
-                            competenceTable.getSelectionModel().select(cell.getItem());
-                        } else {
-                            selectedItems.remove(cell.getItem());
-                            competenceTable.getSelectionModel().clearSelection(cell.getIndex());
-                        }
-                    });
-
-                    selectedItems.addListener(new ListChangeListener<Competence>() {
-                        @Override
-                        public void onChanged(Change<? extends Competence> change) {
-                            selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
-                        }
-                    });
-                    cell.itemProperty().addListener(new ChangeListener<Competence>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Competence> observable, Competence oldValue, Competence newValue) {
-                            selected.set(newValue != null && selectedItems.contains(newValue));
-                        }
-                    });
-                    return cell;
+                    return selected;
                 });
-                possedeColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper(param.getValue()));
-            }
+                selected.addListener((obs, wasSelected, isNowSelected) -> {
+                    if (isNowSelected) {
+                        if(!selectedItems.contains(cell.getItem())) {
+                            selectedItems.add(cell.getItem());
+                        }
+                        competenceTable.getSelectionModel().select(cell.getItem());
+                    } else {
+                        if(selectedItems.contains(cell.getItem())) {
+                            selectedItems.remove(cell.getItem());
+                        }
+                        competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                    }
+                });
+
+                selectedItems.addListener((ListChangeListener<Competence>) change -> {
+                    selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
+                });
+                cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                    selected.set(newValue != null && selectedItems.contains(newValue));
+                });
+                return cell;
+            });
+            possedeColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper(param.getValue()));
         });
 
+        task1.setOnFailed(event -> {
+            AlertUtil.showErrorMessage(task1.getException());
+        });
+
+        task.setOnFailed(event -> {
+            AlertUtil.showErrorMessage(task.getException());
+        });
 
     }
 
     public void validerAction(ActionEvent actionEvent) {
         selectedItems.forEach(System.out::println);
-
         boolean edit = true;
         if (profil == null) {
             profil = new Profil();
-            profil.setCompetences(selectedItems);
             edit = false;
-        }else{
-            for(Competence competence : selectedItems){
-                if(profil.getOriginalCompetence(competence) == null){
-                    profil.getCompetences().add(competence);
-                }
-            }
         }
-
+        profil.setCompetences(selectedItems);
         profil.setAbbreviation(txtAbbreviation.getText());
         profil.setLibelle(txtProfil.getText());
-
         Model<Profil> model = new Model<>("Profil");
         boolean bool = false;
         String sms = "";
@@ -231,7 +218,15 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
     public void comboNiveauAction(ActionEvent actionEvent) {
         Niveau niveau = comboNiveau.getSelectionModel().getSelectedItem();
         if (niveau != null) {
-            System.out.println(niveau);
+            Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+                @Override
+                protected ObservableList<Competence> call() throws Exception {
+                    return FXCollections.observableArrayList(new CompetenceModel().findByNiveau(niveau));
+                }
+            };
+            competenceTable.itemsProperty().bind(task.valueProperty());
+            new ProgressIndicatorUtil(competenceStackPane, task);
+            new Thread(task).start();
         }
     }
 }

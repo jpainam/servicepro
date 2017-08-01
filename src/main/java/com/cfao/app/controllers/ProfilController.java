@@ -6,6 +6,7 @@ import com.cfao.app.beans.Profil;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,7 +23,10 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 import java.net.URL;
@@ -248,8 +252,15 @@ public class ProfilController implements Initializable {
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
-        Tab tab = tabPane.getTabs().get(1);
+        Tab tab = tabPane.getTabs().get(0);
         tabPane.getSelectionModel().select(tab);
+        Platform.runLater(() -> {
+            profilTable.requestFocus();
+            if(profilTable.getItems().size() > 0) {
+                profilTable.getSelectionModel().select(0);
+                profilTable.getFocusModel().focus(0);
+            }
+        });
     }
 
     public void previousAction(ActionEvent event) {

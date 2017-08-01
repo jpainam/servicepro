@@ -12,11 +12,11 @@ import java.util.List;
  * Created by JP on 6/15/2017.
  */
 public class CompetenceModel extends Model<Competence> {
-    public CompetenceModel(){
+    public CompetenceModel() {
         super("Competence");
     }
 
-    public CompetenceModel(String className){
+    public CompetenceModel(String className) {
         super(className);
     }
 
@@ -45,28 +45,29 @@ public class CompetenceModel extends Model<Competence> {
 
     public List<Competence> getNonCompetences(List<Competence> competences) {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             List<Integer> competencesIds = new ArrayList<>();
-            for(Competence c : competences){
+            for (Competence c : competences) {
                 competencesIds.add(c.getIdcompetence());
             }
             Criteria criteria = session.createCriteria(Competence.class);
-            if(!competencesIds.isEmpty()) {
+            if (!competencesIds.isEmpty()) {
                 criteria.add(Restrictions.not(Restrictions.in("idcompetence", competencesIds)));
             }
             return criteria.list();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
-        }finally {
+        } finally {
             session.close();
         }
         return null;
     }
+
     public List<Competence> getNonCompetences(Profil profil, Niveau niveau) {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             /*Query query1 = session.createQuery("select pc.competence from ProfilCompetenceId pc where pc.profil = :profil and pc.niveau = :niveau");
             query1.setParameter("profil", profil);
@@ -82,10 +83,10 @@ public class CompetenceModel extends Model<Competence> {
             sqlQuery.setParameter("profil", profil.getIdprofil());
             sqlQuery.setParameter("niveau", niveau.getIdniveau());
             return sqlQuery.list();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
-        }finally {
+        } finally {
             session.close();
         }
         return null;
@@ -111,21 +112,39 @@ public class CompetenceModel extends Model<Competence> {
     */
     public List<Formation> getFormationByCompetence(Competence competence) {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             SQLQuery query = session.createSQLQuery("select formation from formation_competence where competence = :competence");
             query.setParameter("competence", competence.getIdcompetence());
-           Criteria criteria = session.createCriteria(Formation.class).add(
-                   Restrictions.in("idformation", query.list()));
+            Criteria criteria = session.createCriteria(Formation.class).add(
+                    Restrictions.in("idformation", query.list()));
             return criteria.list();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
-        }finally {
+        } finally {
             session.close();
         }
         return null;
 
+    }
+
+    public List<Competence> findByNiveau(Niveau niveau) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Competence.class).add(
+                    Restrictions.eq("niveau", niveau)
+            );
+            return criteria.list();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
     }
 
     /*public List<ProfilCompetence> getProfilByCompetence(Competence competence) {

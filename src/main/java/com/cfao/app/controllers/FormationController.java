@@ -9,6 +9,7 @@ import com.cfao.app.reports.PrintFormation;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +30,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
 
 import java.awt.*;
 import java.io.File;
@@ -38,7 +38,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 /**
  * Created by JP on 6/19/2017.
@@ -139,6 +138,13 @@ public class FormationController implements Initializable {
             }
         };
         new Thread(task).run();
+        Platform.runLater(() -> {
+            formationTable.requestFocus();
+            if (formationTable.getItems().size() > 0) {
+                formationTable.getSelectionModel().select(0);
+                formationTable.getFocusModel().focus(0);
+            }
+        });
     }
 
     private void buildCombo() {
@@ -288,11 +294,12 @@ public class FormationController implements Initializable {
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Modification OK");
-                    buildTable();
+                    StageManager.loadContent("/views/formation/formation.fxml");
                 } else {
                     ServiceproUtil.notify("Erreur de modification");
                 }
             });
+            task.setOnFailed(event -> AlertUtil.showErrorMessage(task.getException()));
             stateBtnModifier = 0;
         }
     }
@@ -318,7 +325,7 @@ public class FormationController implements Initializable {
                     }
                 });
             }
-        }else{
+        } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la formation à supprimer");
         }
     }
@@ -358,6 +365,10 @@ public class FormationController implements Initializable {
     }
 
     public void ajouterSupportAction(ActionEvent actionEvent) {
+        if(stateBtnModifier == 0 && stateBtnNouveau == 0){
+            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord cliquer sur Modification ou Nouveau");
+            return;
+        }
         Dialog<Support> dialog = new Dialog<>();
         Region region = new Region();
         region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
@@ -373,25 +384,19 @@ public class FormationController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
             FormationSupportDialogController formationSupportDialogController = new FormationSupportDialogController();
             dialog.getDialogPane().setContent(formationSupportDialogController);
-            dialog.setResultConverter(new Callback<ButtonType, Support>() {
-                @Override
-                public Support call(ButtonType param) {
-                    if(param.getButtonData() == ButtonBar.ButtonData.OK_DONE)
-                        return formationSupportDialogController.getSupport();
-                    else
-                        return null;
-                }
+            dialog.setResultConverter(param -> {
+                if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                    return formationSupportDialogController.getSupport();
+                else
+                    return null;
             });
             Optional<Support> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<Support>() {
-                @Override
-                public void accept(Support support) {
-                    Formation formation = formationTable.getSelectionModel().getSelectedItem();
-                    if (!formation.getSupportFormations().contains(support)) {
-                        SupportFormation sp = new SupportFormation();
-                        sp.setSupport(support);
-                        supportTable.getItems().add(sp);
-                    }
+            result.ifPresent(support -> {
+                Formation formation = formationTable.getSelectionModel().getSelectedItem();
+                if (!formation.getSupportFormations().contains(support)) {
+                    SupportFormation sp = new SupportFormation();
+                    sp.setSupport(support);
+                    supportTable.getItems().add(sp);
                 }
             });
         } catch (Exception ex) {
@@ -401,6 +406,10 @@ public class FormationController implements Initializable {
     }
 
     public void supprimerSupportAction(ActionEvent actionEvent) {
+        if(stateBtnModifier == 0 && stateBtnNouveau == 0){
+            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord cliquer sur Modification ou Nouveau");
+            return;
+        }
         if (supportTable.getSelectionModel().getSelectedItem() != null) {
             SupportFormation support = supportTable.getSelectionModel().getSelectedItem();
             supportTable.getItems().remove(support);
@@ -439,15 +448,24 @@ public class FormationController implements Initializable {
     }
 
     public void printAction(ActionEvent event) {
-        PrintFormation print = new PrintFormation();
-        try {
-            if (formationTable.getSelectionModel().getSelectedItem() != null) {
-                print.showReport(formationTable.getSelectionModel().getSelectedItem());
-            } else {
-                print.showReport();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                PrintFormation print = new PrintFormation();
+                if (formationTable.getSelectionModel().getSelectedItem() != null) {
+                    print.showReport(formationTable.getSelectionModel().getSelectedItem());
+                } else {
+                    print.showReport();
+                }
+                return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        };
+        StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+        new Thread(task).start();
+        task.setOnSucceeded(event1 -> {
+            StageManager.getProgressBar().progressProperty().unbind();
+            StageManager.getProgressBar().setProgress(0);
+            ServiceproUtil.notify("Impression réussie");
+        });
     }
 }

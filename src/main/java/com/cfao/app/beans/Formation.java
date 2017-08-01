@@ -142,7 +142,9 @@ public class Formation {
     }
 
     public void setPersonnels(List<Personnel> personnels) {
-        this.personnels.set(FXCollections.observableArrayList(personnels));
+        if(personnels != null) {
+            this.personnels.set(FXCollections.observableArrayList(personnels));
+        }
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
@@ -151,7 +153,9 @@ public class Formation {
     }
 
     public void setSupportFormations(List<SupportFormation> supportFormations) {
-        this.supportFormations.set(FXCollections.observableArrayList(supportFormations));
+        if(supportFormations != null) {
+            this.supportFormations.set(FXCollections.observableArrayList(supportFormations));
+        }
     }
 
     /*@ManyToMany(fetch=FetchType.LAZY)

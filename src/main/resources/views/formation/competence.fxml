@@ -30,7 +30,7 @@
                      <padding>
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </padding></HBox>
-                        <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="competenceTable" VBox.vgrow="ALWAYS">
                             <columns>
                         <TableColumn fx:id="numeroCompetence" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
                                 <TableColumn fx:id="libelleCompetence" prefWidth="75.0" text="Libellé des compétences" />

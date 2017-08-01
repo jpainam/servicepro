@@ -14,6 +14,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -74,6 +75,7 @@ public class FormationCompetenceController extends AnchorPane implements Initial
         searchBoxAssocie.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBoxAssocie, Priority.ALWAYS);
         hboxCompetenceAssociee.getChildren().addAll(new Label("Compétences associées : "), searchBoxAssocie);
+        competenceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initComponents();
     }
 
@@ -83,6 +85,9 @@ public class FormationCompetenceController extends AnchorPane implements Initial
         ButtonUtil.next(btnNextCompetence);
         ButtonUtil.previous(btnPreviousCompetence);
         ButtonUtil.print(btnPrintCompetence);
+    }
+
+    public void buildTable() {
         libelleCompetence.setCellValueFactory(param -> param.getValue().descriptionProperty());
         niveauCompetence.setCellValueFactory(param -> param.getValue().niveauProperty());
         possedeCompetence.setCellFactory(param -> new CheckBoxTableCell<>());
@@ -97,9 +102,6 @@ public class FormationCompetenceController extends AnchorPane implements Initial
             }, cell.emptyProperty(), cell.indexProperty()));
             return cell;
         });
-    }
-
-    public void buildTable() {
         possedeCompetence.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>());
         competenceTable.setItems(FXCollections.observableArrayList(formation.getCompetences()));
         possedeCompetence.setCellFactory(param -> {
@@ -110,36 +112,23 @@ public class FormationCompetenceController extends AnchorPane implements Initial
     }
 
     public void annulerCompetence(ActionEvent actionEvent) {
-        //StageManager.loadContent("/views/formation/formation.fxml");
-        stateBtnModifier = false;
+        StageManager.loadContent("/views/formation/formation.fxml");
+        /*stateBtnModifier = false;
         competenceTable.setEditable(false);
         competenceTable.itemsProperty().unbind();
         buildTable();
-        btnModifierCompetence.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+        btnModifierCompetence.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));*/
     }
 
     public void modifierCompetence(ActionEvent actionEvent) {
+        if (formation == null) {
+            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord choisir la formation");
+            return;
+        }
         if (stateBtnModifier == false) {
             competenceTable.setEditable(true);
             btnModifierCompetence.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
             selectedItems = FXCollections.observableArrayList();
-            possedeCompetence.setCellFactory(param -> {
-                BooleanProperty selected = new SimpleBooleanProperty();
-                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
-                selected.addListener((obs, wasSelected, isNowSelected) -> {
-                    if (isNowSelected) {
-                        selectedItems.add(cell.getItem());
-                        competenceTable.getSelectionModel().select(cell.getItem());
-                    } else {
-                        selectedItems.remove(cell.getItem());
-                        competenceTable.getSelectionModel().clearSelection(cell.getIndex());
-                    }
-                });
-
-                selectedItems.addListener((ListChangeListener<Competence>) change -> selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem())));
-                cell.itemProperty().addListener((observable, oldValue, newValue) -> selected.set(newValue != null && selectedItems.contains(newValue)));
-                return cell;
-            });
             Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
                 @Override
                 protected ObservableList<Competence> call() throws Exception {
@@ -148,8 +137,50 @@ public class FormationCompetenceController extends AnchorPane implements Initial
             };
             competenceTable.itemsProperty().bind(task.valueProperty());
             new Thread(task).start();
+            task.setOnSucceeded(event -> {
+                possedeCompetence.setCellFactory((TableColumn<Competence, Competence> param) -> {
+                    BooleanProperty selected = new SimpleBooleanProperty();
+                    CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
+
+                        Competence competence = task.getValue().get(index);
+                        if (formation.getCompetences().contains(competence)) {
+                            selected.set(true);
+                        }
+
+                        return selected;
+                    });
+                    selected.addListener((obs, wasSelected, isNowSelected) -> {
+                        if (isNowSelected) {
+                            if (!selectedItems.contains(cell.getItem())) {
+                                selectedItems.add(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().select(cell.getItem());
+                        } else {
+                            if (selectedItems.contains(cell.getItem())) {
+                                selectedItems.remove(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                        }
+                    });
+
+                    selectedItems.addListener((ListChangeListener<Competence>) change -> {
+                        selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
+                    });
+                    cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                        selected.set(newValue != null && selectedItems.contains(newValue));
+                    });
+                    return cell;
+                });
+            });
+            possedeCompetence.setCellValueFactory(param -> {
+                return new SimpleObjectProperty<>(param.getValue());
+            });
             stateBtnModifier = true;
+            task.setOnFailed(event -> {
+                AlertUtil.showErrorMessage(task.getException());
+            });
         } else {
+            selectedItems.forEach(System.out::println);
             FormationModel formationModel = new FormationModel();
             formation.setCompetences(selectedItems);
             if (formationModel.update(formation)) {

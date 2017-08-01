@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2017 at 11:47 PM
+-- Generation Time: Jul 31, 2017 at 01:36 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -167,7 +167,6 @@ INSERT INTO `formateurs` (`FORMATION`, `PERSONNEL`) VALUES
 (3, 1),
 (1, 2),
 (3, 2),
-(4, 2),
 (2, 3);
 
 -- --------------------------------------------------------
@@ -190,17 +189,17 @@ CREATE TABLE IF NOT EXISTS `formations` (
   KEY `MODELE` (`MODELE`),
   KEY `ETATFORMATION` (`ETATFORMATION`),
   KEY `TYPEFORMATION` (`TYPEFORMATION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `formations`
 --
 
 INSERT INTO `formations` (`IDFORMATION`, `CODEFORMATION`, `MODELE`, `TITRE`, `DESCRIPTION`, `ETATFORMATION`, `TYPEFORMATION`, `DATEDEBUT`, `DATEFIN`) VALUES
-(1, 'TEST02', 4, 'Un test', 'Une description de test', 3, 2, '1919-11-21', '1970-11-13'),
+(1, 'TEST02', 4, 'Un testhrerh', 'Une description de test', 3, 2, '1919-11-21', '1970-11-13'),
 (2, 'aui', 6, 'je suis ', 'qh obon', 3, 4, '1919-11-12', '1970-11-02'),
 (3, 'eto', 4, 'je dois', 'brqvotoi qussi', 4, NULL, '2017-07-12', '2017-07-09'),
-(4, 'code', 3, 'ah bon', 'gefz', 2, 3, '2017-07-10', '2017-07-10');
+(7, '', 4, 'yugvhv', '', 3, 2, '2017-07-26', '2017-07-26');
 
 -- --------------------------------------------------------
 
@@ -222,13 +221,11 @@ CREATE TABLE IF NOT EXISTS `formation_competence` (
 
 INSERT INTO `formation_competence` (`FORMATION`, `COMPETENCE`) VALUES
 (1, 1),
-(2, 2),
-(3, 3),
-(2, 4),
-(3, 4),
-(4, 4),
-(3, 5),
-(2, 6);
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6);
 
 -- --------------------------------------------------------
 
@@ -249,57 +246,22 @@ CREATE TABLE IF NOT EXISTS `formation_personne` (
 --
 
 INSERT INTO `formation_personne` (`FORMATION`, `PERSONNE`) VALUES
-(2, 1),
-(2, 2),
-(1, 3),
-(2, 3),
-(3, 3),
-(1, 4),
 (2, 4),
-(4, 4),
-(1, 5),
 (2, 5),
 (3, 5),
-(1, 8),
-(2, 8),
-(3, 8),
-(1, 10),
 (3, 10),
-(4, 10),
-(1, 11),
 (3, 11),
-(4, 11),
-(1, 12),
 (3, 12),
-(4, 12),
-(1, 13),
 (3, 13),
-(4, 13),
-(1, 14),
-(3, 14),
-(4, 14),
-(1, 17),
 (3, 17),
-(4, 17),
-(1, 18),
 (3, 18),
-(1, 19),
 (3, 19),
 (3, 20),
 (3, 21),
-(1, 22),
 (3, 22),
 (3, 23),
-(1, 24),
 (3, 24),
-(1, 25),
-(3, 26),
-(1, 27),
-(1, 31),
-(1, 33),
-(1, 36),
-(1, 38),
-(4, 1786);
+(3, 26);
 
 -- --------------------------------------------------------
 
@@ -356,17 +318,6 @@ CREATE TABLE IF NOT EXISTS `langue_parlee` (
   PRIMARY KEY (`IDPERS`,`IDLANGUE`),
   KEY `IDLANGUE` (`IDLANGUE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `langue_parlee`
---
-
-INSERT INTO `langue_parlee` (`IDPERS`, `IDLANGUE`) VALUES
-(1786, 1),
-(1787, 1),
-(1786, 2),
-(1787, 2),
-(3, 3);
 
 -- --------------------------------------------------------
 
@@ -1040,16 +991,15 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   KEY `LANGUE` (`LANGUE`),
   KEY `AMBITION` (`AMBITION`),
   KEY `FK_sn7joh98p4rajw7bflfj6fx91` (`POTENTIEL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1788 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1786 ;
 
 --
 -- Dumping data for table `personnes`
 --
 
 INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `TELEPHONE`, `EMAIL`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `CONTRAT`, `AMBITION`, `LANGUE`, `DATECONTRAT`, `MEMO`, `POTENTIEL`) VALUES
-(1, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 1, 1, 2, 1, 2, 2, NULL, NULL, NULL),
-(2, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 2, 4, 3, 3, 1, NULL, NULL, NULL),
-(3, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 1, 3, 3, 2, 1, 3, NULL, NULL, NULL),
+(2, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', 'telllese', 'a,il', 18, 2, 2, 4, 3, 3, 1, NULL, NULL, NULL),
+(3, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', 'yrdy', NULL, 14, 1, 3, 3, 2, 1, 3, NULL, NULL, NULL),
 (4, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 1, 4, 4, 2, 3, 3, NULL, NULL, NULL),
 (5, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 11, 5, 3, 2, 2, NULL, NULL, NULL),
 (8, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 3, 13, 4, 3, 2, 1, NULL, NULL, NULL),
@@ -1057,7 +1007,7 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (11, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (12, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (13, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(14, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
+(14, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', 'hrtre', NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (17, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (18, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (19, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
@@ -1502,9 +1452,9 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (577, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (578, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (579, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(580, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
+(580, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
+(581, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
 INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `TELEPHONE`, `EMAIL`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `CONTRAT`, `AMBITION`, `LANGUE`, `DATECONTRAT`, `MEMO`, `POTENTIEL`) VALUES
-(581, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (582, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (583, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (584, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
@@ -1957,9 +1907,9 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (1158, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1159, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1160, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(1161, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
+(1161, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
+(1162, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
 INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `TELEPHONE`, `EMAIL`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `CONTRAT`, `AMBITION`, `LANGUE`, `DATECONTRAT`, `MEMO`, `POTENTIEL`) VALUES
-(1162, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1163, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1164, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1165, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
@@ -2409,9 +2359,9 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (1609, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1610, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1611, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(1612, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
+(1612, 'NE00729', 'ABDOULKARIM', 'ALI', NULL, '2017-06-11', NULL, NULL, 130, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
+(1613, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
 INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`, `DATENAISS`, `TELEPHONE`, `EMAIL`, `PAYS`, `GROUPE`, `SOCIETE`, `SECTION`, `CONTRAT`, `AMBITION`, `LANGUE`, `DATECONTRAT`, `MEMO`, `POTENTIEL`) VALUES
-(1613, 'TC0012', 'Armel', 'Kadje', NULL, '2017-06-11', NULL, NULL, 18, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1614, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1615, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1616, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
@@ -2583,9 +2533,7 @@ INSERT INTO `personnes` (`IDPERSONNE`, `MATRICULE`, `NOM`, `PRENOM`, `AUTRENOM`,
 (1782, 'BJ00043', 'ADAMNE', 'Bertin', NULL, '2017-06-26', NULL, NULL, 14, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1783, 'TG00032', 'AKAKPO AGBAN', 'Alban', NULL, '2017-06-26', NULL, NULL, 15, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
 (1784, 'BF00421', 'BADINI', 'Adama', NULL, '2017-06-26', NULL, NULL, 20, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(1785, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL),
-(1786, 'matric', 'nom', 'preonm', NULL, '2017-07-04', 'tele', 'emai', 3, 2, 3, 3, 1, 1, 2, '2017-07-05', '', 2),
-(1787, 'test', 'tetwe', 'tetess', NULL, '2017-06-29', 'tele', 'emaigreg', 2, 3, 5, 2, 1, 2, 2, '2017-07-04', '', 3);
+(1785, 'NE00714', 'CHEFOU', 'IDI', NULL, '2017-06-26', NULL, NULL, 55, 2, 12, 3, 2, 3, 3, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2620,15 +2568,14 @@ CREATE TABLE IF NOT EXISTS `postes` (
   PRIMARY KEY (`IDPOSTE`),
   KEY `PERSONNE` (`PERSONNE`),
   KEY `SOCIETE` (`SOCIETE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `postes`
 --
 
 INSERT INTO `postes` (`IDPOSTE`, `PERSONNE`, `SOCIETE`, `TITRE`, `DATEDEBUT`, `DATEFIN`) VALUES
-(1, 1, 3, 'un poste', '2017-07-22', '2017-07-22'),
-(2, 1, 5, 'fort', '2017-07-22', '2017-07-22');
+(3, 3, 2, 'test', '2017-07-28', '2017-07-28');
 
 -- --------------------------------------------------------
 
@@ -2690,7 +2637,7 @@ INSERT INTO `profils` (`IDPROFIL`, `ABBREVIATION`, `LIBELLE`) VALUES
 (5, 'Recep Admin RT', 'Réceptionnaire atelier RT'),
 (6, 'Recep Admin Ens', 'Réceptionnaire Engins RT'),
 (7, 'Tech OTIS', 'Technicien OTIS'),
-(8, 'abreviation', 'test');
+(8, 'h j k', 'uyyu');
 
 -- --------------------------------------------------------
 
@@ -2734,7 +2681,13 @@ INSERT INTO `profil_competence` (`COMPETENCE`, `PROFIL`) VALUES
 (4, 5),
 (1, 6),
 (2, 6),
-(3, 6);
+(3, 6),
+(4, 6),
+(1, 8),
+(2, 8),
+(3, 8),
+(4, 8),
+(5, 8);
 
 -- --------------------------------------------------------
 
@@ -2757,13 +2710,9 @@ CREATE TABLE IF NOT EXISTS `profil_personne` (
 
 INSERT INTO `profil_personne` (`PERSONNE`, `PROFIL`, `NIVEAU`) VALUES
 (19, 1, 2),
-(1, 2, 2),
-(1, 2, 3),
 (3, 2, 2),
 (19, 2, 2),
 (21, 2, 2),
-(1787, 2, 4),
-(1787, 3, 2),
 (19, 4, 3),
 (19, 5, 4);
 
@@ -2985,10 +2934,10 @@ ALTER TABLE `personnes`
 -- Constraints for table `personne_competence`
 --
 ALTER TABLE `personne_competence`
-  ADD CONSTRAINT `personne_competence_ibfk_4` FOREIGN KEY (`CERTIFICATION`) REFERENCES `competence_statut` (`STATUT`),
   ADD CONSTRAINT `personne_competence_ibfk_1` FOREIGN KEY (`PERSONNE`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `personne_competence_ibfk_2` FOREIGN KEY (`COMPETENCE`) REFERENCES `competences` (`IDCOMPETENCE`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `personne_competence_ibfk_3` FOREIGN KEY (`FORMATION`) REFERENCES `formations` (`IDFORMATION`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `personne_competence_ibfk_3` FOREIGN KEY (`FORMATION`) REFERENCES `formations` (`IDFORMATION`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `personne_competence_ibfk_4` FOREIGN KEY (`CERTIFICATION`) REFERENCES `competence_statut` (`STATUT`);
 
 --
 -- Constraints for table `postes`

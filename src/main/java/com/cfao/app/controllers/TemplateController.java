@@ -122,11 +122,6 @@ public class TemplateController implements Initializable, Controller {
     }
     /*
     @Override
-    public ProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    @Override
     public Node getHighlightPane() {
         return highlightPane;
     }
