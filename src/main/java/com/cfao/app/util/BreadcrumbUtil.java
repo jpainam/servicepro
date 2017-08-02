@@ -1,15 +1,8 @@
 package com.cfao.app.util;
 
-import com.cfao.app.Module;
 import com.cfao.app.StageManager;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import org.controlsfx.control.BreadCrumbBar;
 
 import java.util.HashMap;
@@ -61,7 +54,11 @@ public class BreadcrumbUtil extends BreadCrumbBar<BreadCrumbItem> {
 
         TreeItem<BreadCrumbItem> profil = new TreeItem<>(new BreadCrumbItem("Profil", "/views/profil/profil.fxml"));
         items.put("profil", profil);
-        root.getChildren().setAll(personne, competence, formation, profil);
+
+        TreeItem<BreadCrumbItem> qcm = new TreeItem<>(new BreadCrumbItem("Test", "/views/qcm/qcm.fxml"));
+        items.put("qcm", qcm);
+
+        root.getChildren().setAll(personne, competence, formation, profil, qcm);
 
 
         setSelectedCrumb(root);

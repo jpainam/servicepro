@@ -20,6 +20,7 @@ public class Competence implements java.io.Serializable {
     private ListProperty<Profil> profils = new SimpleListProperty<>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
+    private ListProperty<Qcm> qcms = new SimpleListProperty();
 
     public Competence() {
     }
@@ -147,6 +148,20 @@ public class Competence implements java.io.Serializable {
 
     public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
         this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+    }
+
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="qcm_competence", catalog="servicepro", joinColumns = {
+            @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="QCM", nullable=false, updatable=false) })
+    public List<Qcm> getQcms() {
+        return this.qcms;
+    }
+
+    public void setQcms(List<Qcm> qcms) {
+        if(qcms != null) {
+            this.qcms.set(FXCollections.observableArrayList(qcms));
+        }
     }
 }
 

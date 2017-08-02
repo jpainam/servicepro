@@ -24,7 +24,7 @@ public class PrintReport extends Report{
 
     public void showReport() throws Exception {
 
-        //JasperDesign jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("reports/test.jrxml"));
+        //JasperDesign jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("reports/qcm.jrxml"));
         //JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         // Fields for report
         HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -45,7 +45,7 @@ public class PrintReport extends Report{
         JasperPrint print = JasperFillManager.fillReport(jasperReport, null, beanColDataSource);
         //jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
 
-        /*FileOutputStream output = new FileOutputStream(new File("D:\\test.pdf"));
+        /*FileOutputStream output = new FileOutputStream(new File("D:\\qcm.pdf"));
         JasperExportManager.exportReportToPdfStream(print, output);
         */
         //System.out.println("PDF created");

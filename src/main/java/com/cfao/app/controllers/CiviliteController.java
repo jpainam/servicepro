@@ -4,6 +4,7 @@ import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.FormatDate;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.ServiceproUtil;
@@ -117,6 +118,7 @@ public class CiviliteController implements Initializable {
     public CiviliteFormationController formationController;
     public CiviliteProfilController profilController;
     public CivilitePosteController posteController;
+    public CiviliteQcmController qcmController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,13 +127,13 @@ public class CiviliteController implements Initializable {
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         hboxSearch.getChildren().setAll(new Label("Civilités :"), searchBox);
         ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             personneTable.requestFocus();
             if(personneTable.getItems().size() > 0) {
                 personneTable.getSelectionModel().select(0);
                 personneTable.getFocusModel().focus(0);
             }
-        });
+        });*/
     }
 
     private void buildcontent() {
@@ -141,6 +143,8 @@ public class CiviliteController implements Initializable {
         profilAccordeon.setContent(profilController);
         posteController = new CivilitePosteController();
         posteAccordeon.setContent(posteController);
+        qcmController = new CiviliteQcmController();
+        tabTest.setContent(qcmController);
         initComponents();
         buildCombo();
         buildtablePersonne();
@@ -203,7 +207,7 @@ public class CiviliteController implements Initializable {
             protected ObservableMap<String, ObservableList> call() throws Exception {
 
                 /* MAP PHOTOS */
-                mapFoto = FXCollections.observableHashMap();
+                /*mapFoto = FXCollections.observableHashMap();
                 Path path = Paths.get(URI.create(getClass().getResource("/photos").toExternalForm()));
                 if (path == null) {
                     System.exit(0);
@@ -221,6 +225,7 @@ public class CiviliteController implements Initializable {
                                 mapFoto.put(tab[0], tab[1]);
                             }
                         }
+                        */
                 /* END MAP PHOTOS */
                 map = FXCollections.observableHashMap();
                 map.put("societe", FXCollections.observableList((new SocieteModel()).getList()));
@@ -249,6 +254,13 @@ public class CiviliteController implements Initializable {
             comboAmbition.setItems(map.get("ambition"));
             comboLangue.setItems(map.get("langue"));
             personneTable.setItems(map.get("personne"));
+        });
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.err.println(task.getException());
+                AlertUtil.showErrorMessage(task.getException());
+            }
         });
     }
 
@@ -326,11 +338,13 @@ public class CiviliteController implements Initializable {
         profilController.buildProfil();
         posteController.setPersonne(person);
         posteController.buildPoste();
+        qcmController.setPersonne(person);
+        qcmController.buildTable();
 
     }
 
     private void chargementPhoto(int idpersonne) {
-        if (mapFoto.containsKey(String.valueOf(idpersonne))) {
+        /*if (mapFoto.containsKey(String.valueOf(idpersonne))) {
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
@@ -356,6 +370,7 @@ public class CiviliteController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            */
     }
 
     private void updateLangue(List<Langue> listLangue) {

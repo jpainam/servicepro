@@ -46,8 +46,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </ToggleButton>
-        <ToggleButton fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports">
+        <ToggleButton fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports">
             <font>
                 <Font size="14.0" />
             </font>

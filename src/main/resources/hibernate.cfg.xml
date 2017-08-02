@@ -50,5 +50,9 @@
         <mapping class="com.cfao.app.beans.PersonneCompetence" />
         <mapping class="com.cfao.app.beans.PersonneCompetenceId" />
         <mapping class="com.cfao.app.beans.CompetenceStatut" />
+        <mapping class="com.cfao.app.beans.Qcm" />
+        <mapping class="com.cfao.app.beans.QcmType" />
+        <mapping class="com.cfao.app.beans.PersonneQcm" />
+        <mapping class="com.cfao.app.beans.PersonneQcmId" />
           </session-factory>
 </hibernate-configuration>

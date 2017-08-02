@@ -82,7 +82,8 @@ public class LeftmenuController implements Initializable{
         StageManager.loadContent("/views/competence/competence.fxml");
     }
     public void testAction(ActionEvent event) {
-        StageManager.loadContent("/views/test/test.fxml");
+        StageManager.setSelectedCrumb("qcm");
+        StageManager.loadContent("/views/qcm/qcm.fxml");
     }
     public void rapportAction(ActionEvent event) {
         StageManager.loadContent("/views/rapport/rapport.fxml");
@@ -91,6 +92,7 @@ public class LeftmenuController implements Initializable{
         StageManager.loadContent("/views/parametre/parametre.fxml");
     }
     public void profilAction(ActionEvent event) {
+        StageManager.setSelectedCrumb("profil");
         StageManager.loadContent("/views/profil/profil.fxml");
     }
 }

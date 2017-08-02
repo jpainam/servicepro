@@ -1,6 +1,7 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -37,7 +38,12 @@ public class AlertUtil {
     }
 
     public static void showErrorMessage(Throwable throwable){
-        showErrorMessage(throwable);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                showErrorMessage(throwable);
+            }
+        });
     }
     public static void showErrorMessage(Exception ex) {
         ex.printStackTrace();

@@ -43,7 +43,7 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Poste> postes = new SimpleListProperty<Poste>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
-
+    private ListProperty<PersonneQcm> personneQcms = new SimpleListProperty<>();
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="IDPERSONNE", unique=true, nullable=false)
@@ -360,5 +360,14 @@ public class Personne implements java.io.Serializable {
             competenceList.add(co.getCompetence());
         }
         return competenceList;
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    public List<PersonneQcm> getPersonneQcms() {
+        return this.personneQcms;
+    }
+
+    public void setPersonneQcms(List<PersonneQcm> personneQcms) {
+        this.personneQcms.set(FXCollections.observableArrayList(personneQcms));
     }
 }

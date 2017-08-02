@@ -9,7 +9,6 @@ import com.cfao.app.reports.PrintFormation;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -138,13 +137,7 @@ public class FormationController implements Initializable {
             }
         };
         new Thread(task).run();
-        Platform.runLater(() -> {
-            formationTable.requestFocus();
-            if (formationTable.getItems().size() > 0) {
-                formationTable.getSelectionModel().select(0);
-                formationTable.getFocusModel().focus(0);
-            }
-        });
+
     }
 
     private void buildCombo() {
@@ -170,7 +163,7 @@ public class FormationController implements Initializable {
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                System.err.println(task.getException());
+                AlertUtil.showErrorMessage(task.getException());
                 System.exit(0);
             }
         });
@@ -180,7 +173,8 @@ public class FormationController implements Initializable {
         btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
         btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSupprimer);
-        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur, btnSupprimerFormateur, comboTypeformation);
+        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur,
+                btnSupprimerFormateur, comboTypeformation);
         ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin);
         ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin);
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
@@ -226,7 +220,8 @@ public class FormationController implements Initializable {
             ServiceproUtil.setDisable(true, btnModifier, btnSupprimer);
             ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut);
             ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
-            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur, btnSupprimerFormateur, comboTypeformation);
+            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
+                    btnSupprimerFormateur, comboTypeformation);
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
@@ -269,7 +264,8 @@ public class FormationController implements Initializable {
                 btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
                 ServiceproUtil.setDisable(true, btnNouveau, btnSupprimer);
                 ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
-                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur, btnAjouterFormateur, comboTypeformation);
+                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur,
+                        btnAjouterFormateur, comboTypeformation);
                 stateBtnModifier = 1;
             }
         } else {
@@ -467,5 +463,6 @@ public class FormationController implements Initializable {
             StageManager.getProgressBar().setProgress(0);
             ServiceproUtil.notify("Impression réussie");
         });
+
     }
 }

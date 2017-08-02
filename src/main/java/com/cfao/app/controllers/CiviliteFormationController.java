@@ -94,7 +94,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         String base64 = Base64.getEncoder().encodeToString(data);
         engine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
             if(newState == Worker.State.SUCCEEDED){
-                webView.getEngine().executeScript("openFileFromBase64('" + base64 + "')");
+//                webView.getEngine().executeScript("openFileFromBase64('" + base64 + "')");
             }
         });
         engine.load(url);
