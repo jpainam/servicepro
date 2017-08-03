@@ -4,10 +4,7 @@ import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneQcm;
 import com.cfao.app.beans.Qcm;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.ButtonUtil;
-import com.cfao.app.util.DialogUtil;
-import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,8 +20,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -38,8 +38,10 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
     public TableView<PersonneQcm> qcmTable;
     public TableColumn<PersonneQcm, Qcm> titreColumn;
     public TableColumn<PersonneQcm, String> noteColumn;
+    public TableColumn<PersonneQcm, LocalDate> dateQcmColumn;
     private Personne personne = null;
-    private boolean btnActive = false;
+    public StackPane qcmDiagramPane;
+    public CiviliteQcmDiagram qcmDiagram;
 
     public CiviliteQcmController(Personne personne) {
         this();
@@ -55,6 +57,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
         }
+        qcmDiagram = new CiviliteQcmDiagram();
     }
 
     @Override
@@ -63,6 +66,8 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         ButtonUtil.minusIcon(btnDeaffecterQcm);
         ButtonUtil.print(btnPrint);
         titreColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getQcm()));
+        dateQcmColumn.setCellValueFactory(param -> param.getValue().dateqcmProperty());
+        dateQcmColumn.setCellFactory(new DateTableCellFactory<PersonneQcm>());
         noteColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getNote() + " / " + param.getValue().getQcm().getBase()));
         noteColumn.setCellFactory(param -> {
             TableCell cell = new TableCell<PersonneQcm, String>() {
@@ -89,6 +94,8 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         if (personne == null) {
             return;
         }
+        qcmDiagram.setPersonne(personne);
+        qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
         qcmTable.setItems(FXCollections.observableArrayList(personne.getPersonneQcms()));
     }
 
@@ -111,6 +118,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                     ServiceproUtil.notify("Deaffectation réussie");
                     qcmTable.getItems().remove(personneQcm);
                     personne.setPersonneQcms(qcmTable.getItems());
+                    qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
                 } else {
                     ServiceproUtil.notify("Erreur de deaffectation de test");
                 }
@@ -157,6 +165,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                         Platform.runLater(() -> {
                             qcmTable.getItems().add(personneQcm);
                             personne.setPersonneQcms(qcmTable.getItems());
+                            qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
                             ServiceproUtil.notify("Affectation Réussie");
                         });
 
@@ -179,7 +188,6 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
             }
 
         });
-
     }
 
     class DialogQcmController extends AnchorPane implements Initializable {
@@ -187,6 +195,9 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         public ComboBox<Qcm> comboQcm;
         @FXML
         public TextField txtNote;
+
+        @FXML
+        public DatePicker dateqcm;
 
 
         public DialogQcmController() {
@@ -214,11 +225,20 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         }
 
         public PersonneQcm getData() {
-            if (comboQcm.getValue() != null && txtNote.getText() != null && personne != null) {
+            if (comboQcm.getValue() != null && !txtNote.getText().isEmpty() && personne != null) {
                 PersonneQcm personneQcm = new PersonneQcm();
                 personneQcm.setQcm(comboQcm.getValue());
                 personneQcm.setPersonne(personne);
-                personneQcm.setNote(Double.valueOf(txtNote.getText()));
+                java.util.Date date = new java.util.Date();
+                if(dateqcm.getValue() != null) {
+                    date = Date.valueOf(dateqcm.getValue());
+                }
+                personneQcm.setDateqcm(date);
+                double note = 0;
+                if(!txtNote.getText().isEmpty()){
+                    note = Double.valueOf(txtNote.getText());
+                }
+                personneQcm.setNote(note);
                 personneQcm.getId().setPersonne(personne.getIdpersonne());
                 personneQcm.getId().setQcm(comboQcm.getValue().getIdqcm());
                 return personneQcm;

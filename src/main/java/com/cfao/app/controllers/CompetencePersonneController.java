@@ -5,7 +5,6 @@ import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.SearchBox;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;

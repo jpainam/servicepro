@@ -363,6 +363,7 @@ public class Personne implements java.io.Serializable {
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OrderBy("DATEQCM DESC")
     public List<PersonneQcm> getPersonneQcms() {
         return this.personneQcms;
     }

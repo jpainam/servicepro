@@ -1,6 +1,5 @@
 package com.cfao.app.util;
 
-import com.cfao.app.beans.Formation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -13,10 +12,10 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by JP on 7/16/2017.
  */
-public class DateTableCellFactory implements Callback<TableColumn<Formation, LocalDate>, TableCell<Formation, LocalDate>> {
+public class DateTableCellFactory<T> implements Callback<TableColumn<T, LocalDate>, TableCell<T, LocalDate>> {
     @Override
-    public TableCell<Formation, LocalDate> call(TableColumn<Formation, LocalDate> param) {
-        TableCell cell = new TableCell<Formation, LocalDate>() {
+    public TableCell<T, LocalDate> call(TableColumn<T, LocalDate> param) {
+        TableCell cell = new TableCell<T, LocalDate>() {
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -30,4 +29,9 @@ public class DateTableCellFactory implements Callback<TableColumn<Formation, Loc
         cell.setAlignment(Pos.CENTER_RIGHT);
         return cell;
     }
+
+    /*@Override
+    public TableCell<T, LocalDate> call(TableColumn<T, LocalDate> param) {
+        return null;
+    }*/
 }

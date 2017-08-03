@@ -36,6 +36,7 @@
                                     <TableView fx:id="qcmTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                       <columns>
                                         <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre du Test" />
+                                          <TableColumn fx:id="dateQcmColumn" maxWidth="100.0" minWidth="90.0" prefWidth="90.0" text="Date" />
                                         <TableColumn fx:id="noteColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Note obtenue" />
                                       </columns>
                                        <columnResizePolicy>
@@ -74,7 +75,15 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox />
+            <VBox>
+               <children>
+                  <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+                     <items>
+                        <StackPane fx:id="qcmDiagramPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
+                     </items>
+                  </SplitPane>
+               </children></VBox>
         </items>
       </SplitPane>
    </children>

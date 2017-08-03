@@ -24,7 +24,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -98,11 +97,11 @@ public class FormationController implements Initializable {
     }
 
     private void initComponents() {
-        titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
-        datedebutColumn.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
-        datedebutColumn.setCellFactory(new DateTableCellFactory());
-        datefinColumn.setCellValueFactory(new PropertyValueFactory<>("datefin"));
-        datefinColumn.setCellFactory(new DateTableCellFactory());
+        titreColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+        datedebutColumn.setCellValueFactory(param -> param.getValue().datedebutProperty());
+        datedebutColumn.setCellFactory(new DateTableCellFactory<Formation>());
+        datefinColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
+        datefinColumn.setCellFactory(new DateTableCellFactory<Formation>());
         codeSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
         titreSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
 

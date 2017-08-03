@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2017 at 01:36 AM
+-- Generation Time: Aug 03, 2017 at 03:49 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -199,7 +199,8 @@ INSERT INTO `formations` (`IDFORMATION`, `CODEFORMATION`, `MODELE`, `TITRE`, `DE
 (1, 'TEST02', 4, 'Un testhrerh', 'Une description de test', 3, 2, '1919-11-21', '1970-11-13'),
 (2, 'aui', 6, 'je suis ', 'qh obon', 3, 4, '1919-11-12', '1970-11-02'),
 (3, 'eto', 4, 'je dois', 'brqvotoi qussi', 4, NULL, '2017-07-12', '2017-07-09'),
-(7, '', 4, 'yugvhv', '', 3, 2, '2017-07-26', '2017-07-26');
+(7, '', 4, 'yugvhv', '', 3, 2, '2017-07-26', '2017-07-26'),
+(8, 'INTROTO', 3, 'INTRODUCTION TOYOTA FORKLIFT CI & ELECTRIQUE', '', 1, 1, '2017-08-10', '2017-08-06');
 
 -- --------------------------------------------------------
 
@@ -221,11 +222,14 @@ CREATE TABLE IF NOT EXISTS `formation_competence` (
 
 INSERT INTO `formation_competence` (`FORMATION`, `COMPETENCE`) VALUES
 (1, 1),
+(8, 1),
 (1, 2),
+(8, 2),
 (1, 3),
 (1, 4),
 (1, 5),
-(1, 6);
+(1, 6),
+(8, 6);
 
 -- --------------------------------------------------------
 
@@ -246,9 +250,13 @@ CREATE TABLE IF NOT EXISTS `formation_personne` (
 --
 
 INSERT INTO `formation_personne` (`FORMATION`, `PERSONNE`) VALUES
+(8, 2),
+(8, 3),
 (2, 4),
+(8, 4),
 (2, 5),
 (3, 5),
+(8, 5),
 (3, 10),
 (3, 11),
 (3, 12),
@@ -261,7 +269,16 @@ INSERT INTO `formation_personne` (`FORMATION`, `PERSONNE`) VALUES
 (3, 22),
 (3, 23),
 (3, 24),
-(3, 26);
+(3, 25),
+(3, 26),
+(3, 27),
+(3, 31),
+(3, 32),
+(3, 33),
+(3, 34),
+(3, 35),
+(3, 36),
+(3, 37);
 
 -- --------------------------------------------------------
 
@@ -2555,6 +2572,33 @@ CREATE TABLE IF NOT EXISTS `personne_competence` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `personne_qcm`
+--
+
+CREATE TABLE IF NOT EXISTS `personne_qcm` (
+  `PERSONNE` int(11) NOT NULL,
+  `QCM` int(11) NOT NULL,
+  `NOTE` decimal(6,2) NOT NULL,
+  PRIMARY KEY (`PERSONNE`,`QCM`,`NOTE`),
+  KEY `QCM` (`QCM`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `personne_qcm`
+--
+
+INSERT INTO `personne_qcm` (`PERSONNE`, `QCM`, `NOTE`) VALUES
+(2, 1, '10.00'),
+(2, 2, '10.00'),
+(2, 2, '12.00'),
+(3, 2, '12.00'),
+(10, 2, '13.00'),
+(2, 4, '19.00'),
+(2, 6, '13.00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `postes`
 --
 
@@ -2623,7 +2667,7 @@ CREATE TABLE IF NOT EXISTS `profils` (
   `ABBREVIATION` varchar(15) DEFAULT NULL,
   `LIBELLE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDPROFIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `profils`
@@ -2636,8 +2680,7 @@ INSERT INTO `profils` (`IDPROFIL`, `ABBREVIATION`, `LIBELLE`) VALUES
 (4, 'Tech GE', 'Technicien Groupes Electrogène JCB'),
 (5, 'Recep Admin RT', 'Réceptionnaire atelier RT'),
 (6, 'Recep Admin Ens', 'Réceptionnaire Engins RT'),
-(7, 'Tech OTIS', 'Technicien OTIS'),
-(8, 'h j k', 'uyyu');
+(7, 'Tech OTIS', 'Technicien OTIS');
 
 -- --------------------------------------------------------
 
@@ -2657,20 +2700,14 @@ CREATE TABLE IF NOT EXISTS `profil_competence` (
 --
 
 INSERT INTO `profil_competence` (`COMPETENCE`, `PROFIL`) VALUES
-(1, 1),
-(2, 1),
 (3, 1),
 (4, 1),
-(6, 1),
-(1, 2),
 (4, 2),
 (5, 2),
-(6, 2),
 (1, 3),
 (4, 3),
 (5, 3),
 (6, 3),
-(1, 4),
 (2, 4),
 (3, 4),
 (5, 4),
@@ -2679,15 +2716,12 @@ INSERT INTO `profil_competence` (`COMPETENCE`, `PROFIL`) VALUES
 (2, 5),
 (3, 5),
 (4, 5),
-(1, 6),
-(2, 6),
 (3, 6),
 (4, 6),
-(1, 8),
-(2, 8),
-(3, 8),
-(4, 8),
-(5, 8);
+(1, 7),
+(2, 7),
+(3, 7),
+(4, 7);
 
 -- --------------------------------------------------------
 
@@ -2715,6 +2749,77 @@ INSERT INTO `profil_personne` (`PERSONNE`, `PROFIL`, `NIVEAU`) VALUES
 (21, 2, 2),
 (19, 4, 3),
 (19, 5, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qcm`
+--
+
+CREATE TABLE IF NOT EXISTS `qcm` (
+  `IDQCM` int(11) NOT NULL AUTO_INCREMENT,
+  `TITRE` varchar(250) NOT NULL,
+  `TYPE` int(11) DEFAULT '1',
+  `BASE` int(11) NOT NULL COMMENT 'sur 20 ou sur 100',
+  PRIMARY KEY (`IDQCM`),
+  KEY `TYPE` (`TYPE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `qcm`
+--
+
+INSERT INTO `qcm` (`IDQCM`, `TITRE`, `TYPE`, `BASE`) VALUES
+(1, 'Electricité initial', 1, 20),
+(2, 'Hydraulique initial', 1, 20),
+(3, 'Roulements', 2, 20),
+(4, 'Moteur initial', 1, 20),
+(5, 'Evaluation', 1, 20),
+(6, 'Soudeur niveau 2', 3, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qcm_competence`
+--
+
+CREATE TABLE IF NOT EXISTS `qcm_competence` (
+  `QCM` int(11) NOT NULL,
+  `COMPETENCE` int(11) NOT NULL,
+  PRIMARY KEY (`QCM`,`COMPETENCE`),
+  KEY `COMPETENCE` (`COMPETENCE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `qcm_competence`
+--
+
+INSERT INTO `qcm_competence` (`QCM`, `COMPETENCE`) VALUES
+(1, 2),
+(1, 3),
+(3, 3),
+(4, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qcm_type`
+--
+
+CREATE TABLE IF NOT EXISTS `qcm_type` (
+  `IDQCMTYPE` int(11) NOT NULL AUTO_INCREMENT,
+  `LIBELLE` varchar(30) NOT NULL,
+  PRIMARY KEY (`IDQCMTYPE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `qcm_type`
+--
+
+INSERT INTO `qcm_type` (`IDQCMTYPE`, `LIBELLE`) VALUES
+(1, 'Quiz'),
+(2, 'Test Out'),
+(3, 'Test In');
 
 -- --------------------------------------------------------
 
@@ -2940,6 +3045,13 @@ ALTER TABLE `personne_competence`
   ADD CONSTRAINT `personne_competence_ibfk_4` FOREIGN KEY (`CERTIFICATION`) REFERENCES `competence_statut` (`STATUT`);
 
 --
+-- Constraints for table `personne_qcm`
+--
+ALTER TABLE `personne_qcm`
+  ADD CONSTRAINT `personne_qcm_ibfk_1` FOREIGN KEY (`PERSONNE`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `personne_qcm_ibfk_2` FOREIGN KEY (`QCM`) REFERENCES `qcm` (`IDQCM`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `postes`
 --
 ALTER TABLE `postes`
@@ -2967,6 +3079,19 @@ ALTER TABLE `profil_personne`
   ADD CONSTRAINT `fk_niveau` FOREIGN KEY (`NIVEAU`) REFERENCES `niveau` (`IDNIVEAU`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_personne` FOREIGN KEY (`PERSONNE`) REFERENCES `personnes` (`IDPERSONNE`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_profil` FOREIGN KEY (`PROFIL`) REFERENCES `profils` (`IDPROFIL`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `qcm`
+--
+ALTER TABLE `qcm`
+  ADD CONSTRAINT `qcm_ibfk_1` FOREIGN KEY (`TYPE`) REFERENCES `qcm_type` (`IDQCMTYPE`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `qcm_competence`
+--
+ALTER TABLE `qcm_competence`
+  ADD CONSTRAINT `qcm_competence_ibfk_1` FOREIGN KEY (`QCM`) REFERENCES `qcm` (`IDQCM`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `qcm_competence_ibfk_2` FOREIGN KEY (`COMPETENCE`) REFERENCES `competences` (`IDCOMPETENCE`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `support_formation`
