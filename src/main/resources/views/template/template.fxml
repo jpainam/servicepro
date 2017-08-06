@@ -120,7 +120,13 @@
          
                            </VBox>
                            <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
-                  </StackPane>
+                                 <children>
+                                    <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                                       <bottom>
+                                          <AnchorPane fx:id="calendarPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="113.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+                                       </bottom>
+                                    </BorderPane>
+                                 </children></StackPane>
                              </items>
                          </SplitPane>
                      </children>

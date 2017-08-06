@@ -29,6 +29,7 @@ public class Personne implements java.io.Serializable {
     private SimpleStringProperty email = new SimpleStringProperty();
     private SimpleStringProperty memo = new SimpleStringProperty();
     private ObjectProperty<Date> datenaiss = new SimpleObjectProperty<Date>();
+    private SimpleStringProperty photo = new SimpleStringProperty();
     private ObjectProperty<Date> fincontrat = new SimpleObjectProperty<Date>();
     private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
@@ -370,5 +371,19 @@ public class Personne implements java.io.Serializable {
 
     public void setPersonneQcms(List<PersonneQcm> personneQcms) {
         this.personneQcms.set(FXCollections.observableArrayList(personneQcms));
+    }
+
+
+    @Column(name="PHOTO", length = 150)
+    public String getPhoto() {
+        return photo.get();
+    }
+
+    public SimpleStringProperty photoProperty() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo.set(photo);
     }
 }

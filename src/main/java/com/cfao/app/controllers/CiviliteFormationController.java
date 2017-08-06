@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -21,15 +20,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 
-import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Base64;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -76,7 +71,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
-        WebEngine engine = webView.getEngine();
+        /*WebEngine engine = webView.getEngine();
         String url = getClass().getResource("/pdfjs/web/viewer.html").toExternalForm();
         engine.setUserStyleSheetLocation(getClass().getResource("/pdfjs/web/viewer.css").toExternalForm());
 
@@ -84,8 +79,9 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         byte[] data = null;
         try {
             // readFileToByteArray() comes from commons-io library
-            File f = new File("src/main/resources/documents/Final2016.pdf");
-            //File f = new File(URI.create(getClass().getResource("/views/documents/Final2016.pdf").toExternalForm()));
+            //File f = new File("src/main/resources/documents/Final2016.pdf");
+
+            File f = new File(URI.create(getClass().getResource("/documents/Final2016.pdf").toExternalForm()));
             data = Files.readAllBytes(f.toPath());
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,6 +94,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             }
         });
         engine.load(url);
+        */
     }
 
     private void initComponents() {

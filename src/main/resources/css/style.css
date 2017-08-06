@@ -153,6 +153,9 @@ JFOenix CSS
 .check-box:disabled, .check-box:disabled > * {
     -fx-opacity: 1.0 ;
 }
+.date-picker:disabled, .date-picker:disabled > * {
+    -fx-opacity: 1.0 ;
+}
 .toggle-button{
     /*-fx-outer-border-color: darkblue;
     -fx-outer-border-width: 1;*/

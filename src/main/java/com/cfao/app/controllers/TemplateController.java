@@ -7,6 +7,7 @@ import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.BreadcrumbUtil;
 import com.cfao.app.util.FXMLView;
 import com.cfao.app.util.ServiceproUtil;
+import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -31,6 +32,7 @@ import org.controlsfx.control.PopOver;
 import org.controlsfx.control.action.Action;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
@@ -59,6 +61,7 @@ public class TemplateController implements Initializable, Controller {
     public Label currentLogTimeLabel;
     public StackPane contentPane;
     public StackPane principalLayout;
+    public AnchorPane calendarPanel;
 
     BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
     PopOver profilPopOver = new PopOver();
@@ -88,6 +91,10 @@ public class TemplateController implements Initializable, Controller {
             }));
             notificationStack.getChildren().add(notificationPane);
             StageManager.setNotificationPane(notificationPane);
+
+            DatePickerSkin datePickerSkin = new DatePickerSkin(new DatePicker(LocalDate.now()));
+            Node popupContent = datePickerSkin.getPopupContent();
+            calendarPanel.getChildren().setAll(popupContent);
             // Charger la vue accueil
             Pane accueil = FXMLLoader.load(getClass().getResource(FXMLView.ACCUEIL.getFXMLFile()));
             content.getChildren().setAll(accueil);
