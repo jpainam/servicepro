@@ -125,7 +125,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
             });
             task.setOnFailed(event1 -> {
                 System.err.println(task.getException());
-                AlertUtil.showErrorMessage(task.getException());
+                AlertUtil.showErrorMessage(new Exception(task.getException()));
             });
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir le test désaffecter");
@@ -181,7 +181,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                 });
                 task.setOnFailed(event12 -> {
                     System.err.println(task.getException());
-                    AlertUtil.showErrorMessage(task.getException());
+                    AlertUtil.showErrorMessage(new Exception(task.getException()));
                 });
             } else {
                 ServiceproUtil.notify("Erreur d'ajout de test");

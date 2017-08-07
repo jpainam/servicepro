@@ -172,12 +172,11 @@ public class FormationCompetenceController extends AnchorPane implements Initial
                     return cell;
                 });
             });
-            possedeCompetence.setCellValueFactory(param -> {
-                return new SimpleObjectProperty<>(param.getValue());
-            });
+            possedeCompetence.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
+
             stateBtnModifier = true;
             task.setOnFailed(event -> {
-                AlertUtil.showErrorMessage(task.getException());
+                AlertUtil.showErrorMessage(new Exception(task.getException()));
             });
         } else {
             selectedItems.forEach(System.out::println);

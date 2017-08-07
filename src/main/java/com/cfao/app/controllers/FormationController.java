@@ -162,7 +162,7 @@ public class FormationController implements Initializable {
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                AlertUtil.showErrorMessage(task.getException());
+                AlertUtil.showErrorMessage(new Exception(task.getException()));
                 System.exit(0);
             }
         });
@@ -294,7 +294,7 @@ public class FormationController implements Initializable {
                     ServiceproUtil.notify("Erreur de modification");
                 }
             });
-            task.setOnFailed(event -> AlertUtil.showErrorMessage(task.getException()));
+            task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
             stateBtnModifier = 0;
         }
     }

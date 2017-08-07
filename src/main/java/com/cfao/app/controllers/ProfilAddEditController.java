@@ -173,11 +173,11 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         });
 
         task1.setOnFailed(event -> {
-            AlertUtil.showErrorMessage(task1.getException());
+            AlertUtil.showErrorMessage(new Exception(task1.getException()));
         });
 
         task.setOnFailed(event -> {
-            AlertUtil.showErrorMessage(task.getException());
+            AlertUtil.showErrorMessage(new Exception(task.getException()));
         });
 
     }

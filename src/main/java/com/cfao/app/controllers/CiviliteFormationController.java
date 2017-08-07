@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,9 +21,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.web.WebView;
 import javafx.util.Callback;
+import org.icepdf.ri.common.SwingController;
+import org.icepdf.ri.common.SwingViewBuilder;
+import org.icepdf.ri.util.FontPropertiesManager;
+import org.icepdf.ri.util.PropertiesManager;
 
+import javax.swing.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -49,7 +54,17 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public ComboBox<CompetenceStatut> comboStatut;
     private Personne personne = null;
     public StackPane competenceStackPane;
-    public WebView webView;
+    public AnchorPane pdfContainer;
+
+    final SwingController swingController = new SwingController();
+    private JComponent viewerPanel;
+
+    static {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+        }
+    }
 
     public CiviliteFormationController() {
         try {
@@ -71,6 +86,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
+        createViewer(pdfContainer);
         /*WebEngine engine = webView.getEngine();
         String url = getClass().getResource("/pdfjs/web/viewer.html").toExternalForm();
         engine.setUserStyleSheetLocation(getClass().getResource("/pdfjs/web/viewer.css").toExternalForm());
@@ -97,6 +113,139 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         */
     }
 
+    private void createViewer(AnchorPane Pane) {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    // create the viewer ri components.
+                    swingController.setIsEmbeddedComponent(true);
+                    PropertiesManager properties = new PropertiesManager(System.getProperties(),
+                            ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
+
+                    // read/store the font cache.
+                    ResourceBundle messageBundle = ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE);
+                    new FontPropertiesManager(properties, System.getProperties(), messageBundle);
+                    properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_OPEN, "true");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SAVE, "true");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_PRINT, "true");
+                    // hide the status bar
+                    properties.set(PropertiesManager.PROPERTY_SHOW_STATUSBAR, "false");
+                    // hide a few toolbars, just to show how the prefered size of the viewer changes.
+                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_FIT, "false");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ROTATE, "true");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_TOOL, "false");
+
+                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ANNOTATION, "false");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ZOOM, "true");
+
+
+                    swingController.getDocumentViewController().setAnnotationCallback(
+                            new org.icepdf.ri.common.MyAnnotationCallback(swingController.getDocumentViewController()));
+
+                    SwingViewBuilder factory = new SwingViewBuilder(swingController, properties);
+
+                    viewerPanel = factory.buildViewerPanel();
+                    viewerPanel.revalidate();
+
+                    SwingNode swingNode = new SwingNode();
+                    swingNode.setContent(viewerPanel);
+                    AnchorPane.setLeftAnchor(swingNode, 0.0);
+                    AnchorPane.setRightAnchor(swingNode, 0.0);
+                    AnchorPane.setTopAnchor(swingNode, 0.0);
+                    AnchorPane.setBottomAnchor(swingNode, 0.0);
+                    Pane.getChildren().add(swingNode);
+/*
+                // add toolbar to the top.
+                FlowPane toolBarFlow = new FlowPane();
+                JToolBar mainToolbar = factory.buildCompleteToolBar(true);
+                buildJToolBar(toolBarFlow, mainToolbar);
+                borderPane.setTop(toolBarFlow);
+
+                // main utility pane and viewer
+                SwingNode swingNode = new SwingNode();
+                viewerPanel = factory.buildUtilityAndDocumentSplitPane(true);
+                swingNode.setContent(viewerPanel);
+                borderPane.setCenter(swingNode);
+
+                // the page view menubar
+                FlowPane statusBarFlow = new FlowPane();
+                buildButton(statusBarFlow, factory.buildPageViewSinglePageNonConToggleButton());
+                buildButton(statusBarFlow, factory.buildPageViewSinglePageConToggleButton());
+                buildButton(statusBarFlow, factory.buildPageViewFacingPageNonConToggleButton());
+                buildButton(statusBarFlow, factory.buildPageViewFacingPageConToggleButton());
+                borderPane.setBottom(statusBarFlow);
+
+*/
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openDocument(String document) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                swingController.openDocument(document);
+                viewerPanel.revalidate();
+            }
+        });
+    }
+
+    private void setColumnFactory(){
+        encoursCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        acertifierCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        certifieCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        /*
+        selectedItems = FXCollections.observableArrayList();
+        Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+            @Override
+            protected ObservableList<Competence> call() throws Exception {
+                return FXCollections.observableArrayList(new CompetenceModel().getList());
+            }
+        };
+        competenceTable.itemsProperty().bind(task.valueProperty());
+        new Thread(task).start();
+        task.setOnSucceeded(event -> {
+            possedeCompetence.setCellFactory((TableColumn<Competence, Competence> param) -> {
+                BooleanProperty selected = new SimpleBooleanProperty();
+                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
+
+                    Competence competence = task.getValue().get(index);
+                    if (formation.getCompetences().contains(competence)) {
+                        selected.set(true);
+                    }
+
+                    return selected;
+                });
+                selected.addListener((obs, wasSelected, isNowSelected) -> {
+                    if (isNowSelected) {
+                        if (!selectedItems.contains(cell.getItem())) {
+                            selectedItems.add(cell.getItem());
+                        }
+                        competenceTable.getSelectionModel().select(cell.getItem());
+                    } else {
+                        if (selectedItems.contains(cell.getItem())) {
+                            selectedItems.remove(cell.getItem());
+                        }
+                        competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                    }
+                });
+
+                selectedItems.addListener((ListChangeListener<Competence>) change -> {
+                    selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
+                });
+                cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                    selected.set(newValue != null && selectedItems.contains(newValue));
+                });
+                return cell;
+            });
+        });
+        */
+    }
     private void initComponents() {
         ButtonUtil.next(btnNextCompetence);
         ButtonUtil.previous(btnPreviousCompetence);
@@ -108,12 +257,9 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             }
         };
         comboStatut.itemsProperty().bind(task.valueProperty());
-        new Thread(task).start();
-        encoursCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        acertifierCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        certifieCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         intituleCompetenceColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
-
+        new Thread(task).start();
+        setColumnFactory();
         competenceTable.setRowFactory(new Callback<TableView<Competence>, TableRow<Competence>>() {
             @Override
             public TableRow<Competence> call(TableView<Competence> param) {
@@ -122,7 +268,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 row.hoverProperty().addListener(observable -> {
 
                     final Competence competence = row.getItem();
-                    if(row.isHover() && competence != null){
+                    if (row.isHover() && competence != null) {
                         tooltip.setText(competence.getDescription());
                         row.setTooltip(tooltip);
                     }
@@ -154,6 +300,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     }
 
     public void buildFormation() {
+        openDocument(getClass().getResource("/documents/documents.pdf").getPath());
         Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
             @Override
             protected ObservableList<Competence> call() throws Exception {
@@ -166,8 +313,8 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         task.setOnSucceeded((WorkerStateEvent event) -> {
             encoursCompetenceColumn.setCellValueFactory(param -> {
                 Competence competence = param.getValue();
-                for(PersonneCompetence pc : personne.getPersonneCompetences()){
-                    if(pc.getCompetence().equals(competence) && pc.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)){
+                for (PersonneCompetence pc : personne.getPersonneCompetences()) {
+                    if (pc.getCompetence().equals(competence) && pc.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)) {
                         return new SimpleBooleanProperty(true);
                     }
                 }
@@ -204,6 +351,6 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     }
 
     public void changeLanguage(Locale locale) {
-        webView.getEngine().executeScript("changeLanguage('" + locale.toLanguageTag() + "')");
+        //webView.getEngine().executeScript("changeLanguage('" + locale.toLanguageTag() + "')");
     }
 }

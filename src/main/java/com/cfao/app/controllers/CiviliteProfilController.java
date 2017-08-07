@@ -11,8 +11,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -27,14 +25,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 /**
  * Created by armel on 10/07/2017.
@@ -95,11 +91,8 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         encoursColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         acertifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         certifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        tableProfil.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfilPersonne>() {
-            @Override
-            public void changed(ObservableValue<? extends ProfilPersonne> observable, ProfilPersonne oldValue, ProfilPersonne newValue) {
-                buildCompetencePopover(newValue);
-            }
+        tableProfil.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            buildCompetencePopover(newValue);
         });
     }
 
@@ -157,27 +150,21 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
             dialog.setHeaderText("Ajouter un Profil");
             DialogProfilController controller = new DialogProfilController();
             dialog.getDialogPane().setContent(controller);
-            dialog.setResultConverter(new Callback<ButtonType, ProfilPersonne>() {
-                @Override
-                public ProfilPersonne call(ButtonType param) {
-                    if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                        return controller.getData();
-                    } else {
-                        return null;
-                    }
+            dialog.setResultConverter(param -> {
+                if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                    return controller.getData();
+                } else {
+                    return null;
                 }
             });
             Optional<ProfilPersonne> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<ProfilPersonne>() {
-                @Override
-                public void accept(ProfilPersonne profilPersonne) {
-                    if (profilPersonne != null) {
-                        tableProfil.getItems().add(profilPersonne);
-                    } else {
-                        ServiceproUtil.notify("Erreur d'ajout de profil");
-                    }
-
+            result.ifPresent(profilPersonne -> {
+                if (profilPersonne != null) {
+                    tableProfil.getItems().add(profilPersonne);
+                } else {
+                    ServiceproUtil.notify("Erreur d'ajout de profil");
                 }
+
             });
         }
     }

@@ -1,12 +1,8 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -37,14 +33,7 @@ public class AlertUtil {
         alert.showAndWait();
     }
 
-    public static void showErrorMessage(Throwable throwable){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                showErrorMessage(throwable);
-            }
-        });
-    }
+
     public static void showErrorMessage(Exception ex) {
         ex.printStackTrace();
         Alert alert = new Alert(AlertType.ERROR);
@@ -75,6 +64,7 @@ public class AlertUtil {
         expContent.add(textArea, 0, 1);
 
         alert.getDialogPane().setExpandableContent(expContent);
+        alert.getDialogPane().setExpanded(true);
         alert.showAndWait();
 
     }
@@ -111,6 +101,13 @@ public class AlertUtil {
         alert.showAndWait();
     }
     private static void grayBackground(Alert alert){
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+        StageManager.getContentLayout().getChildren().add(region);
+        region.visibleProperty().bind(alert.showingProperty());
+    }
+    private static void grayBackground(Dialog alert){
         Region region = new Region();
         region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
         region.setVisible(false);

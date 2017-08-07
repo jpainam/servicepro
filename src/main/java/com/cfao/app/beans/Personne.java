@@ -56,7 +56,7 @@ public class Personne implements java.io.Serializable {
         this.idpersonne.set(idpersonne);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="AMBITION")
     public Ambition getAmbition() {
         return this.ambition.get();
@@ -66,7 +66,7 @@ public class Personne implements java.io.Serializable {
         this.ambition.set(ambition);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="CONTRAT")
     public Contrat getContrat() {
         return this.contrat.get();
@@ -76,7 +76,7 @@ public class Personne implements java.io.Serializable {
         this.contrat.set(contrat);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="GROUPE")
     public Groupe getGroupe() {
         return this.groupe.get();
@@ -86,7 +86,7 @@ public class Personne implements java.io.Serializable {
         this.groupe.set(groupe);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="LANGUE")
     public Langue getLangue() {
         return this.langue.get();
@@ -96,7 +96,7 @@ public class Personne implements java.io.Serializable {
         this.langue.set(langue);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="PAYS")
     public Pays getPays() {
         return this.pays.get();
@@ -106,7 +106,7 @@ public class Personne implements java.io.Serializable {
         this.pays.set(pays);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="POTENTIEL")
     public Potentiel getPotentiel() {
         return this.potentiel.get();
@@ -116,7 +116,7 @@ public class Personne implements java.io.Serializable {
         this.potentiel.set(potentiel);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="SECTION")
     public Section getSection() {
         return this.section.get();
@@ -126,7 +126,7 @@ public class Personne implements java.io.Serializable {
         this.section.set(section);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="SOCIETE")
     public Societe getSociete() {
         return this.societe.get();
@@ -229,7 +229,7 @@ public class Personne implements java.io.Serializable {
         this.memo.set(memo);
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(mappedBy="personne")
     public List<Poste> getPostes() {
         return this.postes;
     }
@@ -238,7 +238,7 @@ public class Personne implements java.io.Serializable {
         this.postes.set(FXCollections.observableList(postes));
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(mappedBy="personne")
     public List<ProfilPersonne> getProfilPersonnes() {
         return this.profilPersonnes.get();
     }
@@ -247,19 +247,20 @@ public class Personne implements java.io.Serializable {
         this.profilPersonnes.set(FXCollections.observableList(profilPersonnes));
     }
 
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(name="langue_parlee", catalog="servicepro", joinColumns = {
-            @JoinColumn(name="IDPERS", nullable=false, updatable=false) }, inverseJoinColumns = {
-            @JoinColumn(name="IDLANGUE", nullable=false, updatable=false) })
+            @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="LANGUE", nullable=false, updatable=false) })
     public List<Langue> getLangues() {
         return this.langues.get();
     }
 
     public void setLangues(List<Langue> langues) {
-        this.langues.set(FXCollections.observableList(langues));
+            this.langues.set(FXCollections.observableArrayList(langues));
+
     }
 
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
             @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) })
@@ -335,7 +336,7 @@ public class Personne implements java.io.Serializable {
         return datenaiss;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(mappedBy="personne")
     public List<PersonneCompetence> getPersonneCompetences() {
         return personneCompetences.get();
     }
@@ -363,7 +364,7 @@ public class Personne implements java.io.Serializable {
         return competenceList;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(mappedBy="personne")
     @OrderBy("DATEQCM DESC")
     public List<PersonneQcm> getPersonneQcms() {
         return this.personneQcms;

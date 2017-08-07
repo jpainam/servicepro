@@ -11,9 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -207,7 +205,7 @@ public class CiviliteController implements Initializable {
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
-            AlertUtil.showErrorMessage(task.getException());
+            AlertUtil.showErrorMessage(new Exception(task.getException()));
         });
     }
 
@@ -335,7 +333,7 @@ public class CiviliteController implements Initializable {
         /*
         * comboLanguesParlees.getCheckModel().getCheckedItems() renvoi une ReadOnlyObserverList
         * */
-        personne.setLangues(FXCollections.observableArrayList(comboLanguesParlees.getCheckModel().getCheckedItems()));
+        personne.setLangues(comboLanguesParlees.getCheckModel().getCheckedItems());
         personne.setGroupe(comboGroupe.getValue());
         personne.setSection(comboSection.getValue());
         personne.setSociete(comboSociete.getValue());
@@ -410,12 +408,9 @@ public class CiviliteController implements Initializable {
                 ServiceproUtil.notify("Erreur d'ajout");
             }
         });
-        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                task.getException().printStackTrace();
-                System.err.println(task.getException());
-            }
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+            System.err.println(task.getException());
         });
     }
 
@@ -468,8 +463,10 @@ public class CiviliteController implements Initializable {
                 ServiceproUtil.notify("Erreur de modification");
             }
         });
+
         task.setOnFailed(event -> {
             ServiceproUtil.notify("Modification Thread failed");
+            //AlertUtil.showErrorMessage(new Exception(task.getException()));
             task.getException().printStackTrace();
             System.err.println(task.getException());
 
@@ -520,7 +517,7 @@ public class CiviliteController implements Initializable {
                     ServiceproUtil.notify("Erreur de suppression de la photo");
                 }
             });
-            task.setOnFailed(event -> AlertUtil.showErrorMessage(task.getException()));
+            task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
         }
     }
 

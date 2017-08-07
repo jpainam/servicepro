@@ -81,7 +81,7 @@ public class QCMController implements Initializable {
         };
         comboTypeTest.itemsProperty().bind(task.valueProperty());
         new Thread(task).start();
-        task.setOnFailed(event -> AlertUtil.showErrorMessage(task.getException()));
+        task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
 
     }
 
@@ -118,7 +118,7 @@ public class QCMController implements Initializable {
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                AlertUtil.showErrorMessage(task.getException());
+                AlertUtil.showErrorMessage(new Exception(task.getException()));
             }
         });
 
