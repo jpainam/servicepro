@@ -1,93 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.String?>
 
-<VBox fx:id="connexionPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
+<AnchorPane prefHeight="463.0" prefWidth="538.0" styleClass="background" stylesheets="@../../css/login.css" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
     <children>
-        <StackPane prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 1px 0;" VBox.vgrow="ALWAYS" />
-        <HBox prefHeight="443.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+        <VBox alignment="CENTER" fillWidth="false" prefHeight="619.0" prefWidth="445.0" spacing="15.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Pane prefHeight="238.0" prefWidth="208.0" HBox.hgrow="ALWAYS" />
-                <VBox alignment="TOP_CENTER" prefHeight="457.0" prefWidth="403.0" HBox.hgrow="NEVER">
+                <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" />
+                <AnchorPane prefHeight="240.0" prefWidth="400.0">
                     <children>
-                  <AnchorPane prefHeight="600.0" prefWidth="1000.0">
-                     <children>
-                        <VBox alignment="CENTER" fillWidth="false" prefHeight="619.0" prefWidth="445.0" spacing="15.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="335.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" />
-                              <AnchorPane prefHeight="240.0" prefWidth="400.0">
-                                 <children>
-                                    <AnchorPane layoutX="46.0" layoutY="17.0" prefHeight="281.0" prefWidth="354.0" styleClass="box-login" AnchorPane.bottomAnchor="-55.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
-                                       <children>
-                                          <TextField fx:id="login" text="test" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0"
-                                                     promptText="Entrer le nom d'utilisateur" styleClass="txtNom" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
-                                          <PasswordField fx:id="password" text="pwd" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0"
-                                                         promptText="Entrer le mot de passe" styleClass="txtPwd" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </PasswordField>
-                                          <Button layoutX="17.0" layoutY="235.0" mnemonicParsing="false" onAction="#btnConnexion"
-                                                  prefHeight="20.0" styleClass="bt-connexion" text="Connexion" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </AnchorPane>
-                                    <StackPane layoutX="63.0" layoutY="-3.0" prefHeight="61.0" prefWidth="307.0" AnchorPane.leftAnchor="63.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="0.0">
-                                       <children>
-                                          <ImageView fitHeight="61.0" fitWidth="296.0" pickOnBounds="true" preserveRatio="true" styleClass="login-img" />
-                                          <Label alignment="CENTER" prefHeight="30.0" prefWidth="85.0" styleClass="login-txt" text="Login" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </StackPane>
-                                 </children>
-                              </AnchorPane>
-                              <Label fx:id="errorLabel" alignment="CENTER" prefHeight="29.0" prefWidth="433.0" styleClass="error">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <HBox alignment="CENTER" maxHeight="30.0" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                           <children>
-                              <Hyperlink onAction="#linkToCfao" text="CFAO Cameroun" textAlignment="CENTER">
-                                 <styleClass>
-                                    <String fx:value="link" />
-                                    <String fx:value="link-cosendai" />
-                                 </styleClass>
-                              </Hyperlink>
-                              <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkToCosendai" text="Cosendai University" textAlignment="CENTER">
-                                 <styleClass>
-                                    <String fx:value="link" />
-                                    <String fx:value="link-cfao" />
-                                 </styleClass>
-                              </Hyperlink>
-                           </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
+                        <AnchorPane layoutY="17.0" prefHeight="223.0" prefWidth="389.0" styleClass="box-login" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                            <children>
+                                <TextField fx:id="login" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0" promptText="Nom de l'utilisateur" styleClass="nom" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </TextField>
+                                <PasswordField fx:id="password" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0" promptText="Mot de passe" styleClass="password" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </PasswordField>
+                                <Button layoutX="17.0" layoutY="235.0" mnemonicParsing="false" onAction="#btnConnexion" prefHeight="20.0" styleClass="btn-login" text="Connexion" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                                    <font>
+                                        <Font size="16.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </AnchorPane>
+                        <StackPane layoutY="-3.0" prefHeight="40.0" prefWidth="248.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ImageView fitHeight="61.0" fitWidth="271.0" pickOnBounds="true" preserveRatio="true" styleClass="login-img" />
+                                <Label alignment="CENTER" prefHeight="30.0" prefWidth="85.0" styleClass="login-txt" text="Login" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </StackPane>
                     </children>
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-                </VBox>
+                </AnchorPane>
+                <Label fx:id="errorLabel" alignment="CENTER" prefHeight="29.0" prefWidth="433.0" styleClass="error">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <HBox alignment="CENTER" maxHeight="30.0" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <Hyperlink onAction="#linkToCfao" text="CFAO Equipment" textAlignment="CENTER">
+                    <styleClass>
+                        <String fx:value="link" />
+                        <String fx:value="link-cosendai" />
+                    </styleClass>
+                </Hyperlink>
+                <Hyperlink layoutX="477.0" layoutY="17.0" onAction="#linkToCosendai" text="Cosendai University" textAlignment="CENTER">
+                    <styleClass>
+                        <String fx:value="link" />
+                        <String fx:value="link-geopark" />
+                    </styleClass>
+                </Hyperlink>
             </children>
         </HBox>
-        <Pane prefHeight="0.0" prefWidth="600.0" style="-fx-border-color: blue; -fx-border-width: 1px 0 0 0; -fx-background-color: white;" VBox.vgrow="ALWAYS" />
+        <HBox styleClass="box-janela" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#minimizeAction" styleClass="minimize" text="Minimize" />
+                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#closeAction" styleClass="close" text="Close" />
+            </children>
+        </HBox>
     </children>
-</VBox>
+</AnchorPane>
