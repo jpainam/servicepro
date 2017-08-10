@@ -48,8 +48,8 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
 
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="IDPERSONNE", unique=true, nullable=false)
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public int getIdpersonne() {
         return this.idpersonne.get();
     }
@@ -58,88 +58,7 @@ public class Personne implements java.io.Serializable {
         this.idpersonne.set(idpersonne);
     }
 
-    @ManyToOne()
-    @JoinColumn(name="AMBITION")
-    public Ambition getAmbition() {
-        return this.ambition.get();
-    }
-
-    public void setAmbition(Ambition ambition) {
-        this.ambition.set(ambition);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="CONTRAT")
-    public Contrat getContrat() {
-        return this.contrat.get();
-    }
-
-    public void setContrat(Contrat contrat) {
-        this.contrat.set(contrat);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="GROUPE")
-    public Groupe getGroupe() {
-        return this.groupe.get();
-    }
-
-    public void setGroupe(Groupe groupe) {
-        this.groupe.set(groupe);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="LANGUE")
-    public Langue getLangue() {
-        return this.langue.get();
-    }
-
-    public void setLangue(Langue langue) {
-        this.langue.set(langue);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="PAYS")
-    public Pays getPays() {
-        return this.pays.get();
-    }
-
-    public void setPays(Pays pays) {
-        this.pays.set(pays);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="POTENTIEL")
-    public Potentiel getPotentiel() {
-        return this.potentiel.get();
-    }
-
-    public void setPotentiel(Potentiel potentiel) {
-        this.potentiel.set(potentiel);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="SECTION")
-    public Section getSection() {
-        return this.section.get();
-    }
-
-    public void setSection(Section section) {
-        this.section.set(section);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="SOCIETE")
-    public Societe getSociete() {
-        return this.societe.get();
-    }
-
-    public void setSociete(Societe societe) {
-        this.societe.set(societe);
-    }
-
-
-    @Column(name="MATRICULE", nullable=false, length=15)
+    @Column(name="MATRICULE")
     public String getMatricule() {
         return this.matricule.get();
     }
@@ -149,7 +68,7 @@ public class Personne implements java.io.Serializable {
     }
 
 
-    @Column(name="NOM", nullable=false, length=30)
+    @Column(name="NOM")
     public String getNom() {
         return this.nom.get();
     }
@@ -159,7 +78,7 @@ public class Personne implements java.io.Serializable {
     }
 
 
-    @Column(name="PRENOM", nullable=false, length=30)
+    @Column(name="PRENOM")
     public String getPrenom() {
         return this.prenom.get();
     }
@@ -169,24 +88,9 @@ public class Personne implements java.io.Serializable {
     }
 
 
-    @Column(name="AUTRENOM", length=30)
+    @Column(name="AUTRENOM")
     public String getAutrenom() {
         return this.autrenom.get();
-    }
-
-    public void setAutrenom(String autrenom) {
-        this.autrenom.set(autrenom);
-    }
-
-    @Temporal(TemporalType.DATE)
-    // @Temporal should only be set on a java.util.Date or java.util.Calendar property: com.cfao.app.beans.Personne.datenaiss
-    @Column(name="DATENAISS", nullable=false, length=10)
-    public Date getDatenaiss() {
-        return datenaiss.get();
-    }
-
-    public void setDatenaiss(Date datenaiss) {
-        this.datenaiss.set(datenaiss);
     }
 
 
@@ -209,19 +113,6 @@ public class Personne implements java.io.Serializable {
         this.email.set(email);
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name="DATECONTRAT", length=10)
-    public Date getDatecontrat() {
-       return fincontrat.get();
-
-    }
-
-    public void setDatecontrat(Date datecontrat) {
-            this.fincontrat.set(datecontrat);
-
-    }
-
-
     @Column(name="MEMO")
     public String getMemo() {
         return this.memo.get();
@@ -231,7 +122,118 @@ public class Personne implements java.io.Serializable {
         this.memo.set(memo);
     }
 
-    @OneToMany(mappedBy="personne")
+    @Temporal(TemporalType.DATE)
+    // @Temporal should only be set on a java.util.Date or java.util.Calendar property: com.cfao.app.beans.Personne.datenaiss
+    @Column(name="DATENAISS", nullable=false, length=10)
+    public Date getDatenaiss() {
+        return datenaiss.get();
+    }
+
+    public void setDatenaiss(Date datenaiss) {
+        this.datenaiss.set(datenaiss);
+    }
+
+
+    @Temporal(TemporalType.DATE)
+    @Column(name="DATECONTRAT", length=10)
+    public Date getDatecontrat() {
+        return fincontrat.get();
+
+    }
+
+    public void setDatecontrat(Date datecontrat) {
+        this.fincontrat.set(datecontrat);
+
+    }
+
+
+
+    @ManyToOne
+    @JoinColumn(name="AMBITION")
+    public Ambition getAmbition() {
+        return this.ambition.get();
+    }
+
+    public void setAmbition(Ambition ambition) {
+        this.ambition.set(ambition);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="CONTRAT")
+    public Contrat getContrat() {
+        return this.contrat.get();
+    }
+
+    public void setContrat(Contrat contrat) {
+        this.contrat.set(contrat);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="GROUPE")
+    public Groupe getGroupe() {
+        return this.groupe.get();
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe.set(groupe);
+    }
+
+    @ManyToOne()
+    @JoinColumn(name="LANGUE")
+    public Langue getLangue() {
+        return this.langue.get();
+    }
+
+    public void setLangue(Langue langue) {
+        this.langue.set(langue);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="PAYS")
+    public Pays getPays() {
+        return this.pays.get();
+    }
+
+    public void setPays(Pays pays) {
+        this.pays.set(pays);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="POTENTIEL")
+    public Potentiel getPotentiel() {
+        return this.potentiel.get();
+    }
+
+    public void setPotentiel(Potentiel potentiel) {
+        this.potentiel.set(potentiel);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="SECTION")
+    public Section getSection() {
+        return this.section.get();
+    }
+
+    public void setSection(Section section) {
+        this.section.set(section);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="SOCIETE")
+    public Societe getSociete() {
+        return this.societe.get();
+    }
+
+    public void setSociete(Societe societe) {
+        this.societe.set(societe);
+    }
+
+
+    public void setAutrenom(String autrenom) {
+        this.autrenom.set(autrenom);
+    }
+
+    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
     public List<Poste> getPostes() {
         return this.postes;
     }
@@ -240,7 +242,7 @@ public class Personne implements java.io.Serializable {
         this.postes.set(FXCollections.observableList(postes));
     }
 
-    @OneToMany(mappedBy="personne")
+    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
     public List<ProfilPersonne> getProfilPersonnes() {
         return this.profilPersonnes.get();
     }
@@ -249,10 +251,10 @@ public class Personne implements java.io.Serializable {
         this.profilPersonnes.set(FXCollections.observableList(profilPersonnes));
     }
 
-    @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="langue_parlee", catalog="servicepro", joinColumns = {
-            @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
-            @JoinColumn(name="LANGUE", nullable=false, updatable=false) })
+    @ManyToMany
+    @JoinTable(name="langue_parlee", catalog="servicepro", joinColumns =
+            @JoinColumn(name="PERSONNE") , inverseJoinColumns =
+            @JoinColumn(name="LANGUE"))
     public List<Langue> getLangues() {
         return this.langues.get();
     }
@@ -262,7 +264,7 @@ public class Personne implements java.io.Serializable {
 
     }
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
             @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) })
@@ -338,7 +340,7 @@ public class Personne implements java.io.Serializable {
         return datenaiss;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(mappedBy="personne")
     public List<PersonneCompetence> getPersonneCompetences() {
         return personneCompetences.get();
     }
