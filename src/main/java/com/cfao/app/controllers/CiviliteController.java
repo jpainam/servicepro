@@ -115,6 +115,7 @@ public class CiviliteController implements Initializable {
             }
         });*/
         disableAllComponents(true);
+        personneTable.setTableMenuButtonVisible(true);
     }
 
     private void buildcontent() {

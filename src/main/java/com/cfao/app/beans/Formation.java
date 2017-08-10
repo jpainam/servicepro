@@ -28,7 +28,10 @@ public class Formation {
     private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
     private ListProperty<Competence> competences = new SimpleListProperty<>();
     //private SetProperty<Competence> prerequis = new SimpleSetProperty<>();
+
+    //Les deux font la meme chose
     private ListProperty<Personne> personnes = new SimpleListProperty<>();
+    private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
 
     public Formation(){}
     public Formation(int idformation, String codeformation, Modele modele, String titre,
@@ -202,6 +205,9 @@ public class Formation {
         return titre;
     }
 
+    public SimpleStringProperty codeformationProperty(){
+        return codeformation;
+    }
     public ObjectProperty<LocalDate> datedebutProperty() {
         return new SimpleObjectProperty<>(new java.sql.Date(datedebut.get().getTime()).toLocalDate());
 
@@ -211,9 +217,23 @@ public class Formation {
         return new SimpleObjectProperty<>(new java.sql.Date(datefin.get().getTime()).toLocalDate());
     }
 
+
     @Override
     public String toString() {
         return getTitre();
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
+    public List<FormationPersonne> getFormationPersonnes() {
+        return formationPersonnes.get();
+    }
+
+    public ListProperty<FormationPersonne> formationPersonnesProperty() {
+        return formationPersonnes;
+    }
+
+    public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
+        this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
     }
 }
 

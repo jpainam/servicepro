@@ -201,7 +201,7 @@ public class FormationController implements Initializable {
         dateDebut.setValue(new java.sql.Date(formation.getDatedebut().getTime()).toLocalDate());
         dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
         supportTable.setItems(FXCollections.observableArrayList(formation.getSupportFormations()));
-        System.err.println(formation.getPersonnes());
+        System.err.println(formation.getFormationPersonnes());
         formationParticipantController.setFormation(formation);
         competenceController.setFormation(formation);
 

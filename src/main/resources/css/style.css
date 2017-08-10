@@ -1,3 +1,30 @@
+.btn-deconnexion {
+    -fx-padding: 5 5 5 5;
+    -fx-text-fill: white;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 5;
+    -fx-fill: white;
+    -fx-background-color:
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+.btn-deconnexion:hover {
+    -fx-background-color:
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
+}
+.btn-deconnexion:pressed {
+    -fx-padding: 5 5 5 5;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
 
 .background {
     /*-fx-background-image: url("/images/CoarseGrid.png");
@@ -137,14 +164,37 @@ JFOenix CSS
      /*-fx-background-color: transparent;*/
      -fx-cursor: hand;
 }
-.actionButton{
+/*.actionButton{
     -fx-cursor: hand;
     -fx-font-size: 10pt;
     -fx-padding: 2 10 2 10;
     -fx-text-fill: #fff;
     -fx-background-color: #080c50 ;
+    #7ebcea, #2f4b8f
+}*/
+.button {
+    -fx-cursor: hand;
+   -fx-background-color:
+           #000000,
+           linear-gradient(#7ebcea, #2f4b8f),
+           linear-gradient(#426ab7, #263e75),
+           linear-gradient(#395cab, #223768);
+       -fx-background-insets: 0,1,2,3;
+       -fx-background-radius: 3,2,2,2;
+       -fx-text-fill: white;
+       -fx-font-size: 12px;
 }
-.actionButton .glyph-icon {
+.button:pressed{
+   -fx-background-color:
+                    #000000,
+                    linear-gradient(#5a61af, #51536d),
+                    linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
+        -fx-background-insets: 0,1,2,3;
+        -fx-background-radius: 3,2,2,2;
+        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+        -fx-text-fill: #395306;
+}
+.button .glyph-icon {
     -fx-fill: white;
 }
 .combo-box:disabled, .combo-box:disabled > * {
@@ -161,15 +211,32 @@ JFOenix CSS
     -fx-outer-border-width: 1;*/
     /*-fx-border-radius:none;*/
     -fx-background-radius:0;
-     -fx-border-color: #e2e2e2;
+     /*-fx-border-color: #e2e2e2;*/
      -fx-border-width: 1;
-    -fx-background-color: white;
+    /*-fx-background-color: white;*/
+    /* -fx-background-color: #ee543a , white;*/
+
+      -fx-background-color:
+                 #8b0000,
+                 linear-gradient(#5a61af, #51536d),
+                 linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
+        -fx-background-insets: 0, 1 5 1 6;
 }
-.toggle-button:selected{
+.toggle-button:pressed{
     -fx-text-fill: white;
-     -fx-background-color: #ee543a, #373e48;
-      -fx-background-insets: 0, 0 0 0 6;
+    -fx-background-color: #ee543a, #373e48;
+    -fx-background-insets: 0, 0 0 0 6;
 }
+.toggle-button:selected {
+      -fx-text-fill: white;
+  -fx-background-color:
+  black,
+  linear-gradient(to bottom, derive(red,-90%) 0%, derive(blue,-60%) 100%),
+  linear-gradient(to bottom, derive(red,-60%) 0%, derive(blue,-35%) 50%, derive(red,-30%) 98%, derive(blue,-50%) 100%),
+  linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 90%, rgba(0,0,0,0.3) 100%);
+  -fx-background-insets: 0, 0 0 0 6;
+}
+
 /* Row hovered */
 .table-view:row-selection .table-row-cell:filled:hover {
     -fx-background-color: brown;
@@ -179,4 +246,27 @@ JFOenix CSS
 }
 #toolbarViewerRight {
     display:none;
+}
+.row-certifie{
+    -fx-background-color: rgba(255, 248, 33, .4);
+    /*-fx-control-inner-background: rgb(255, 248, 33);*/
+    -fx-accent: derive(-fx-control-inner-background, -40%);
+    -fx-cell-hover-color: #cce3f4;
+    -fx-cell-focus-inner-border: #85b9de;
+}
+
+.row-acertifier{
+    -fx-background-color: rgba(255, 159, 160, .4);
+    /*-fx-control-inner-background: rgb(255, 159, 160);*/
+    -fx-accent: derive(-fx-control-inner-background, -40%);
+    -fx-cell-hover-color: #cce3f4;
+    -fx-cell-focus-inner-border: #85b9de;
+}
+
+.row-encours{
+    -fx-background-color: #7fffd4;
+    /*-fx-control-inner-background: rgb(255, 205, 158);*/
+    -fx-accent: derive(-fx-control-inner-background, -40%);
+    -fx-cell-hover-color: #cce3f4;
+    -fx-cell-focus-inner-border: #85b9de;
 }

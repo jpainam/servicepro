@@ -1,7 +1,9 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.Formation;
+import com.cfao.app.beans.FormationPersonne;
 import com.cfao.app.beans.Personne;
+import com.cfao.app.beans.Societe;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
@@ -35,10 +37,11 @@ public class FormationParticipantController extends AnchorPane implements Initia
     private FormationModel formationModel = new FormationModel();
     private PersonneModel personneModel = new PersonneModel();
 
-    public TableView<Personne> participantTable;
-    public TableColumn<Personne, String> matriculeParticipantColumn;
-    public TableColumn<Personne, String> nomParticipantColumn;
-    public TableColumn<Personne, String> prenomParticipantColumn;
+    public TableView<FormationPersonne> participantTable;
+    public TableColumn<FormationPersonne, String> matriculeParticipantColumn;
+    public TableColumn<FormationPersonne, String> nomParticipantColumn;
+    public TableColumn<FormationPersonne, String> prenomParticipantColumn;
+    public TableColumn<FormationPersonne, Societe> societeParticipantColumn;
     public Button btnPreviousParticipant;
     public Button btnNextParticipant;
     public Button btnPrintParticipant;
@@ -57,7 +60,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
     public TableColumn<Personne, String> matriculePersonneColumn;
     public TableColumn<Personne, String> nomPersonneColumn;
     public TableColumn<Personne, String> prenomPersonneColumn;
-    public TableColumn<Personne, String> societeParticipantColumn;
+
     public TableColumn<Personne, FontAwesomeIconView> potentielPersonneColumn;
 
     public int stateBtnModifierParticipant = 0;
@@ -111,7 +114,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
             protected ObservableList<Personne> call() throws Exception {
-                if (formation.getPersonnes().isEmpty()) {
+                if (formation.getFormationPersonnes().isEmpty()) {
                     return FXCollections.observableArrayList(personneModel.getList());
                 } else {
                     return FXCollections.observableArrayList(formationModel.getNonParticipants(formation));
@@ -122,7 +125,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
         personneTable.itemsProperty().bind(task.valueProperty());
         new ProgressIndicatorUtil(personneStackPane, task);
         new Thread(task).start();
-        participantTable.setItems(FXCollections.observableArrayList(formation.getPersonnes()));
+        participantTable.setItems(FXCollections.observableArrayList(formation.getFormationPersonnes()));
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
     }
 
@@ -138,10 +141,10 @@ public class FormationParticipantController extends AnchorPane implements Initia
         ButtonUtil.previous(btnPreviousParticipant);
         ButtonUtil.print(btnPrintParticipant);
         // Participant
-        matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
-        nomParticipantColumn.setCellValueFactory(param -> param.getValue().nomProperty());
-        prenomParticipantColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
-        societeParticipantColumn.setCellValueFactory(param -> param.getValue().getSociete().nomProperty());
+        matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().matriculeProperty());
+        nomParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().nomProperty());
+        prenomParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().prenomProperty());
+        societeParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().societe());
         matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
         nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
         prenomPersonneColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
@@ -150,7 +153,9 @@ public class FormationParticipantController extends AnchorPane implements Initia
 
     public void participantDoubleClick(MouseEvent event) {
         if (event.getClickCount() > 1 && stateBtnModifierParticipant == 1) {
-            this.move(participantTable, personneTable);
+            FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
+            participantTable.getItems().remove(fp);
+            personneTable.getItems().add(fp.getPersonne());
             participantTable.getSelectionModel().clearSelection();
         }
     }
@@ -178,7 +183,13 @@ public class FormationParticipantController extends AnchorPane implements Initia
 
     public void participantToPersonneAction(ActionEvent actionEvent) {
         if (participantTable.getSelectionModel().getSelectedItem() != null) {
-            this.move(participantTable, personneTable);
+            List<FormationPersonne> selectedItems = new ArrayList<>(participantTable.getSelectionModel().getSelectedItems());
+            Iterator<FormationPersonne> iterator = selectedItems.iterator();
+            while(iterator.hasNext()){
+                FormationPersonne fp = iterator.next();
+                participantTable.getItems().remove(fp);
+                personneTable.getItems().add(fp.getPersonne());
+            }
             participantTable.getSelectionModel().clearSelection();
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir le particpant à exclure de la liste");
@@ -186,24 +197,34 @@ public class FormationParticipantController extends AnchorPane implements Initia
     }
 
     public void participantToPersonneAllAction(ActionEvent actionEvent) {
-        this.move(participantTable, personneTable, new ArrayList<>(this.participantTable.getItems()));
+        List<FormationPersonne> items = new ArrayList<>(this.participantTable.getItems());
+        Iterator<FormationPersonne> iterator = items.iterator();
+        while(iterator.hasNext()){
+            FormationPersonne fp = iterator.next();
+            participantTable.getItems().remove(fp);
+            personneTable.getItems().add(fp.getPersonne());
+        }
+
         participantTable.getSelectionModel().clearSelection();
     }
 
-    private void move(TableView<Personne> viewA, TableView<Personne> viewB) {
+    private void move(TableView<Personne> viewA, TableView<FormationPersonne> viewB) {
         List<Personne> selectedItems = new ArrayList(viewA.getSelectionModel().getSelectedItems());
         this.move(viewA, viewB, selectedItems);
     }
 
-    private void move(TableView<Personne> viewA, TableView<Personne> viewB, List<Personne> items) {
+    private void move(TableView<Personne> viewA, TableView<FormationPersonne> viewB, List<Personne> items) {
         Iterator<Personne> var4 = items.iterator();
         while (var4.hasNext()) {
             Personne item = var4.next();
+            FormationPersonne fp = new FormationPersonne();
+            fp.setPersonne(item);
+            fp.setFormation(formation);
             viewA.getItems().remove(item);
-            viewB.getItems().add(item);
+            viewB.getItems().add(fp);
         }
-
     }
+
 
     public void modifierParticipant(ActionEvent actionEvent) {
         if (formation == null) {
@@ -217,7 +238,10 @@ public class FormationParticipantController extends AnchorPane implements Initia
         } else {
             btnModifierParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
             ServiceproUtil.setDisable(true, participantToPersonneAll, participantToPersonne, personneToParticipantAll, personneToParticipant);
-            formation.setPersonnes(participantTable.getItems());
+            formation.getPersonnes().clear();
+            for(FormationPersonne fp : participantTable.getItems()) {
+                formation.getPersonnes().add(fp.getPersonne());
+            }
             if (formationModel.update(formation)) {
                 ServiceproUtil.notify("Participants ajoutés avec succès");
             } else {

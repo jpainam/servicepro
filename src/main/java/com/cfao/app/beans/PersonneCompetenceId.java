@@ -12,23 +12,13 @@ public class PersonneCompetenceId  implements java.io.Serializable {
 
     private int personne;
     private int competence;
-    private String certification;
-    private Integer formation;
-
     public PersonneCompetenceId() {
     }
 
 
-    public PersonneCompetenceId(int personne, int competence, String certification) {
+    public PersonneCompetenceId(int personne, int competence) {
         this.personne = personne;
         this.competence = competence;
-        this.certification = certification;
-    }
-    public PersonneCompetenceId(int personne, int competence, String certification, Integer formation) {
-        this.personne = personne;
-        this.competence = competence;
-        this.certification = certification;
-        this.formation = formation;
     }
 
 
@@ -52,27 +42,6 @@ public class PersonneCompetenceId  implements java.io.Serializable {
         this.competence = competence;
     }
 
-
-    @Column(name="CERTIFICATION", nullable=false, length=2)
-    public String getCertification() {
-        return this.certification;
-    }
-
-    public void setCertification(String certification) {
-        this.certification = certification;
-    }
-
-
-    @Column(name="FORMATION")
-    public Integer getFormation() {
-        return this.formation;
-    }
-
-    public void setFormation(Integer formation) {
-        this.formation = formation;
-    }
-
-
     public boolean equals(Object other) {
         if ( (this == other ) ) return true;
         if ( (other == null ) ) return false;
@@ -80,9 +49,7 @@ public class PersonneCompetenceId  implements java.io.Serializable {
         PersonneCompetenceId castOther = ( PersonneCompetenceId ) other;
 
         return (this.getPersonne()==castOther.getPersonne())
-                && (this.getCompetence()==castOther.getCompetence())
-                && ( (this.getCertification()==castOther.getCertification()) || ( this.getCertification()!=null && castOther.getCertification()!=null && this.getCertification().equals(castOther.getCertification()) ) )
-                && ( (this.getFormation()==castOther.getFormation()) || ( this.getFormation()!=null && castOther.getFormation()!=null && this.getFormation().equals(castOther.getFormation()) ) );
+                && (this.getCompetence()==castOther.getCompetence());
     }
 
     public int hashCode() {
@@ -90,12 +57,18 @@ public class PersonneCompetenceId  implements java.io.Serializable {
 
         result = 37 * result + this.getPersonne();
         result = 37 * result + this.getCompetence();
-        result = 37 * result + ( getCertification() == null ? 0 : this.getCertification().hashCode() );
-        result = 37 * result + ( getFormation() == null ? 0 : this.getFormation().hashCode() );
+
         return result;
     }
 
 
+    @Override
+    public String toString() {
+        return "PersonneCompetenceId{" +
+                "personne=" + personne +
+                ", competence=" + competence +
+                "}\n";
+    }
 }
 
 

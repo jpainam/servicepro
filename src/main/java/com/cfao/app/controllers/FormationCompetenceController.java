@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -90,7 +91,7 @@ public class FormationCompetenceController extends AnchorPane implements Initial
     public void buildTable() {
         libelleCompetence.setCellValueFactory(param -> param.getValue().descriptionProperty());
         niveauCompetence.setCellValueFactory(param -> param.getValue().niveauProperty());
-        possedeCompetence.setCellFactory(param -> new CheckBoxTableCell<>());
+
         numeroCompetence.setCellFactory(col -> {
             TableCell<Competence, Void> cell = new TableCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> {
@@ -137,7 +138,7 @@ public class FormationCompetenceController extends AnchorPane implements Initial
             };
             competenceTable.itemsProperty().bind(task.valueProperty());
             new Thread(task).start();
-            task.setOnSucceeded(event -> {
+            task.setOnSucceeded((WorkerStateEvent event) -> {
                 possedeCompetence.setCellFactory((TableColumn<Competence, Competence> param) -> {
                     BooleanProperty selected = new SimpleBooleanProperty();
                     CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
@@ -146,7 +147,6 @@ public class FormationCompetenceController extends AnchorPane implements Initial
                         if (formation.getCompetences().contains(competence)) {
                             selected.set(true);
                         }
-
                         return selected;
                     });
                     selected.addListener((obs, wasSelected, isNowSelected) -> {

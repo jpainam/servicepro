@@ -1,17 +1,14 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.Formationpersonne;
+import com.cfao.app.beans.FormationPersonne;
 import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.Personnel;
 import com.cfao.app.util.AlertUtil;
+import javafx.application.Platform;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +30,8 @@ public class FormationModel extends Model<Formation> {
         Session session = getCurrentSession();
         try{
             List<Integer> personneIds = new ArrayList<>();
-            for(Personne p : formation.getPersonnes()){
-                personneIds.add(p.getIdpersonne());
+            for(FormationPersonne fp : formation.getFormationPersonnes()){
+                personneIds.add(fp.getPersonne().getIdpersonne());
             }
             session.beginTransaction();
             Criteria criteria = session.createCriteria(Personne.class);
@@ -46,6 +43,30 @@ public class FormationModel extends Model<Formation> {
         }catch (Exception ex){
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Formation> getFormationsByPersonne(Personne personne) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(FormationPersonne.class).add(
+                    Restrictions.eq("personne", personne)
+            );
+            criteria.setProjection(Projections.property("formation"));
+            return criteria.list();
+        }catch (Exception ex){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    AlertUtil.showErrorMessage(ex);
+                }
+            });
         }finally {
             if(session.isOpen()){
                 session.close();

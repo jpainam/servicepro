@@ -79,7 +79,7 @@ public class Langue {
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="langue")
-    public List<Personne> getPersonnes() {
+    public List<Personne> getPersonne() {
         return personnes.get();
     }
 
@@ -87,7 +87,7 @@ public class Langue {
         return personnes;
     }
 
-    public void setPersonnes(List<Personne> personnes) {
+    public void setPersonne(List<Personne> personnes) {
         this.personnes.set(FXCollections.observableArrayList(personnes));
     }
     */

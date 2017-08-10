@@ -93,7 +93,7 @@
                               <Insets left="10.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitAction" text="Exit" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS" StackPane.alignment="CENTER_RIGHT" />
+                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitAction" prefHeight="29.0" prefWidth="81.0" styleClass="btn-deconnexion" text="Exit" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS" StackPane.alignment="CENTER_RIGHT" />
                      </children>
                      <BorderPane.margin>
                         <Insets right="10.0" />

@@ -104,7 +104,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ENCOURS)){
+                    if(co.equals(competence) && co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ENCOURS)){
                         return  new SimpleBooleanProperty(true);
                     }
                     i++;
@@ -116,7 +116,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && !co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_ACERTIFIER)){
+                    if(co.equals(competence) && !co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)){
                         return new SimpleBooleanProperty(false);
                     }
                 }
@@ -127,7 +127,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && co.getCompetenceStatut().getStatut().equals(Constante.COMPETENCE_CERTIFIEE)){
+                    if(co.equals(competence) && co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)){
                         return new SimpleBooleanProperty(true);
                     }
                 }

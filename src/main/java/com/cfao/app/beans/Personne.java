@@ -31,7 +31,7 @@ public class Personne implements java.io.Serializable {
     private ObjectProperty<Date> datenaiss = new SimpleObjectProperty<Date>();
     private SimpleStringProperty photo = new SimpleStringProperty();
     private ObjectProperty<Date> fincontrat = new SimpleObjectProperty<Date>();
-    private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
+
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
     private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
@@ -45,8 +45,10 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
     private ListProperty<PersonneQcm> personneQcms = new SimpleListProperty<>();
+    private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
+    private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
 
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="IDPERSONNE", unique=true, nullable=false)
     public int getIdpersonne() {
         return this.idpersonne.get();
@@ -247,7 +249,7 @@ public class Personne implements java.io.Serializable {
         this.profilPersonnes.set(FXCollections.observableList(profilPersonnes));
     }
 
-    @ManyToMany()
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="langue_parlee", catalog="servicepro", joinColumns = {
             @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="LANGUE", nullable=false, updatable=false) })
@@ -336,7 +338,7 @@ public class Personne implements java.io.Serializable {
         return datenaiss;
     }
 
-    @OneToMany(mappedBy="personne")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
     public List<PersonneCompetence> getPersonneCompetences() {
         return personneCompetences.get();
     }
@@ -364,7 +366,7 @@ public class Personne implements java.io.Serializable {
         return competenceList;
     }
 
-    @OneToMany(mappedBy="personne")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
     @OrderBy("DATEQCM DESC")
     public List<PersonneQcm> getPersonneQcms() {
         return this.personneQcms;
@@ -386,5 +388,18 @@ public class Personne implements java.io.Serializable {
 
     public void setPhoto(String photo) {
         this.photo.set(photo);
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    public List<FormationPersonne> getFormationPersonnes() {
+        return formationPersonnes.get();
+    }
+
+    public ListProperty<FormationPersonne> formationPersonnesProperty() {
+        return formationPersonnes;
+    }
+
+    public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
+        this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
     }
 }
