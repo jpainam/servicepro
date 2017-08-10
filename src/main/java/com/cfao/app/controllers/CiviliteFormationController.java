@@ -29,7 +29,10 @@ import org.icepdf.ri.util.FontPropertiesManager;
 import org.icepdf.ri.util.PropertiesManager;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -95,8 +98,14 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         formationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Formation>() {
             @Override
             public void changed(ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) {
-                String url = ResourceBundle.getBundle("Bundle").getString("document.dir");
-                openDocument(getClass().getResource(url + "documents.pdf").getPath());
+                //String url = ResourceBundle.getBundle("Bundle").getString("document.dir");
+                //openDocument(getClass().getResource(url + "documents.pdf").getPath());
+
+                Path path = Paths.get("documents").toAbsolutePath();
+                if(!path.toFile().exists()){
+                    path.toFile().mkdir();
+                }
+                openDocument(path.toString() + File.separator + "documents.pdf");
             }
         });
 
@@ -160,7 +169,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             }
         };
         competenceTable.itemsProperty().bind(task.valueProperty());
-        new ProgressIndicatorUtil(competenceStackPane, task);
+        ProgressIndicatorUtil.show(competenceStackPane, task);
         new Thread(task).start();
 
         // Historique des formation
@@ -171,7 +180,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             }
         };
         formationTable.itemsProperty().bind(task2.valueProperty());
-        new ProgressIndicatorUtil(historiqueStackPane, task2);
+        ProgressIndicatorUtil.show(historiqueStackPane, task2);
         new Thread(task2).start();
 
         // Competence a certifier
@@ -378,6 +387,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                     properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_TOOL, "false");
 
                     properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ANNOTATION, "false");
+
                     properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ZOOM, "true");
 
 

@@ -123,7 +123,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
         };
 
         personneTable.itemsProperty().bind(task.valueProperty());
-        new ProgressIndicatorUtil(personneStackPane, task);
+        ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
         participantTable.setItems(FXCollections.observableArrayList(formation.getFormationPersonnes()));
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);

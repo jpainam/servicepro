@@ -189,7 +189,7 @@ public class CiviliteController implements Initializable {
                 return map;
             }
         };
-        new ProgressIndicatorUtil(personneStackPane, task);
+        ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
         task.setOnSucceeded(event -> {
             map = task.getValue();
@@ -271,6 +271,7 @@ public class CiviliteController implements Initializable {
 
         /*Necessaire à l'update du component checkcombobox des Langues parlées par une personne*/
         updateLangue(person.getLangues());
+
         formationController.setPersonne(person);
         formationController.buildFormation();
         profilController.setPersonne(person);
@@ -289,7 +290,7 @@ public class CiviliteController implements Initializable {
             }
         };
         /* Activer le progress bar pdt le chargement de la photo et des tableview*/
-        new ProgressIndicatorUtil(imageviewStackPane, task);
+        ProgressIndicatorUtil.show(imageviewStackPane, task);
         new Thread(task).start();
         task.setOnFailed(event -> {
             task.getException().printStackTrace();

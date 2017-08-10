@@ -1,11 +1,9 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.ProgressIndicatorUtil;
 import com.cfao.app.util.SearchBox;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -151,7 +149,7 @@ public class AccueilController implements Initializable {
         new Thread(task).start();
         participantTable.itemsProperty().bind(task.valueProperty());
         StackPane stack = new StackPane(participantTable);
-        new ProgressIndicatorUtil(stack, task);
+        ProgressIndicatorUtil.show(stack, task);
         participantBox.setPadding(new Insets(5, 5, 5, 5));
         participantBox.setSpacing(10);
         participantBox.getChildren().addAll(reserchePanel, stack);

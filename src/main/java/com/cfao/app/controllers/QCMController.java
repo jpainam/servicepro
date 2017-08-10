@@ -113,7 +113,7 @@ public class QCMController implements Initializable {
             }
         };
         qcmTable.itemsProperty().bind(task.valueProperty());
-        new ProgressIndicatorUtil(qcmStackPane, task);
+        ProgressIndicatorUtil.show(qcmStackPane, task);
         new Thread(task).start();
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
@@ -151,7 +151,7 @@ public class QCMController implements Initializable {
         };
         competenceTable.itemsProperty().bind(task.valueProperty());
 
-        new ProgressIndicatorUtil(competenceStackPane, task);
+        ProgressIndicatorUtil.show(competenceStackPane, task);
         new Thread(task).start();
     }
 

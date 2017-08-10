@@ -99,7 +99,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
                 return FXCollections.observableArrayList(new CompetenceModel().getList());
             }
         };
-        new ProgressIndicatorUtil(competenceStackPane, task1);
+        ProgressIndicatorUtil.show(competenceStackPane, task1);
         competenceTable.itemsProperty().bind(task1.valueProperty());
         new Thread(task1).start();
         competenceTable.setEditable(true);
@@ -225,7 +225,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
                 }
             };
             competenceTable.itemsProperty().bind(task.valueProperty());
-            new ProgressIndicatorUtil(competenceStackPane, task);
+            ProgressIndicatorUtil.show(competenceStackPane, task);
             new Thread(task).start();
         }
     }

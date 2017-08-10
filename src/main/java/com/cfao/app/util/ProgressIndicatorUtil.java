@@ -1,5 +1,6 @@
 package com.cfao.app.util;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Region;
@@ -20,5 +21,22 @@ public class ProgressIndicatorUtil {
         veil.visibleProperty().bind(task.runningProperty());
         p.visibleProperty().bind(task.runningProperty());
         container.getChildren().addAll(veil, p);
+    }
+
+    public static void show(StackPane container, Task task) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Region veil = new Region();
+                ProgressIndicator p = new ProgressIndicator();
+                veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+                p.setMaxSize(50, 50);
+                p.progressProperty().bind(task.progressProperty());
+                veil.visibleProperty().bind(task.runningProperty());
+                p.visibleProperty().bind(task.runningProperty());
+                container.getChildren().addAll(veil, p);
+            }
+        });
+
     }
 }

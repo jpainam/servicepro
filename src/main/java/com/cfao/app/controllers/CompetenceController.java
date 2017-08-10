@@ -146,7 +146,7 @@ public class CompetenceController implements Initializable{
             }
         };
         competenceTable.itemsProperty().bind(task.valueProperty());
-        new ProgressIndicatorUtil(competenceStackPane, task);
+        ProgressIndicatorUtil.show(competenceStackPane, task);
         new Thread(task).start();
         Task<ObservableList<Niveau>> task1 = new Task<ObservableList<Niveau>>() {
             @Override
@@ -176,7 +176,7 @@ public class CompetenceController implements Initializable{
                 return FXCollections.observableArrayList(new CompetenceModel().getFormationByCompetence(competence));
             }
         };
-        new ProgressIndicatorUtil(formationStackPane, task);
+        ProgressIndicatorUtil.show(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
         profilTable.setItems(FXCollections.observableArrayList(competence.getProfils()));
         new Thread(task).start();

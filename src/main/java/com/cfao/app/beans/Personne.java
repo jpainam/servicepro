@@ -28,10 +28,10 @@ public class Personne implements java.io.Serializable {
     private SimpleStringProperty telephone = new SimpleStringProperty();
     private SimpleStringProperty email = new SimpleStringProperty();
     private SimpleStringProperty memo = new SimpleStringProperty();
-    private ObjectProperty<Date> datenaiss = new SimpleObjectProperty<Date>();
     private SimpleStringProperty photo = new SimpleStringProperty();
+    private ObjectProperty<Date> datenaiss = new SimpleObjectProperty<Date>();
     private ObjectProperty<Date> fincontrat = new SimpleObjectProperty<Date>();
-
+    private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
     private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
@@ -45,341 +45,101 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
     private ListProperty<PersonneQcm> personneQcms = new SimpleListProperty<>();
-    private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdpersonne() {
-        return this.idpersonne.get();
+        return idpersonne.get();
     }
 
-    public void setIdpersonne(Integer idpersonne) {
+    public SimpleIntegerProperty idpersonneProperty() {
+        return idpersonne;
+    }
+
+    public void setIdpersonne(int idpersonne) {
         this.idpersonne.set(idpersonne);
     }
 
-    @Column(name="MATRICULE")
+    @Column(name = "MATRICULE")
     public String getMatricule() {
-        return this.matricule.get();
+        return matricule.get();
+    }
+
+    public SimpleStringProperty matriculeProperty() {
+        return matricule;
     }
 
     public void setMatricule(String matricule) {
         this.matricule.set(matricule);
     }
 
-
-    @Column(name="NOM")
+    @Column(name = "NOM")
     public String getNom() {
-        return this.nom.get();
-    }
-
-    public void setNom(String nom) {
-        this.nom.set(nom);
-    }
-
-
-    @Column(name="PRENOM")
-    public String getPrenom() {
-        return this.prenom.get();
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom.set(prenom);
-    }
-
-
-    @Column(name="AUTRENOM")
-    public String getAutrenom() {
-        return this.autrenom.get();
-    }
-
-
-    @Column(name="TELEPHONE", length=20)
-    public String getTelephone() {
-        return this.telephone.get();
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone.set(telephone);
-    }
-
-
-    @Column(name="EMAIL", length=50)
-    public String getEmail() {
-        return this.email.get();
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
-    @Column(name="MEMO")
-    public String getMemo() {
-        return this.memo.get();
-    }
-
-    public void setMemo(String memo) {
-        this.memo.set(memo);
-    }
-
-    @Temporal(TemporalType.DATE)
-    // @Temporal should only be set on a java.util.Date or java.util.Calendar property: com.cfao.app.beans.Personne.datenaiss
-    @Column(name="DATENAISS", nullable=false, length=10)
-    public Date getDatenaiss() {
-        return datenaiss.get();
-    }
-
-    public void setDatenaiss(Date datenaiss) {
-        this.datenaiss.set(datenaiss);
-    }
-
-
-    @Temporal(TemporalType.DATE)
-    @Column(name="DATECONTRAT", length=10)
-    public Date getDatecontrat() {
-        return fincontrat.get();
-
-    }
-
-    public void setDatecontrat(Date datecontrat) {
-        this.fincontrat.set(datecontrat);
-
-    }
-
-
-
-    @ManyToOne
-    @JoinColumn(name="AMBITION")
-    public Ambition getAmbition() {
-        return this.ambition.get();
-    }
-
-    public void setAmbition(Ambition ambition) {
-        this.ambition.set(ambition);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="CONTRAT")
-    public Contrat getContrat() {
-        return this.contrat.get();
-    }
-
-    public void setContrat(Contrat contrat) {
-        this.contrat.set(contrat);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="GROUPE")
-    public Groupe getGroupe() {
-        return this.groupe.get();
-    }
-
-    public void setGroupe(Groupe groupe) {
-        this.groupe.set(groupe);
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="LANGUE")
-    public Langue getLangue() {
-        return this.langue.get();
-    }
-
-    public void setLangue(Langue langue) {
-        this.langue.set(langue);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="PAYS")
-    public Pays getPays() {
-        return this.pays.get();
-    }
-
-    public void setPays(Pays pays) {
-        this.pays.set(pays);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="POTENTIEL")
-    public Potentiel getPotentiel() {
-        return this.potentiel.get();
-    }
-
-    public void setPotentiel(Potentiel potentiel) {
-        this.potentiel.set(potentiel);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="SECTION")
-    public Section getSection() {
-        return this.section.get();
-    }
-
-    public void setSection(Section section) {
-        this.section.set(section);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="SOCIETE")
-    public Societe getSociete() {
-        return this.societe.get();
-    }
-
-    public void setSociete(Societe societe) {
-        this.societe.set(societe);
-    }
-
-
-    public void setAutrenom(String autrenom) {
-        this.autrenom.set(autrenom);
-    }
-
-    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
-    public List<Poste> getPostes() {
-        return this.postes;
-    }
-
-    public void setPostes(List<Poste> postes) {
-        this.postes.set(FXCollections.observableList(postes));
-    }
-
-    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
-    public List<ProfilPersonne> getProfilPersonnes() {
-        return this.profilPersonnes.get();
-    }
-
-    public void setProfilPersonnes(List<ProfilPersonne> profilPersonnes) {
-        this.profilPersonnes.set(FXCollections.observableList(profilPersonnes));
-    }
-
-    @ManyToMany
-    @JoinTable(name="langue_parlee", catalog="servicepro", joinColumns =
-            @JoinColumn(name="PERSONNE") , inverseJoinColumns =
-            @JoinColumn(name="LANGUE"))
-    public List<Langue> getLangues() {
-        return this.langues.get();
-    }
-
-    public void setLangues(List<Langue> langues) {
-            this.langues.set(FXCollections.observableArrayList(langues));
-
-    }
-
-    @ManyToMany
-    @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
-            @JoinColumn(name="PERSONNE", nullable=false, updatable=false) }, inverseJoinColumns = {
-            @JoinColumn(name="FORMATION", nullable=false, updatable=false) })
-    public List<Formation> getFormations() {
-        return this.formations;
-    }
-
-    public void setFormations(List<Formation> formations) {
-        if(formations != null) {
-            this.formations.set(FXCollections.observableList(formations));
-        }
-    }
-
-
-    public SimpleStringProperty telephoneProperty() {
-        return telephone;
-    }
-
-    public ObjectProperty<Societe> societe() {
-        return societe;
-    }
-
-
-    public SimpleStringProperty matriculeProperty() {
-        return matricule;
+        return nom.get();
     }
 
     public SimpleStringProperty nomProperty() {
         return nom;
     }
 
+    public void setNom(String nom) {
+        this.nom.set(nom);
+    }
+
+    @Column(name = "PRENOM")
+    public String getPrenom() {
+        return prenom.get();
+    }
+
     public SimpleStringProperty prenomProperty() {
         return prenom;
     }
 
-    public ObjectProperty<Pays> pays() {
-        return pays;
+    public void setPrenom(String prenom) {
+        this.prenom.set(prenom);
     }
 
-    public ObjectProperty<Date> datenaiss() {
-        return datenaiss;
+    @Column(name = "TELEPHONE")
+    public String getTelephone() {
+        return telephone.get();
     }
 
-    public ObjectProperty<Section> section() {
-        return section;
+    public SimpleStringProperty telephoneProperty() {
+        return telephone;
     }
 
-    public ObjectProperty<Groupe> groupe() {
-        return groupe;
+    public void setTelephone(String telephone) {
+        this.telephone.set(telephone);
     }
 
-    public ListProperty<Langue> langues() {
-        return langues;
-    }
-
-    public ObjectProperty<Date> datecontratProperty() {
-        return fincontrat;
-    }
-
-    public SimpleStringProperty memoProperty() {
-        return memo;
+    @Column(name = "EMAIL")
+    public String getEmail() {
+        return email.get();
     }
 
     public SimpleStringProperty emailProperty() {
         return email;
     }
 
-    public ObjectProperty<Potentiel> potentiel() {
-        return potentiel;
+    public void setEmail(String email) {
+        this.email.set(email);
     }
 
-    public ObjectProperty<Date> naissance() {
-        return datenaiss;
+    @Column(name = "MEMO")
+    public String getMemo() {
+        return memo.get();
     }
 
-    @OneToMany(mappedBy="personne")
-    public List<PersonneCompetence> getPersonneCompetences() {
-        return personneCompetences.get();
+    public SimpleStringProperty memoProperty() {
+        return memo;
     }
 
-    public ListProperty<PersonneCompetence> personneCompetencesProperty() {
-        return personneCompetences;
+    public void setMemo(String memo) {
+        this.memo.set(memo);
     }
 
-    @Override
-    public String toString() {
-        return getNom() + " " + getPrenom();
-    }
-
-    public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
-        if(personneCompetences != null) {
-            this.personneCompetences.set(FXCollections.observableList(personneCompetences));
-        }
-    }
-    @Transient
-    public List<Competence> getCompetences(){
-        List<Competence> competenceList = new ArrayList<>();
-        for(PersonneCompetence co : personneCompetences){
-            competenceList.add(co.getCompetence());
-        }
-        return competenceList;
-    }
-
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
-    @OrderBy("DATEQCM DESC")
-    public List<PersonneQcm> getPersonneQcms() {
-        return this.personneQcms;
-    }
-
-    public void setPersonneQcms(List<PersonneQcm> personneQcms) {
-        this.personneQcms.set(FXCollections.observableArrayList(personneQcms));
-    }
-
-
-    @Column(name="PHOTO", length = 150)
+    @Column(name = "PHOTO")
     public String getPhoto() {
         return photo.get();
     }
@@ -392,6 +152,240 @@ public class Personne implements java.io.Serializable {
         this.photo.set(photo);
     }
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATENAISS")
+    public Date getDatenaiss() {
+        return datenaiss.get();
+    }
+
+    public ObjectProperty<Date> datenaissProperty() {
+        return datenaiss;
+    }
+
+    public void setDatenaiss(Date datenaiss) {
+        this.datenaiss.set(datenaiss);
+    }
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATECONTRAT")
+    public Date getDatecontrat() {
+        return fincontrat.get();
+    }
+
+    public ObjectProperty<Date> fincontratProperty() {
+        return fincontrat;
+    }
+
+    public void setDatecontrat(Date fincontrat) {
+        this.fincontrat.set(fincontrat);
+    }
+
+    @ManyToMany
+    @JoinTable(name = "langue_parlee", joinColumns = @JoinColumn(name = "PERSONNE"), inverseJoinColumns = @JoinColumn(name = "LANGUE"))
+    public List<Langue> getLangues() {
+        return langues.get();
+    }
+
+    public ListProperty<Langue> languesProperty() {
+        return langues;
+    }
+
+    public void setLangues(List<Langue> langues) {
+        this.langues.set(FXCollections.observableList(langues));
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "PAYS")
+    public Pays getPays() {
+        return pays.get();
+    }
+
+    public ObjectProperty<Pays> paysProperty() {
+        return pays;
+    }
+
+    public void setPays(Pays pays) {
+        this.pays.set(pays);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "GROUPE")
+    public Groupe getGroupe() {
+        return groupe.get();
+    }
+
+    public ObjectProperty<Groupe> groupeProperty() {
+        return groupe;
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe.set(groupe);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "SOCIETE")
+    public Societe getSociete() {
+        return societe.get();
+    }
+
+    public ObjectProperty<Societe> societeProperty() {
+        return societe;
+    }
+
+    public void setSociete(Societe societe) {
+        this.societe.set(societe);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "SECTION")
+    public Section getSection() {
+        return section.get();
+    }
+
+    public ObjectProperty<Section> sectionProperty() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section.set(section);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "CONTRAT")
+    public Contrat getContrat() {
+        return contrat.get();
+    }
+
+    public ObjectProperty<Contrat> contratProperty() {
+        return contrat;
+    }
+
+    public void setContrat(Contrat contrat) {
+        this.contrat.set(contrat);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "AMBITION")
+    public Ambition getAmbition() {
+        return ambition.get();
+    }
+
+    public ObjectProperty<Ambition> ambitionProperty() {
+        return ambition;
+    }
+
+    public void setAmbition(Ambition ambition) {
+        this.ambition.set(ambition);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "POTENTIEL")
+    public Potentiel getPotentiel() {
+        return potentiel.get();
+    }
+
+    public ObjectProperty<Potentiel> potentielProperty() {
+        return potentiel;
+    }
+
+    public void setPotentiel(Potentiel potentiel) {
+        this.potentiel.set(potentiel);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "LANGUE")
+    public Langue getLangue() {
+        return langue.get();
+    }
+
+    public ObjectProperty<Langue> langueProperty() {
+        return langue;
+    }
+
+    public void setLangue(Langue langue) {
+        this.langue.set(langue);
+    }
+
+    @OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
+    public List<ProfilPersonne> getProfilPersonnes() {
+        return profilPersonnes.get();
+    }
+
+    public ListProperty<ProfilPersonne> profilPersonnesProperty() {
+        return profilPersonnes;
+    }
+
+    public void setProfilPersonnes(List<ProfilPersonne> profilPersonnes) {
+        this.profilPersonnes.set(FXCollections.observableList(profilPersonnes));
+    }
+
+    @OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
+    public List<Poste> getPostes() {
+        return postes.get();
+    }
+
+    public ListProperty<Poste> postesProperty() {
+        return postes;
+    }
+
+    public void setPostes(List<Poste> postes) {
+        this.postes.set(FXCollections.observableList(postes));
+    }
+
+    @ManyToMany
+    @JoinTable(name="formation_personne", catalog="servicepro", joinColumns =
+    @JoinColumn(name="PERSONNE", nullable=false, updatable=false) , inverseJoinColumns =
+    @JoinColumn(name="FORMATION", nullable=false, updatable=false))
+    public List<Formation> getFormations() {
+        return formations.get();
+    }
+
+    public ListProperty<Formation> formationsProperty() {
+        return formations;
+    }
+
+    public void setFormations(List<Formation> formations) {
+        if(formations != null)
+            this.formations.set(FXCollections.observableList(formations));
+    }
+
+    @OneToMany(mappedBy="personne")
+    public List<PersonneCompetence> getPersonneCompetences() {
+        return personneCompetences.get();
+    }
+
+    public ListProperty<PersonneCompetence> personneCompetencesProperty() {
+        return personneCompetences;
+    }
+
+    public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
+        if(personneCompetences != null)
+            this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+    }
+
+    @Transient
+    public List<Competence> getCompetences(){
+        List<Competence> competenceList = new ArrayList<>();
+        for(PersonneCompetence co : personneCompetences){
+            competenceList.add(co.getCompetence());
+        }
+        return competenceList;
+    }
+
+    @OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
+    public List<PersonneQcm> getPersonneQcms() {
+        return personneQcms.get();
+    }
+
+    public ListProperty<PersonneQcm> personneQcmsProperty() {
+        return personneQcms;
+    }
+
+    public void setPersonneQcms(List<PersonneQcm> personneQcms) {
+        if(personneQcms!= null)
+            this.personneQcms.set(FXCollections.observableList(personneQcms));
+    }
+
     @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
     public List<FormationPersonne> getFormationPersonnes() {
         return formationPersonnes.get();
@@ -402,6 +396,12 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
-        this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
+        if(formationPersonnes != null) {
+            this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
+        }
+    }
+
+    public ObjectProperty<Societe> societe() {
+        return societe;
     }
 }

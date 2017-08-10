@@ -182,7 +182,7 @@ public class FormationController implements Initializable {
                 return FXCollections.observableList(formationModel.getList());
             }
         };
-        new ProgressIndicatorUtil(formationStackPane, task);
+        ProgressIndicatorUtil.show(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
         listeViewFormateurs.getItems().clear();
         new Thread(task).start();
