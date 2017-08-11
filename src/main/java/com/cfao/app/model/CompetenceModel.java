@@ -114,24 +114,6 @@ public class CompetenceModel extends Model<Competence> {
         return null;
     }
     */
-    public List<Formation> getFormationByCompetence(Competence competence) {
-        Session session = getCurrentSession();
-        try {
-            session.beginTransaction();
-            SQLQuery query = session.createSQLQuery("select formation from formation_competence where competence = :competence");
-            query.setParameter("competence", competence.getIdcompetence());
-            Criteria criteria = session.createCriteria(Formation.class).add(
-                    Restrictions.in("idformation", query.list()));
-            return criteria.list();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex);
-        } finally {
-            session.close();
-        }
-        return null;
-
-    }
 
     public List<Competence> findByNiveau(Niveau niveau) {
         Session session = getCurrentSession();

@@ -41,10 +41,6 @@ public class CivilitePhoto {
         FileInputStream file = null;
         try {
             Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("photo.dir")).toAbsolutePath();
-            if (path == null) {
-                Files.createDirectories(path);
-            }
-
             String chemin = path.toString() + File.separator + filename;
            File f = new File(chemin);
             if (f.exists() && !f.isDirectory()) {

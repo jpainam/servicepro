@@ -71,10 +71,10 @@
               </StackPane>
             <BorderPane prefHeight="30.0" prefWidth="910.0">
                <left>
-                      <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                      <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </left>
                <center>
-                  <StackPane fx:id="notificationStack" prefHeight="41.0" prefWidth="667.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER" />
+                  <StackPane fx:id="notificationStack" maxWidth="-Infinity" prefHeight="54.0" prefWidth="391.0" style="-fx-alignment: center; -fx-text-fill: red;" BorderPane.alignment="CENTER" />
                </center>
                <right>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" BorderPane.alignment="CENTER">
@@ -105,9 +105,9 @@
                 <content>
                  <StackPane fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
                      <children>
-                         <SplitPane dividerPositions="0.12665198237885464, 0.8116740088105727" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                         <SplitPane dividerPositions="0.1238390092879257" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                              <items>
-                           <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="363.0" prefWidth="118.0">
+                           <StackPane fx:id="shortcutContent" prefHeight="453.0" prefWidth="27.0" SplitPane.resizableWithParent="false">
                               <children>
 
                      </children>
@@ -119,14 +119,6 @@
                               </children>
          
                            </VBox>
-                           <StackPane fx:id="notificationContent" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
-                                 <children>
-                                    <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
-                                       <bottom>
-                                          <AnchorPane fx:id="calendarPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="113.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
-                                       </bottom>
-                                    </BorderPane>
-                                 </children></StackPane>
                              </items>
                          </SplitPane>
                      </children>

@@ -1,6 +1,7 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Controller;
+import com.cfao.app.Login;
 import com.cfao.app.Module;
 import com.cfao.app.StageManager;
 import com.cfao.app.util.AlertUtil;
@@ -47,7 +48,7 @@ public class TemplateController implements Initializable, Controller {
     public ImageView cfaoLogo;
     public ProgressBar progressBar;
     public StackPane shortcutContent;
-    public StackPane notificationContent;
+    //public StackPane rappelContent;
     public Button exitButton;
 
     public NotificationPane notificationPane = new NotificationPane(new StackPane());
@@ -62,7 +63,7 @@ public class TemplateController implements Initializable, Controller {
     public Label currentLogTimeLabel;
     public StackPane contentPane;
     public StackPane principalLayout;
-    public AnchorPane calendarPanel;
+
 
     BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
     PopOver profilPopOver = new PopOver();
@@ -87,6 +88,7 @@ public class TemplateController implements Initializable, Controller {
             Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
             shortcutContent.getChildren().setAll(leftMenuPane);
 
+            notificationPane.getContent().getStyleClass().add("notificationPane");
             notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
                 notificationPane.hide();
             }));
@@ -96,6 +98,8 @@ public class TemplateController implements Initializable, Controller {
             /*DatePickerSkin datePickerSkin = new DatePickerSkin(new DatePicker(LocalDate.now()));
             Node popupContent = datePickerSkin.getPopupContent();
             calendarPanel.getChildren().setAll(popupContent);*/
+            //Pane rappelContentPane = FXMLLoader.load(getClass().getResource("/views/rappel/rappel.fxml"));
+            //rappelContent.getChildren().addAll(rappelContentPane);
             // Charger la vue accueil
             Pane accueil = FXMLLoader.load(getClass().getResource(FXMLView.ACCUEIL.getFXMLFile()));
             content.getChildren().setAll(accueil);
@@ -122,12 +126,14 @@ public class TemplateController implements Initializable, Controller {
 
     /**
      * Utiliser pour rendre les fond gris en cas d'alert
+     *
      * @return
      */
     @Override
-    public StackPane getContentLayout(){
+    public StackPane getContentLayout() {
         return principalLayout;
     }
+
     /*
     @Override
     public Node getHighlightPane() {
@@ -135,7 +141,7 @@ public class TemplateController implements Initializable, Controller {
     }
 */
     @Override
-    public ProgressBar getProgressBar(){
+    public ProgressBar getProgressBar() {
         return progressBar;
     }
 
@@ -150,8 +156,8 @@ public class TemplateController implements Initializable, Controller {
             ParametreController parametreController = new ParametreController(activeTab);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/parametre/parametre.fxml"));
             loader.setController(parametreController);
-            content.getChildren().setAll((Node)loader.load());
-        }catch(Exception ex){
+            content.getChildren().setAll((Node) loader.load());
+        } catch (Exception ex) {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         }
@@ -182,17 +188,13 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void exitAction(ActionEvent actionEvent) {
-        Pane connexionPane = null;
         try {
-            connexionPane = FXMLLoader.load(getClass().getResource(FXMLView.LOGIN.getFXMLFile()));
-        } catch (Exception e) {
-            e.printStackTrace();
+            new Login().start(new Stage());
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.close();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
         }
-
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle(FXMLView.LOGIN.getTitle());
-        stage.getScene().setRoot(connexionPane);
-
     }
 
     public void showAction(ActionEvent actionEvent) {

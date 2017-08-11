@@ -8,13 +8,12 @@
 <?import javafx.scene.text.*?>
 <?import java.lang.String?>
 
-<AnchorPane prefHeight="463.0" prefWidth="538.0" styleClass="background" stylesheets="@../../css/login.css" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
+<AnchorPane prefHeight="463.0" prefWidth="538.0" styleClass="background" stylesheets="@../../css/login.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LoginController">
     <children>
         <VBox alignment="CENTER" fillWidth="false" prefHeight="619.0" prefWidth="445.0" spacing="15.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" />
-                <AnchorPane prefHeight="240.0" prefWidth="400.0">
+                <AnchorPane prefHeight="296.0" prefWidth="400.0">
                     <children>
                         <AnchorPane layoutY="17.0" prefHeight="223.0" prefWidth="389.0" styleClass="box-login" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
                             <children>
@@ -28,6 +27,7 @@
                                         <Font size="14.0" />
                                     </font>
                                 </PasswordField>
+                        <StackPane fx:id="loadingStackContainer" layoutX="84.0" layoutY="151.0" prefHeight="62.0" prefWidth="222.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="96.0" AnchorPane.topAnchor="151.0" />
                                 <Button layoutX="17.0" layoutY="235.0" mnemonicParsing="false" onAction="#btnConnexion" prefHeight="20.0" styleClass="btn-login" text="Connexion" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                     <font>
                                         <Font size="16.0" />

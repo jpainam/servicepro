@@ -6,17 +6,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 
-
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -105,7 +101,7 @@ public class ServiceproUtil {
         try {
             Desktop.getDesktop().browse(new URI(link));
         } catch (URISyntaxException | IOException ex) {
-            AlertUtil.showSimpleAlert("Information", "");
+            AlertUtil.showSimpleAlert("Information", "Erreur d'ouverture du lien");
         }
     }
 

@@ -7,6 +7,7 @@ import com.cfao.app.model.*;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -306,9 +307,15 @@ public class CiviliteController implements Initializable {
                 int index = 0;
                 for (Langue l : comboLanguesParlees.getItems()) {
                     Iterator<Langue> iterator = listLangue.iterator();
+                    final int indice = index;
                     while (iterator.hasNext()) {
                         if (l.equals(iterator.next()))
-                            comboLanguesParlees.getCheckModel().check(index);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    comboLanguesParlees.getCheckModel().check(indice);
+                                }
+                            });
                     }
                     index++;
                 }
@@ -344,6 +351,7 @@ public class CiviliteController implements Initializable {
         personne.setAmbition(comboAmbition.getValue());
         personne.setPotentiel(comboPotentiel.getValue());
         personne.setPhoto(civilitePhoto.getCurrentPhoto());
+        System.err.println(civilitePhoto.getCurrentPhoto());
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
@@ -364,13 +372,14 @@ public class CiviliteController implements Initializable {
                     Personne personne = new Personne();
                     setPersonneParameters(personne);
                     savePersonne(personne);
-                    personneTable.getItems().add(personne);
+                    StageManager.loadContent("/views/civilite/civilite.fxml");
+                    /*personneTable.getItems().add(personne);
                     ServiceproUtil.setDisable(false, btnModifier, btnSuppr);
                     disableAllComponents(true);
                     btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
                     this.stateBtnNouveau = 0;
                     profilController.setActive(false);
-                    posteController.setActive(false);
+                    posteController.setActive(false);*/
                     break;
             }
     }
@@ -432,12 +441,13 @@ public class CiviliteController implements Initializable {
                 case 1:
                     setPersonneParameters(personne);
                     updatePersonne(personne);
-                    disableAllComponents(true);
+                    StageManager.loadContent("/views/civilite/civilite.fxml");
+                    /*disableAllComponents(true);
                     btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
                     ServiceproUtil.setDisable(false, btnNouveau);
                     this.stateBtnModifier = 0;
                     profilController.setActive(false);
-                    posteController.setActive(false);
+                    posteController.setActive(false);*/
                     break;
             }
     }

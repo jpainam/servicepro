@@ -2,7 +2,6 @@ package com.cfao.app.model;
 
 import com.cfao.app.beans.User;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
@@ -28,6 +27,7 @@ public class UserModel extends Model<User>{
     public boolean isAuthorized(String login, String pwd){
         Session session = getCurrentSession();
         try {
+            session.beginTransaction();
             Criteria criteria = session.createCriteria(User.class);
             Criterion loginCriterion = Restrictions.eq("login", login);
             Criterion pwdCriterion = Restrictions.eq("password", pwd);

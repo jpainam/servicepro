@@ -101,7 +101,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 //String url = ResourceBundle.getBundle("Bundle").getString("document.dir");
                 //openDocument(getClass().getResource(url + "documents.pdf").getPath());
 
-                Path path = Paths.get("documents").toAbsolutePath();
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
                 if(!path.toFile().exists()){
                     path.toFile().mkdir();
                 }

@@ -1,6 +1,5 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Main;
 import com.cfao.app.beans.Support;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
@@ -20,7 +19,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.ResourceBundle;
@@ -50,21 +48,21 @@ public class FormationSupportDialogController extends AnchorPane implements Init
     }
 
     public Support getSupport() {
-       if(txtCodeSupport.getText().isEmpty() || txtTitreSupport.getText().isEmpty() || fileStatus.getText().isEmpty()){
-           if(supportTable.getSelectionModel().getSelectedItem() == null){
-               AlertUtil.showSimpleAlert("Information", "Veuillez choisir un support ou remplir tous les champs nécessaires");
-           }else{
-               return supportTable.getSelectionModel().getSelectedItem();
-           }
-       }else{
-           if(this.destination != null) {
-               Support support = new Support();
-               support.setCode(txtCodeSupport.getText());
-               support.setLien(destination);
-               support.setTitre(txtTitreSupport.getText());
-               return support;
-           }
-       }
+        if (txtCodeSupport.getText().isEmpty() || txtTitreSupport.getText().isEmpty() || fileStatus.getText().isEmpty()) {
+            if (supportTable.getSelectionModel().getSelectedItem() == null) {
+                AlertUtil.showSimpleAlert("Information", "Veuillez choisir un support ou remplir tous les champs nécessaires");
+            } else {
+                return supportTable.getSelectionModel().getSelectedItem();
+            }
+        } else {
+            if (this.destination != null) {
+                Support support = new Support();
+                support.setCode(txtCodeSupport.getText());
+                support.setLien(destination);
+                support.setTitre(txtTitreSupport.getText());
+                return support;
+            }
+        }
         return null;
     }
 
@@ -102,13 +100,14 @@ public class FormationSupportDialogController extends AnchorPane implements Init
             File file = fileChooser.showOpenDialog(currentStage);
             if (file != null) {
                 Path from = FileSystems.getDefault().getPath(file.getPath());
-                destination = ResourceBundle.getBundle("Bundle").getString("document.dir");
-                URI uri = new URI(destination + Main.DS + file.getName());
-                Path to = Paths.get(uri.getPath());
-                if(to.getParent() == null){
-                    Files.createDirectories(to.getParent());
+                Path to = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+                if (!to.toFile().exists()) {
+                    to.toFile().mkdir();
                 }
-                Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+
+                String chemin = to.toString() + File.separator + file.getName();
+
+                Files.copy(from, Paths.get(chemin), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
                 fileStatus.setText(file.getName());
             }
         } catch (Exception ex) {

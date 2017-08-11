@@ -5,21 +5,19 @@ import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.ProgressIndicatorUtil;
 import com.cfao.app.util.SearchBox;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import org.controlsfx.control.CheckListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,32 +26,30 @@ import java.util.ResourceBundle;
  * Created by JP on 6/21/2017.
  */
 public class AccueilController implements Initializable {
-    public CheckListView<String> formationListView = new CheckListView<>();
-    public TableView participantTable = new TableView();
-    public StackPane overalPerformance;
-    public StackPane participantPerformance;
-    public TableColumn participantNom = new TableColumn("Nom/Name");
-    public TableColumn participantMatricule = new TableColumn("Matricule");
-    public SearchBox searchBox1 = new SearchBox();
-    public SearchBox searchBox2 = new SearchBox();
-    public VBox formationBox;
-    public VBox participantBox;
+    public TableView<Personne> personneTable;
+    public VBox participantPerformance;
+    public TableColumn<Personne, String> nomPersonneColumn;
+    public TableColumn<Personne, String> matriculePersonneColumn;
 
+    public SearchBox searchBox = new SearchBox();
+
+    public StackPane personneStackPane;
+    public TableColumn societePersonneColumn;
+    public TableColumn groupePersonneColumn;
+    public TableColumn sectionPersonneColumn;
+    public TableColumn telephonePersonneColumn;
+
+    public VBox reserchePanel;
     PieChart.Data passedChart, failedChart, averageChart;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Region veil = new Region();
-        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
-        ProgressIndicator p = new ProgressIndicator();
-        p.setMaxSize(150, 150);
 
-        overalPerformance.getChildren().add(createChartFormation());
         participantPerformance.getChildren().add(createChartPersonnel());
-        createFormationList();
-        createParticipantTable();
+
+        initComponents();
 
         // Use binding to be notified whenever the data source chagnes
         /*Task<ObservableList<DailySales>> task = new GetDailySalesTask();
@@ -69,7 +65,7 @@ public class AccueilController implements Initializable {
 
     }
 
-    protected void createFormationList() {
+    /*protected void createFormationList() {
         Label label = new Label("Formations : ");
         HBox reserchePanel = new HBox();
         HBox.setHgrow(searchBox1, Priority.ALWAYS);
@@ -97,7 +93,7 @@ public class AccueilController implements Initializable {
             formationListView.setItems(task.getValue());
         });
         */
-        String[] formations = {"CFAO Academy", "JCB Distance Learning", "JCB JDS","Introduction conduite engins",
+        /*String[] formations = {"CFAO Academy", "JCB Distance Learning", "JCB JDS","Introduction conduite engins",
                 "Mécanique de base CFAO Academy", "Niveau Initial CFAO Academy (4 modules)"};
         final ObservableList<String> strings = FXCollections.observableArrayList();
         for (int i = 0; i < formations.length; i++) {
@@ -111,7 +107,7 @@ public class AccueilController implements Initializable {
             }
         });*/
 
-        formationListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+        /*formationListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
             public void onChanged(ListChangeListener.Change<? extends String> c) {
                 System.out.println(formationListView.getCheckModel().getCheckedItems());
             }
@@ -121,23 +117,16 @@ public class AccueilController implements Initializable {
         formationBox.setSpacing(10);
         formationBox.getChildren().addAll(reserchePanel, formationListView);
     }
+    */
 
+    private void initComponents() {
+        HBox.setHgrow(searchBox, Priority.ALWAYS);
+        searchBox.setMaxWidth(Double.MAX_VALUE);
+        reserchePanel.getChildren().addAll(new Label("Civilités "), searchBox);
 
-    private void createParticipantTable() {
-        Label label = new Label("Participants : ");
-        HBox reserchePanel = new HBox();
-        HBox.setHgrow(searchBox2, Priority.ALWAYS);
-        reserchePanel.setSpacing(10);
-        HBox.setMargin(reserchePanel, new Insets(5, 5, 5, 5));
-        searchBox2.setMaxWidth(Double.MAX_VALUE);
-        reserchePanel.setMaxWidth(Double.MAX_VALUE);
-        reserchePanel.getChildren().addAll(label, searchBox2);
+        nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
+        matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
 
-        participantNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        participantMatricule.setCellValueFactory(new PropertyValueFactory<>("matricule"));
-        participantTable.getColumns().addAll(participantNom, participantMatricule);
-        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        VBox.setVgrow(participantTable, Priority.ALWAYS);
         PersonneModel personneModel = new PersonneModel();
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
             @Override
@@ -147,12 +136,8 @@ public class AccueilController implements Initializable {
 
         };
         new Thread(task).start();
-        participantTable.itemsProperty().bind(task.valueProperty());
-        StackPane stack = new StackPane(participantTable);
-        ProgressIndicatorUtil.show(stack, task);
-        participantBox.setPadding(new Insets(5, 5, 5, 5));
-        participantBox.setSpacing(10);
-        participantBox.getChildren().addAll(reserchePanel, stack);
+        personneTable.itemsProperty().bind(task.valueProperty());
+        ProgressIndicatorUtil.show(personneStackPane, task);
     }
 
 
@@ -161,12 +146,12 @@ public class AccueilController implements Initializable {
 
         PieChart pie = new PieChart(
                 FXCollections.observableArrayList(
-                        passedChart = new PieChart.Data("Réussit/Passed", 20),
-                        failedChart = new PieChart.Data("Echoué/Failed", 30),
-                        averageChart = new PieChart.Data("Moyen/Average", 10)
+                        passedChart = new PieChart.Data("Certifiée", 20),
+                        failedChart = new PieChart.Data("A Certifier", 30),
+                        averageChart = new PieChart.Data("En cours", 10)
                 ));
         //((Parent) pie).getStylesheets().add(drilldownCss);
-        pie.setTitle("Performance par participant / Participant performance");
+        pie.setTitle("Rapport des compétence de Jean-Paul Dupond");
 
         setDrilldownData(pie, passedChart, "a");
         setDrilldownData(pie, failedChart, "b");
@@ -174,7 +159,7 @@ public class AccueilController implements Initializable {
         return pie;
     }
 
-    protected AreaChart<Number, Number> createChartFormation() {
+    /*protected AreaChart<Number, Number> createChartFormation() {
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis, yAxis);
@@ -197,6 +182,7 @@ public class AccueilController implements Initializable {
         }
         return ac;
     }
+    */
 
     private void setDrilldownData(final PieChart pie, PieChart.Data data, final String labelPrefix) {
         pie.setTitle("Performance par formation");
@@ -211,4 +197,5 @@ public class AccueilController implements Initializable {
             }
         });
     }
+
 }

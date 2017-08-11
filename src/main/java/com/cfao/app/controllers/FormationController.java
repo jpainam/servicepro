@@ -246,7 +246,8 @@ public class FormationController implements Initializable {
                 public void handle(WorkerStateEvent event) {
                     if (task.getValue()) {
                         ServiceproUtil.notify("Ajout OK");
-                        buildTable();
+                        formationTable.getItems().add(formation);
+                        formationTable.getSelectionModel().select(formation);
                     } else {
                         ServiceproUtil.notify("Erreur d'ajout");
                     }
@@ -314,7 +315,8 @@ public class FormationController implements Initializable {
                 task.setOnSucceeded(event -> {
                     if (task.getValue()) {
                         ServiceproUtil.notify("Suppression OK");
-                        buildTable();
+                        formationTable.getItems().remove(formation);
+                        StageManager.loadContent("/views/formation/formation.fxml");
                     } else {
                         ServiceproUtil.notify("Erreur de suppression");
                     }

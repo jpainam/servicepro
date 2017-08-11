@@ -170,16 +170,9 @@ public class CompetenceController implements Initializable{
         }else if(competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)){
             chkCompetence.setSelected(true);
         }
-        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
-            @Override
-            protected ObservableList<Formation> call() throws Exception {
-                return FXCollections.observableArrayList(new CompetenceModel().getFormationByCompetence(competence));
-            }
-        };
-        ProgressIndicatorUtil.show(formationStackPane, task);
-        formationTable.itemsProperty().bind(task.valueProperty());
+
+        formationTable.setItems(FXCollections.observableArrayList(competence.getFormations()));
         profilTable.setItems(FXCollections.observableArrayList(competence.getProfils()));
-        new Thread(task).start();
     }
 
     private  void buildPersonneTable(Competence competence){
