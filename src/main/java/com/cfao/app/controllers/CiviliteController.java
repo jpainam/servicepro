@@ -300,29 +300,31 @@ public class CiviliteController implements Initializable {
     }
 
     private void updateLangue(List<Langue> listLangue) {
-        Task<Void> task = new Task<Void>() {
+        comboLanguesParlees.getCheckModel().clearChecks();
+        Task<int[]> task = new Task<int[]>() {
             @Override
-            protected Void call() throws Exception {
-                comboLanguesParlees.getCheckModel().clearChecks();
-                int index = 0;
+            protected int[] call() throws Exception {
+                int[] tab = new int[comboLanguesParlees.getItems().size()];
+                int index = 0, i = 0;
                 for (Langue l : comboLanguesParlees.getItems()) {
                     Iterator<Langue> iterator = listLangue.iterator();
-                    final int indice = index;
                     while (iterator.hasNext()) {
-                        if (l.equals(iterator.next()))
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    comboLanguesParlees.getCheckModel().check(indice);
-                                }
-                            });
+                        if (l.equals(iterator.next())) {
+                            tab[i] = index;
+                            i++;
+                        }
                     }
                     index++;
                 }
-                return null;
+                return tab;
             }
         };
         new Thread(task).start();
+        task.setOnSucceeded(event -> {
+            Platform.runLater(() -> {
+                comboLanguesParlees.getCheckModel().checkIndices(task.getValue());
+            });
+        });
     }
 
     private void setPersonneParameters(Personne personne) {

@@ -44,7 +44,7 @@
                             <addClasspath>true</addClasspath>
                             <!-- Utiliser si les libraries doivent aller dans un repertoir lib -->
                             <!-- classpathPrefix>lib/</classpathPrefix -->
-                            <mainClass>com.cfao.app.Main</mainClass>
+                            <mainClass>com.cfao.app.Login</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
