@@ -1,7 +1,9 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,10 +32,10 @@ public class Niveau implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IDNIVEAU")
-    public int getIdniveau (){
+    public Integer getIdniveau (){
         return this.idniveau.get();
     }
-    public void setIdniveau(int niveau){
+    public void setIdniveau(Integer niveau){
         this.idniveau.set(niveau);
     }
 
@@ -58,7 +60,7 @@ public class Niveau implements Serializable{
     public boolean equals(Object o) {
         if(o instanceof Niveau){
             Niveau niveau = (Niveau)o;
-            if(niveau.getIdniveau() == this.getIdniveau()){
+            if(niveau.getIdniveau().equals(this.getIdniveau())){
                 return true;
             }
         }

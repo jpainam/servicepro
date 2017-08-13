@@ -455,12 +455,17 @@ public class CiviliteController implements Initializable {
     }
 
     private void updatePersonne(Personne personne) {
+        personne.setProfilPersonnes(profilController.getItems());
+        for(ProfilPersonne profilPersonne : personne.getProfilPersonnes()){
+            profilPersonne.getId().setPersonne(personne.getIdpersonne());
+        }
+        personne.setPostes(posteController.getItems());
+        for(Poste poste : personne.getPostes()){
+            poste.setPersonne(personne);
+        }
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                personne.setProfilPersonnes(profilController.getItems());
-                personne.setPostes(posteController.getItems());
-                System.err.println(personne.getPostes());
                 PersonneModel personneModel = new PersonneModel();
                 if (personneModel.update(personne)) {
                     return true;

@@ -8,7 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "competences"
-        , catalog = "servicepro"
 )
 public class Competence implements java.io.Serializable {
 
@@ -66,7 +65,7 @@ public class Competence implements java.io.Serializable {
 
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="profil_competence", catalog="servicepro", joinColumns = {
+    @JoinTable(name="profil_competence",  joinColumns = {
             @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PROFIL", nullable=false, updatable=false) })
     public List<Profil> getProfils() {
@@ -78,7 +77,7 @@ public class Competence implements java.io.Serializable {
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "formation_competence", catalog = "servicepro", joinColumns = {
+    @JoinTable(name = "formation_competence", joinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "FORMATION", nullable = false, updatable = false)})
     public List<Formation> getFormations() {
@@ -126,10 +125,6 @@ public class Competence implements java.io.Serializable {
     public int hashCode() {
         int result = idcompetence != null ? idcompetence.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (niveau != null ? niveau.hashCode() : 0);
-        result = 31 * result + (profils != null ? profils.hashCode() : 0);
-        result = 31 * result + (formations != null ? formations.hashCode() : 0);
         return result;
     }
 
@@ -151,7 +146,7 @@ public class Competence implements java.io.Serializable {
     }
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="qcm_competence", catalog="servicepro", joinColumns = {
+    @JoinTable(name="qcm_competence",  joinColumns = {
             @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="QCM", nullable=false, updatable=false) })
     public List<Qcm> getQcms() {

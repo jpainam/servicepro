@@ -10,7 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="support_formation"
-        ,catalog="servicepro"
 )
 public class SupportFormation  implements java.io.Serializable {
 

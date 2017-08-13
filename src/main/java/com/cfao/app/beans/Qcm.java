@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "qcm"
-        , catalog = "servicepro"
 )
 public class Qcm implements java.io.Serializable {
 
@@ -94,7 +93,7 @@ public class Qcm implements java.io.Serializable {
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "qcm_competence", catalog = "servicepro", joinColumns = {
+    @JoinTable(name = "qcm_competence",  joinColumns = {
             @JoinColumn(name = "QCM", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)})
     public List<Competence> getCompetences() {

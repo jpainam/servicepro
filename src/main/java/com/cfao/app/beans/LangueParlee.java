@@ -17,7 +17,6 @@ package com.cfao.app.beans;
  */
 @Entity
 @Table(name="langue_parlee"
-        ,catalog="servicepro"
 )
 public class LangueParlee  implements java.io.Serializable {
 

@@ -137,7 +137,7 @@ public class Formation {
     }
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="formateurs", catalog="servicepro", joinColumns = {
+    @JoinTable(name="formateurs",  joinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) })
     public List<Personnel> getPersonnels() {
@@ -175,7 +175,7 @@ public class Formation {
     */
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="formation_competence", catalog="servicepro", joinColumns = {
+    @JoinTable(name="formation_competence", joinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="COMPETENCE", nullable=false, updatable=false) })
     public List<Competence> getCompetences() {
@@ -189,7 +189,7 @@ public class Formation {
     }
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="formation_personne", catalog="servicepro", joinColumns = {
+    @JoinTable(name="formation_personne", joinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PERSONNE", nullable=false, updatable=false) })
     public List<Personne> getPersonnes() {

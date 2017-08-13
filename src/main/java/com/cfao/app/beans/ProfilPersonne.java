@@ -10,7 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="profil_personne"
-        ,catalog="servicepro"
 )
 public class ProfilPersonne  implements java.io.Serializable {
 
@@ -80,6 +79,34 @@ public class ProfilPersonne  implements java.io.Serializable {
 
     public ObjectProperty<Niveau> niveau() {
         return this.niveau;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProfilPersonne that = (ProfilPersonne) o;
+
+        if (id != null) {
+            return id.equals(that.id);
+        }return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfilPersonne{" +
+                "niveau=" + niveau +
+                ", personne=" + personne +
+                ", profil=" + profil +
+                '}';
     }
 }
 

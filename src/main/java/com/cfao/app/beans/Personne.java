@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Entity
 @Table(name="personnes"
-        ,catalog="servicepro"
 )
 public class Personne implements java.io.Serializable {
 
@@ -333,7 +332,7 @@ public class Personne implements java.io.Serializable {
     }
 
     @ManyToMany
-    @JoinTable(name="formation_personne", catalog="servicepro", joinColumns =
+    @JoinTable(name="formation_personne", joinColumns =
     @JoinColumn(name="PERSONNE", nullable=false, updatable=false) , inverseJoinColumns =
     @JoinColumn(name="FORMATION", nullable=false, updatable=false))
     public List<Formation> getFormations() {
@@ -403,5 +402,23 @@ public class Personne implements java.io.Serializable {
 
     public ObjectProperty<Societe> societe() {
         return societe;
+    }
+
+    @Column(name = "AUTRENOM")
+    public String getAutrenom() {
+        return autrenom.get();
+    }
+
+    public SimpleStringProperty autrenomProperty() {
+        return autrenom;
+    }
+
+    public void setAutrenom(String autrenom) {
+        this.autrenom.set(autrenom);
+    }
+
+    @Override
+    public String toString(){
+        return this.getNom() + " " + this.getPrenom();
     }
 }

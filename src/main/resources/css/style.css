@@ -270,7 +270,15 @@ JFOenix CSS
     -fx-cell-hover-color: #cce3f4;
     -fx-cell-focus-inner-border: #85b9de;
 }
-.notificationPane{
-    -fx-text-fill: red;
-    -fx-background-radius: 3,2,2,2;
+
+.table-row-cell:empty {
+    padding:0;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+.popOver{
+    margin:10;
+    padding:10;
 }

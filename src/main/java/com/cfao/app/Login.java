@@ -1,6 +1,9 @@
 package com.cfao.app;
 
 
+import com.cfao.app.model.PersonneModel;
+import com.cfao.app.util.PreloaderUtil;
+import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +16,15 @@ import java.util.ResourceBundle;
 
 
 public class Login extends Application {
+
+    @Override
+    public void init() throws Exception {
+        super.init();
+        // Initialiser la base de donnees
+        new PersonneModel().getList();
+        // verification d'une mise a jour
+        /** TO DO list */
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -39,7 +51,7 @@ public class Login extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        LauncherImpl.launchApplication(Login.class, PreloaderUtil.class, args);
     }
 
 }

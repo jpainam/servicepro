@@ -1,18 +1,19 @@
 package com.cfao.app.beans;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by JP on 6/10/2017.
  */
 @Entity
 @Table(name="pays"
-        ,catalog="servicepro"
 )
 public class Pays {
     private SimpleIntegerProperty idpays = new SimpleIntegerProperty();

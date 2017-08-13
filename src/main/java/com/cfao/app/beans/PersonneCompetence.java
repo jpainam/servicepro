@@ -19,7 +19,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="personne_competence"
-        ,catalog="servicepro"
 )
 public class PersonneCompetence  implements java.io.Serializable {
 

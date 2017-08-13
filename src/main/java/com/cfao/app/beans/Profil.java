@@ -14,7 +14,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "profils"
-        , catalog = "servicepro"
 )
 public class Profil implements java.io.Serializable {
 
@@ -54,7 +53,7 @@ public class Profil implements java.io.Serializable {
     }
 
 
-    @Column(name = "ABBREVIATION", length = 15)
+    @Column(name = "ABBREVIATION", length = 50)
     public String getAbbreviation() {
         return this.abbreviation.get();
     }
@@ -92,7 +91,7 @@ public class Profil implements java.io.Serializable {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "profil_competence", catalog = "servicepro", joinColumns = {
+    @JoinTable(name = "profil_competence",  joinColumns = {
             @JoinColumn(name = "PROFIL", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)})
     public List<Competence> getCompetences() {
@@ -118,6 +117,27 @@ public class Profil implements java.io.Serializable {
     @Override
     public String toString() {
         return getLibelle();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Profil profil = (Profil) o;
+        if(profil.getIdprofil().equals(profil.getIdprofil())){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idprofil != null ? idprofil.hashCode() : 0;
+        result = 31 * result + (abbreviation != null ? abbreviation.hashCode() : 0);
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+
+        return result;
     }
 }
 

@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="langue"
-        ,catalog="servicepro"
+
 )
 public class Langue {
 

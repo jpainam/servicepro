@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="competence_certification"
-        ,catalog="servicepro"
+
 )
 public class CompetenceCertification implements java.io.Serializable {
 

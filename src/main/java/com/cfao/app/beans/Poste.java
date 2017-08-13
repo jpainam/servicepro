@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name="postes"
-        ,catalog="servicepro"
 )
 public class Poste implements java.io.Serializable {
 

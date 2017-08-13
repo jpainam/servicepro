@@ -17,7 +17,6 @@ import static javax.persistence.GenerationType.AUTO;
  */
 @Entity
 @Table(name="etat_formation"
-        ,catalog="servicepro"
 )
 public class EtatFormation  implements java.io.Serializable {
 

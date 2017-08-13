@@ -3,9 +3,9 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.Constante;
 import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.TableViewResizeUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
@@ -43,7 +43,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     public TableColumn<ProfilPersonne, Profil> columnProfil;
     public TableColumn<ProfilPersonne, Niveau> columnNiveau;
     TableColumn<Competence, Competence> intituleColum = new TableColumn<>("Libellé de la compétence");
-    TableView<Competence> competenceTable = new TableView<>();
+    TableViewResizeUtil<Competence> competenceTable = new TableViewResizeUtil<>();
     TableColumn<Competence, Boolean> encoursColumn = new TableColumn<>("En cours");
     TableColumn<Competence, Boolean> acertifierColumn = new TableColumn<>("A certifier");
     TableColumn<Competence, Boolean> certifierColumn = new TableColumn<>("Certifiée");
@@ -57,21 +57,23 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
 
     PopOver profilPopOver = new PopOver();
 
-    public CiviliteProfilController(Personne personne){
+    public CiviliteProfilController(Personne personne) {
         this();
         this.personne = personne;
 
     }
-    public CiviliteProfilController(){
-        try{
+
+    public CiviliteProfilController() {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/civilite/profil.fxml"));
             loader.setRoot(this);
             loader.setController(this);
             loader.load();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         columnProfil.setCellValueFactory(param -> param.getValue().profil());
@@ -94,13 +96,15 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         tableProfil.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             buildCompetencePopover(newValue);
         });
+
+
     }
 
     private void buildCompetencePopover(ProfilPersonne profilPersonne) {
-        if(profilPersonne != null){
+        if (profilPersonne != null) {
             List<PersonneCompetence> competences = personne.getPersonneCompetences();
             encoursColumn.setCellValueFactory(param -> {
-                Competence competence = param.getValue();
+                /*Competence competence = param.getValue();
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
@@ -108,38 +112,44 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
                         return  new SimpleBooleanProperty(true);
                     }
                     i++;
-                }
+                }*/
                 return new SimpleBooleanProperty(false);
             });
             acertifierColumn.setCellValueFactory(param -> {
-                Competence competence = param.getValue();
+                /*Competence competence = param.getValue();
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
                     if(co.equals(competence) && !co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)){
                         return new SimpleBooleanProperty(false);
                     }
-                }
+                }*/
                 return new SimpleBooleanProperty(true);
             });
             certifierColumn.setCellValueFactory(param -> {
-                Competence competence = param.getValue();
+                /*Competence competence = param.getValue();
                 int i = 0;
                 while(i < competences.size()){
                     PersonneCompetence co = competences.get(i);
                     if(co.equals(competence) && co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)){
                         return new SimpleBooleanProperty(true);
                     }
-                }
+                }*/
                 return new SimpleBooleanProperty(false);
             });
+
             competenceTable.setItems(FXCollections.observableArrayList(profilPersonne.getProfil().getCompetences()));
+            competenceTable.setVisibleRowCount(profilPersonne.getProfil().getCompetences().size() + 2);
+            competenceTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             profilPopOver.setContentNode(competenceTable);
+            intituleColum.setMinWidth(300);
+            competenceTable.setMinWidth(600);
             profilPopOver.show(tableProfil);
+
         }
     }
 
-    public ObservableList<ProfilPersonne> getItems(){
+    public ObservableList<ProfilPersonne> getItems() {
         return this.tableProfil.getItems();
     }
 
@@ -160,7 +170,18 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
             Optional<ProfilPersonne> result = dialog.showAndWait();
             result.ifPresent(profilPersonne -> {
                 if (profilPersonne != null) {
-                    tableProfil.getItems().add(profilPersonne);
+                    boolean exiteDeja = false;
+                    int i = 0;
+                    while (!exiteDeja && i < tableProfil.getItems().size()) {
+                        ProfilPersonne pp = tableProfil.getItems().get(i);
+                        if (pp.getProfil().equals(profilPersonne.getProfil()) && pp.getNiveau().equals(profilPersonne.getNiveau())) {
+                            exiteDeja = true;
+                        }
+                        i++;
+                    }
+                    if (!exiteDeja) {
+                        tableProfil.getItems().add(profilPersonne);
+                    }
                 } else {
                     ServiceproUtil.notify("Erreur d'ajout de profil");
                 }
@@ -180,7 +201,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     }
 
     public void buildProfil() {
-        if(personne != null) {
+        if (personne != null) {
             tableProfil.setItems(FXCollections.observableArrayList(personne.getProfilPersonnes()));
         }
     }
@@ -191,22 +212,23 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     }
 
 
-    class DialogProfilController extends  AnchorPane implements  Initializable{
+    class DialogProfilController extends AnchorPane implements Initializable {
         @FXML
         public ComboBox<Profil> comboProfil;
         @FXML
         public ComboBox<Niveau> comboLevel;
 
-        public DialogProfilController(){
-            try{
+        public DialogProfilController() {
+            try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/civilite/dialog/dialogProfil.fxml"));
                 loader.setRoot(this);
                 loader.setController(this);
                 loader.load();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 AlertUtil.showErrorMessage(ex);
             }
         }
+
         @Override
         public void initialize(URL location, ResourceBundle resources) {
             Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
@@ -220,19 +242,22 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
             };
             new Thread(task).start();
             task.setOnSucceeded(event -> {
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     comboProfil.setItems(map.get("profil"));
                     comboLevel.setItems(map.get("niveau"));
                 });
 
             });
         }
-        public ProfilPersonne getData(){
-            if(comboLevel.getValue() != null && comboProfil.getValue() != null) {
+
+        public ProfilPersonne getData() {
+            if (comboLevel.getValue() != null && comboProfil.getValue() != null) {
                 ProfilPersonne profilPersonne = new ProfilPersonne();
                 profilPersonne.setNiveau(comboLevel.getSelectionModel().getSelectedItem());
+                profilPersonne.getId().setNiveau(comboLevel.getSelectionModel().getSelectedItem().getIdniveau());
                 profilPersonne.setProfil(comboProfil.getSelectionModel().getSelectedItem());
-                if(personne != null) {
+                profilPersonne.getId().setProfil(comboProfil.getSelectionModel().getSelectedItem().getIdprofil());
+                if (personne != null) {
                     profilPersonne.setPersonne(personne);
                 }
                 return profilPersonne;

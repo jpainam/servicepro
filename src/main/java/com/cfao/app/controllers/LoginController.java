@@ -1,8 +1,6 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Main;
-import com.cfao.app.model.FormationModel;
-import com.cfao.app.model.PersonneModel;
 import com.cfao.app.model.UserModel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ServiceproUtil;
@@ -65,9 +63,6 @@ public class LoginController implements Initializable {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                // Charger une certaine quantite de donnee
-                new PersonneModel().getList();
-                new FormationModel().getList();
                 if (userModel.isAuthorized(login, pwd)) return true;
                 else return false;
             }

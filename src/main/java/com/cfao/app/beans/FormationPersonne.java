@@ -13,7 +13,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="formation_personne"
-        ,catalog="servicepro"
 )
 public class FormationPersonne  implements java.io.Serializable {
 

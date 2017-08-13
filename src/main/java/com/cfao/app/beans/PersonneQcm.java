@@ -14,7 +14,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "personne_qcm"
-        , catalog = "servicepro"
 )
 public class PersonneQcm implements java.io.Serializable {
 

@@ -69,7 +69,7 @@
                       </MenuBar>
                   </children>
               </StackPane>
-            <BorderPane prefHeight="30.0" prefWidth="910.0">
+            <BorderPane prefHeight="30.0" prefWidth="910.0" style="-fx-background-color: white;">
                <left>
                       <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </left>

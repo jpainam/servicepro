@@ -2,7 +2,6 @@ package com.cfao.app.util;
 
 import javafx.application.Platform;
 import org.controlsfx.control.Notifications;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -30,6 +29,7 @@ public class HibernateUtil {
                 public void run() {
                     Notifications.create().title("Connexion à la Base de données")
                             .text("Impossible d'ouvrir une connexion à la Base de données ").showError();
+                    AlertUtil.showErrorMessage(ex);
                 }
             });
             ex.printStackTrace();

@@ -11,7 +11,6 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "qcm_type"
-        , catalog = "servicepro"
 )
 public class QcmType implements java.io.Serializable {
 

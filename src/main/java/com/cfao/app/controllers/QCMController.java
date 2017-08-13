@@ -7,16 +7,17 @@ import com.cfao.app.beans.QcmType;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.*;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -54,6 +55,11 @@ public class QCMController implements Initializable {
     public StackPane competenceStackPane;
     private SearchBox searchBox = new SearchBox();
     public VBox vboxSearch;
+    public Tab tabPersonne;
+    public Tab tabDetails;
+
+    public QCMPersonneController personneController;
+
     public TableView<Qcm> qcmTable;
     public QCMController(){
 
@@ -83,6 +89,11 @@ public class QCMController implements Initializable {
         new Thread(task).start();
         task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
 
+        personneController = new QCMPersonneController();
+        tabPersonne.setContent(personneController);
+
+        ButtonUtil.detailsTab(tabDetails);
+        GlyphsDude.setIcon(tabPersonne, FontAwesomeIcon.USERS);
     }
 
     private void buildCompetenceTable(Qcm qcm) {
@@ -91,6 +102,8 @@ public class QCMController implements Initializable {
             txtBase.setText(qcm.getBase() + "");
             txtTitre.setText(qcm.getTitre());
             competenceTable.setItems(FXCollections.observableArrayList(qcm.getCompetences()));
+            personneController.setQcm(qcm);
+            personneController.buildPersonneTable();
         }
     }
 
@@ -115,17 +128,30 @@ public class QCMController implements Initializable {
         qcmTable.itemsProperty().bind(task.valueProperty());
         ProgressIndicatorUtil.show(qcmStackPane, task);
         new Thread(task).start();
-        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                AlertUtil.showErrorMessage(new Exception(task.getException()));
-            }
-        });
+        task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
 
         descriptionCompetenceColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
         connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         possedeCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        possedeCompetenceColumn.setCellValueFactory(param -> new SimpleBooleanProperty(true));
+
+        competenceColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue();
+            if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                return new SimpleBooleanProperty(true);
+            } else {
+                return new SimpleBooleanProperty(false);
+            }
+        });
+        connaissanceColumn.setCellValueFactory(param -> {
+            Competence competence = param.getValue();
+            if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                return new SimpleBooleanProperty(true);
+            } else {
+                return new SimpleBooleanProperty(false);
+            }
+        });
         numeroCompetenceColumn.setCellFactory(col -> {
             TableCell<Competence, Void> cell = new TableCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> {

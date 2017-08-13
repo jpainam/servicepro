@@ -5,10 +5,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import org.hibernate.annotations.MetaValue;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,7 +14,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name="groupes"
-        ,catalog="servicepro"
+
 )
 public class Groupe  implements java.io.Serializable {
 
