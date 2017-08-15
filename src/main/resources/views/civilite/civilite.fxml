@@ -114,7 +114,7 @@
                                                                             <children>
                                                                                 <StackPane fx:id="imageviewStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="102.0" prefWidth="127.0" style="-fx-padding: 5; -fx-background-radius: 10; -fx-background-color: firebrick; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
                                                                                     <children>
-                                                                                        <ImageView fx:id="imageview" fitHeight="105.0" fitWidth="111.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true" styleClass="civilite-photo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                                        <ImageView fx:id="imageview" fitHeight="105.0" fitWidth="111.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                                     </children>
                                                                                 </StackPane>
                                                                                 <VBox alignment="CENTER" spacing="10.0">

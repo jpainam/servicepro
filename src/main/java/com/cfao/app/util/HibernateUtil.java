@@ -16,7 +16,8 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory = null;
     private static ServiceRegistry serviceRegistry;
     private static final String HIBERNATE_CONFIG = "/hibernate.cfg.xml";
-    private static SessionFactory buildSessionFactory(){
+
+    private synchronized static SessionFactory buildSessionFactory(){
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
         try {
             Configuration configuration = new Configuration();
@@ -36,14 +37,14 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
-    public static SessionFactory getSessionFactory(){
+    public synchronized static SessionFactory getSessionFactory(){
         if(sessionFactory == null){
             sessionFactory = buildSessionFactory();
         }
         return sessionFactory;
 
     }
-    public static void shutdown(){
+    public synchronized static void shutdown(){
         getSessionFactory().close();
     }
 

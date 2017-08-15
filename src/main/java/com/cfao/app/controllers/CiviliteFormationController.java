@@ -1,12 +1,10 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
-import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,11 +16,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.util.FontPropertiesManager;
@@ -34,16 +34,21 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.ResourceBundle;
 
 /**
  * Created by JP on 7/25/2017.
  */
 public class CiviliteFormationController extends AnchorPane implements Initializable {
-    public TableColumn<Competence, Competence> intituleCompetenceColumn;
-    public TableColumn<Competence, CompetenceCertification> certificationCompetenceColumn;
+    public TableColumn<PersonneCompetence, Competence> intituleCompetenceColumn;
+    //public TableColumn<Competence, CompetenceCertification> certificationCompetenceColumn;
+    public TableColumn<PersonneCompetence, Boolean> encoursCompetenceColumn;
+    public TableColumn<PersonneCompetence, Boolean> certifieeCompetenceColumn;
+    public TableColumn<PersonneCompetence, Boolean> acertifierCompetenceColumn;
 
-    public TableView<Competence> competenceTable;
+    public TableView<PersonneCompetence> competenceTable;
+
     public Button btnPreviousCompetence;
     public Button btnNextCompetence;
     public Button btnPrintCompetence;
@@ -60,6 +65,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public StackPane competenceStackPane;
     public AnchorPane pdfContainer;
 
+    public Button btnSupprimerCompetence;
     private boolean editerCertification = false;
 
     private HashMap<Competence, CompetenceCertification> selectedItems;
@@ -95,6 +101,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
         createViewer(pdfContainer);
+        ButtonUtil.delete(btnSupprimerCompetence);
         formationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Formation>() {
             @Override
             public void changed(ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) {
@@ -102,7 +109,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 //openDocument(getClass().getResource(url + "documents.pdf").getPath());
 
                 Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
-                if(!path.toFile().exists()){
+                if (!path.toFile().exists()) {
                     path.toFile().mkdir();
                 }
                 openDocument(path.toString() + File.separator + "documents.pdf");
@@ -137,7 +144,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             ServiceproUtil.notify("Erreur dans le Thread combo Statut");
         });
 
-        competenceTable.setRowFactory(param -> {
+        /*competenceTable.setRowFactory(param -> {
             final TableRow<Competence> row = new TableRow<>();
             final Tooltip tooltip = new Tooltip();
             row.hoverProperty().addListener(observable -> {
@@ -149,126 +156,88 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 }
             });
             return row;
-        });
-
+        });*/
         codeFormationColumn.setCellValueFactory(param -> param.getValue().codeformationProperty());
         titreFormationColumn.setCellValueFactory(param -> param.getValue().titreProperty());
         datedebutFormationColumn.setCellValueFactory(param -> param.getValue().datedebutProperty());
         datedebutFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
         datefinFormationColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
         datefinFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
+        intituleCompetenceColumn.setCellValueFactory(param -> param.getValue().competence());
+        setColumnFactories();
+        encoursCompetenceColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
+        acertifierCompetenceColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
+        certifieeCompetenceColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
+    }
+
+    private void setColumnFactories() {
+        encoursCompetenceColumn.setCellFactory(param -> {
+            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
+            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
+                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
+                    pp.setEncours(newValue);
+                    if (newValue) {
+                        pp.setCertifiee(false);
+                        pp.setAcertifier(false);
+                    }
+                    cell.setItem(newValue);
+                }
+            });
+            return cell;
+        });
+        acertifierCompetenceColumn.setCellFactory(param -> {
+            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
+            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
+                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getIndex());
+                    pp.setAcertifier(newValue);
+                    if (newValue) {
+                        pp.setCertifiee(false);
+                        pp.setEncours(false);
+                    }
+                    cell.setItem(newValue);
+                }
+            });
+            return cell;
+        });
+        certifieeCompetenceColumn.setCellFactory(param -> {
+            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
+            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
+                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
+                    pp.setCertifiee(newValue);
+                    if (newValue) {
+                        pp.setEncours(false);
+                        pp.setAcertifier(false);
+                    }
+                    cell.setItem(newValue);
+                }
+            });
+            return cell;
+        });
+
 
     }
 
     public void buildFormation() {
-        //Competence table / competence a certifier
-        Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
-            @Override
-            protected ObservableList<Competence> call() throws Exception {
-                return FXCollections.observableArrayList(new CompetenceModel().getList());
-            }
-        };
-        competenceTable.itemsProperty().bind(task.valueProperty());
-        ProgressIndicatorUtil.show(competenceStackPane, task);
-        new Thread(task).start();
-
+        competenceTable.itemsProperty().bind(personne.personneCompetencesProperty());
         // Historique des formation
-        Task<ObservableList<Formation>> task2 = new Task<ObservableList<Formation>>() {
+        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
             protected ObservableList<Formation> call() throws Exception {
                 return FXCollections.observableArrayList(new FormationModel().getFormationsByPersonne(personne));
             }
         };
-        formationTable.itemsProperty().bind(task2.valueProperty());
-        ProgressIndicatorUtil.show(historiqueStackPane, task2);
-        new Thread(task2).start();
 
-        // Competence a certifier
-        Task<ObservableList<CompetenceCertification>> task1 = new Task<ObservableList<CompetenceCertification>>() {
-            @Override
-            protected ObservableList<CompetenceCertification> call() throws Exception {
-                return FXCollections.observableArrayList(new Model("CompetenceCertification").getList());
-            }
-        };
-        new Thread(task1).start();
-        intituleCompetenceColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
-        competenceTable.setRowFactory(new Callback<TableView<Competence>, TableRow<Competence>>() {
-            @Override
-            public TableRow<Competence> call(TableView<Competence> param) {
-                return new TableRow<Competence>() {
-                    @Override
-                    protected void updateItem(Competence item, boolean empty) {
-                        super.updateItem(item, empty);
-                        boolean trouver = false;
-                        if (item != null) {
-                            for (PersonneCompetence pc : personne.getPersonneCompetences()) {
-                                if (pc.getCompetence().equals(item)) {
-                                    trouver = true;
-                                    if (pc.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)) {
-                                        getStyleClass().add("row-certifie");
-                                    } else if (pc.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ENCOURS)) {
-                                        getStyleClass().add("row-encours");
-                                    } else {
-                                        getStyleClass().add("row-acertifier");
-                                    }
-                                }
-                            }
-                            if (!trouver) {
-                                getStyleClass().add("row-acertifier");
-                            }
-                        }
-                    }
-                };
-            }
-        });
-        selectedItems = new HashMap<>();
-        task1.setOnSucceeded(event -> {
-            certificationCompetenceColumn.setCellValueFactory(param -> {
-                Competence competence = param.getValue();
-                for (PersonneCompetence pc : personne.getPersonneCompetences()) {
-                    if (pc.getCompetence().equals(competence) && !pc.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)) {
-                        selectedItems.put(competence, pc.getCompetenceCertification());
-                        return new SimpleObjectProperty<>(pc.getCompetenceCertification());
-                    }
-                }
-                return new SimpleObjectProperty<>(new CompetenceCertification("AC", "A certifier"));
-            });
-            certificationCompetenceColumn.setCellFactory(ComboBoxTableCell.forTableColumn(task1.getValue()));
-            certificationCompetenceColumn.setOnEditCommit(event1 -> {
-                TablePosition<Competence, CompetenceCertification> pos = event1.getTablePosition();
-                CompetenceCertification certif = event1.getNewValue();
-                int row = pos.getRow();
-                Competence competence = event1.getTableView().getItems().get(row);
-                if (certif.getCertification().equals(Constante.COMPETENCE_ENCOURS) || certif.getCertification().equals(Constante.COMPETENCE_CERTIFIEE)) {
-                    selectedItems.put(competence, certif);
-                } else {
-                    selectedItems.remove(competence);
-                }
-            });
-        });
-        task2.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                ServiceproUtil.notify("Erreur dans le thread d'historique de formation");
-                task2.getException().printStackTrace();
-                System.err.println(task2.getException());
-            }
-        });
-        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                ServiceproUtil.notify("Erreur dans le thread de competence");
-                task.getException().printStackTrace();
-                System.err.println(task.getException());
-            }
-        });
-        task1.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                ServiceproUtil.notify("Erreur dans le thread de certification");
-                task1.getException().printStackTrace();
-                System.err.println(task1.getException());
-            }
+        formationTable.itemsProperty().bind(task.valueProperty());
+        ProgressIndicatorUtil.show(historiqueStackPane, task);
+        new Thread(task).start();
+
+        task.setOnFailed(event -> {
+            ServiceproUtil.notify("Erreur dans le thread de certification");
+            task.getException().printStackTrace();
+            System.err.println(task.getException());
         });
     }
 
@@ -276,32 +245,18 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public void editerCertificationCompetence(ActionEvent event) {
         if (personne != null) {
             if (!editerCertification) {
-                Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
-                    @Override
-                    protected ObservableList<Competence> call() throws Exception {
-                        return FXCollections.observableArrayList(new CompetenceModel().getList());
-                    }
-                };
-                new Thread(task).start();
-                btnEditerCertification.setText(ResourceBundle.getBundle("Bundle").getString("button.save.fr"));
                 competenceTable.setEditable(true);
+                btnEditerCertification.setText(ResourceBundle.getBundle("Bundle").getString("button.save.fr"));
                 editerCertification = true;
             } else {
 
-                List<PersonneCompetence> competenceList = new ArrayList<>();
-                personne.getPersonneCompetences().clear();
-                for (Map.Entry<Competence, CompetenceCertification> entry : selectedItems.entrySet()) {
-                    PersonneCompetence pc = new PersonneCompetence();
-                    pc.setPersonne(personne);
-                    pc.setCompetence(entry.getKey());
-                    pc.setCompetenceCertification(entry.getValue());
-                    competenceList.add(pc);
-                    personne.getPersonneCompetences().add(pc);
-                }
+                /*for(PersonneCompetence pp : competenceTable.getItems()){
+                    System.err.println(pp.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
+                }*/
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-                        return new PersonneModel().saveCompetence(competenceList);
+                        return new PersonneModel().save(personne);
                     }
                 };
                 new Thread(task).start();
@@ -315,14 +270,12 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                         ServiceproUtil.notify("Une erreur de sauvegarde s'est produite");
                     }
                 });
-                task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-                        ServiceproUtil.notify("Erreur dans le Thread de formation certification");
-                        task.getException().printStackTrace();
-                        System.err.println(task.getException());
-                    }
+                task.setOnFailed(event12 -> {
+                    ServiceproUtil.notify("Erreur dans le Thread de formation certification");
+                    task.getException().printStackTrace();
+                    System.err.println(task.getException());
                 });
+
             }
         }
     }
@@ -336,16 +289,49 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public void printCompetenceAction(ActionEvent event) {
     }
 
-    public void filterCertification(ActionEvent event) {
-        CompetenceCertification certification = comboStatut.getValue();
-        if (certification != null) {
-            Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+    public void supprimerCompetenceAction(ActionEvent event) {
+        PersonneCompetence pp = competenceTable.getSelectionModel().getSelectedItem();
+        if (pp != null) {
+            Task<Boolean> task = new Task<Boolean>() {
                 @Override
-                protected ObservableList<Competence> call() throws Exception {
-                    return FXCollections.observableArrayList(new CompetenceModel().getCompetencesByCertification(personne, certification));
+                protected Boolean call() throws Exception {
+                    return new Model<PersonneCompetence>().delete(pp);
                 }
             };
             new Thread(task).start();
+            task.setOnSucceeded(event1 -> {
+                if (task.getValue()) {
+                    competenceTable.getItems().remove(pp);
+                    setColumnFactories();
+                } else {
+                    ServiceproUtil.notify("Erreur de suppression");
+                }
+            });
+            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    task.getException().printStackTrace();
+                    System.err.println(task.getException());
+
+                }
+            });
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir la compétence à retirer de la civilité");
+        }
+    }
+
+    public void filterCertification(ActionEvent event) {
+        CompetenceCertification certification = comboStatut.getValue();
+        if (certification != null) {
+            Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
+                @Override
+                protected ObservableList<PersonneCompetence> call() throws Exception {
+                    return FXCollections.observableArrayList(new PersonneModel().getCompetencesByCertification(personne, certification));
+                }
+            };
+            new Thread(task).start();
+            setColumnFactories();
+
             competenceTable.itemsProperty().bind(task.valueProperty());
             task.setOnFailed(new EventHandler<WorkerStateEvent>() {
                 @Override
@@ -389,6 +375,8 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                     properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ANNOTATION, "false");
 
                     properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ZOOM, "true");
+                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SEARCH, "false");
+                    properties.set(PropertiesManager.PROPERTY_HIDE_UTILITYPANE, "false");
 
 
                     swingController.getDocumentViewController().setAnnotationCallback(

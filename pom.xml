@@ -46,6 +46,11 @@
                             <!-- classpathPrefix>lib/</classpathPrefix -->
                             <mainClass>com.cfao.app.Login</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>photos/</Class-Path>
+                            <Class-Path>documents/</Class-Path>
+                            <Class-Path>data/</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>

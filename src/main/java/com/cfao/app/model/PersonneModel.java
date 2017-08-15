@@ -1,13 +1,17 @@
 package com.cfao.app.model;
 
+import com.cfao.app.beans.CompetenceCertification;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.util.AlertUtil;
 import javafx.application.Platform;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,5 +63,25 @@ public class PersonneModel extends Model<Personne> {
             }
         }
         return false;
+    }
+
+    public List<PersonneCompetence> getCompetencesByCertification(Personne personne, CompetenceCertification certification) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
+                    Restrictions.eq("competenceCertification", certification)
+            ).add(Restrictions.eq("personne", personne));
+
+            return criteria.list();
+        } catch (Exception ex) {
+            Platform.runLater(() -> AlertUtil.showErrorMessage(ex));
+            ex.printStackTrace();
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return new ArrayList<>();
     }
 }

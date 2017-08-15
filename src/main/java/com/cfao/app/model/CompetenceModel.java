@@ -158,6 +158,29 @@ public class CompetenceModel extends Model<Competence> {
         return null;
     }
 
+    public List<PersonneCompetence> getCompetencePersonneByProfil(ProfilPersonne profilPersonne) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
+                    Restrictions.in("competence", profilPersonne.getProfil().getCompetences())
+            ).add(Restrictions.eq("personne", profilPersonne.getPersonne()));
+            return  criteria.list();
+        }catch (Exception ex){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    AlertUtil.showErrorMessage(ex);
+                }
+            });
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return null;
+    }
+
     /*public List<ProfilCompetence> getProfilByCompetence(Competence competence) {
         Session session = getCurrentSession();
         try{

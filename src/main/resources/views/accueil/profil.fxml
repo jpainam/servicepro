@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="446.0" prefWidth="270.0" style="-fx-background-color: white; -fx-background-radius: 3; -fx-border-color: #3C8DBC; -fx-border-radius: 3; -fx-border-width: 4 0 0 0; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+      <children>
+          <Separator layoutX="13.0" layoutY="184.0" prefHeight="4.0" prefWidth="244.0" />
+          <Label fx:id="lblNom" alignment="TOP_LEFT" layoutX="11.0" layoutY="106.0" prefHeight="25.0" prefWidth="254.0" style="-fx-text-fill: #162E3B; -fx-font-size: 12; -fx-font-weight: bold;" text="Noms &amp; Prénoms">
+         <font>
+            <Font size="10.0" />
+         </font></Label>
+          <Separator layoutX="13.0" layoutY="213.0" prefHeight="4.0" prefWidth="244.0" />
+          <Separator layoutX="14.0" layoutY="241.0" prefHeight="4.0" prefWidth="244.0" />
+          <Separator layoutX="14.0" layoutY="273.0" prefHeight="4.0" prefWidth="244.0" />
+          <ImageView fx:id="photoView" fitHeight="102.0" fitWidth="124.0" layoutX="79.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                  <Image url="@../../photos/avatar_defaut.png" />
+              </image>
+          </ImageView>
+          <Label layoutX="14.0" layoutY="191.0" prefHeight="17.0" prefWidth="118.0" text="Formations suivies" />
+          <Label layoutX="14.0" layoutY="221.0" prefHeight="17.0" prefWidth="146.0" text="Formations souhaitées" />
+          <Label layoutX="14.0" layoutY="249.0" prefHeight="17.0" prefWidth="94.0" text="Tests" />
+          <Label fx:id="lblFormationSuivie" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="196.0" layoutY="191.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
+          <Label fx:id="lblFormationSouhaitee" alignment="CENTER_RIGHT" layoutX="196.0" layoutY="221.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
+          <Label fx:id="lblTest" alignment="CENTER_RIGHT" layoutX="196.0" layoutY="250.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
+          <Button fx:id="btnPrintProfil" layoutX="75.0" layoutY="284.0" onAction="#printProfilAction" prefHeight="30.0" prefWidth="124.0" text="Imprimer profil" textFill="WHITE">
+              <font>
+                  <Font name="Roboto Medium" size="15.0" />
+              </font>
+          </Button>
+          <Label layoutX="14.0" layoutY="348.0" prefHeight="17.0" prefWidth="94.0" text="Certifiées" />
+          <Label fx:id="lblCompetence" layoutX="213.0" layoutY="314.0" prefHeight="20.0" prefWidth="40.0" style="-fx-alignment: center; -fx-background-color: #3C8DBC; -fx-background-radius: 6; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;" text="00">
+              <opaqueInsets>
+                  <Insets />
+              </opaqueInsets>
+          </Label>
+          <Label layoutX="14.0" layoutY="405.0" prefHeight="17.0" prefWidth="94.0" text="A Certifier" />
+          <Separator layoutX="14.0" layoutY="402.0" prefHeight="4.0" prefWidth="244.0" />
+          <Separator layoutX="13.0" layoutY="342.0" prefHeight="4.0" prefWidth="244.0" />
+          <Label fx:id="lblCertifiee" layoutX="212.0" layoutY="348.0" prefHeight="17.0" prefWidth="40.0" style="-fx-alignment: center; -fx-background-color: #00A65A; -fx-background-radius: 6; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;" text="00">
+              <opaqueInsets>
+                  <Insets />
+              </opaqueInsets>
+          </Label>
+          <Separator layoutX="13.0" layoutY="372.0" prefHeight="4.0" prefWidth="244.0" />
+          <Label fx:id="lblAcertifier" layoutX="212.0" layoutY="407.0" prefHeight="17.0" prefWidth="40.0" style="-fx-alignment: center; -fx-background-color: #DD4B39; -fx-background-radius: 6; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;" text="00">
+              <opaqueInsets>
+                  <Insets />
+              </opaqueInsets>
+          </Label>
+          <Label layoutX="14.0" layoutY="376.0" prefHeight="20.0" prefWidth="124.0" text="En cours" />
+          <Label fx:id="lblEncours" layoutX="212.0" layoutY="378.0" prefHeight="17.0" prefWidth="40.0" style="-fx-alignment: center; -fx-background-color: #daa520; -fx-background-radius: 6; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;" text="00">
+              <opaqueInsets>
+                  <Insets />
+              </opaqueInsets>
+          </Label>
+      <Label layoutX="14.0" layoutY="318.0" prefHeight="18.0" prefWidth="112.0" text="Compétences" />
+      <Label fx:id="lblProfil" alignment="TOP_LEFT" layoutX="11.0" layoutY="129.0" prefHeight="25.0" prefWidth="254.0" style="-fx-text-fill: #A6A6A6; -fx-font-size: 12;" text="Profil">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblEmail" alignment="TOP_LEFT" layoutX="11.0" layoutY="153.0" prefHeight="25.0" prefWidth="254.0" style="-fx-text-fill: #A6A6A6; -fx-font-size: 12;" text="Email">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      </children>
+  </fx:root>

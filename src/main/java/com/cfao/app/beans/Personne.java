@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -157,8 +158,8 @@ public class Personne implements java.io.Serializable {
         return datenaiss.get();
     }
 
-    public ObjectProperty<Date> datenaissProperty() {
-        return datenaiss;
+    public ObjectProperty<LocalDate> datenaissProperty() {
+        return new SimpleObjectProperty<>(new java.sql.Date(datenaiss.get().getTime()).toLocalDate());
     }
 
     public void setDatenaiss(Date datenaiss) {
@@ -348,7 +349,7 @@ public class Personne implements java.io.Serializable {
             this.formations.set(FXCollections.observableList(formations));
     }
 
-    @OneToMany(mappedBy="personne")
+    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
     public List<PersonneCompetence> getPersonneCompetences() {
         return personneCompetences.get();
     }
@@ -420,5 +421,12 @@ public class Personne implements java.io.Serializable {
     @Override
     public String toString(){
         return this.getNom() + " " + this.getPrenom();
+    }
+
+    public ObjectProperty<LocalDate> datecontratProperty() {
+        if(fincontrat != null) {
+            return new SimpleObjectProperty<>(new java.sql.Date(fincontrat.get().getTime()).toLocalDate());
+        }
+        return new SimpleObjectProperty<>(new java.sql.Date(new Date().getTime()).toLocalDate());
     }
 }

@@ -1,9 +1,8 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.FormationPersonne;
-import com.cfao.app.beans.Personne;
+import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.Constante;
 import javafx.application.Platform;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -11,6 +10,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,5 +73,43 @@ public class FormationModel extends Model<Formation> {
             }
         }
         return null;
+    }
+
+    public List<Formation> getFormationsSouhaitees(Personne personne) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            /** Competences de la personne a certifier (non certifier) */
+            //CompetenceCertification certif = new CompetenceCertification("AC", "A Certifier");
+            Criteria competence = session.createCriteria(PersonneCompetence.class).add(
+                    Restrictions.eq("competenceCertification.certification", Constante.COMPETENCE_ACERTIFIER)
+            ).add(Restrictions.eq("personne", personne));
+            competence.setProjection(Projections.property("competence"));
+
+            /** Formations qui couvre ces competence et qui n'ont pas n'ont pas deja debute */
+            if(competence.list().size() > 0) {
+                Criteria formations = session.createCriteria(FormationCompetence.class, "fc").add(
+                        Restrictions.in("fc.competence", competence.list())).setProjection(
+                  Projections.distinct(Projections.property("formation"))
+                ).
+                        createCriteria("fc.formation", "f").add(
+                        Restrictions.ge("f.datedebut", new Date())
+                );
+                return formations.list();
+            }
+        }catch (Exception ex){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    AlertUtil.showErrorMessage(ex);
+                }
+            });
+            ex.printStackTrace();
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return new ArrayList<>();
     }
 }

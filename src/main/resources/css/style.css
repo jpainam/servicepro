@@ -239,10 +239,11 @@ JFOenix CSS
 
 /* Row hovered */
 .table-view:row-selection .table-row-cell:filled:hover {
-    -fx-background-color: brown;
+    -fx-background-color: #f0e68c;
        -fx-background-insets: 0, 1, 2;
-       -fx-background: -fx-accent;
-       -fx-text-fill: -fx-selection-bar-text;
+       /*-fx-background: -fx-accent;*/
+       /*-fx-background: #800000;*/
+       -fx-text-fill: black;
 }
 #toolbarViewerRight {
     display:none;

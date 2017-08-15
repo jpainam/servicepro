@@ -69,13 +69,9 @@
 		<field name="adresse" class="java.lang.String"/>
 		<field name="telephone" class="java.lang.String"/>
 	</subDataset>
+
 	<subDataset name="Participants table" uuid="46fb6d67-58c8-4d60-bbac-ac9252f7a3b6">
-		<field name="matricule" class="java.lang.String"/>
-		<field name="nom" class="java.lang.String"/>
-		<field name="prenom" class="java.lang.String"/>
-		<field name="societe" class="com.cfao.app.beans.Societe"/>
-		<field name="section" class="com.cfao.app.beans.Section"/>
-		<field name="groupe" class="com.cfao.app.beans.Groupe"/>
+		<field name="personne" class="com.cfao.app.beans.Personne"/>
 	</subDataset>
 	<subDataset name="Competences table" uuid="396bc269-f5ad-4a2e-8bbe-0ba65f6dc822"/>
 	<subDataset name="dataset1" uuid="2cce6860-50cb-4854-93e3-de8bb1824056"/>
@@ -141,7 +137,8 @@
 			</staticText>
 			<componentElement>
 				<reportElement key="table" style="table" x="0" y="176" width="555" height="50" uuid="1b46fa47-f8c3-4725-8188-c144aa143765"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components"
+						  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Formateurs table" uuid="5e21657b-13d7-4d46-bc37-fc40f8eccd7a">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{DSFormateurs})]]></dataSourceExpression>
 					</datasetRun>
@@ -227,7 +224,7 @@
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="24" y="0" width="66" height="20" uuid="eb82ec92-2734-44d9-ac44-211bab3b21d7"/>
-								<textFieldExpression><![CDATA[$F{matricule}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{personne}.getMatricule()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -241,7 +238,7 @@
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="10" y="0" width="100" height="20" uuid="24e647db-c900-465e-a40b-7628202166ea"/>
-								<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{personne}.getNom()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -255,7 +252,7 @@
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="13" y="0" width="77" height="20" uuid="95a534dd-0d92-4374-9a6b-b25c93644148"/>
-								<textFieldExpression><![CDATA[$F{societe}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{personne}.getSociete()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -269,7 +266,7 @@
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="13" y="0" width="77" height="20" uuid="4872389a-fc5a-494e-89b0-d3db143f5855"/>
-								<textFieldExpression><![CDATA[$F{groupe}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{personne}.getGroupe()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -283,7 +280,7 @@
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="14" y="0" width="76" height="20" uuid="af11feaa-48b1-4e51-899d-5915620f56ef"/>
-								<textFieldExpression><![CDATA[$F{section}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{personne}.getSection()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

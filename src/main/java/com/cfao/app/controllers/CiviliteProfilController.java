@@ -1,6 +1,7 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
+import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.DialogUtil;
@@ -9,7 +10,6 @@ import com.cfao.app.util.TableViewResizeUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +28,6 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -42,11 +41,11 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     public TableView<ProfilPersonne> tableProfil;
     public TableColumn<ProfilPersonne, Profil> columnProfil;
     public TableColumn<ProfilPersonne, Niveau> columnNiveau;
-    TableColumn<Competence, Competence> intituleColum = new TableColumn<>("Libellé de la compétence");
-    TableViewResizeUtil<Competence> competenceTable = new TableViewResizeUtil<>();
-    TableColumn<Competence, Boolean> encoursColumn = new TableColumn<>("En cours");
-    TableColumn<Competence, Boolean> acertifierColumn = new TableColumn<>("A certifier");
-    TableColumn<Competence, Boolean> certifierColumn = new TableColumn<>("Certifiée");
+    TableColumn<PersonneCompetence, Competence> intituleColum = new TableColumn<>("Libellé de la compétence");
+    TableViewResizeUtil<PersonneCompetence> competenceTable = new TableViewResizeUtil<>();
+    TableColumn<PersonneCompetence, Boolean> encoursColumn = new TableColumn<>("En cours");
+    TableColumn<PersonneCompetence, Boolean> acertifierColumn = new TableColumn<>("A certifier");
+    TableColumn<PersonneCompetence, Boolean> certifierColumn = new TableColumn<>("Certifiée");
     public Button btnAjouterProfil;
     public Button btnDeleteProfil;
 
@@ -89,7 +88,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         HBox.setHgrow(competenceTable, Priority.ALWAYS);
         competenceTable.getColumns().addAll(intituleColum, encoursColumn, acertifierColumn, certifierColumn);
 
-        intituleColum.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
+        intituleColum.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getCompetence()));
         encoursColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         acertifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         certifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
@@ -102,48 +101,22 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
 
     private void buildCompetencePopover(ProfilPersonne profilPersonne) {
         if (profilPersonne != null) {
-            List<PersonneCompetence> competences = personne.getPersonneCompetences();
-            encoursColumn.setCellValueFactory(param -> {
-                /*Competence competence = param.getValue();
-                int i = 0;
-                while(i < competences.size()){
-                    PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ENCOURS)){
-                        return  new SimpleBooleanProperty(true);
-                    }
-                    i++;
-                }*/
-                return new SimpleBooleanProperty(false);
-            });
-            acertifierColumn.setCellValueFactory(param -> {
-                /*Competence competence = param.getValue();
-                int i = 0;
-                while(i < competences.size()){
-                    PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && !co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)){
-                        return new SimpleBooleanProperty(false);
-                    }
-                }*/
-                return new SimpleBooleanProperty(true);
-            });
-            certifierColumn.setCellValueFactory(param -> {
-                /*Competence competence = param.getValue();
-                int i = 0;
-                while(i < competences.size()){
-                    PersonneCompetence co = competences.get(i);
-                    if(co.equals(competence) && co.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)){
-                        return new SimpleBooleanProperty(true);
-                    }
-                }*/
-                return new SimpleBooleanProperty(false);
-            });
-
-            competenceTable.setItems(FXCollections.observableArrayList(profilPersonne.getProfil().getCompetences()));
+            encoursColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
+            acertifierColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
+            certifierColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
+            Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
+                @Override
+                protected ObservableList<PersonneCompetence> call() throws Exception {
+                    return  FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(profilPersonne));
+                }
+            };
+            competenceTable.itemsProperty().bind(task.valueProperty());
             competenceTable.setVisibleRowCount(profilPersonne.getProfil().getCompetences().size() + 2);
             competenceTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             profilPopOver.setContentNode(competenceTable);
             intituleColum.setMinWidth(300);
             competenceTable.setMinWidth(600);
+            profilPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
             profilPopOver.show(tableProfil);
 
         }

@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,8 +26,34 @@ public class CivilitePhoto {
 
     }
 
+    public URL getImagePath(Personne personne){
+        FileInputStream file = null;
+        try {
+            Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("photo.dir")).toAbsolutePath();
+            String chemin = path.toString() + File.separator + personne.getPhoto();
+            File f = new File(chemin);
+            if (f.exists() && !f.isDirectory()) {
+               return f.toURI().toURL();
+            }
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            // Leve une erreur lors de la suppression si le fichier n'est pas fermer
+            //Error: The process cannot access the file because it is being used...
+            try {
+                if (file != null)
+                    file.close();
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        }
+        return getClass().getResource(ResourceBundle.getBundle("Application").getString("default.image"));
+    }
     public Image getImage(Personne personne) {
         return getImage(personne.getPhoto());
+    }
+    public Image getImage(Personne personne, double width, double height){
+        return getImage(personne.getPhoto(), width, height);
     }
 
     public Image getPhoto(Personne personne) {
@@ -35,6 +62,31 @@ public class CivilitePhoto {
 
     public String getCurrentPhoto() {
         return currentPhoto;
+    }
+
+    public Image getImage(String filename, double width, double height){
+        FileInputStream file = null;
+        try {
+            Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("photo.dir")).toAbsolutePath();
+            String chemin = path.toString() + File.separator + filename;
+            File f = new File(chemin);
+            if (f.exists() && !f.isDirectory()) {
+                file = new FileInputStream(f);
+                return new Image(file, width, height, false, false);
+            }
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            // Leve une erreur lors de la suppression si le fichier n'est pas fermer
+            //Error: The process cannot access the file because it is being used...
+            try {
+                if (file != null)
+                    file.close();
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        }
+        return new Image(ResourceBundle.getBundle("Application").getString("default.image"), width, height, false, false);
     }
 
     public Image getImage(String filename) {

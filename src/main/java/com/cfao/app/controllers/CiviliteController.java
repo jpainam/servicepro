@@ -160,7 +160,6 @@ public class CiviliteController implements Initializable {
             final TableRow<Personne> row = new TableRow<>();
             final Tooltip tooltip = new Tooltip();
             row.hoverProperty().addListener(observable -> {
-
                 final Personne personne = row.getItem();
                 if (row.isHover() && personne != null) {
                     tooltip.setText(personne.getNom() + " " + personne.getPrenom() + " => " + personne.getSociete());

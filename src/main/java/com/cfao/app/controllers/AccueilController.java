@@ -1,23 +1,7 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.beans.Personne;
-import com.cfao.app.model.PersonneModel;
-import com.cfao.app.util.ProgressIndicatorUtil;
-import com.cfao.app.util.SearchBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,31 +10,16 @@ import java.util.ResourceBundle;
  * Created by JP on 6/21/2017.
  */
 public class AccueilController implements Initializable {
-    public TableView<Personne> personneTable;
-    public VBox participantPerformance;
-    public TableColumn<Personne, String> nomPersonneColumn;
-    public TableColumn<Personne, String> matriculePersonneColumn;
-
-    public SearchBox searchBox = new SearchBox();
-
-    public StackPane personneStackPane;
-    public TableColumn societePersonneColumn;
-    public TableColumn groupePersonneColumn;
-    public TableColumn sectionPersonneColumn;
-    public TableColumn telephonePersonneColumn;
-
-    public VBox reserchePanel;
-    PieChart.Data passedChart, failedChart, averageChart;
 
 
+    public AnchorPane personneStatContent;
+    public AccueilPersonneController personneController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        participantPerformance.getChildren().add(createChartPersonnel());
-
         initComponents();
-
+        personneController = new AccueilPersonneController();
+        personneStatContent.getChildren().setAll(personneController);
         // Use binding to be notified whenever the data source chagnes
         /*Task<ObservableList<DailySales>> task = new GetDailySalesTask();
         p.progressProperty().bind(task.progressProperty());
@@ -120,44 +89,11 @@ public class AccueilController implements Initializable {
     */
 
     private void initComponents() {
-        HBox.setHgrow(searchBox, Priority.ALWAYS);
-        searchBox.setMaxWidth(Double.MAX_VALUE);
-        reserchePanel.getChildren().addAll(new Label("Civilités "), searchBox);
 
-        nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
-        matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
-
-        PersonneModel personneModel = new PersonneModel();
-        Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
-            @Override
-            protected ObservableList<Personne> call() throws Exception {
-                return FXCollections.observableArrayList(personneModel.getList());
-            }
-
-        };
-        new Thread(task).start();
-        personneTable.itemsProperty().bind(task.valueProperty());
-        ProgressIndicatorUtil.show(personneStackPane, task);
     }
 
 
-    protected PieChart createChartPersonnel() {
-        // String drilldownCss = DrilldownPieChartSample.class.getResource("DrilldownChart.css").toExternalForm();
 
-        PieChart pie = new PieChart(
-                FXCollections.observableArrayList(
-                        passedChart = new PieChart.Data("Certifiée", 20),
-                        failedChart = new PieChart.Data("A Certifier", 30),
-                        averageChart = new PieChart.Data("En cours", 10)
-                ));
-        //((Parent) pie).getStylesheets().add(drilldownCss);
-        pie.setTitle("Rapport des compétence de Jean-Paul Dupond");
-
-        setDrilldownData(pie, passedChart, "a");
-        setDrilldownData(pie, failedChart, "b");
-        setDrilldownData(pie, averageChart, "c");
-        return pie;
-    }
 
     /*protected AreaChart<Number, Number> createChartFormation() {
         NumberAxis xAxis = new NumberAxis();
@@ -184,18 +120,6 @@ public class AccueilController implements Initializable {
     }
     */
 
-    private void setDrilldownData(final PieChart pie, PieChart.Data data, final String labelPrefix) {
-        pie.setTitle("Performance par formation");
-        data.getNode().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent t) {
-                pie.setData(FXCollections.observableArrayList(
-                        new PieChart.Data(labelPrefix + "-1", 7),
-                        new PieChart.Data(labelPrefix + "-2", 2),
-                        new PieChart.Data(labelPrefix + "-3", 5),
-                        new PieChart.Data(labelPrefix + "-4", 3),
-                        new PieChart.Data(labelPrefix + "-5", 2)));
-            }
-        });
-    }
+
 
 }
