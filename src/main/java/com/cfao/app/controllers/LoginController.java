@@ -1,10 +1,12 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Main;
-import com.cfao.app.model.UserModel;
+import com.cfao.app.model.*;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.Constante;
 import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
+import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -18,11 +20,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
 import java.net.URL;
-import java.util.Calendar;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 /**
@@ -34,6 +36,7 @@ public class LoginController implements Initializable {
     public Label errorLabel;
     public VBox connexionPane;
     public StackPane loadingStackContainer;
+    public static ScheduledService<ArrayList<Map<String,String>>> serviceNotification;
 
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,6 +45,7 @@ public class LoginController implements Initializable {
                 btnConnexion(new ActionEvent(key.getSource(), key.getTarget()));
             }
         });
+
     }
 
     private void progressIndicator(StackPane stackPane, Task task) {
@@ -76,6 +80,7 @@ public class LoginController implements Initializable {
                     ServiceproUtil.setLoggedUser(login);
                     ServiceproUtil.setLoggedTime(Calendar.getInstance());
                     try {
+                        startServiceNotification();
                         new Main().start(new Stage());
                         stage.close();
                     } catch (Exception ex) {
@@ -115,5 +120,67 @@ public class LoginController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
         System.exit(0);
+    }
+
+    private void startServiceNotification() {
+        serviceNotification = new ScheduledService<ArrayList<Map<String,String>>>() {
+            @Override
+            protected Task <ArrayList<Map<String,String>>> createTask() {
+                return new Task<ArrayList<Map<String,String>>>() {
+                    @Override
+                    protected ArrayList<Map<String,String>> call() throws Exception {
+                        ArrayList<Map<String, String>> listMap = new ArrayList<>();
+                        listMap.add(buildMapCivilite());
+                        listMap.add(buildMapFormation());
+                        listMap.add(buildMapFormateur());
+                        listMap.add(buildMapProfil());
+                        return listMap;
+                    }
+                };
+            }
+
+            private Map<String,String> buildMapProfil() {
+                Map<String, String> labelsProfil = new HashMap<>();
+                ProfilModel profilModel = new ProfilModel();
+                labelsProfil.put("info1", String.valueOf(profilModel.getList().size()));
+                return labelsProfil;
+            }
+
+            private Map<String,String> buildMapFormateur() {
+                Map<String, String> labelsformateur = new HashMap<>();
+                PersonnelModel personnelModel = new PersonnelModel();
+                labelsformateur.put("info1", String.valueOf(personnelModel.countFormateurs()));
+                return labelsformateur;
+            }
+
+            private Map<String,String> buildMapFormation() {
+                Map<String, String> labelsformation = new HashMap<>();
+                FormationModel formationModel = new FormationModel();
+                labelsformation.put("info1", String.valueOf(formationModel.getList().size()));
+                labelsformation.put("info2", String.valueOf(formationModel.countFormationTerminees()));
+                labelsformation.put("info3", String.valueOf(formationModel.countFormation(Constante.FORMATION_ANNULEE)));
+                labelsformation.put("info4", String.valueOf(formationModel.countFormation(Constante.FORMATION_PREPARATION)));
+                return labelsformation;
+            }
+
+            private Map<String,String> buildMapCivilite() {
+                Map<String, String> labelsCivilite = new HashMap<>();
+                PersonneModel personneModel = new PersonneModel();
+                // Nbre de civilite
+                labelsCivilite.put("info1", String.valueOf(personneModel.getList().size()));
+                //Nbre de dossiers incomplet
+                labelsCivilite.put("info2", String.valueOf(personneModel.countPersonnePassportNull()));
+                //Nbre de personne disposant des competence a certifier
+                labelsCivilite.put("info3", String.valueOf(personneModel.countPersonneCompetenceEncours()));
+                return labelsCivilite;
+            }
+        };
+
+        serviceNotification.setPeriod(Duration.seconds(2));
+        serviceNotification.setRestartOnFailure(true);
+        serviceNotification.setMaximumFailureCount(50);
+        serviceNotification.setBackoffStrategy(service -> Duration.seconds(service.getCurrentFailureCount() * 5));
+        serviceNotification.setMaximumCumulativePeriod(Duration.minutes(10));
+        serviceNotification.start();
     }
 }

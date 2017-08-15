@@ -228,13 +228,16 @@ JFOenix CSS
     -fx-background-insets: 0, 0 0 0 6;
 }
 .toggle-button:selected {
-      -fx-text-fill: white;
+     /* -fx-text-fill: white;
   -fx-background-color:
   black,
   linear-gradient(to bottom, derive(red,-90%) 0%, derive(blue,-60%) 100%),
   linear-gradient(to bottom, derive(red,-60%) 0%, derive(blue,-35%) 50%, derive(red,-30%) 98%, derive(blue,-50%) 100%),
   linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 90%, rgba(0,0,0,0.3) 100%);
-  -fx-background-insets: 0, 0 0 0 6;
+  -fx-background-insets: 0, 0 0 0 6;*/
+   -fx-text-fill: white;
+      -fx-background-color: #ee543a, #373e48;
+      -fx-background-insets: 0, 0 0 0 6;
 }
 
 /* Row hovered */

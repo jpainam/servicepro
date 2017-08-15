@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
@@ -83,5 +84,56 @@ public class PersonneModel extends Model<Personne> {
             }
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public String queryCountCase(int cas){
+        switch (cas){
+            case 1:
+                return "select count(*) from personnes p where ! isnull(p.PASSPORT)";
+            case 2:
+                return "select count(*) from personnes p inner join personne_competence c on (p.IDPERSONNE = c.PERSONNE) where c.CERTIFICATION = 'EN'";
+            default:
+                return "select count(*) from personnes";
+        }
+    }
+    public Integer countPersonneCompetenceEncours(){
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
+                    Restrictions.eq("competenceCertification.certification", "EN")
+            );
+            criteria.setProjection(Projections.countDistinct("personne"));
+            Long count = (Long) criteria.uniqueResult();
+            return count.intValue();
+        }catch (Exception ex){
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return 0;
+    }
+    public Integer countPersonnePassportNull(){
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Personne.class).add(
+                    Restrictions.or(Restrictions.isNull("passport"), Restrictions.eq("passport", ""))
+            );
+            criteria.setProjection(Projections.rowCount());
+            Long count = (Long) criteria.uniqueResult();
+            return count.intValue();
+        }catch (Exception ex){
+            AlertUtil.showErrorMessage(ex);
+            ex.printStackTrace();
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return 0;
     }
 }

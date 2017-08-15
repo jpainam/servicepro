@@ -46,6 +46,9 @@ public class Personne implements java.io.Serializable {
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
     private ListProperty<PersonneQcm> personneQcms = new SimpleListProperty<>();
     private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
+    private ObjectProperty<Date> expirationPassport = new SimpleObjectProperty<Date>();
+    private SimpleStringProperty passport = new SimpleStringProperty();
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -428,5 +431,31 @@ public class Personne implements java.io.Serializable {
             return new SimpleObjectProperty<>(new java.sql.Date(fincontrat.get().getTime()).toLocalDate());
         }
         return new SimpleObjectProperty<>(new java.sql.Date(new Date().getTime()).toLocalDate());
+    }
+    @Column(name = "PASSPORT")
+    public String getPassport() {
+        return passport.get();
+    }
+
+    public SimpleStringProperty passportProperty() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport.set(passport);
+    }
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "EXPIRE")
+    public Date getExpirationPassport() {
+        return expirationPassport.get();
+    }
+
+    public ObjectProperty<Date> expirationPassportProperty() {
+        return expirationPassport;
+    }
+
+    public void setExpirationPassport(Date expire) {
+        this.expirationPassport.set(expire);
     }
 }

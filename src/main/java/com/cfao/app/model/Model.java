@@ -3,10 +3,12 @@ package com.cfao.app.model;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.lang.Class;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -153,6 +155,30 @@ public class Model<T> {
     public void close() {
         getCurrentSession().flush();
         getCurrentSession().close();
+    }
+
+    public long countTemplate(int cas){
+        String req = queryCountCase(cas);
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Query query = session.createSQLQuery(req);
+            return ((BigInteger) query.list().get(0)).longValue();
+
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+            return 0;
+        }
+        finally {
+            if(session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public String queryCountCase(int cas) {
+        return "";
     }
 
 

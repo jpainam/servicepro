@@ -12,4 +12,12 @@ public class Constante {
     public static final String COMPETENCE_ENCOURS = "EN";
     public static final String COMPETENCE_CERTIFIEE = "CE";
     public static final String COMPETENCE_ACERTIFIER = "AC";
+
+    /**
+     * FORMATIONS
+     */
+    public static final Integer FORMATION_TERMINEE = 1;
+    public static final Integer FORMATION_VALIDEE = 2;
+    public static final Integer FORMATION_PREPARATION = 3;
+    public static final Integer FORMATION_ANNULEE = 4;
 }

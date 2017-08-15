@@ -4,7 +4,7 @@ import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
@@ -43,5 +43,25 @@ public class PersonnelModel extends  Model<Personnel> {
     }
     public void insertProfilNiveau(Personne personne, Profil profil, Niveau niveau){
 
+
     }
+
+    public Integer countFormateurs(){
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Formateur.class);
+            criteria.setProjection(Projections.countDistinct("personnel"));
+            Long count = (Long)criteria.uniqueResult();
+            return count.intValue();
+        }catch (Exception ex){
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return 0;
+    }
+
 }

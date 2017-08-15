@@ -22,19 +22,19 @@
                         </Pane>
                         <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
                            <children>
-                              <Label fx:id="lblCivilite" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="150" />
+                              <Label fx:id="lblNbCivilite" prefHeight="42.0" prefWidth="89.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </VBox>
-                        <Label layoutX="104.0" layoutY="4.0" prefHeight="20.0" prefWidth="164.0" text="15 dossiers incomplets" textFill="WHITE">
+                        <Label fx:id="lblCiviliteInfo1" layoutX="104.0" layoutY="4.0" prefHeight="20.0" prefWidth="164.0" text="15 dossiers incomplets" textFill="WHITE">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="97.0" layoutY="70.0" prefHeight="20.0" prefWidth="171.0" text="8 en attentes de certification" textFill="WHITE">
+                        <Label fx:id="lblCiviliteInfo2" layoutX="97.0" layoutY="70.0" prefHeight="20.0" prefWidth="171.0" text="8 en attentes de certification" textFill="WHITE">
                            <font>
                               <Font size="11.0" />
                            </font>
@@ -50,29 +50,29 @@
                         </Pane>
                         <VBox layoutX="-5.0" layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
                            <children>
-                              <Label fx:id="lblFormation" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="150" />
+                              <Label fx:id="lblNbFormation" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </VBox>
-                        <Label layoutX="99.0" layoutY="26.0" prefHeight="20.0" prefWidth="164.0" text="2 en préparation (-3 mois)" textFill="WHITE" wrapText="true">
+                        <Label fx:id="lblFormationInfo2" layoutX="99.0" layoutY="26.0" prefHeight="20.0" prefWidth="164.0" text="2 en préparation (-3 mois)" textFill="WHITE" wrapText="true">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="99.0" layoutY="2.0" prefHeight="20.0" prefWidth="164.0" text="15 terminées / 0 annulées" textFill="WHITE">
+                        <Label fx:id="lblFormationInfo1" layoutX="99.0" layoutY="2.0" prefHeight="20.0" prefWidth="164.0" text="15 terminées / 0 annulées" textFill="WHITE">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="101.0" layoutY="51.0" prefHeight="20.0" prefWidth="171.0" text="3 en preparation (-7jrs)" textFill="WHITE">
+                        <Label fx:id="lblFormationInfo3" layoutX="101.0" layoutY="51.0" prefHeight="20.0" prefWidth="171.0" text="3 en preparation (-7jrs)" textFill="WHITE">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="101.0" layoutY="78.0" prefHeight="20.0" prefWidth="171.0" text="3 en attentes de validation" textFill="WHITE">
+                        <Label fx:id="lblFormationInfo4" layoutX="101.0" layoutY="78.0" prefHeight="20.0" prefWidth="171.0" text="3 en attentes de validation" textFill="WHITE">
                            <font>
                               <Font size="11.0" />
                            </font>
@@ -88,7 +88,7 @@
                         </Pane>
                         <VBox layoutY="12.0" prefHeight="66.0" prefWidth="155.0">
                            <children>
-                              <Label prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="150" />
+                              <Label fx:id="lblNbFormateur" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Formateurs" />
                            </children>
                            <padding>
@@ -121,7 +121,7 @@
                         </Pane>
                         <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
                            <children>
-                              <Label prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="150" />
+                              <Label fx:id="lblNbprofil" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils" />
                            </children>
                            <padding>

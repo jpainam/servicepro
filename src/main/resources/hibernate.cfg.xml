@@ -5,16 +5,16 @@
 
 <hibernate-configuration>
     <session-factory>
-        <!-- property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/servicepro</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
-        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+        <!-- property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
         <property name="hibernate.connection.url">jdbc:hsqldb:./data/servicepro</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property -->
 
         <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
-        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
 
 
@@ -32,6 +32,7 @@
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
+        <mapping resource="mapping/formateur.hbm.xml" />
 
         <mapping class="com.cfao.app.beans.Personne" />
         <mapping class="com.cfao.app.beans.Personnel" />
@@ -47,6 +48,7 @@
         <mapping class="com.cfao.app.beans.Profil" />
         <mapping class="com.cfao.app.beans.Typeformation" />
         <mapping class="com.cfao.app.beans.Societe" />
+
 
         <mapping class="com.cfao.app.beans.Niveau" />
         <mapping class="com.cfao.app.beans.ProfilPersonne" />

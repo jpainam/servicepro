@@ -249,11 +249,14 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 btnEditerCertification.setText(ResourceBundle.getBundle("Bundle").getString("button.save.fr"));
                 editerCertification = true;
             } else {
-
-                /*for(PersonneCompetence pp : competenceTable.getItems()){
+                //personne.getPersonneCompetences()
+                competenceTable.itemsProperty().unbind();
+                competenceTable.setEditable(false);
+                //System.err.println(personne.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
+                for(PersonneCompetence pp : competenceTable.getItems()){
                     System.err.println(pp.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
-                }*/
-                Task<Boolean> task = new Task<Boolean>() {
+                }
+                /*Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
                         return new PersonneModel().save(personne);
@@ -275,7 +278,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                     task.getException().printStackTrace();
                     System.err.println(task.getException());
                 });
-
+                */
             }
         }
     }
