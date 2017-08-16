@@ -2,12 +2,15 @@ package com.cfao.app.controllers;
 
 
 import com.cfao.app.StageManager;
+import com.cfao.app.util.AlertUtil;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -88,8 +91,17 @@ public class LeftmenuController implements Initializable{
     public void rapportAction(ActionEvent event) {
         StageManager.loadContent("/views/rapport/rapport.fxml");
     }
+
     public void parametreAction(ActionEvent event) {
-        StageManager.loadContent("/views/parametre/parametre.fxml");
+        try {
+            ParametreController parametreController = new ParametreController(ParametreController.TAB_SECTION);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/parametre/parametre.fxml"));
+            loader.setController(parametreController);
+            StageManager.getContent().getChildren().setAll((Node) loader.load());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
+        }
     }
     public void profilAction(ActionEvent event) {
         StageManager.setSelectedCrumb("profil");

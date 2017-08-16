@@ -6,8 +6,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hsqldb.persist.HsqlProperties;
+import org.hsqldb.server.Server;
 
-import java.lang.Class;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -22,6 +23,25 @@ public class Model<T> {
     protected static Transaction transaction;
 
     public Model() {
+        //startServer();
+    }
+    public void startServer(){
+        try {
+            HsqlProperties p = new HsqlProperties();
+            p.setProperty("server.database.0", "file:/data/servicepro");
+            p.setProperty("server.dbname.0", "servicepro");
+            // set up the rest of properties
+
+            // alternative to the above is
+            Server server = new Server();
+            server.setProperties(p);
+            server.setLogWriter(null); // can use custom writer
+            server.setErrWriter(null); // can use custom writer
+            server.start();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public static Session getCurrentSession() {
@@ -88,6 +108,7 @@ public class Model<T> {
         try {
             session.beginTransaction();
             session.save(type);
+            session.flush();
             session.getTransaction().commit();
             return true;
         } catch (Exception ex) {
@@ -107,8 +128,8 @@ public class Model<T> {
         try {
             session.beginTransaction();
             session.update(type);
+            session.flush();
             session.getTransaction().commit();
-
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -126,6 +147,7 @@ public class Model<T> {
         try {
             session.beginTransaction();
             session.delete(type);
+            session.flush();
             session.getTransaction().commit();
             return true;
         } catch (Exception ex) {

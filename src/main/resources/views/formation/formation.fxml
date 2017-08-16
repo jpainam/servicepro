@@ -9,26 +9,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="764.0" prefWidth="1079.0"
-            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="764.0" prefWidth="1079.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
    <children>
         <SplitPane dividerPositions="0.3441258094357077" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                <children>
-                        <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="NEVER">
-                            <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </padding>
-                        </HBox>
+                        <VBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="NEVER">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></VBox>
                   <StackPane fx:id="formationStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                      <children>
                               <TableView fx:id="formationTable" layoutX="20.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="618.0" prefWidth="349.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0" VBox.vgrow="ALWAYS">
                                   <columns>
-                                      <TableColumn fx:id="titreColumn" prefWidth="75.0" text="Titre" />
-                                      <TableColumn fx:id="datedebutColumn" prefWidth="75.0" text="Date de debut" />
-                                      <TableColumn fx:id="datefinColumn" prefWidth="75.0" text="Date de fin" />
+                                      <TableColumn fx:id="titreColumn" prefWidth="258.0" text="Titre" />
+                                      <TableColumn fx:id="datedebutColumn" maxWidth="100.0" minWidth="100.0" prefWidth="91.0" text="Date de debut" />
+                                      <TableColumn fx:id="datefinColumn" maxWidth="150.0" minWidth="100.0" prefWidth="100.0" text="Date de fin" />
                                   </columns>
                                   <columnResizePolicy>
                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -38,10 +35,10 @@
                   </StackPane>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
                </padding>
             </VBox>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                <children>
                         <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="571.0" prefWidth="365.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                             <tabs>
@@ -51,8 +48,8 @@
                                             <children>
                                                 <ToolBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="628.0">
                                                     <items>
-                                                        <Button fx:id="btnPrevious" onAction="#previousAction" mnemonicParsing="false" styleClass="onlyIcon" />
-                                                        <Button fx:id="btnNext" onAction="#nextAction" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                        <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#previousAction" styleClass="onlyIcon" />
+                                                        <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextAction" styleClass="onlyIcon" />
                                                         <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printAction" styleClass="onlyIcon" />
                                                         <Separator orientation="VERTICAL" />
                                                         <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
@@ -209,7 +206,7 @@
                         </TabPane>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" />
+                  <Insets bottom="5.0" left="5.0" />
                </padding>
             </VBox>
             </items>

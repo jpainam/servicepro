@@ -11,6 +11,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -101,12 +103,19 @@ public class CiviliteController implements Initializable {
     public StackPane imageviewStackPane;
     public StackPane personneStackPane;
 
+    public Label searchLabelStat = new Label();
+    private ObservableList<Personne> masterData = FXCollections.observableArrayList();
+    private FilteredList<Personne> filteredList = new FilteredList<Personne>(masterData, p -> true);
+    private SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildcontent();
         searchBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBox, Priority.ALWAYS);
-        hboxSearch.getChildren().setAll(new Label("Civilités :"), searchBox);
+        //searchLabelStat.textProperty().bind(new SimpleIntegerProperty(filteredList.size()).asString());
+        hboxSearch.getChildren().setAll(new HBox(new Label("Civilité "), searchLabelStat),  searchBox);
+
         ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
         /*Platform.runLater(() -> {
             personneTable.requestFocus();
@@ -185,11 +194,9 @@ public class CiviliteController implements Initializable {
                 map.put("contrat", FXCollections.observableList(new Model<Contrat>("Contrat").getList()));
                 map.put("ambition", FXCollections.observableList(new Model<Ambition>("Ambition").getList()));
                 map.put("langue", FXCollections.observableList(new Model<Langue>("Langue").getList()));
-                map.put("personne", FXCollections.observableList((new PersonneModel()).getList()));
                 return map;
             }
         };
-        ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
         task.setOnSucceeded(event -> {
             map = task.getValue();
@@ -202,7 +209,6 @@ public class CiviliteController implements Initializable {
             comboContrat.setItems(map.get("contrat"));
             comboAmbition.setItems(map.get("ambition"));
             comboLangue.setItems(map.get("langue"));
-            personneTable.setItems(map.get("personne"));
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
@@ -217,7 +223,33 @@ public class CiviliteController implements Initializable {
     }
 
     private void buildtablePersonne() {
-
+        Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
+            @Override
+            protected ObservableList<Personne> call() throws Exception {
+                return FXCollections.observableArrayList(new PersonneModel().getList());
+            }
+        };
+        ProgressIndicatorUtil.show(personneStackPane, task);
+        new Thread(task).start();
+        task.setOnSucceeded(event -> {
+            masterData.addAll(task.getValue());
+            sortedList.comparatorProperty().bind(personneTable.comparatorProperty());
+            searchLabelStat.setText("(" + filteredList.size() + ")");
+            personneTable.setItems(sortedList);
+        });
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(p -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
+            String val = newValue.toLowerCase();
+            if (p.getNom().toLowerCase().contains(val) || p.getPrenom().toLowerCase().contains(val) || p.getMatricule().toLowerCase().contains(newValue)) {
+                return true;
+            }
+            if (p.getSociete() != null && p.getSociete().toString().toLowerCase().contains(val)) {
+                return true;
+            }
+            return false;
+        }));
         columnMatricule.setCellValueFactory(param -> param.getValue().matriculeProperty());
         columnNom.setCellValueFactory(param -> param.getValue().nomProperty());
         columnPersonneSociete.setCellValueFactory(param -> param.getValue().societe());
@@ -415,6 +447,7 @@ public class CiviliteController implements Initializable {
             if (task.getValue()) {
                 //personneTable.getSelectionModel().select(personne);
                 ServiceproUtil.notify("Ajout OK");
+                StageManager.loadContent("/views/civilite/civilite.fxml");
                 System.out.println("Good");
             } else {
                 ServiceproUtil.notify("Erreur d'ajout");
@@ -476,6 +509,7 @@ public class CiviliteController implements Initializable {
         task.setOnSucceeded(event -> {
             if (task.getValue()) {
                 ServiceproUtil.notify("Modification OK");
+
                 StageManager.loadContent("/views/civilite/civilite.fxml");
             } else {
                 ServiceproUtil.notify("Erreur de modification");
@@ -504,8 +538,9 @@ public class CiviliteController implements Initializable {
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Suppression OK");
-                    personneTable.getSelectionModel().selectPrevious();
-                    personneTable.getItems().remove(p);
+                    /*personneTable.getSelectionModel().selectPrevious();
+                    personneTable.getItems().remove(p);*/
+                    StageManager.loadContent("/views/civilite/civilite.fxml");
                 } else {
                     ServiceproUtil.notify("Erreur de suppression");
                 }

@@ -250,6 +250,8 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 editerCertification = true;
             } else {
                 //personne.getPersonneCompetences()
+                editerCertification = false;
+                btnEditerCertification.setText("Editer");
                 competenceTable.itemsProperty().unbind();
                 competenceTable.setEditable(false);
                 //System.err.println(personne.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
@@ -266,7 +268,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 task.setOnSucceeded(event1 -> {
                     if (task.getValue()) {
                         editerCertification = false;
-                        btnEditerCertification.setText("Editer");
+
                         competenceTable.setEditable(false);
                         ServiceproUtil.notify("Sauvegarde OK");
                     } else {

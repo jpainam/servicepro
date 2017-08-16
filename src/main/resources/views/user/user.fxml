@@ -7,7 +7,6 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.*?>
 
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.UserController">
@@ -80,18 +79,12 @@
                                           <TextArea fx:id="txtAdresse" maxWidth="1.7976931348623157E308" prefHeight="66.0" prefWidth="293.0" promptText="Entrer l'adresse de la société" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                           <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                               <children>
-                                                  <JFXButton fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT">
-                                                      <styleClass>
-                                                          <String fx:value="button-raised" />
-                                                          <String fx:value="button-success" />
-                                                      </styleClass>
-                                                  </JFXButton>
-                                                  <JFXButton fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT">
-                                                      <styleClass>
-                                                          <String fx:value="button-raised" />
-                                                          <String fx:value="button-attention" />
-                                                      </styleClass>
-                                                  </JFXButton>
+                                                  <Button fx:id="btnValider" alignment="CENTER" layoutX="411.0" layoutY="196.0" mnemonicParsing="false" onAction="#validerAction" text="Valider" ButtonBar.buttonData="RIGHT">
+
+                                                  </Button>
+                                                  <Button fx:id="btnAnnuler" alignment="CENTER" layoutX="521.0" layoutY="196.0" mnemonicParsing="false" onAction="#annulerAction" text="Annuler" ButtonBar.buttonData="RIGHT">
+
+                                                  </Button>
                                               </children>
                                           </HBox>
                                       </children>

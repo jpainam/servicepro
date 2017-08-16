@@ -24,10 +24,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.awt.*;
 import java.io.File;
@@ -55,7 +52,7 @@ public class FormationController implements Initializable {
     public ComboBox<Personnel> comboFormateur;
     public Button btnAjouterFormateur;
     public Button btnSupprimerFormateur;
-    public HBox researchBox;
+    public VBox researchBox;
     public Button btnPrevious;
     public Button btnNext;
     public Button btnPrint;
@@ -185,6 +182,18 @@ public class FormationController implements Initializable {
         ProgressIndicatorUtil.show(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
         listeViewFormateurs.getItems().clear();
+        formationTable.setRowFactory((TableView<Formation> param) -> {
+            final TableRow<Formation> row = new TableRow<>();
+            final Tooltip tooltip = new Tooltip();
+            row.hoverProperty().addListener(observable -> {
+                final Formation formation = row.getItem();
+                if (row.isHover() && formation != null) {
+                    tooltip.setText(formation.getTitre() + " " + formation.getDescription());
+                    row.setTooltip(tooltip);
+                }
+            });
+            return row;
+        });
         new Thread(task).start();
     }
 

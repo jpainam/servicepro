@@ -3,6 +3,7 @@ package com.cfao.app;
 
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 
@@ -11,6 +12,7 @@ import javafx.scene.layout.StackPane;
  */
 public interface Controller{
      void setContent(Node node);
+     AnchorPane getContent();
      StackPane getContentLayout();
      ProgressBar getProgressBar();
 

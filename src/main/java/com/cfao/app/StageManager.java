@@ -5,6 +5,7 @@ import com.cfao.app.controllers.TemplateController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.NotificationPane;
 
@@ -28,6 +29,9 @@ public class StageManager {
         }catch(IOException ex){
             ex.printStackTrace();
         }
+    }
+    public static AnchorPane getContent(){
+        return mainController.getContent();
     }
     public static StackPane getContentLayout(){
         return mainController.getContentLayout();

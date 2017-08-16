@@ -217,7 +217,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<detail>
-		<band height="414" splitType="Stretch">
+		<band height="737" splitType="Stretch">
 			<textField>
 				<reportElement style="Detail" x="0" y="0" width="100" height="15" uuid="4393719b-c9c9-4b06-a9d8-b6c61c24350e"/>
 				<textFieldExpression><![CDATA["Détails"]]></textFieldExpression>
@@ -317,7 +317,7 @@
 				<textFieldExpression><![CDATA[$P{personne}.getPotentiel().getLibelle()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" positionType="Float" x="3" y="133" width="185" height="15" uuid="9a1e820e-aafd-4ecc-b714-d411d58573a2"/>
+				<reportElement style="Detail" positionType="Float" stretchType="RelativeToTallestObject" x="3" y="133" width="185" height="15" uuid="9a1e820e-aafd-4ecc-b714-d411d58573a2"/>
 				<textFieldExpression><![CDATA["Compétences"]]></textFieldExpression>
 			</textField>
 			<line>
@@ -401,7 +401,7 @@
 				</jr:table>
 			</componentElement>
 			<textField>
-				<reportElement style="Detail" positionType="Float" x="4" y="191" width="185" height="15" uuid="27f1ab3b-152b-4551-bdc9-50b3a337f355"/>
+				<reportElement style="Detail" positionType="Float" stretchType="RelativeToTallestObject" x="4" y="191" width="185" height="15" uuid="27f1ab3b-152b-4551-bdc9-50b3a337f355"/>
 				<textFieldExpression><![CDATA["Formations"]]></textFieldExpression>
 			</textField>
 			<line>

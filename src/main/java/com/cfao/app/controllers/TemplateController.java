@@ -124,6 +124,10 @@ public class TemplateController implements Initializable, Controller {
         content.getChildren().setAll(node);
     }
 
+    @Override
+    public AnchorPane getContent(){
+        return content;
+    }
     /**
      * Utiliser pour rendre les fond gris en cas d'alert
      *

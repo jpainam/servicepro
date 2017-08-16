@@ -5,12 +5,18 @@ import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
@@ -26,6 +32,7 @@ import org.controlsfx.control.PopOver;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * Created by JP on 8/13/2017.
@@ -70,6 +77,8 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
 
     public VBox reserchePanel;
 
+    private ObjectProperty<Predicate<Personne>> personneFilter = new SimpleObjectProperty<>();
+
 
     public AccueilPersonneController() {
         try {
@@ -82,8 +91,28 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         }
         createChartPersonne();
         profilController = new AccueilProfilController();
+        personneFilter.bind(Bindings.createObjectBinding(() ->
+                        person -> comparePersonne(person, searchBox.getText()),
+                searchBox.textProperty())
+        );
     }
 
+    private boolean comparePersonne(Personne p, String newValue) {
+        if (newValue == null || newValue.isEmpty()) {
+            return true;
+        }
+        String val = newValue.toLowerCase();
+        if (p.getNom().toLowerCase().contains(val) || p.getPrenom().toLowerCase().contains(val) || p.getMatricule().toLowerCase().contains(newValue)) {
+            return true;
+        }
+        if (p.getSociete() != null && p.getSociete().toString().toLowerCase().contains(val)) {
+            return true;
+        }
+        if (p.getSection() != null && p.getSection().toString().toLowerCase().contains(newValue)) {
+            return true;
+        }
+        return p.getGroupe() != null && p.getGroupe().toString().toLowerCase().contains(newValue);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -142,29 +171,37 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
             }
 
         };
-        new Thread(task).start();
-        personneTable.itemsProperty().bind(task.valueProperty());
         ProgressIndicatorUtil.show(personneStackPane, task);
-
-        personneTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Personne>() {
-            @Override
-            public void changed(ObservableValue<? extends Personne> observable, Personne oldValue, Personne newValue) {
-                buildProfilTable(newValue);
-                createChartPersonne();
-            }
+        new Thread(task).start();
+        //personneTable.itemsProperty().bind(task.valueProperty());
+        task.setOnSucceeded(event -> {
+            FilteredList<Personne> filteredList = new FilteredList<Personne>(task.getValue(), p -> true);
+            SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
+            sortedList.comparatorProperty().bind(personneTable.comparatorProperty());
+            personneTable.setItems(sortedList);
+            filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> personneFilter.get(), personneFilter));
+        });
+        personneTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            buildProfilTable(newValue);
+            createChartPersonne();
         });
 
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+                System.err.println(task.getException());
+                ServiceproUtil.notify("Une erreur dans le thread s'est produit");
+            }
+        });
         personneTable.setRowFactory(param -> {
             TableRow<Personne> row = new TableRow<>();
-            row.hoverProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (isHover()) {
-                        profilController.setPersonne(row.getItem());
-                        profilController.buildProfilDetails();
-                        personneDetailsPopOver.setContentNode(profilController);
-                        personneDetailsPopOver.show(row);
-                    }
+            row.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (isHover()) {
+                    profilController.setPersonne(row.getItem());
+                    profilController.buildProfilDetails();
+                    personneDetailsPopOver.setContentNode(profilController);
+                    personneDetailsPopOver.show(row);
                 }
             });
             return row;
@@ -216,22 +253,28 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
     }
 
     private void buildProfilTable(Personne personne) {
-        profilTable.itemsProperty().bind(personne.profilPersonnesProperty());
-        profilTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfilPersonne>() {
-            @Override
-            public void changed(ObservableValue<? extends ProfilPersonne> observable, ProfilPersonne oldValue, ProfilPersonne newValue) {
-                Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
-                    @Override
-                    protected ObservableList<PersonneCompetence> call() throws Exception {
-                        return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+        if (personne != null) {
+            profilTable.setItems(FXCollections.observableArrayList(personne.getProfilPersonnes()));
+            profilTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfilPersonne>() {
+                @Override
+                public void changed(ObservableValue<? extends ProfilPersonne> observable, ProfilPersonne oldValue, ProfilPersonne newValue) {
+                    Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
+                        @Override
+                        protected ObservableList<PersonneCompetence> call() throws Exception {
+                            return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+                        }
+                    };
+                    competenceTable.itemsProperty().bind(task.valueProperty());
+                    if (newValue != null) {
+                        competenceTable.setVisibleRowCount(newValue.getProfil().getCompetences().size() + 2);
+                        profilPopOver.setContentNode(competenceTable);
+                        profilPopOver.show(profilTable);
                     }
-                };
-                competenceTable.itemsProperty().bind(task.valueProperty());
-                competenceTable.setVisibleRowCount(newValue.getProfil().getCompetences().size() + 2);
-                profilPopOver.setContentNode(competenceTable);
-                profilPopOver.show(profilTable);
-            }
-        });
+                }
+            });
+        } else {
+            profilTable.getItems().clear();
+        }
     }
 
 }
