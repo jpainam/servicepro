@@ -44,7 +44,7 @@ public class LeftmenuController implements Initializable{
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 if(oldValue != null){
-                    ((FontAwesomeIconView)((ToggleButton)oldValue).getGraphic()).setFill(Color.BLACK);
+                    ((FontAwesomeIconView)((ToggleButton)oldValue).getGraphic()).setFill(Color.ROYALBLUE);
                 }
                 if(newValue == null){
                     oldValue.setSelected(true);
@@ -68,7 +68,8 @@ public class LeftmenuController implements Initializable{
     public void setLeftMenuSetting(ToggleButton button, FontAwesomeIcon fontAwesomeIcon) {
         button.setToggleGroup(toggleGroup);
         FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
-        icon.setGlyphSize(35);
+        icon.setGlyphSize(40);
+        icon.setFill(Color.ROYALBLUE);
         button.setContentDisplay(ContentDisplay.TOP);
         button.setGraphic(icon);
     }

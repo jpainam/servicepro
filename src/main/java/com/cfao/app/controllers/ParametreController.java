@@ -1,18 +1,15 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Controller;
 import com.cfao.app.util.FXMLView;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,10 +26,10 @@ public class ParametreController implements Initializable{
 
 
     public Tab tabUtilsateur;
-    public Tab tabProfil;
+    //public Tab tabProfil;
     public Tab tabSociete;
     public Tab tabGroupe;
-    public Tab tabNiveauetude;
+    //public Tab tabNiveauetude;
     public Tab tabSection;
     public TabPane tabPane;
     private int activeTab;
@@ -51,7 +48,7 @@ public class ParametreController implements Initializable{
         tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
         tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
         tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
-        tabNiveauetude.setContent(getTabContent("/views/niveauetude/niveauetude.fxml"));
+        //tabNiveauetude.setContent(getTabContent("/views/niveauetude/niveauetude.fxml"));
         singleSelectionModel = tabPane.getSelectionModel();
 
         singleSelectionModel.select(getActiveTab());
@@ -68,8 +65,8 @@ public class ParametreController implements Initializable{
     }
     public void setTabIcon(){
         tabUtilsateur.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("utilisateur.icon")));
-        tabProfil.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("profil.icon")));
-        tabNiveauetude.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("niveauetude.icon")));
+        //tabProfil.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("profil.icon")));
+        //tabNiveauetude.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("niveauetude.icon")));
         tabSection.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("section.icon")));
         tabSociete.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("societe.icon")));
         tabGroupe.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("groupe.icon")));
@@ -78,8 +75,8 @@ public class ParametreController implements Initializable{
         switch (activeTab){
             case TAB_UTILISATEUR: return tabUtilsateur;
             case TAB_GROUPE: return tabGroupe;
-            case TAB_NIVEAUETUDE: return tabNiveauetude;
-            case TAB_PROFIL: return tabProfil;
+            //case TAB_NIVEAUETUDE: return tabNiveauetude;
+            //case TAB_PROFIL: return tabProfil;
             case TAB_SECTION: return tabSection;
             case TAB_SOCIETE: return tabSociete;
         }

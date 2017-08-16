@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -15,9 +14,9 @@
       <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
             <Tab fx:id="tabUtilsateur" text="Utilisateurs" />
-            <Tab fx:id="tabProfil" text="Profils" />
+            <!-- Tab fx:id="tabProfil" text="Profils" / -->
             <Tab fx:id="tabSociete" text="Sociétés" />
-            <Tab fx:id="tabNiveauetude" text="Niveau d'étude" />
+            <!-- Tab  fx:id="tabNiveauetude" text="Niveau d'étude" / -->
             <Tab fx:id="tabGroupe" text="Groupes" />
             <Tab fx:id="tabSection" text="Sections" />
         </tabs>
