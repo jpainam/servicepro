@@ -99,19 +99,14 @@ public class FormationModel extends Model<Formation> {
                 return formations.list();
             }
         } catch (Exception ex) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    AlertUtil.showErrorMessage(ex);
-                }
-            });
+            AlertUtil.showErrorMessage(ex);
             ex.printStackTrace();
         } finally {
             if (session.isOpen()) {
                 session.close();
             }
         }
-        return new ArrayList<>();
+        return null;
     }
 
     @Override
@@ -157,7 +152,7 @@ public class FormationModel extends Model<Formation> {
             session.beginTransaction();
             Criteria criteria = session.createCriteria(Formation.class, "f")
                     .add(Restrictions.le("f.datefin", new Date())
-            ).createCriteria("f.etatFormation", "e")
+                    ).createCriteria("f.etatFormation", "e")
                     .add(Restrictions.eq("e.idetatformation", Constante.FORMATION_TERMINEE));
             criteria.setProjection(Projections.rowCount());
             Long count = (Long) criteria.uniqueResult();

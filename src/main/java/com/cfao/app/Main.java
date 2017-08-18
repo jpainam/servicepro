@@ -1,5 +1,6 @@
 package com.cfao.app;
 
+import com.cfao.app.model.Model;
 import com.cfao.app.util.FXMLView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.hibernate.Session;
 
 import java.awt.*;
 import java.io.File;
@@ -57,5 +59,14 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        Session session = Model.getCurrentSession();
+        if(session.isOpen()) {
+            session.close();
+        }
+        super.stop();
     }
 }

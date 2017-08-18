@@ -69,9 +69,8 @@ public class Model<T> {
     public List<T> getList() {
         Session session = getCurrentSession();
         try {
-            Criteria criteria;
             session.beginTransaction();
-            criteria = session.createCriteria(Class.forName(className));
+            Criteria criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -87,9 +86,9 @@ public class Model<T> {
     public boolean saveOrUpdate(T type) {
         Session session = getCurrentSession();
         try {
-            session.beginTransaction();
+            Transaction tx = session.beginTransaction();
             session.saveOrUpdate(type);
-            session.getTransaction().commit();
+            tx.commit();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -106,10 +105,10 @@ public class Model<T> {
     public boolean save(T type) {
         Session session = getCurrentSession();
         try {
-            session.beginTransaction();
+            Transaction tx = session.beginTransaction();
             session.save(type);
             session.flush();
-            session.getTransaction().commit();
+            tx.commit();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -126,10 +125,10 @@ public class Model<T> {
     public boolean update(T type) {
         Session session = getCurrentSession();
         try {
-            session.beginTransaction();
+            Transaction tx = session.beginTransaction();
             session.update(type);
             session.flush();
-            session.getTransaction().commit();
+            tx.commit();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -145,10 +144,10 @@ public class Model<T> {
     public boolean delete(T type) {
         Session session = getCurrentSession();
         try {
-            session.beginTransaction();
+            Transaction tx = session.beginTransaction();
             session.delete(type);
             session.flush();
-            session.getTransaction().commit();
+            tx.commit();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();

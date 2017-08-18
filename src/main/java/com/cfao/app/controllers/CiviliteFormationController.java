@@ -1,25 +1,26 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
+import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -35,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -66,6 +68,8 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public AnchorPane pdfContainer;
 
     public Button btnSupprimerCompetence;
+    public Button btnAddCompetence;
+
     private boolean editerCertification = false;
 
     private HashMap<Competence, CompetenceCertification> selectedItems;
@@ -102,6 +106,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         initComponents();
         createViewer(pdfContainer);
         ButtonUtil.delete(btnSupprimerCompetence);
+        ButtonUtil.plusIcon(btnAddCompetence);
         formationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Formation>() {
             @Override
             public void changed(ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) {
@@ -157,53 +162,106 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             });
             return row;
         });*/
+
         codeFormationColumn.setCellValueFactory(param -> param.getValue().codeformationProperty());
+
         titreFormationColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+
         datedebutFormationColumn.setCellValueFactory(param -> param.getValue().datedebutProperty());
         datedebutFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
+
         datefinFormationColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
         datefinFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
-        intituleCompetenceColumn.setCellValueFactory(param -> param.getValue().competence());
         setColumnFactories();
+
+        intituleCompetenceColumn.setCellValueFactory(param -> param.getValue().competence());
         encoursCompetenceColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
         acertifierCompetenceColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
         certifieeCompetenceColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
     }
 
     private void setColumnFactories() {
-        encoursCompetenceColumn.setCellFactory(param -> {
+        encoursCompetenceColumn.setCellFactory(param ->
+                new CheckTable() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
+                            if (newValue != null && newValue) {
+                                PersonneCompetence pp = this.getTableView().getItems().get(this.getTableRow().getIndex());
+                                pp.setEncours(newValue);
+                                pp.setCertifiee(false);
+                                pp.setAcertifier(false);
+                            }
+                    }
+                });
+                /*{
             CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
             cell.itemProperty().addListener((observable, oldValue, newValue) -> {
                 if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
-                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
-                    pp.setEncours(newValue);
                     if (newValue) {
+                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
+                        pp.setEncours(newValue);
                         pp.setCertifiee(false);
                         pp.setAcertifier(false);
                     }
-                    cell.setItem(newValue);
                 }
             });
             return cell;
-        });
-        acertifierCompetenceColumn.setCellFactory(param -> {
+        });*/
+        acertifierCompetenceColumn.setCellFactory(param ->
+                new CheckTable() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
+                            if (newValue != null && newValue) {
+                                PersonneCompetence pp = this.getTableView().getItems().get(this.getIndex());
+                                pp.setAcertifier(newValue);
+                                pp.setCertifiee(false);
+                                pp.setEncours(false);
+                            }
+
+                    }
+                });
+            /*
             CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
             cell.itemProperty().addListener((observable, oldValue, newValue) -> {
                 if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
-                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getIndex());
-                    pp.setAcertifier(newValue);
                     if (newValue) {
+                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getIndex());
+                        pp.setAcertifier(newValue);
                         pp.setCertifiee(false);
                         pp.setEncours(false);
                     }
-                    cell.setItem(newValue);
                 }
             });
             return cell;
-        });
-        certifieeCompetenceColumn.setCellFactory(param -> {
+        });*/
+
+        certifieeCompetenceColumn.setCellFactory(param ->
+                new CheckTable() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
+                            if (newValue != null && newValue) {
+                                PersonneCompetence pp = this.getTableView().getItems().get(this.getTableRow().getIndex());
+                                pp.setCertifiee(newValue);
+                                pp.setEncours(false);
+                                pp.setAcertifier(false);
+                            }
+                    }
+                });
+
+            /*
             CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
             cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0)
+                    if(newValue){
+                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
+                        pp.setCertifiee(newValue);
+                        pp.setEncours(false);
+                        pp.setAcertifier(false);
+                    }*/
+                /*
                 if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
                     PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
                     pp.setCertifiee(newValue);
@@ -211,18 +269,29 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                         pp.setEncours(false);
                         pp.setAcertifier(false);
                     }
-                    cell.setItem(newValue);
+                    System.out.println(">>> " + pp.getCompetenceCertification().getCertification());
                 }
+
             });
             return cell;
-        });
-
+        });*/
 
     }
 
+    /*private void updatePersonneCompetence(PersonneCompetence pp) {
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                return new PersonneCompetenceModel().update(pp);
+            }
+        };
+        new Thread(task).start();
+    }*/
+
     public void buildFormation() {
         competenceTable.itemsProperty().bind(personne.personneCompetencesProperty());
-        // Historique des formation
+        //competenceTable.setItems(FXCollections.observableArrayList(personne.getPersonneCompetences()));
+        // Historique des formatioetItems().setAll(personne.personneCompetencesPropn
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
             protected ObservableList<Formation> call() throws Exception {
@@ -250,25 +319,31 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                 editerCertification = true;
             } else {
                 //personne.getPersonneCompetences()
-                editerCertification = false;
-                btnEditerCertification.setText("Editer");
-                competenceTable.itemsProperty().unbind();
-                competenceTable.setEditable(false);
-                //System.err.println(personne.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
-                for(PersonneCompetence pp : competenceTable.getItems()){
-                    System.err.println(pp.getCompetence() + "=>" + pp.getCompetenceCertification().getCertification());
-                }
-                /*Task<Boolean> task = new Task<Boolean>() {
+                Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-                        return new PersonneModel().save(personne);
+                        for (PersonneCompetence pc : personne.getPersonneCompetences()) {
+
+                            if (pc.isCertifiee())
+                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_CERTIFIEE);
+                            else if (pc.isEncours())
+                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ENCOURS);
+                            else if (pc.isAcertifier())
+                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ACERTIFIER);
+
+                            if (pc.isAcertifier() || pc.isEncours() || pc.isCertifiee()) {
+                                pc.setCreatedAt(new java.util.Date());
+                                new Model<PersonneCompetence>().update(pc);
+                            }
+                        }
+                        return true;
                     }
                 };
                 new Thread(task).start();
                 task.setOnSucceeded(event1 -> {
                     if (task.getValue()) {
                         editerCertification = false;
-
+                        btnEditerCertification.setText("Editer");
                         competenceTable.setEditable(false);
                         ServiceproUtil.notify("Sauvegarde OK");
                     } else {
@@ -280,7 +355,6 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                     task.getException().printStackTrace();
                     System.err.println(task.getException());
                 });
-                */
             }
         }
     }
@@ -353,6 +427,45 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         this.personne = personne;
     }
 
+    public void addCompetenceAction(ActionEvent event) {
+        if (personne != null) {
+            Dialog<PersonneCompetence> dialog = DialogUtil.dialogTemplate();
+            dialog.setHeaderText("Ajouter d'une competence");
+            DialogCompetenceController controller = new DialogCompetenceController();
+            dialog.getDialogPane().setContent(controller);
+            dialog.setResultConverter(param -> {
+                if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                    return controller.getData();
+                } else {
+                    return null;
+                }
+            });
+            Optional<PersonneCompetence> result = dialog.showAndWait();
+            result.ifPresent(personneCompetence -> {
+                if (personneCompetence != null) {
+                    boolean exiteDeja = false;
+                    int i = 0;
+                    while (!exiteDeja && i < competenceTable.getItems().size()) {
+                        PersonneCompetence pp = competenceTable.getItems().get(i);
+                        if (pp.getCompetence().equals(personneCompetence.getCompetence())) {
+                            exiteDeja = true;
+                        }
+                        i++;
+                    }
+                    if (!exiteDeja) {
+                        new Model<PersonneCompetence>().save(personneCompetence);
+                        personne.getPersonneCompetences().add(personneCompetence);
+                        //competenceTable.getItems().add(personneCompetence);
+                    }
+                } else {
+                    ServiceproUtil.notify("Erreur d'ajout de profil");
+                }
+
+            });
+        }
+    }
+
+
     private void createViewer(AnchorPane Pane) {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -405,5 +518,67 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    class DialogCompetenceController extends AnchorPane implements Initializable {
+        @FXML
+        public ComboBox<Competence> comboCompetence;
+        @FXML
+        public ComboBox<CompetenceCertification> comboCertification;
+        private ObservableMap<String, ObservableList> map;
+
+        public DialogCompetenceController() {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/civilite/dialog/dialogFormationCompetence.fxml"));
+                loader.setRoot(this);
+                loader.setController(this);
+                loader.load();
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        }
+
+        @Override
+        public void initialize(URL location, ResourceBundle resources) {
+            Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
+                @Override
+                protected ObservableMap<String, ObservableList> call() throws Exception {
+                    map = FXCollections.observableHashMap();
+                    map.put("competence", FXCollections.observableList(new CompetenceModel().getList()));
+                    map.put("certification", FXCollections.observableList(new Model<>("CompetenceCertification").getList()));
+                    return map;
+                }
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(event -> {
+                Platform.runLater(() -> {
+                    comboCompetence.setItems(map.get("competence"));
+                    comboCertification.setItems(map.get("certification"));
+                });
+
+            });
+        }
+
+        public PersonneCompetence getData() {
+            if (comboCompetence.getValue() != null && comboCertification.getValue() != null) {
+                PersonneCompetence personneCompetence = new PersonneCompetence();
+                personneCompetence.setCompetence(comboCompetence.getSelectionModel().getSelectedItem());
+                personneCompetence.getId().setCompetence(comboCompetence.getSelectionModel().getSelectedItem().getIdcompetence());
+                personneCompetence.setCompetenceCertification(comboCertification.getSelectionModel().getSelectedItem());
+                if (personne != null) {
+                    personneCompetence.setPersonne(personne);
+                    personneCompetence.getId().setPersonne(personne.getIdpersonne());
+                }
+                personneCompetence.setCreatedAt(new java.util.Date());
+                return personneCompetence;
+            }
+            return null;
+        }
+    }
+}
+
+abstract class CheckTable extends CheckBoxTableCell<PersonneCompetence, Boolean> implements ChangeListener<Boolean> {
+    public CheckTable() {
+        this.itemProperty().addListener(this);
     }
 }

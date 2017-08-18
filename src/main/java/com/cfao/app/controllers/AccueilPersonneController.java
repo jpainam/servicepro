@@ -191,7 +191,7 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
             public void handle(WorkerStateEvent event) {
                 task.getException().printStackTrace();
                 System.err.println(task.getException());
-                ServiceproUtil.notify("Une erreur dans le thread s'est produit");
+                ServiceproUtil.notify("Une erreur dans le thread Accueil personne");
             }
         });
         personneTable.setRowFactory(param -> {

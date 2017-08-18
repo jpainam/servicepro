@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="973.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
+<StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
           <children>
@@ -74,7 +74,7 @@
                       <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </left>
                <center>
-                  <StackPane fx:id="notificationStack" maxWidth="-Infinity" prefHeight="54.0" prefWidth="391.0" style="-fx-alignment: center; -fx-text-fill: red;" BorderPane.alignment="CENTER" />
+                  <StackPane fx:id="notificationStack" maxWidth="-Infinity" prefHeight="54.0" prefWidth="453.0" style="-fx-alignment: center; -fx-background-color: white;" BorderPane.alignment="CENTER" />
                </center>
                <right>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" BorderPane.alignment="CENTER">
@@ -101,7 +101,7 @@
                   </HBox>
                </right>
             </BorderPane>
-             <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+             <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" pannable="true" VBox.vgrow="ALWAYS">
                 <content>
                  <StackPane fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
                      <children>
@@ -114,7 +114,7 @@
                            </StackPane>
                            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
                               <children>
-                                 <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" VBox.vgrow="NEVER" />
+                                 <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="34.0" prefWidth="848.0" VBox.vgrow="NEVER" />
                                   <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
                               </children>
          

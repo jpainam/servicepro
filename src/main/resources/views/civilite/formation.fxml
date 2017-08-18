@@ -24,6 +24,7 @@
                         <Separator orientation="VERTICAL" />
                         <Button fx:id="btnEditerCertification" mnemonicParsing="false" onAction="#editerCertificationCompetence" text="Editer" />
                         <Button fx:id="btnSupprimerCompetence" mnemonicParsing="false" onAction="#supprimerCompetenceAction" />
+                        <Button fx:id="btnAddCompetence" mnemonicParsing="false" onAction="#addCompetenceAction" />
                             </items>
                         </ToolBar>
                   <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">

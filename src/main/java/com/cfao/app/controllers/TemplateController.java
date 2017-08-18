@@ -24,10 +24,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.NotificationPane;
@@ -88,10 +85,10 @@ public class TemplateController implements Initializable, Controller {
             Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
             shortcutContent.getChildren().setAll(leftMenuPane);
 
-            notificationPane.getContent().getStyleClass().add("notificationPane");
             notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
                 notificationPane.hide();
             }));
+
             notificationStack.getChildren().add(notificationPane);
             StageManager.setNotificationPane(notificationPane);
 

@@ -143,6 +143,9 @@ public class LoginController implements Initializable {
                 Map<String, String> labelsProfil = new HashMap<>();
                 ProfilModel profilModel = new ProfilModel();
                 labelsProfil.put("info1", String.valueOf(profilModel.getList().size()));
+                labelsProfil.put("nbCompetence", new CompetenceModel().getList().size() + "");
+                labelsProfil.put("nbNiveau",new Model<>("Niveau").getList().size() + "");
+                labelsProfil.put("nbTest", new Model<>("Qcm").getList().size() + "");
                 return labelsProfil;
             }
 

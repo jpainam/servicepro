@@ -13,138 +13,139 @@
          <children>
             <HBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="20.0" VBox.vgrow="NEVER">
                <children>
-                  <Pane maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #00C0EF; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
+                  <HBox maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #00C0EF; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
                      <children>
-                        <Pane layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="164.0" style="-fx-background-color: #009ABF;">
+                        <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="84.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="171.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #F0F0F0;" text="Plus d'info" />
+                              <Label fx:id="lblNbCivilite" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="79.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités" />
+                               <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #009ABF;" text="Plus d'info" />
                            </children>
-                        </Pane>
-                        <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
-                           <children>
-                              <Label fx:id="lblNbCivilite" prefHeight="42.0" prefWidth="89.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités" />
-                           </children>
+                        </VBox>
+                        <VBox layoutY="12.0" prefHeight="128.0" prefWidth="112.0" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <children>
+                              <Label fx:id="lblCiviliteInfo1" layoutX="104.0" layoutY="4.0" prefHeight="20.0" prefWidth="164.0" text="0 dossiers incomplets" textFill="WHITE">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblCiviliteInfo2" layoutX="97.0" layoutY="70.0" prefHeight="20.0" prefWidth="171.0" text="0 en attentes de certification" textFill="WHITE">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
-                        <Label fx:id="lblCiviliteInfo1" layoutX="104.0" layoutY="4.0" prefHeight="20.0" prefWidth="164.0" text="15 dossiers incomplets" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblCiviliteInfo2" layoutX="97.0" layoutY="70.0" prefHeight="20.0" prefWidth="171.0" text="8 en attentes de certification" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
                      </children>
-                  </Pane>
-                  <Pane maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #00A65A; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #00A65A; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
                      <children>
-                        <Pane layoutY="103.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="155.0" style="-fx-background-color: #008548;">
+                        <VBox alignment="BOTTOM_LEFT" layoutY="103.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="91.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="164.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #F0F0F0;" text="Plus d'info" />
+                              <Label fx:id="lblNbFormation" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations" />
+                               <Label alignment="TOP_LEFT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="85.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #008548;" text="Plus d'info" />
                            </children>
-                        </Pane>
-                        <VBox layoutX="-5.0" layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
                            <children>
-                              <Label fx:id="lblNbFormation" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations" />
+                              <Label fx:id="lblFormationInfo3" layoutX="101.0" layoutY="51.0" prefHeight="20.0" prefWidth="171.0" text="0 en preparation (-7jrs)" textFill="WHITE">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblFormationInfo4" layoutX="101.0" layoutY="78.0" prefHeight="20.0" prefWidth="171.0" text="0 en attentes de validation" textFill="WHITE">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblFormationInfo2" layoutX="99.0" layoutY="26.0" prefHeight="20.0" prefWidth="164.0" text="0 en préparation (-3 mois)" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblFormationInfo1" layoutX="99.0" layoutY="2.0" prefHeight="20.0" prefWidth="164.0" text="0 terminées / 0 annulées" textFill="WHITE">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
                            </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #DD4B39; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="91.0">
+                           <children>
+                              <Label fx:id="lblNbFormateur" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="100.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formateurs" />
+                               <Label alignment="TOP_LEFT" layoutX="2.0" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #B13C2E;" text="Plus d'info" />
+
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox layoutY="12.0" prefHeight="66.0" prefWidth="155.0" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <children>
+                              <Label prefHeight="20.0" prefWidth="135.0" text="0 Electriciens" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="20.0" prefWidth="145.0" text="0 Mecaniciens" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="20.0" prefWidth="145.0" text="0 Monteurs Ascenseurs" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                           </children>
                         </VBox>
-                        <Label fx:id="lblFormationInfo2" layoutX="99.0" layoutY="26.0" prefHeight="20.0" prefWidth="164.0" text="2 en préparation (-3 mois)" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblFormationInfo1" layoutX="99.0" layoutY="2.0" prefHeight="20.0" prefWidth="164.0" text="15 terminées / 0 annulées" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblFormationInfo3" layoutX="101.0" layoutY="51.0" prefHeight="20.0" prefWidth="171.0" text="3 en preparation (-7jrs)" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblFormationInfo4" layoutX="101.0" layoutY="78.0" prefHeight="20.0" prefWidth="171.0" text="3 en attentes de validation" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
                      </children>
-                  </Pane>
-                  <Pane maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #DD4B39; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #A74E12; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
                      <children>
-                        <Pane layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="155.0" style="-fx-background-color: #B13C2E;">
+                        <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="84.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="27.0" layoutY="1.0" maxWidth="1.7976931348623157E308" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #F0F0F0;" text="Plus d'info" />
+                              <Label fx:id="lblNbprofil" maxWidth="1.7976931348623157E308" prefHeight="3.0" prefWidth="79.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils" />
+                              <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #C37D0E;" text="Plus d'info" />
                            </children>
-                        </Pane>
-                        <VBox layoutY="12.0" prefHeight="66.0" prefWidth="155.0">
-                           <children>
-                              <Label fx:id="lblNbFormateur" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Formateurs" />
-                           </children>
+                        </VBox>
+                        <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
-                        </VBox>
-                        <Label layoutX="122.0" layoutY="14.0" prefHeight="20.0" prefWidth="135.0" text="2 Electriciens" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="125.0" layoutY="45.0" prefHeight="20.0" prefWidth="145.0" text="3 Mecaniciens" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="119.0" layoutY="68.0" prefHeight="20.0" prefWidth="145.0" text="4 Monteurs Ascenseurs" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-                  <Pane maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="277.0" style="-fx-background-color: #A74E12; -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Pane layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="155.0" style="-fx-background-color: #C37D0E;">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutY="1.0" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #F0F0F0;" text="Plus d'info" />
+                              <Label fx:id="lblNbCompetence" prefHeight="20.0" prefWidth="135.0" text="0 Compétences" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblNbNiveau" text="0 Niveaux" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblNbTest" prefHeight="20.0" prefWidth="135.0" text="0 Tests" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Label>
                            </children>
-                        </Pane>
-                        <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0">
-                           <children>
-                              <Label fx:id="lblNbprofil" prefHeight="43.0" prefWidth="64.0" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils" />
-                           </children>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
                         </VBox>
-                        <Label layoutX="106.0" layoutY="12.0" prefHeight="20.0" prefWidth="135.0" text="120 Compétences" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="112.0" layoutY="53.0" prefHeight="42.0" prefWidth="145.0" text="4 Niveaux par compétence" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="114.0" layoutY="35.0" prefHeight="20.0" prefWidth="135.0" text="15 Tests" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
                      </children>
-                  </Pane>
+                  </HBox>
                </children>
             </HBox>
             <AnchorPane fx:id="personneStatContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />

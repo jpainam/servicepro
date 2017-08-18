@@ -30,6 +30,10 @@ public class AccueilController implements Initializable {
     public Label lblFormationInfo3;
     public Label lblFormationInfo4;
 
+    public Label lblNbCompetence;
+    public Label lblNbNiveau;
+    public Label lblNbTest;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
@@ -59,14 +63,17 @@ public class AccueilController implements Initializable {
 
                     /** LABELS FORMATIONS **/
                     lblNbFormation.setText(mapFormation.get("info1"));
-                    lblFormationInfo1.setText(mapFormation.get("info2") + "terminées / "+mapFormation.get("info3")+ " annulées");
-                    lblFormationInfo2.setText(mapFormation.get("info3") + "en préparation ()");
+                    lblFormationInfo1.setText(mapFormation.get("info2") + " terminées / "+mapFormation.get("info3")+ " annulées");
+                    lblFormationInfo2.setText(mapFormation.get("info3") + " en préparation");
 
                     /** LABELS FORMATEURS **/
                     lblNbFormateur.setText(mapFormateur.get("info1"));
 
                     /** LABELS PROFIL **/
                     lblNbprofil.setText(mapProfil.get("info1"));
+                    lblNbCompetence.setText(mapProfil.get("nbCompetence") + " Compétence");
+                    lblNbNiveau.setText(mapProfil.get("nbNiveau") + " Niveaux");
+                    lblNbTest.setText(mapProfil.get("nbTest") + " Tests");
                 });
 
             });

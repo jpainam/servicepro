@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -110,16 +111,24 @@ public class AccueilProfilController extends AnchorPane implements Initializable
             Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
                 @Override
                 protected ObservableList<Formation> call() throws Exception {
-                    return FXCollections.observableArrayList(new FormationModel().getFormationsSouhaitees(personne));
+                    List<Formation> formationList = new FormationModel().getFormationsSouhaitees(personne);
+                    if(formationList != null) {
+                        return FXCollections.observableArrayList(formationList);
+                    }
+                    return null;
                 }
             };
             new Thread(task).start();
             task.setOnSucceeded(event -> {
-                lblFormationSouhaitee.setText(task.getValue().size() + "");
+                if(task.getValue() != null) {
+                    lblFormationSouhaitee.setText(task.getValue().size() + "");
+                }else{
+                    lblFormationSouhaitee.setText("0");
+                }
             });
             task.setOnFailed(event -> {
                 System.err.println(task.getException());
-                ServiceproUtil.notify("Erreur dans le thread");
+                //ServiceproUtil.notify("Erreur dans le thread de Accueil Profil");
                 task.getException().printStackTrace();
             });
         }
