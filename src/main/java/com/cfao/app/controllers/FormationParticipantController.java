@@ -1,33 +1,43 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.beans.Formation;
-import com.cfao.app.beans.FormationPersonne;
-import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.Societe;
+import com.cfao.app.Main;
+import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
+import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * Created by JP on 7/13/2017.
@@ -42,6 +52,8 @@ public class FormationParticipantController extends AnchorPane implements Initia
     public TableColumn<FormationPersonne, String> nomParticipantColumn;
     public TableColumn<FormationPersonne, String> prenomParticipantColumn;
     public TableColumn<FormationPersonne, Societe> societeParticipantColumn;
+    public TableColumn<FormationPersonne, FontAwesomeIconView> docParticipantColumn;
+
     public Button btnPreviousParticipant;
     public Button btnNextParticipant;
     public Button btnPrintParticipant;
@@ -51,23 +63,29 @@ public class FormationParticipantController extends AnchorPane implements Initia
     public Button personneToParticipantAll;
     public Button participantToPersonne;
     public Button participantToPersonneAll;
-    public HBox hboxSearchParticipant;
-    public HBox hboxSearchPersonne;
+
+    public Button btnVisualiserDoc;
+    public Button btnAjouterDoc;
+    public Button btnSupprimerDoc;
+
+    public VBox vboxSearchPersonne;
     public TableView<Personne> personneTable;
     public StackPane personneStackPane;
-    public StackPane participantStackPane;
+
 
     public TableColumn<Personne, String> matriculePersonneColumn;
     public TableColumn<Personne, String> nomPersonneColumn;
     public TableColumn<Personne, String> prenomPersonneColumn;
-
-    public TableColumn<Personne, FontAwesomeIconView> potentielPersonneColumn;
+    public TableColumn<Personne, Label> potentielPersonneColumn;
+    private ObjectProperty<Predicate<Personne>> personneFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<FormationPersonne>> participantFilter = new SimpleObjectProperty<>();
 
     public int stateBtnModifierParticipant = 0;
     // search personnes
-    SearchBox searchBox2 = new SearchBox();
-    // search participant
-    SearchBox searchBox3 = new SearchBox();
+    SearchBox searchBox = new SearchBox();
+
+
+    private ObservableList<Personne> personneData = FXCollections.observableArrayList();
 
     public FormationParticipantController() {
         try {
@@ -84,12 +102,40 @@ public class FormationParticipantController extends AnchorPane implements Initia
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
+        participantTable.setTableMenuButtonVisible(true);
         participantTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         personneTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        HBox.setHgrow(searchBox2, Priority.ALWAYS);
-        hboxSearchPersonne.getChildren().addAll(new Label("Personnes : "), searchBox2);
-        HBox.setHgrow(searchBox3, Priority.ALWAYS);
-        hboxSearchParticipant.getChildren().addAll(new Label("Participants : "), searchBox3);
+        HBox.setHgrow(searchBox, Priority.ALWAYS);
+        vboxSearchPersonne.getChildren().addAll(new Label("Personnes : (# pour potentiels)"), searchBox);
+
+        personneFilter.bind(Bindings.createObjectBinding(() -> (Predicate<Personne>) personne -> {
+                    if (comparePersonne(personne, searchBox.getText())) {
+                        return true;
+                    }
+                    return false;
+                }, searchBox.textProperty())
+        );
+    }
+
+    private boolean comparePersonne(Personne personne, String newValue) {
+        newValue = newValue.toLowerCase();
+        if (personne.getNom().toLowerCase().contains(newValue) || personne.getPrenom().contains(newValue)) {
+            return true;
+        }
+        if (personne.getSociete() != null && personne.getSociete().toString().toLowerCase().contains(newValue)) {
+            return true;
+        }
+        if (personne.getSection() != null && personne.getSection().toString().toLowerCase().contains(newValue)) {
+            return true;
+        }
+        if (newValue.contains("#")) {
+            for (PersonneCompetence pc : personne.getPersonneCompetences()) {
+                if (formation.getCompetences().contains(pc.getCompetence()) && pc.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void setFormation(Formation formation) {
@@ -99,16 +145,20 @@ public class FormationParticipantController extends AnchorPane implements Initia
     public void buildTable() {
         if (formation == null)
             return;
-
         potentielPersonneColumn.setCellValueFactory(param -> {
             Personne personne = param.getValue();
+            Label label = new Label("N");
             FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.USER);
-            /*if (!personne.getProfil().isEmpty()) {
-                *if (personne.getProfil().get(0).getCompetence().contains(formation.getCompetence())) {
+            formation.getCompetences();
+            for (PersonneCompetence pc : personne.getPersonneCompetences()) {
+                if (formation.getCompetences().contains(pc.getCompetence()) && pc.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)) {
                     iconView.setFill(Color.FORESTGREEN);
+                    label.setText("P");
+                    break;
                 }
-            }*/
-            return new SimpleObjectProperty<>(iconView);
+            }
+            label.setGraphic(iconView);
+            return new SimpleObjectProperty<>(label);
         });
 
         Task<ObservableList<Personne>> task = new Task<ObservableList<Personne>>() {
@@ -121,16 +171,28 @@ public class FormationParticipantController extends AnchorPane implements Initia
                 }
             }
         };
-
-        personneTable.itemsProperty().bind(task.valueProperty());
+        //personneTable.itemsProperty().bind(task.valueProperty());
         ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                personneData.addAll(task.getValue());
+                FilteredList<Personne> filteredList = new FilteredList<Personne>(personneData, p -> true);
+                SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
+                sortedList.comparatorProperty().bind(personneTable.comparatorProperty());
+                personneTable.setItems(sortedList);
+                filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> personneFilter.get(), personneFilter));
+            }
+        });
         participantTable.setItems(FXCollections.observableArrayList(formation.getFormationPersonnes()));
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
     }
 
     private void initComponents() {
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
+        ButtonUtil.plusIcon(btnAjouterDoc);
+        ButtonUtil.delete(btnSupprimerDoc);
         ButtonUtil.add(btnModifierParticipant);
         ButtonUtil.cancel(btnAnnulerParticipant);
         ButtonUtil.angle_left(participantToPersonne);
@@ -139,8 +201,9 @@ public class FormationParticipantController extends AnchorPane implements Initia
         ButtonUtil.angle_double_right(personneToParticipantAll);
         ButtonUtil.next(btnNextParticipant);
         ButtonUtil.previous(btnPreviousParticipant);
-        ButtonUtil.print(btnPrintParticipant);
-        // Participant
+        ButtonUtil.print(btnPrintParticipant, btnVisualiserDoc);
+
+        /**  Propriete de la table participant */
         matriculeParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().matriculeProperty());
         nomParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().nomProperty());
         prenomParticipantColumn.setCellValueFactory(param -> param.getValue().getPersonne().prenomProperty());
@@ -148,6 +211,20 @@ public class FormationParticipantController extends AnchorPane implements Initia
         matriculePersonneColumn.setCellValueFactory(param -> param.getValue().matriculeProperty());
         nomPersonneColumn.setCellValueFactory(param -> param.getValue().nomProperty());
         prenomPersonneColumn.setCellValueFactory(param -> param.getValue().prenomProperty());
+        docParticipantColumn.setCellValueFactory(param -> {
+            FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.PRINT);
+            iconView.setFill(Color.ORANGERED);
+            FormationPersonne fp = param.getValue();
+            if (fp.getDocument() != null && !fp.getDocument().isEmpty()) {
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+                String chemin = path.toString() + File.separator + fp.getDocument();
+                File f = new File(chemin);
+                if (f.exists() && !f.isDirectory()) {
+                    iconView.setFill(Color.FORESTGREEN);
+                }
+            }
+            return new SimpleObjectProperty<>(iconView);
+        });
 
     }
 
@@ -155,22 +232,23 @@ public class FormationParticipantController extends AnchorPane implements Initia
         if (event.getClickCount() > 1 && stateBtnModifierParticipant == 1) {
             FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
             participantTable.getItems().remove(fp);
-            personneTable.getItems().add(fp.getPersonne());
-            participantTable.getSelectionModel().clearSelection();
+            //personneTable.getItems().add(fp.getPersonne());
+            personneData.add(fp.getPersonne());
+            //participantTable.getSelectionModel().clearSelection();
         }
     }
 
     public void personneDoubleClick(MouseEvent event) {
         if (event.getClickCount() > 1 && stateBtnModifierParticipant == 1) {
             this.move(personneTable, participantTable);
-            personneTable.getSelectionModel().clearSelection();
+            //personneTable.getSelectionModel().clearSelection();
         }
     }
 
     public void personneToParticipantAction(ActionEvent actionEvent) {
         if (personneTable.getSelectionModel().getSelectedItem() != null) {
             this.move(personneTable, participantTable);
-            personneTable.getSelectionModel().clearSelection();
+            //personneTable.getSelectionModel().clearSelection();
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la personne à ajouter");
         }
@@ -178,19 +256,20 @@ public class FormationParticipantController extends AnchorPane implements Initia
 
     public void personneToParticipantAllAction(ActionEvent actionEvent) {
         this.move(personneTable, participantTable, new ArrayList(this.personneTable.getItems()));
-        personneTable.getSelectionModel().clearSelection();
+        //personneTable.getSelectionModel().clearSelection();
     }
 
     public void participantToPersonneAction(ActionEvent actionEvent) {
         if (participantTable.getSelectionModel().getSelectedItem() != null) {
             List<FormationPersonne> selectedItems = new ArrayList<>(participantTable.getSelectionModel().getSelectedItems());
             Iterator<FormationPersonne> iterator = selectedItems.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 FormationPersonne fp = iterator.next();
                 participantTable.getItems().remove(fp);
-                personneTable.getItems().add(fp.getPersonne());
+                //personneTable.getItems().add(fp.getPersonne());
+                personneData.add(fp.getPersonne());
             }
-            participantTable.getSelectionModel().clearSelection();
+            //participantTable.getSelectionModel().clearSelection();
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir le particpant à exclure de la liste");
         }
@@ -199,13 +278,13 @@ public class FormationParticipantController extends AnchorPane implements Initia
     public void participantToPersonneAllAction(ActionEvent actionEvent) {
         List<FormationPersonne> items = new ArrayList<>(this.participantTable.getItems());
         Iterator<FormationPersonne> iterator = items.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             FormationPersonne fp = iterator.next();
             participantTable.getItems().remove(fp);
-            personneTable.getItems().add(fp.getPersonne());
+            //personneTable.getItems().add(fp.getPersonne());
+            personneData.add(fp.getPersonne());
         }
-
-        participantTable.getSelectionModel().clearSelection();
+        //participantTable.getSelectionModel().clearSelection();
     }
 
     private void move(TableView<Personne> viewA, TableView<FormationPersonne> viewB) {
@@ -220,7 +299,8 @@ public class FormationParticipantController extends AnchorPane implements Initia
             FormationPersonne fp = new FormationPersonne();
             fp.setPersonne(item);
             fp.setFormation(formation);
-            viewA.getItems().remove(item);
+            //viewA.getItems().remove(item);
+            personneData.remove(item);
             viewB.getItems().add(fp);
         }
     }
@@ -239,7 +319,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
             btnModifierParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
             ServiceproUtil.setDisable(true, participantToPersonneAll, participantToPersonne, personneToParticipantAll, personneToParticipant);
             formation.getPersonnes().clear();
-            for(FormationPersonne fp : participantTable.getItems()) {
+            for (FormationPersonne fp : participantTable.getItems()) {
                 formation.getPersonnes().add(fp.getPersonne());
             }
             if (formationModel.update(formation)) {
@@ -257,5 +337,113 @@ public class FormationParticipantController extends AnchorPane implements Initia
         btnModifierParticipant.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
         stateBtnModifierParticipant = 0;
         buildTable();
+    }
+
+    public void supprimerDocAction(ActionEvent event) {
+        if( stateBtnModifierParticipant != 0)
+            return;
+        FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
+        if (fp != null) {
+            Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+            File f = new File(path.toString() + File.separator + fp.getDocument());
+            if (f.exists() && !f.isDirectory()) {
+                if (f.delete()) {
+                    Task<Boolean> task = new Task<Boolean>() {
+                        @Override
+                        protected Boolean call() throws Exception {
+                            fp.setDocument("");
+                            return new Model<>("FormationPersonne").update(fp);
+                        }
+                    };
+                    new Thread(task).start();
+                    task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+                            if (task.getValue()) {
+                                participantTable.refresh();
+                                ServiceproUtil.notify("Suppression OK");
+                            } else {
+                                ServiceproUtil.notify("Erreur de suppression");
+                            }
+                        }
+                    });
+                    task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+                            ServiceproUtil.notify("Erreur dans the thread de suppression");
+                            task.getException().printStackTrace();
+                        }
+                    });
+                }
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le participant dont il faut supprimer le document d'analyse");
+        }
+    }
+
+    public void ajouterDocAction(ActionEvent event) {
+        if( stateBtnModifierParticipant != 0)
+            return;
+        FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
+        if (fp != null) {
+            FileChooser choosePic = new FileChooser();
+            File file;
+            try {
+                if ((file = choosePic.showOpenDialog(Main.stage)) != null) {
+                    Task<Boolean> task = new Task<Boolean>() {
+                        @Override
+                        protected Boolean call() throws Exception {
+                            Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+                            File f = new File(path.toString() + File.separator + fp.getDocument());
+                            if (f.exists() && !f.isDirectory()) {
+                                f.delete();
+                            }
+                            String chemin = path.toString() + File.separator + file.getName();
+                            Path src = file.toPath();
+                            Files.copy(src, Paths.get(chemin), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                            fp.setDocument(file.getName());
+                            return new Model<>("FormationPersonne").update(fp);
+                        }
+                    };
+                    task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+                            if (task.getValue()) {
+                                participantTable.refresh();
+                                ServiceproUtil.notify("Document ajouté avec succès");
+                            } else {
+                                ServiceproUtil.notify("Erreur d'ajout du document");
+                            }
+                        }
+                    });
+                    new Thread(task).start();
+                    task.setOnFailed(event1 -> {
+                        ServiceproUtil.notify("Erreur dans le thread lors de la sauvegarde du fichier");
+                        task.getException().printStackTrace();
+                    });
+
+                }
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le participant, titulaire du document");
+        }
+    }
+
+    public void visualiserDocAction(ActionEvent event) {
+        if( stateBtnModifierParticipant != 0)
+            return;
+        FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
+        if (fp != null) {
+            Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+            String document = path.toString() + File.separator + fp.getDocument();
+            File f = new File((document));
+            if(f.exists() && !f.isDirectory()) {
+                ServiceproUtil.openDocument(f);
+            }
+        } else {
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le participant dont il faut afficher le document d'analyse");
+        }
     }
 }

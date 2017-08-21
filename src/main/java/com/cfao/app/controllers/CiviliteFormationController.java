@@ -2,7 +2,6 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
-import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
@@ -34,6 +33,8 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Optional;
@@ -56,11 +57,11 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public Button btnPrintCompetence;
     public Button btnEditerCertification;
 
-    public TableView<Formation> formationTable;
-    public TableColumn<Formation, String> codeFormationColumn;
-    public TableColumn<Formation, String> titreFormationColumn;
-    public TableColumn<Formation, LocalDate> datedebutFormationColumn;
-    public TableColumn<Formation, LocalDate> datefinFormationColumn;
+    public TableView<FormationPersonne> formationTable;
+    public TableColumn<FormationPersonne, String> codeFormationColumn;
+    public TableColumn<FormationPersonne, String> titreFormationColumn;
+    public TableColumn<FormationPersonne, LocalDate> datedebutFormationColumn;
+    public TableColumn<FormationPersonne, LocalDate> datefinFormationColumn;
     public StackPane historiqueStackPane;
     public ComboBox<CompetenceCertification> comboStatut;
     private Personne personne = null;
@@ -107,20 +108,16 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         createViewer(pdfContainer);
         ButtonUtil.delete(btnSupprimerCompetence);
         ButtonUtil.plusIcon(btnAddCompetence);
-        formationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Formation>() {
-            @Override
-            public void changed(ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) {
-                //String url = ResourceBundle.getBundle("Bundle").getString("document.dir");
-                //openDocument(getClass().getResource(url + "documents.pdf").getPath());
-
-                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
-                if (!path.toFile().exists()) {
-                    path.toFile().mkdir();
+        formationTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue.getDocument() != null)
+                if (!newValue.getDocument().isEmpty()) {
+                    Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+                    File f = new File(path.toString() + File.separator + newValue.getDocument());
+                    if (f.exists() && !f.isDirectory()) {
+                        openDocument(f.toPath().toString());
+                    }
                 }
-                openDocument(path.toString() + File.separator + "documents.pdf");
-            }
         });
-
     }
 
 
@@ -149,29 +146,30 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             ServiceproUtil.notify("Erreur dans le Thread combo Statut");
         });
 
-        /*competenceTable.setRowFactory(param -> {
-            final TableRow<Competence> row = new TableRow<>();
+        competenceTable.setRowFactory(param -> {
+            final TableRow<PersonneCompetence> row = new TableRow<>();
             final Tooltip tooltip = new Tooltip();
             row.hoverProperty().addListener(observable -> {
 
-                final Competence competence = row.getItem();
-                if (row.isHover() && competence != null) {
-                    tooltip.setText(competence.getDescription());
+                final PersonneCompetence pc = row.getItem();
+                if (row.isHover() && pc != null) {
+                    DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
+                    tooltip.setText(pc.getCompetence().getDescription() + "=>" + format.format(pc.getCreatedAt()));
                     row.setTooltip(tooltip);
                 }
             });
             return row;
-        });*/
+        });
 
-        codeFormationColumn.setCellValueFactory(param -> param.getValue().codeformationProperty());
+        codeFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().codeformationProperty());
 
-        titreFormationColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+        titreFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().titreProperty());
 
-        datedebutFormationColumn.setCellValueFactory(param -> param.getValue().datedebutProperty());
-        datedebutFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
+        datedebutFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().datedebutProperty());
+        datedebutFormationColumn.setCellFactory(new DateTableCellFactory<FormationPersonne>());
 
-        datefinFormationColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
-        datefinFormationColumn.setCellFactory(new DateTableCellFactory<Formation>());
+        datefinFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().datefinProperty());
+        datefinFormationColumn.setCellFactory(new DateTableCellFactory<>());
         setColumnFactories();
 
         intituleCompetenceColumn.setCellValueFactory(param -> param.getValue().competence());
@@ -194,20 +192,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                             }
                     }
                 });
-                /*{
-            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
-            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
-                    if (newValue) {
-                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
-                        pp.setEncours(newValue);
-                        pp.setCertifiee(false);
-                        pp.setAcertifier(false);
-                    }
-                }
-            });
-            return cell;
-        });*/
+
         acertifierCompetenceColumn.setCellFactory(param ->
                 new CheckTable() {
                     @Override
@@ -222,20 +207,6 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
 
                     }
                 });
-            /*
-            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
-            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
-                    if (newValue) {
-                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getIndex());
-                        pp.setAcertifier(newValue);
-                        pp.setCertifiee(false);
-                        pp.setEncours(false);
-                    }
-                }
-            });
-            return cell;
-        });*/
 
         certifieeCompetenceColumn.setCellFactory(param ->
                 new CheckTable() {
@@ -251,63 +222,15 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
                     }
                 });
 
-            /*
-            CheckBoxTableCell<PersonneCompetence, Boolean> cell = new CheckBoxTableCell<>();
-            cell.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0)
-                    if(newValue){
-                        PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
-                        pp.setCertifiee(newValue);
-                        pp.setEncours(false);
-                        pp.setAcertifier(false);
-                    }*/
-                /*
-                if (cell.getTableRow().getIndex() >= 0 && cell.getTableView().getItems().size() > 0) {
-                    PersonneCompetence pp = cell.getTableView().getItems().get(cell.getTableRow().getIndex());
-                    pp.setCertifiee(newValue);
-                    if (newValue) {
-                        pp.setEncours(false);
-                        pp.setAcertifier(false);
-                    }
-                    System.out.println(">>> " + pp.getCompetenceCertification().getCertification());
-                }
-
-            });
-            return cell;
-        });*/
-
     }
 
-    /*private void updatePersonneCompetence(PersonneCompetence pp) {
-        Task<Boolean> task = new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                return new PersonneCompetenceModel().update(pp);
-            }
-        };
-        new Thread(task).start();
-    }*/
 
     public void buildFormation() {
         competenceTable.itemsProperty().bind(personne.personneCompetencesProperty());
-        //competenceTable.setItems(FXCollections.observableArrayList(personne.getPersonneCompetences()));
-        // Historique des formatioetItems().setAll(personne.personneCompetencesPropn
-        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
-            @Override
-            protected ObservableList<Formation> call() throws Exception {
-                return FXCollections.observableArrayList(new FormationModel().getFormationsByPersonne(personne));
-            }
-        };
-
-        formationTable.itemsProperty().bind(task.valueProperty());
-        ProgressIndicatorUtil.show(historiqueStackPane, task);
-        new Thread(task).start();
-
-        task.setOnFailed(event -> {
-            ServiceproUtil.notify("Erreur dans le thread de certification");
-            task.getException().printStackTrace();
-            System.err.println(task.getException());
-        });
+        formationTable.itemsProperty().bind(personne.formationPersonnesProperty());
+        if (swingController.getDocument() != null) {
+            swingController.closeDocument();
+        }
     }
 
 

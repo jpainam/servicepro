@@ -23,7 +23,6 @@ public class CivilitePhoto {
     private String currentPhoto = "";
 
     public CivilitePhoto() {
-
     }
 
     public URL getImagePath(Personne personne){

@@ -118,6 +118,9 @@ public class Personne implements java.io.Serializable {
 
     @Column(name = "EMAIL")
     public String getEmail() {
+        if(email.isNull().get()){
+            return "";
+        }
         return email.get();
     }
 
@@ -448,6 +451,9 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "EXPIRE")
     public Date getExpirationPassport() {
+        if(expirationPassport.isNull().get()){
+            return null;
+        }
         return expirationPassport.get();
     }
 

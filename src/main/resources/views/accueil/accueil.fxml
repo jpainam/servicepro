@@ -19,7 +19,7 @@
                            <children>
                               <Label fx:id="lblNbCivilite" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="79.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités" />
-                               <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #009ABF;" text="Plus d'info" />
+                               <Label contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #009ABF;" text="Plus d'info" />
                            </children>
                         </VBox>
                         <VBox layoutY="12.0" prefHeight="128.0" prefWidth="112.0" HBox.hgrow="ALWAYS">
@@ -47,7 +47,7 @@
                            <children>
                               <Label fx:id="lblNbFormation" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations" />
-                               <Label alignment="TOP_LEFT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="85.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #008548;" text="Plus d'info" />
+                               <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="85.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #008548;" text="Plus d'info" />
                            </children>
                         </VBox>
                         <VBox HBox.hgrow="ALWAYS">
@@ -82,7 +82,7 @@
                            <children>
                               <Label fx:id="lblNbFormateur" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="100.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formateurs" />
-                               <Label alignment="TOP_LEFT" layoutX="2.0" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #B13C2E;" text="Plus d'info" />
+                               <Label layoutX="2.0" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #B13C2E;" text="Plus d'info" />
 
                            </children>
                            <HBox.margin>
@@ -119,7 +119,7 @@
                            <children>
                               <Label fx:id="lblNbprofil" maxWidth="1.7976931348623157E308" prefHeight="3.0" prefWidth="79.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
                               <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils" />
-                              <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #C37D0E;" text="Plus d'info" />
+                              <Label contentDisplay="CENTER" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #C37D0E;" text="Plus d'info" />
                            </children>
                         </VBox>
                         <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0" HBox.hgrow="ALWAYS">
@@ -151,6 +151,7 @@
             <AnchorPane fx:id="personneStatContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
+      <Button mnemonicParsing="false" onAction="#printProfilAction" text="Button" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

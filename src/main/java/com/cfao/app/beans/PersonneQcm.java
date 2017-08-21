@@ -23,6 +23,7 @@ public class PersonneQcm implements java.io.Serializable {
     private ObjectProperty<Qcm> qcm = new SimpleObjectProperty<>();
     private ObjectProperty<Date> dateqcm = new SimpleObjectProperty<Date>();
     private SimpleDoubleProperty note = new SimpleDoubleProperty();
+    private ObjectProperty<Date> createdAt = new SimpleObjectProperty<>();
 
     public PersonneQcm() {
     }
@@ -111,6 +112,23 @@ public class PersonneQcm implements java.io.Serializable {
 
     public void setNote(Double note) {
         this.note.set(note);
+    }
+
+    @Column(name="CREATEDAT", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreatedAt() {
+        return createdAt.get();
+    }
+
+    public ObjectProperty<LocalDate> createdAtProperty() {
+        if(createdAt != null) {
+            return new SimpleObjectProperty<>(new java.sql.Date(createdAt.get().getTime()).toLocalDate());
+        }
+        return new SimpleObjectProperty<>(new java.sql.Date(new Date().getTime()).toLocalDate());
+    }
+
+    public void setCreatedAt(Date createat) {
+        this.createdAt.set(createat);
     }
 }
 

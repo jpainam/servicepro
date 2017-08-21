@@ -1,57 +1,134 @@
 package com.cfao.app.reports;
 
-import com.cfao.app.beans.Personne;
+import com.cfao.app.beans.*;
 import com.cfao.app.controllers.CivilitePhoto;
-import com.cfao.app.model.PersonneModel;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.Report;
-import javafx.application.Platform;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
+import com.cfao.app.util.ServiceproUtil;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.util.Date;
-import java.util.HashMap;
+import java.io.File;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by JP on 8/14/2017.
  */
 public class PrintCivilite extends Report {
-    HashMap<String, Object> parameters;
-    PersonneModel personneModel;
-
-    BufferedImage photo;
     CivilitePhoto civilitePhoto = new CivilitePhoto();
-
     public PrintCivilite(){
         super();
-        parameters = new HashMap<>();
-        parameters.put("logo", logo);
     }
-    public void showDetails(Personne personne) {
-        try {
-            parameters.put("personne", personne);
-            /*parameters.put("DSFormateurs", formation.getPersonnels());
-            parameters.put("DSCompetences", formation.getCompetences());
-            parameters.put("DSParticipants", formation.getFormationPersonnes());*/
-            parameters.put("DSLangues", personne.getLangues());
-            parameters.put("DSCompetences", personne.getPersonneCompetences());
-            parameters.put("DSFormations", personne.getFormations());
-            parameters.put("DSTests", personne.getPersonneQcms());
-            parameters.put("today", new Date());
-            photo = ImageIO.read(civilitePhoto.getImagePath(personne));
-            parameters.put("photo", photo);
-            jasperDesign = JRXmlLoader.load(getClass().getClassLoader().getResourceAsStream("views/civilite/details.jrxml"));
-            jasperReport = JasperCompileManager.compileReport(jasperDesign);
-            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-            JasperViewer.viewReport(print, false);
-        } catch (Exception ex) {
-            Platform.runLater(() -> AlertUtil.showErrorMessage(ex));
+    public void printDetails(Personne personne) throws Exception {
+        URL filename = civilitePhoto.getImagePath(personne);
+        Image photo = new Image(ImageDataFactory.create(filename));
+        photo.setWidth(35);
+        photo.setHeight(30);
+        photo.setFixedPosition(530, 803);
+        this.document.add(photo);
+        PdfFont bold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+
+        document.add(new Paragraph());
+        document.add(new Paragraph("Profil Apprenant").setTextAlignment(TextAlignment.CENTER).setFont(bold).setUnderline());
+        /**
+         * INFORMATION GENERALE
+         */
+        DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
+        document.add(new Paragraph("Information générale").setBold().setUnderline());
+        Table infos = new Table(new float[]{5, 5, 5, 5});
+        infos.setWidthPercent(100);
+
+        infos.addCell(new Cell().add(new Paragraph("Matricule").setBold())
+                .add(personne.getMatricule()).setBorder(Border.NO_BORDER));
+        infos.addCell(new Cell().add(new Paragraph("Noms et Prenoms").setBold())
+                .add(personne.getNom() + " " + personne.getPrenom()).setBorder(Border.NO_BORDER));
+
+
+        infos.addCell(new Cell().add(new Paragraph("Date Naiss").setBold())
+                .add(personne.getDatenaiss() == null ? "" : format.format(personne.getDatenaiss())).setBorder(Border.NO_BORDER));
+
+        infos.addCell(new Cell().add(new Paragraph("Email").setBold())
+                .add(personne.getEmail()).setBorder(Border.NO_BORDER));
+
+        infos.addCell(new Cell().add(new Paragraph("Groupe").setBold())
+                .add(personne.getGroupe() != null ? personne.getGroupe().getLibelle() : "").setBorder(Border.NO_BORDER));
+        infos.addCell(new Cell().add(new Paragraph("Société").setBold())
+                .add(personne.getSociete().getNom()).setBorder(Border.NO_BORDER));
+        infos.addCell(new Cell().add(new Paragraph("Section").setBold())
+                .add(personne.getSection().getLibelle()).setBorder(Border.NO_BORDER));
+        infos.addCell(new Cell().add(new Paragraph("Ambition").setBold())
+                .add(personne.getAmbition().getLibelle()).setBorder(Border.NO_BORDER));
+
+
+        infos.addCell(new Cell().add(new Paragraph("Date Contrat").setBold())
+                .add(personne.getDatecontrat() == null ? "" : format.format(personne.getDatecontrat())).setBorder(Border.NO_BORDER));
+        infos.addCell(new Cell().add(new Paragraph("Pays").setBold())
+                .add(personne.getPays().getNamefr()).setBorder(Border.NO_BORDER));
+        if(personne.getPassport() != null) {
+            infos.addCell(new Cell().add(new Paragraph("Passport").setBold())
+                    .add(personne.getPassport().substring(0, personne.getPassport().lastIndexOf("."))).setBorder(Border.NO_BORDER));
+        }else{
+            infos.addCell(new Cell().add(new Paragraph("Passport").setBold()).setBorder(Border.NO_BORDER));
         }
+        infos.addCell(new Cell().add(new Paragraph("Langue").setBold())
+                .add(personne.getLangue().getLibelle()).setBorder(Border.NO_BORDER));
+        document.add(infos);
+        document.add(new Paragraph("Langues parlées : " + personne.getLangues()));
+
+        /**
+         * TABLE COMPETENCE
+         */
+        Table competenceTable = new Table(new float[] {1, 5, 2, 4});
+        //use 100% of the width of the page
+        competenceTable.setWidthPercent(100);
+        competenceTable.addHeaderCell(new Paragraph("N°").setBold());
+        competenceTable.addHeaderCell(new Paragraph("Intitulé de la compétence").setBold());
+        competenceTable.addHeaderCell(new Paragraph("Niveau").setBold());
+        competenceTable.addHeaderCell(new Paragraph("Certification").setBold());
+        int i = 1;
+        for(PersonneCompetence pc : personne.getPersonneCompetences()){
+            Competence competence = pc.getCompetence();
+            competenceTable.addCell(i + "");
+            competenceTable.addCell(competence.getDescription());
+            competenceTable.addCell(competence.getNiveau().getLibelle());
+            competenceTable.addCell(pc.getCompetenceCertification().getLibelle());
+            i++;
+        }
+        //Font bold = FontFactory.getFont(FontConstants.HELVETICA_BOLD);
+        document.add(new Paragraph("Compétences").setFont(bold).setUnderline());
+        document.add(competenceTable);
+
+        /**
+         * TABLE QCM
+         */
+        Table qcmTable = new Table(new float[]{1, 16, 2, 2, 2});
+        qcmTable.setWidthPercent(100);
+        qcmTable.addHeaderCell(new Paragraph("N°").setBold());
+        qcmTable.addHeaderCell(new Paragraph("Titre du Test").setBold());
+        qcmTable.addHeaderCell(new Paragraph("Type du Test").setBold());
+        qcmTable.addHeaderCell(new Paragraph("Note").setBold());
+        qcmTable.addHeaderCell(new Paragraph("Base").setBold());
+        i = 1;
+        for(PersonneQcm pq : personne.getPersonneQcms()){
+            Qcm qcm = pq.getQcm();
+            qcmTable.addCell(i + "");
+            qcmTable.addCell(qcm.getTitre());
+            qcmTable.addCell(qcm.getQcmType().getLibelle());
+            qcmTable.addCell(pq.getNote() + "");
+            qcmTable.addCell(qcm.getBase() + "");
+            i++;
+        }
+        document.add(new Paragraph("Tests").setFont(bold).setUnderline());
+        document.add(qcmTable);
+        close();
+        ServiceproUtil.openDocument(destination + File.separator + "test.pdf");
     }
 }

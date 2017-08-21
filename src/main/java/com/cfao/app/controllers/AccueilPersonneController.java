@@ -91,8 +91,9 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         }
         createChartPersonne();
         profilController = new AccueilProfilController();
-        personneFilter.bind(Bindings.createObjectBinding(() ->
-                        person -> comparePersonne(person, searchBox.getText()),
+        personneFilter.bind(Bindings.createObjectBinding(() -> {
+                    return person -> comparePersonne(person, searchBox.getText());
+                },
                 searchBox.textProperty())
         );
     }
@@ -197,12 +198,12 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         personneTable.setRowFactory(param -> {
             TableRow<Personne> row = new TableRow<>();
             row.hoverProperty().addListener((observable, oldValue, newValue) -> {
-                if (isHover()) {
+                /*if (isHover()) {
                     profilController.setPersonne(row.getItem());
                     profilController.buildProfilDetails();
                     personneDetailsPopOver.setContentNode(profilController);
                     personneDetailsPopOver.show(row);
-                }
+                }*/
             });
             return row;
         });

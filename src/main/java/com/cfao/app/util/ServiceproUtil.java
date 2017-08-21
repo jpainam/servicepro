@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -102,6 +103,16 @@ public class ServiceproUtil {
             Desktop.getDesktop().browse(new URI(link));
         } catch (URISyntaxException | IOException ex) {
             AlertUtil.showSimpleAlert("Information", "Erreur d'ouverture du lien");
+        }
+    }
+    public static void openDocument(String document) {
+        openDocument(new File(document));
+    }
+    public static void openDocument(File file) {
+        try {
+            Desktop.getDesktop().open(file);
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
         }
     }
 

@@ -5,6 +5,7 @@ import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.model.FormationModel;
+import com.cfao.app.model.PersonneModel;
 import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
@@ -139,9 +140,11 @@ public class AccueilProfilController extends AnchorPane implements Initializable
             @Override
             protected Void call() throws Exception {
                 PrintCivilite print = new PrintCivilite();
-                if (personne != null) {
-                    print.showDetails(personne);
-                }
+                //if (personne != null) {
+                    //print.showDetails(personne);
+                personne = new PersonneModel().getList().get(0);
+                    print.printDetails(personne);
+                //}
                 return null;
             }
         };

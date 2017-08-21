@@ -1,6 +1,15 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
+import com.cfao.app.beans.Personne;
+import com.cfao.app.model.PersonneModel;
+import com.cfao.app.reports.PrintCivilite;
+import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -83,6 +92,37 @@ public class AccueilController implements Initializable {
 
     private void initComponents() {
 
+    }
+
+    public void printProfilAction(ActionEvent event) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                PrintCivilite print = new PrintCivilite();
+                //if (personne != null) {
+                //print.showDetails(personne);
+                Personne personne = new PersonneModel().getList().get(0);
+                print.printDetails(personne);
+                //}
+                return null;
+            }
+        };
+        StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+        new Thread(task).start();
+        task.setOnSucceeded(event1 -> {
+            StageManager.getProgressBar().progressProperty().unbind();
+            StageManager.getProgressBar().setProgress(0);
+            ServiceproUtil.notify("Impression réussie");
+        });
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+                ServiceproUtil.notify("Erreur d'impression");
+                StageManager.getProgressBar().progressProperty().unbind();
+                StageManager.getProgressBar().setProgress(0);
+            }
+        });
     }
 
 
