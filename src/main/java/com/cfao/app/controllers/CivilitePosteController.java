@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,7 +25,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 /**
  * Created by armel on 10/07/2017.
@@ -101,14 +101,11 @@ public class CivilitePosteController extends AnchorPane implements Initializable
                 }
             });
             Optional<Poste> result = dialog.showAndWait();
-            result.ifPresent(new Consumer<Poste>() {
-                @Override
-                public void accept(Poste poste) {
-                    if (poste != null) {
-                        tablePoste.getItems().add(poste);
-                    } else {
-                        ServiceproUtil.notify("Erreur d'ajout de poste");
-                    }
+            result.ifPresent(poste -> {
+                if (poste != null) {
+                    tablePoste.getItems().add(poste);
+                } else {
+                    ServiceproUtil.notify("Erreur d'ajout de poste");
                 }
             });
         }
@@ -126,12 +123,14 @@ public class CivilitePosteController extends AnchorPane implements Initializable
 
 
     class DialogPosteController extends AnchorPane implements  Initializable{
+        @FXML
         public TextField txtPoste;
+        @FXML
         public ComboBox<Societe> comboSociete;
+        @FXML
         public DatePicker dateTo;
+        @FXML
         public DatePicker dateFrom;
-        public ObservableList<Societe> data = FXCollections.observableArrayList();
-
 
         public DialogPosteController() {
             try {
@@ -147,8 +146,18 @@ public class CivilitePosteController extends AnchorPane implements Initializable
 
         @Override
         public void initialize(URL location, ResourceBundle resources) {
-            setData();
-            comboSociete.setItems(data);
+            Task<ObservableList<Societe>> task = new Task<ObservableList<Societe>>() {
+                @Override
+                protected ObservableList<Societe> call() throws Exception {
+                    return FXCollections.observableList(new Model<Societe>("Societe").getList());
+                }
+            };
+            new Thread(task).start();
+            comboSociete.itemsProperty().bind(task.valueProperty());
+            task.setOnFailed(event -> {
+                ServiceproUtil.notify("Erreur dans le thread du dialog");
+                task.getException().printStackTrace();
+            });
             dateFrom.setValue(LocalDate.now());
             dateTo.setValue(LocalDate.now());
         }
@@ -166,19 +175,6 @@ public class CivilitePosteController extends AnchorPane implements Initializable
                 return poste;
             }
             return null;
-        }
-
-        private void setData() {
-            Task<ObservableList<Societe>> task = new Task<ObservableList<Societe>>() {
-                @Override
-                protected ObservableList<Societe> call() throws Exception {
-                    return FXCollections.observableList(new Model<Societe>("Societe").getList());
-                }
-            };
-            task.run();
-            task.setOnSucceeded(event -> {
-                data.setAll(task.getValue());
-            });
         }
     }
 }

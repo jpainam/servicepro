@@ -24,7 +24,7 @@ public class UserModel extends Model<User>{
     }
 
 
-    public boolean isAuthorized(String login, String pwd){
+    public User isAuthorized(String login, String pwd){
         Session session = getCurrentSession();
         try {
             session.beginTransaction();
@@ -33,12 +33,16 @@ public class UserModel extends Model<User>{
             Criterion pwdCriterion = Restrictions.eq("password", pwd);
             LogicalExpression andExp = Restrictions.and(loginCriterion, pwdCriterion);
             criteria.add(andExp);
-            return criteria.list().size() != 0;
+            if(criteria.list().size() != 0) {
+                return (User) criteria.uniqueResult();
+            }
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            session.close();
+            if(session.isOpen()) {
+                session.close();
+            }
         }
-        return false;
+        return null;
     }
 }

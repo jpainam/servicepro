@@ -6,11 +6,8 @@ import com.cfao.app.beans.Profil;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.ProfilModel;
 import com.cfao.app.util.*;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -23,6 +20,8 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -48,10 +47,10 @@ public class ProfilController implements Initializable {
     public TableColumn<Competence, Boolean> connaissanceColumn;
     public TableColumn<Competence, Boolean> competenceColumn;
     public TableView<Competence> competenceTable;
-    public HBox researchBox;
+    public VBox researchBox;
     public AnchorPane rootPane1;
-    public VBox rootPane2;
-    public HBox researchBox2;
+
+    public VBox researchBox2;
     public TabPane tabPane;
     public Tab firstTab;
     public Button btnPrevious;
@@ -61,7 +60,6 @@ public class ProfilController implements Initializable {
     public Button btnModifier;
     public Button btnSupprimer;
     public Button btnAnnuler;
-    private TableView.TableViewSelectionModel<Profil> tableProfilModel;
     private SearchBox searchBox = new SearchBox();
     private SearchBox searchBox2 = new SearchBox();
 
@@ -73,14 +71,6 @@ public class ProfilController implements Initializable {
         firstTab.setClosable(false);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         HBox.setHgrow(profilTable, Priority.ALWAYS);
-        tableProfilModel = profilTable.getSelectionModel();
-        tableProfilModel.selectedItemProperty().addListener(new ChangeListener<Profil>() {
-            @Override
-            public void changed(ObservableValue<? extends Profil> observable, Profil oldValue, Profil newValue) {
-                Profil profil = profilTable.getSelectionModel().getSelectedItem();
-                ProfilController.this.fillCompetenceTable(profil);
-            }
-        });
     }
     private void initComponents(){
         HBox.setHgrow(searchBox, Priority.ALWAYS);
@@ -98,11 +88,6 @@ public class ProfilController implements Initializable {
         ButtonUtil.edit(btnModifier);
         ButtonUtil.cancel(btnAnnuler);
         ButtonUtil.delete(btnSupprimer);
-    }
-
-    private void fillCompetenceTable(Profil profil) {
-
-        System.out.println(profil.getCompetences());
         setColumnProperty(initialColumn,  ProfilModel.INITIAL);
         setColumnProperty(fondamentalColumn,  ProfilModel.FONDAMENTAL);
         setColumnProperty(avanceColumn, ProfilModel.AVANCE);
@@ -129,8 +114,10 @@ public class ProfilController implements Initializable {
             Competence competence = param.getValue();
             return new SimpleObjectProperty<>(competence);
         });
-        competenceTable.setItems(FXCollections.observableArrayList(profil.getCompetences()));
+    }
 
+    private void fillCompetenceTable(Profil profil) {
+        competenceTable.setItems(FXCollections.observableArrayList(profil.getCompetences()));
     }
 
     private void setColumnProperty(TableColumn<Competence, Boolean> tableColumn, int niveau) {
@@ -199,6 +186,20 @@ public class ProfilController implements Initializable {
             sortedList.comparatorProperty().bind(profilTable.comparatorProperty());
             profilTable.setItems(sortedList);
         });
+        /*profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            fillCompetenceTable(newValue);
+        });*/
+        /*profilTable.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Profil>() {
+            @Override
+            public void onChanged(Change<? extends Profil> c) {
+                fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
+            }
+        });*/
+        profilTable.setOnMouseClicked((MouseEvent event) -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)){
+                fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
+            }
+        });
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
@@ -252,15 +253,7 @@ public class ProfilController implements Initializable {
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
-        Tab tab = tabPane.getTabs().get(0);
-        tabPane.getSelectionModel().select(tab);
-        Platform.runLater(() -> {
-            profilTable.requestFocus();
-            if(profilTable.getItems().size() > 0) {
-                profilTable.getSelectionModel().select(0);
-                profilTable.getFocusModel().focus(0);
-            }
-        });
+        StageManager.loadContent("/views/profil/profil.fxml");
     }
 
     public void previousAction(ActionEvent event) {

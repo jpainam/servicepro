@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -91,11 +92,8 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         }
         createChartPersonne();
         profilController = new AccueilProfilController();
-        personneFilter.bind(Bindings.createObjectBinding(() -> {
-                    return person -> comparePersonne(person, searchBox.getText());
-                },
-                searchBox.textProperty())
-        );
+        personneFilter.bind(Bindings.createObjectBinding(() -> (Predicate<Personne>)
+                personne -> comparePersonne(personne, searchBox.getText()), searchBox.textProperty()));
     }
 
     private boolean comparePersonne(Personne p, String newValue) {
@@ -133,6 +131,10 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         acertifierColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
         certifieeColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
         intituleColum.setCellValueFactory(param -> param.getValue().competence());
+
+        encoursColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        acertifierColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        certifieeColumn.setCellFactory(param -> new CheckBoxTableCell<>());
 
     }
 
@@ -262,15 +264,23 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
                     Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
                         @Override
                         protected ObservableList<PersonneCompetence> call() throws Exception {
-                            return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+                            if(newValue != null) {
+                                return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+                            }
+                            return null;
                         }
                     };
+                    new Thread(task).start();
                     competenceTable.itemsProperty().bind(task.valueProperty());
                     if (newValue != null) {
                         competenceTable.setVisibleRowCount(newValue.getProfil().getCompetences().size() + 2);
                         profilPopOver.setContentNode(competenceTable);
                         profilPopOver.show(profilTable);
                     }
+                    task.setOnFailed(event -> {
+                        ServiceproUtil.notify("Erreur dans le thread de profil table");
+                        task.getException().printStackTrace();
+                    });
                 }
             });
         } else {

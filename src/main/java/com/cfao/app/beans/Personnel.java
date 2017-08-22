@@ -26,6 +26,7 @@ public class Personnel implements java.io.Serializable {
     private SimpleStringProperty adresse = new SimpleStringProperty();
     private SimpleStringProperty telephone = new SimpleStringProperty();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
+    private ListProperty<Domaine> domaines = new SimpleListProperty<>();
 
     public Personnel() {
     }
@@ -104,9 +105,26 @@ public class Personnel implements java.io.Serializable {
         this.formations.set(FXCollections.observableArrayList(formations));
     }
 
+
     @Override
     public String toString() {
         return getNom() + " " + getPrenom();
+    }
+
+    @ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="personnel_domaine", joinColumns = {
+            @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) }, inverseJoinColumns = {
+            @JoinColumn(name="DOMAINE", nullable=false, updatable=false) })
+    public List<Domaine> getDomaines() {
+        return domaines.get();
+    }
+
+    public ListProperty<Domaine> domainesProperty() {
+        return domaines;
+    }
+
+    public void setDomaines(List<Domaine> domaines) {
+        this.domaines.set(FXCollections.observableArrayList(domaines));
     }
 }
 

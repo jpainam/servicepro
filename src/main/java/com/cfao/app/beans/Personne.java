@@ -161,7 +161,10 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATENAISS")
     public Date getDatenaiss() {
-        return datenaiss.get();
+        if(datenaiss != null) {
+            return datenaiss.get();
+        }
+        return new Date(0l);
     }
 
     public ObjectProperty<LocalDate> datenaissProperty() {
@@ -175,7 +178,10 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATECONTRAT")
     public Date getDatecontrat() {
-        return fincontrat.get();
+        if(fincontrat != null) {
+            return fincontrat.get();
+        }
+        return  new Date(0l);
     }
 
     public ObjectProperty<Date> fincontratProperty() {
@@ -433,7 +439,7 @@ public class Personne implements java.io.Serializable {
         if(fincontrat != null) {
             return new SimpleObjectProperty<>(new java.sql.Date(fincontrat.get().getTime()).toLocalDate());
         }
-        return new SimpleObjectProperty<>(new java.sql.Date(new Date().getTime()).toLocalDate());
+        return new SimpleObjectProperty<>(new java.sql.Date(new Date(0l).getTime()).toLocalDate());
     }
     @Column(name = "PASSPORT")
     public String getPassport() {
@@ -451,14 +457,18 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "EXPIRE")
     public Date getExpirationPassport() {
-        if(expirationPassport.isNull().get()){
-            return null;
+        if(expirationPassport != null){
+            return expirationPassport.get();
         }
-        return expirationPassport.get();
+        return new Date(0l); //0 date
+
     }
 
-    public ObjectProperty<Date> expirationPassportProperty() {
-        return expirationPassport;
+    public ObjectProperty<LocalDate> expirationPassportProperty() {
+        if(expirationPassport != null){
+            return new SimpleObjectProperty<>(new java.sql.Date(expirationPassport.get().getTime()).toLocalDate());
+        }
+        return new SimpleObjectProperty<>(new java.sql.Date(new Date(0l).getTime()).toLocalDate());
     }
 
     public void setExpirationPassport(Date expire) {

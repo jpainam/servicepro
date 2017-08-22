@@ -7,7 +7,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -24,6 +25,7 @@ public class PersonneCompetence implements java.io.Serializable {
     private ObjectProperty<Competence> competence = new SimpleObjectProperty<>();
     private ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
     private ObjectProperty<Date> createdAt = new SimpleObjectProperty<>();
+    private ObjectProperty<User> certifiedBy = new SimpleObjectProperty<>();
 
     private SimpleBooleanProperty acertifier = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty certifiee = new SimpleBooleanProperty(false);
@@ -172,15 +174,30 @@ public class PersonneCompetence implements java.io.Serializable {
         return createdAt.get();
     }
 
-    public ObjectProperty<LocalDate> createdAtProperty() {
+    public ObjectProperty<LocalDateTime> createdAtProperty() {
         if(createdAt != null) {
-            return new SimpleObjectProperty<>(new java.sql.Date(createdAt.get().getTime()).toLocalDate());
+            LocalDateTime ldt = LocalDateTime.ofInstant(createdAt.get().toInstant(), ZoneId.systemDefault());
+            return new SimpleObjectProperty<>(ldt);
         }
-        return new SimpleObjectProperty<>(new java.sql.Date(new Date().getTime()).toLocalDate());
+        return new SimpleObjectProperty<>(LocalDateTime.ofInstant(new Date(0l).toInstant(), ZoneId.systemDefault()));
     }
 
     public void setCreatedAt(Date createat) {
         this.createdAt.set(createat);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "USER")
+    public User getCertifiedBy() {
+        return certifiedBy.get();
+    }
+
+    public ObjectProperty<User> certifiedByProperty() {
+        return certifiedBy;
+    }
+
+    public void setCertifiedBy(User certifiedBy) {
+        this.certifiedBy.set(certifiedBy);
     }
 }
 

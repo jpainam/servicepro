@@ -8,23 +8,31 @@ import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +46,6 @@ public class CiviliteController implements Initializable {
     /**
      * TableView des Personne
      */
-    public Model<Personne> modelPersonne;
     public TableView<Personne> personneTable;
     public TableColumn<Personne, String> columnNom;
     public TableColumn<Personne, String> columnMatricule;
@@ -55,7 +62,7 @@ public class CiviliteController implements Initializable {
 
     public Button btnNouveau;
     public Button btnModifier;
-    public ComboBox searchCombo;
+
     public Button btnSuppr;
 
     public int stateBtnNouveau = 0;
@@ -73,6 +80,7 @@ public class CiviliteController implements Initializable {
     public GridPane gridB;
     public Button btnAnnuler;
     public Tab tabDetails;
+    public Tab tabCompetence;
     public Tab tabFormation;
     public Tab tabTest;
     public ComboBox<Ambition> comboAmbition;
@@ -89,12 +97,15 @@ public class CiviliteController implements Initializable {
 
     public ObservableMap<String, ObservableList> map;
     public TextArea txtMemo;
+    public TextField txtPassport;
     public DatePicker dateFincontrat;
+    public DatePicker datePassport;
     public TableColumn<Personne, String> columnTelephone;
     public TableColumn<Personne, Societe> columnPersonneSociete;
     public TextField txtTelephone;
     public TextField txtEmail;
-    public ObservableMap<String, String> mapFoto;
+
+    public CiviliteCompetenceController competenceController;
     public CiviliteFormationController formationController;
     public CiviliteProfilController profilController;
     public CivilitePosteController posteController;
@@ -114,7 +125,7 @@ public class CiviliteController implements Initializable {
         searchBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         //searchLabelStat.textProperty().bind(new SimpleIntegerProperty(filteredList.size()).asString());
-        hboxSearch.getChildren().setAll(new HBox(new Label("Civilité "), searchLabelStat),  searchBox);
+        hboxSearch.getChildren().setAll(new HBox(new Label("Civilité "), searchLabelStat), searchBox);
 
         ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
         /*Platform.runLater(() -> {
@@ -131,6 +142,8 @@ public class CiviliteController implements Initializable {
     private void buildcontent() {
         formationController = new CiviliteFormationController();
         tabFormation.setContent(formationController);
+        competenceController = new CiviliteCompetenceController();
+        tabCompetence.setContent(competenceController);
         profilController = new CiviliteProfilController();
         profilAccordeon.setContent(profilController);
         posteController = new CivilitePosteController();
@@ -148,13 +161,14 @@ public class CiviliteController implements Initializable {
         comboLanguesParlees = new CheckComboBox(FXCollections.observableArrayList());
         comboLanguesParlees.setMaxWidth(Double.MAX_VALUE);
         //comboLanguesParlees.setDisable(true);
-        gridB.add(comboLanguesParlees, 3, 1);
+        gridB.add(comboLanguesParlees, 3, 3);
         datePicker.setValue(LocalDate.now());
         GlyphsDude.setIcon(addPhoto, FontAwesomeIcon.PICTURE_ALT);
         GlyphsDude.setIcon(delPhoto, FontAwesomeIcon.CLOSE);
         imageview.setImage(defaultImage);
         GlyphsDude.setIcon(tabDetails, FontAwesomeIcon.USER);
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
+        GlyphsDude.setIcon(tabCompetence,  FontAwesomeIcon.SLACK);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
 
         GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
@@ -175,10 +189,33 @@ public class CiviliteController implements Initializable {
                     row.setTooltip(tooltip);
                 }
             });
+            final ContextMenu rowMenu = new ContextMenu();
+            MenuItem viewPassportItem = new MenuItem("Afficher passport");
+            GlyphsDude.setIcon(viewPassportItem, FontAwesomeIcon.FILE_ALT);
+            viewPassportItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    afficherPassport(row.getItem());
+                }
+            });
+            MenuItem editItem = new MenuItem("Modifier/Edit");
+            GlyphsDude.setIcon(editItem, FontAwesomeIcon.PENCIL);
+            editItem.setOnAction(event -> clicModifier(event));
+            MenuItem removeItem = new MenuItem("Supprimer/Delete");
+            GlyphsDude.setIcon(removeItem, FontAwesomeIcon.TRASH);
+            removeItem.setOnAction(event -> clicSuppr(event));
+            rowMenu.getItems().addAll(viewPassportItem, new SeparatorMenuItem(), editItem, removeItem);
+
+            // only display context menu for non-null items:
+            row.contextMenuProperty().bind(
+                    Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                            .then(rowMenu)
+                            .otherwise((ContextMenu) null));
             return row;
         });
         ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
     }
+
 
     private void buildCombo() {
         Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
@@ -219,7 +256,7 @@ public class CiviliteController implements Initializable {
     private void disableAllComponents(boolean bool) {
         ServiceproUtil.setEditable(!bool, txtMatricule, txtNom, txtPrenom, txtMemo, txtTelephone, txtEmail);
         ServiceproUtil.setDisable(bool, comboGroupe, comboPays, comboSociete, comboSection, comboPotentiel, comboAmbition,
-                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees);
+                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees, datePassport);
     }
 
     private void buildtablePersonne() {
@@ -282,15 +319,25 @@ public class CiviliteController implements Initializable {
         txtMemo.setText(person.getMemo());
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
+        txtPassport.setText(person.getPassport());
 
-        LocalDate date1 = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
-        datePicker.getEditor().setText(date1.format(FormatDate.currentForme));
-        datePicker.setValue(date1);
-        labelAge.setText(DateUtil.age(date1));
+        if (person.getDatenaiss() != null) {
+            LocalDate date = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
+            datePicker.getEditor().setText(date.format(DateUtil.currentForme));
+            datePicker.setValue(date);
+            labelAge.setText(DateUtil.age(date));
+        }
 
-        //LocalDate date2 = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
-        //dateFincontrat.getEditor().setText(date2.format(FormatDate.currentForme));
-        //dateFincontrat.setValue(date2);
+        if (person.getDatecontrat() != null) {
+            LocalDate date = new java.sql.Date(person.getDatecontrat().getTime()).toLocalDate();
+            dateFincontrat.getEditor().setText(date.format(DateUtil.currentForme));
+            dateFincontrat.setValue(date);
+        }
+        if (person.getExpirationPassport() != null) {
+            LocalDate date = new java.sql.Date(person.getExpirationPassport().getTime()).toLocalDate();
+            datePassport.getEditor().setText(date.format(DateUtil.currentForme));
+            datePassport.setValue(date);
+        }
 
         comboSection.setValue(person.getSection());
         comboSociete.setValue(person.getSociete());
@@ -306,6 +353,8 @@ public class CiviliteController implements Initializable {
 
         formationController.setPersonne(person);
         formationController.buildFormation();
+        competenceController.setPersonne(person);
+        competenceController.buildCompetence();
         profilController.setPersonne(person);
         profilController.buildProfil();
         posteController.setPersonne(person);
@@ -365,6 +414,10 @@ public class CiviliteController implements Initializable {
         personne.setMemo(txtMemo.getText());
         personne.setTelephone(txtTelephone.getText());
         personne.setEmail(txtEmail.getText());
+        personne.setPassport(txtPassport.getText());
+        if (datePassport.getValue() != null) {
+            personne.setExpirationPassport(java.sql.Date.valueOf(datePassport.getValue()));
+        }
         if (datePicker.getValue() != null) {
             personne.setDatenaiss(java.sql.Date.valueOf(datePicker.getValue()));
         }
@@ -406,13 +459,6 @@ public class CiviliteController implements Initializable {
                     setPersonneParameters(personne);
                     savePersonne(personne);
                     StageManager.loadContent("/views/civilite/civilite.fxml");
-                    /*personneTable.getItems().add(personne);
-                    ServiceproUtil.setDisable(false, btnModifier, btnSuppr);
-                    disableAllComponents(true);
-                    btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
-                    this.stateBtnNouveau = 0;
-                    profilController.setActive(false);
-                    posteController.setActive(false);*/
                     break;
             }
     }
@@ -476,23 +522,17 @@ public class CiviliteController implements Initializable {
                     setPersonneParameters(personne);
                     updatePersonne(personne);
                     StageManager.loadContent("/views/civilite/civilite.fxml");
-                    /*disableAllComponents(true);
-                    btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
-                    ServiceproUtil.setDisable(false, btnNouveau);
-                    this.stateBtnModifier = 0;
-                    profilController.setActive(false);
-                    posteController.setActive(false);*/
                     break;
             }
     }
 
     private void updatePersonne(Personne personne) {
         personne.setProfilPersonnes(profilController.getItems());
-        for(ProfilPersonne profilPersonne : personne.getProfilPersonnes()){
+        for (ProfilPersonne profilPersonne : personne.getProfilPersonnes()) {
             profilPersonne.getId().setPersonne(personne.getIdpersonne());
         }
         personne.setPostes(posteController.getItems());
-        for(Poste poste : personne.getPostes()){
+        for (Poste poste : personne.getPostes()) {
             poste.setPersonne(personne);
         }
         Task<Boolean> task = new Task<Boolean>() {
@@ -526,8 +566,13 @@ public class CiviliteController implements Initializable {
     }
 
     public void clicSuppr(ActionEvent actionEvent) {
+
         if (!btnSuppr.isDisable() && personneTable.getSelectionModel().getSelectedItem() != null) {
             Personne p = personneTable.getSelectionModel().getSelectedItem();
+            boolean confirm = AlertUtil.showConfirmationMessage("Suppression d'une civilité", "Etes vous sûr de vouloir supprimer " + p);
+            if(!confirm){
+                return;
+            }
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -592,6 +637,26 @@ public class CiviliteController implements Initializable {
         }
     }
 
+    public void addPassportFile(MouseEvent event) {
+        if (stateBtnNouveau == 1 || stateBtnModifier == 1) {
+            FileChooser fileChooser = new FileChooser();
+            File file;
+            try {
+                if ((file = fileChooser.showOpenDialog(Main.stage)) != null) {
+                    Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("passport.dir")).toAbsolutePath();
+                    if (path == null) {
+                        Files.createDirectories(path);
+                    }
+                    String chemin = path.toString() + File.separator + file.getName();
+                    Files.copy(file.toPath(), Paths.get(chemin), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                    txtPassport.setText(file.getName());
+                }
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        }
+    }
+
     public void clicAnnuler(ActionEvent actionEvent) {
         StageManager.loadContent("/views/civilite/civilite.fxml");
     }
@@ -602,5 +667,35 @@ public class CiviliteController implements Initializable {
 
     public void clicNext(ActionEvent actionEvent) {
         personneTable.getSelectionModel().selectNext();
+    }
+
+    private void afficherPassport(Personne personne) {
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("passport.dir")).toAbsolutePath();
+                String chemin = path.toString() + File.separator + personne.getPassport();
+                File file = new File(chemin);
+                if (file.exists() && !file.isDirectory()) {
+                    ServiceproUtil.openDocument(file);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                if (!task.getValue()) {
+                    AlertUtil.showSimpleAlert("Information", "Fichier passport introuvable");
+                }
+            }
+        });
+        task.setOnFailed(event -> {
+            ServiceproUtil.notify("Erreur dans le thread du print passport");
+            task.getException().printStackTrace();
+        });
     }
 }

@@ -6,20 +6,15 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.*?>
 
 <AnchorPane fx:id="rootPane1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="579.0" prefWidth="853.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.ProfilController">
    <children>
       <SplitPane dividerPositions="0.362" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="519.0" prefWidth="305.0" spacing="5.0">
                <children>
-                  <HBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="369.0" spacing="10.0">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
-                  <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1255.0" prefWidth="292.0" style="-fx-cursor: hand;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                  <VBox fx:id="researchBox" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="295.0" />
+                  <TableView fx:id="profilTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="530.0" prefWidth="295.0" style="-fx-cursor: hand;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="abbreviationColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Abbréviation" />
                       <TableColumn fx:id="libelleColumn" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="Libellé" />
@@ -28,12 +23,15 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets />
                      </VBox.margin>
                   </TableView>
                </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </VBox>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="551.0" spacing="10.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="551.0" spacing="5.0">
                <children>
                   <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
@@ -54,14 +52,14 @@
                                           <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
                                        </items>
                                     </ToolBar>
-                                    <HBox fx:id="researchBox2" maxWidth="1.7976931348623157E308" prefHeight="38.0" prefWidth="481.0" spacing="10.0" VBox.vgrow="NEVER">
+                                    <VBox fx:id="researchBox2" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="540.0" spacing="5.0" VBox.vgrow="NEVER">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                        <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </padding>
-                                    </HBox>
+                                    </VBox>
                                     <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="306.0" prefWidth="461.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                                       <columns>
                                           <TableColumn fx:id="initialColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Niveau Initial" />
@@ -76,7 +74,7 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                        <VBox.margin>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                          <Insets bottom="5.0" left="5.0" right="5.0" />
                                        </VBox.margin>
                                     </TableView>
                                  </children>

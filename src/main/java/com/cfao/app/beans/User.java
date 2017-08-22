@@ -72,9 +72,10 @@ public class User implements java.io.Serializable {
         this.profile = profile;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return getLogin();
+    }
 }
 
 

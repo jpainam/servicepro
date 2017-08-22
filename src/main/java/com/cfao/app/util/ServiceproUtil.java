@@ -1,6 +1,7 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
+import com.cfao.app.beans.User;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
@@ -27,8 +28,9 @@ import java.util.Calendar;
  * Created by JP on 6/21/2017.
  */
 public class ServiceproUtil {
-    public static String loggedUser = null;
+    public static User loggedUser = null;
     public static String loggedTime = null;
+    //public static User loggedUser = null;
 
     /**
      * Definir les panel qui reste deroule dans le panel accordion
@@ -79,7 +81,7 @@ public class ServiceproUtil {
      * L'utilisateur connecte
      * @return
      */
-    public static String getLoggedUser() {
+    public static User getLoggedUser() {
         return loggedUser;
     }
 
@@ -90,13 +92,16 @@ public class ServiceproUtil {
     public static String getLoggedTime() {
         return loggedTime;
     }
-    public static void setLoggedUser(String login){
-        ServiceproUtil.loggedUser = login;
+    public static void setLoggedUser(User user){
+        ServiceproUtil.loggedUser = user;
     }
     public static void setLoggedTime(Calendar cal){
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
         loggedTime = dateFormat.format(cal.getTime());
     }
+    /*public static void setLoggedUser(User user){
+
+    }*/
 
     public static void link(String link) {
         try {

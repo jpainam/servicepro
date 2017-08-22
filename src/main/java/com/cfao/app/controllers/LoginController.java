@@ -1,6 +1,7 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Main;
+import com.cfao.app.beans.User;
 import com.cfao.app.model.*;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.Constante;
@@ -64,20 +65,19 @@ public class LoginController implements Initializable {
         final String pwd = this.password.getText();
         final UserModel userModel = new UserModel();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Task<Boolean> task = new Task<Boolean>() {
+        Task<User> task = new Task<User>() {
             @Override
-            protected Boolean call() throws Exception {
-                if (userModel.isAuthorized(login, pwd)) return true;
-                else return false;
+            protected User call() throws Exception {
+                return userModel.isAuthorized(login, pwd);
             }
         };
         progressIndicator(loadingStackContainer, task);
         new Thread(task).start();
         task.setOnSucceeded(event -> {
             Platform.runLater(() -> {
-                if (task.getValue()) {
+                if (task.getValue() != null) {
                     // Set static variable
-                    ServiceproUtil.setLoggedUser(login);
+                    ServiceproUtil.setLoggedUser(task.getValue());
                     ServiceproUtil.setLoggedTime(Calendar.getInstance());
                     try {
                         startServiceNotification();

@@ -57,8 +57,8 @@
                                     </Label>
                                     <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                       <columns>
-                                        <TableColumn prefWidth="75.0" text="Intitulé de la connaissance" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
+                                        <TableColumn fx:id="libelleCompetenceColumn" prefWidth="75.0" text="Intitulé de la connaissance" />
+                                        <TableColumn fx:id="niveauCompetenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Niveau" />
                                       </columns>
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" />
@@ -80,7 +80,7 @@
                   <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
                      <items>
                         <StackPane fx:id="qcmDiagramPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
+                        <VBox fx:id="analyseResultatBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
                      </items>
                   </SplitPane>
                </children></VBox>

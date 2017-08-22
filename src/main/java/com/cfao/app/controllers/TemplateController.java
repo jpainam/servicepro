@@ -79,7 +79,9 @@ public class TemplateController implements Initializable, Controller {
             icon.setFill(Color.DARKBLUE);
             userLabel.setGraphic(icon);
             GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
-            userNameLabel.setText(ServiceproUtil.getLoggedUser());
+            if(ServiceproUtil.getLoggedUser() != null) {
+                userNameLabel.setText(ServiceproUtil.getLoggedUser().getLogin());
+            }
             currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
 
             Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));

@@ -4,23 +4,19 @@ import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.beans.Societe;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.Constante;
 import com.cfao.app.util.SearchBox;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.List;
@@ -61,27 +57,6 @@ public class CompetencePersonneController extends AnchorPane implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
-        personneTable.setRowFactory(new Callback<TableView<PersonneCompetence>, TableRow<PersonneCompetence>>() {
-            @Override
-            public TableRow<PersonneCompetence> call(TableView<PersonneCompetence> param) {
-                return new TableRow<PersonneCompetence>() {
-                    @Override
-                    protected void updateItem(PersonneCompetence item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            if (item.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)) {
-                                getStyleClass().add("row-certifie");
-                            } else if (item.getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ENCOURS)) {
-                                getStyleClass().add("row-encours");
-                            } else {
-                                getStyleClass().add("row-acertifier");
-
-                            }
-                        }
-                    }
-                };
-            }
-        });
     }
 
     public void initComponents() {
@@ -104,24 +79,9 @@ public class CompetencePersonneController extends AnchorPane implements Initiali
 
     public void buildTable() {
         List<PersonneCompetence> personnes = competence.getPersonneCompetences();
-        encoursColumn.setCellValueFactory(param -> {
-            if (param.getValue().getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ENCOURS)) {
-                return new SimpleBooleanProperty(true);
-            }
-            return new SimpleBooleanProperty(false);
-        });
-        acertifierColumn.setCellValueFactory(param -> {
-            if (param.getValue().getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_ACERTIFIER)) {
-                return new SimpleBooleanProperty(true);
-            }
-            return new SimpleBooleanProperty(false);
-        });
-        certifieColumn.setCellValueFactory(param -> {
-            if (param.getValue().getCompetenceCertification().getCertification().equals(Constante.COMPETENCE_CERTIFIEE)) {
-                return new SimpleBooleanProperty(true);
-            }
-            return new SimpleBooleanProperty(false);
-        });
+        encoursColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
+        acertifierColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
+        certifieColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
         personneTable.setItems(FXCollections.observableArrayList(personnes));
     }
 }

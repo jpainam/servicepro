@@ -114,6 +114,10 @@ public class Qcm implements java.io.Serializable {
         this.personneQcms.set(FXCollections.observableArrayList(personneQcms));
     }
 
+    public ListProperty<Competence> competenceListProperty(){
+        return competences;
+    }
+
 
 }
 

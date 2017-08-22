@@ -2,10 +2,11 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneQcm;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import com.cfao.app.beans.Qcm;
+import javafx.scene.chart.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by JP on 8/3/2017.
@@ -41,7 +42,7 @@ public class CiviliteQcmDiagram {
         //xAxis.setLabel("Tests");
         //xAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(years)));
         yAxis.setLabel("Note obtenue");
-        for(PersonneQcm personneQcm : personne.getPersonneQcms()){
+        for (PersonneQcm personneQcm : personne.getPersonneQcms()) {
             XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
             series.setName(personneQcm.getQcm().getTitre());
             series.getData().add(new XYChart.Data<String, Number>("", personneQcm.getNote()));
@@ -70,4 +71,59 @@ public class CiviliteQcmDiagram {
         return bc;
     }
 
+    protected AreaChart<Number, Number> analyseResultChart(Qcm qcm) {
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis, yAxis);
+        // setup chart
+        ac.setTitle("Analyse des résultats du Test");
+        xAxis.setLabel("Notes obtenues");
+        yAxis.setLabel("Nombre de personnes");
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+        series.setName(qcm.getTitre());
+        HashMap<Double, Double> map = new HashMap<>();
+        for (PersonneQcm personneQcm : qcm.getPersonneQcms()) {
+            System.err.println(personneQcm.getNote() + "=" + personneQcm.getPersonne().getNom());
+            if (map.get(personneQcm.getNote()) != null) {
+                double n = map.get(personneQcm.getNote());
+                map.put(personneQcm.getNote(), ++n);
+            } else {
+                map.put(personneQcm.getNote(), 1d);
+            }
+        }
+        for (Map.Entry<Double, Double> line : map.entrySet()) {
+            series.getData().add(new XYChart.Data<Number, Number>(line.getKey(), line.getValue()));
+        }
+        ac.getData().add(series);
+        return ac;
+    }
+    protected AreaChart<Number, Number> analyseResultChart(Personne personne) {
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis, yAxis);
+        // setup chart
+        ac.setTitle("Analyse des résultats des Tests");
+        xAxis.setLabel("Notes obtenues");
+        yAxis.setLabel("Nombre de personnes");
+        for(PersonneQcm pq : personne.getPersonneQcms()) {
+            Qcm qcm = pq.getQcm();
+            XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+            series.setName(qcm.getTitre());
+            HashMap<Double, Double> map = new HashMap<>();
+            for (PersonneQcm personneQcm : qcm.getPersonneQcms()) {
+                if (map.get(personneQcm.getNote()) != null) {
+                    double n = map.get(personneQcm.getNote());
+                    map.put(personneQcm.getNote(), ++n);
+                } else {
+                    map.put(personneQcm.getNote(), 1d);
+                }
+            }
+            for (Map.Entry<Double, Double> line : map.entrySet()) {
+                series.getData().add(new XYChart.Data<Number, Number>(line.getKey(), line.getValue()));
+            }
+            ac.getData().add(series);
+        }
+        return ac;
+    }
 }

@@ -64,7 +64,9 @@ public class CompetenceModel extends Model<Competence> {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         } finally {
-            session.close();
+            if(session.isOpen()) {
+                session.close();
+            }
         }
         return null;
     }
@@ -91,29 +93,12 @@ public class CompetenceModel extends Model<Competence> {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         } finally {
-            session.close();
+            if(session.isOpen()) {
+                session.close();
+            }
         }
         return null;
     }
-
-    /*
-     Quand le mapping de Formationcompetence va marcher
-    public List<Formationcompetence> getFormationByCompetence(Competence competence) {
-        Session session = getCurrentSession();
-        try{
-            session.beginTransaction();
-            Criteria criteria = session.createCriteria(Formationcompetence.class).add(
-                    Restrictions.eq("competence", competence));
-            return criteria.list();
-        }catch (Exception ex){
-            ex.printStackTrace();
-            AlertUtil.showErrorMessage(ex);
-        }finally {
-            session.close();
-        }
-        return null;
-    }
-    */
 
     public List<Competence> findByNiveau(Niveau niveau) {
         Session session = getCurrentSession();
@@ -163,16 +148,14 @@ public class CompetenceModel extends Model<Competence> {
         try{
             session.beginTransaction();
             Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
+                    Restrictions.eq("personne", profilPersonne.getPersonne()));
+            criteria.add(
                     Restrictions.in("competence", profilPersonne.getProfil().getCompetences())
-            ).add(Restrictions.eq("personne", profilPersonne.getPersonne()));
+            );
+
             return  criteria.list();
         }catch (Exception ex){
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    AlertUtil.showErrorMessage(ex);
-                }
-            });
+            AlertUtil.showErrorMessage(ex);
         }finally {
             if(session.isOpen()){
                 session.close();

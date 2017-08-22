@@ -16,51 +16,20 @@
                     <children>
                         <ToolBar maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="NEVER">
                             <items>
-                                <Button fx:id="btnPreviousCompetence" mnemonicParsing="false" onAction="#previousCompetenceAction" />
-                                <Button fx:id="btnNextCompetence" mnemonicParsing="false" onAction="#nextCompetenceAction" />
+                                <Button fx:id="btnPreviousFormation" mnemonicParsing="false" onAction="#previousFormationAction" />
+                                <Button fx:id="btnNextFormation" mnemonicParsing="false" onAction="#nextFormationAction" />
                                 <Separator orientation="VERTICAL" />
-                                <Button fx:id="btnPrintCompetence" mnemonicParsing="false" onAction="#printCompetenceAction" />
-                                <ComboBox fx:id="comboStatut" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#filterCertification" prefWidth="150.0" />
-                        <Separator orientation="VERTICAL" />
-                        <Button fx:id="btnEditerCertification" mnemonicParsing="false" onAction="#editerCertificationCompetence" text="Editer" />
-                        <Button fx:id="btnSupprimerCompetence" mnemonicParsing="false" onAction="#supprimerCompetenceAction" />
-                        <Button fx:id="btnAddCompetence" mnemonicParsing="false" onAction="#addCompetenceAction" />
+                                <Button fx:id="btnPrintFormation" mnemonicParsing="false" onAction="#printFormationAction" />
                             </items>
                         </ToolBar>
                   <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
                      <items>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                   <children>
-                                      <Label text="Compétences" />
+                                      <Label text="Historique des formations" />
                               <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                  <children>
-                                            <TableView fx:id="competenceTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                                                <columns>
-                                                    <TableColumn fx:id="intituleCompetenceColumn" prefWidth="212.0" text="Intitulé de la compétence" />
-                                                    <TableColumn fx:id="encoursCompetenceColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="En cours" />
-                                          <TableColumn fx:id="certifieeCompetenceColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Certifiée" />
-                                          <TableColumn fx:id="acertifierCompetenceColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="A Certifier" />
-                                                </columns>
-                                                <columnResizePolicy>
-                                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                </columnResizePolicy>
-                                            </TableView>
-                                 </children>
-                              </StackPane>
-                                  </children>
-                                  <VBox.margin>
-                                      <Insets bottom="5.0" left="5.0" right="5.0" />
-                                  </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" />
-                           </padding>
-                              </VBox>
-                            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
-                                <children>
-                              <Label text="Historique des formation" />
-                              <StackPane fx:id="historiqueStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <TableView fx:id="formationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="formationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
                                       <columns>
                                           <TableColumn fx:id="codeFormationColumn" maxWidth="75.0" minWidth="71.0" prefWidth="71.0" text="Code" />
                                         <TableColumn fx:id="titreFormationColumn" maxWidth="1.7976931348623157E308" prefWidth="215.0" text="Titre" />
@@ -73,6 +42,18 @@
                                     </TableView>
                                  </children>
                               </StackPane>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="5.0" left="5.0" right="5.0" />
+                                  </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </padding>
+                              </VBox>
+                            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
+                                <children>
+                              <Label text="Souhait des formations" />
+                              <StackPane fx:id="historiqueStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
                                 </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" />

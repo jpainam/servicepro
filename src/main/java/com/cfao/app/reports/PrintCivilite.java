@@ -82,7 +82,49 @@ public class PrintCivilite extends Report {
                 .add(personne.getLangue().getLibelle()).setBorder(Border.NO_BORDER));
         document.add(infos);
         document.add(new Paragraph("Langues parlées : " + personne.getLangues()));
-
+        if(personne.getMemo() != null) {
+            document.add(new Paragraph("Memo").setBold());
+            document.add(new Paragraph(personne.getMemo() + ""));
+        }
+        /**
+         * PROFIL
+         */
+        Table profilTable = new Table(new float[]{1, 4, 8});
+        profilTable.setWidthPercent(100f);
+        profilTable.addHeaderCell(new Paragraph("N°").setBold());
+        profilTable.addHeaderCell(new Paragraph("Abbréviation").setBold());
+        profilTable.addHeaderCell(new Paragraph("Libellé").setBold());
+        int i = 1;
+        for(ProfilPersonne pp : personne.getProfilPersonnes()){
+            Profil p = pp.getProfil();
+            profilTable.addCell(i + "");
+            profilTable.addCell(p.getAbbreviation());
+            profilTable.addCell(p.getLibelle());
+            i++;
+        }
+        document.add(new Paragraph("Profils").setBold().setUnderline());
+        document.add(profilTable);
+        /**
+         * POSTE
+         */
+        Table posteTable = new Table(new float[]{1, 5, 5, 3, 3});
+        posteTable.setWidthPercent(100f);
+        posteTable.addHeaderCell(new Paragraph("N°").setBold());
+        posteTable.addHeaderCell(new Paragraph("Titre du poste").setBold());
+        posteTable.addHeaderCell(new Paragraph("Société").setBold());
+        posteTable.addHeaderCell(new Paragraph("Date debut").setBold());
+        posteTable.addHeaderCell(new Paragraph("Date fin").setBold());
+        i = 1;
+        for(Poste p : personne.getPostes()){
+            posteTable.addCell(i + "");
+            posteTable.addCell(p.getTitre());
+            posteTable.addCell(p.getSociete().getNom());
+            posteTable.addCell(p.getDatedebut() != null ? format.format(p.getDatedebut()) : "");
+            posteTable.addCell(p.getDatedebut() != null ? format.format(p.getDatefin()) : "");
+            i++;
+        }
+        document.add(new Paragraph("Postes").setBold().setUnderline());
+        document.add(posteTable);
         /**
          * TABLE COMPETENCE
          */
@@ -93,7 +135,7 @@ public class PrintCivilite extends Report {
         competenceTable.addHeaderCell(new Paragraph("Intitulé de la compétence").setBold());
         competenceTable.addHeaderCell(new Paragraph("Niveau").setBold());
         competenceTable.addHeaderCell(new Paragraph("Certification").setBold());
-        int i = 1;
+        i = 1;
         for(PersonneCompetence pc : personne.getPersonneCompetences()){
             Competence competence = pc.getCompetence();
             competenceTable.addCell(i + "");

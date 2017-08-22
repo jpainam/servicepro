@@ -4,7 +4,6 @@ import com.cfao.app.beans.CompetenceCertification;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.util.AlertUtil;
-import javafx.application.Platform;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -52,12 +51,7 @@ public class PersonneModel extends Model<Personne> {
             }
             return true;
         } catch (Exception ex) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    AlertUtil.showErrorMessage(ex);
-                }
-            });
+            AlertUtil.showErrorMessage(ex);
         } finally {
             if (session.isOpen()) {
                 session.close();
@@ -76,8 +70,7 @@ public class PersonneModel extends Model<Personne> {
 
             return criteria.list();
         } catch (Exception ex) {
-            Platform.runLater(() -> AlertUtil.showErrorMessage(ex));
-            ex.printStackTrace();
+            AlertUtil.showErrorMessage(ex);
         } finally {
             if (session.isOpen()) {
                 session.close();
@@ -87,8 +80,8 @@ public class PersonneModel extends Model<Personne> {
     }
 
     @Override
-    public String queryCountCase(int cas){
-        switch (cas){
+    public String queryCountCase(int cas) {
+        switch (cas) {
             case 1:
                 return "select count(*) from personnes p where ! isnull(p.PASSPORT)";
             case 2:
@@ -97,9 +90,10 @@ public class PersonneModel extends Model<Personne> {
                 return "select count(*) from personnes";
         }
     }
-    public Integer countPersonneCompetenceEncours(){
+
+    public Integer countPersonneCompetenceEncours() {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
                     Restrictions.eq("competenceCertification.certification", "EN")
@@ -107,18 +101,19 @@ public class PersonneModel extends Model<Personne> {
             criteria.setProjection(Projections.countDistinct("personne"));
             Long count = (Long) criteria.uniqueResult();
             return count.intValue();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
-        }finally {
-            if(session.isOpen()){
+        } finally {
+            if (session.isOpen()) {
                 session.close();
             }
         }
         return 0;
     }
-    public Integer countPersonnePassportNull(){
+
+    public Integer countPersonnePassportNull() {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             Criteria criteria = session.createCriteria(Personne.class).add(
                     Restrictions.or(Restrictions.isNull("passport"), Restrictions.eq("passport", ""))
@@ -126,11 +121,10 @@ public class PersonneModel extends Model<Personne> {
             criteria.setProjection(Projections.rowCount());
             Long count = (Long) criteria.uniqueResult();
             return count.intValue();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
-            ex.printStackTrace();
-        }finally {
-            if(session.isOpen()){
+        } finally {
+            if (session.isOpen()) {
                 session.close();
             }
         }

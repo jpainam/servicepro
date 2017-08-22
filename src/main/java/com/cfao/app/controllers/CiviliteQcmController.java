@@ -1,8 +1,6 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.PersonneQcm;
-import com.cfao.app.beans.Qcm;
+import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.*;
 import javafx.application.Platform;
@@ -17,10 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.sql.Date;
@@ -42,6 +37,11 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
     private Personne personne = null;
     public StackPane qcmDiagramPane;
     public CiviliteQcmDiagram qcmDiagram;
+
+    public TableView<Competence> competenceTable;
+    public TableColumn<Competence, String> libelleCompetenceColumn;
+    public TableColumn<Competence, Niveau> niveauCompetenceColumn;
+    public VBox analyseResultatBox;
 
     public CiviliteQcmController(Personne personne) {
         this();
@@ -84,11 +84,14 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
             cell.setAlignment(Pos.CENTER_RIGHT);
             return cell;
         });
+        libelleCompetenceColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
+        niveauCompetenceColumn.setCellValueFactory(param -> param.getValue().niveauProperty());
     }
 
     public void setPersonne(Personne p) {
         this.personne = p;
     }
+
 
     public void buildTable() {
         if (personne == null) {
@@ -97,7 +100,18 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         qcmDiagram.setPersonne(personne);
         qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
         qcmTable.setItems(FXCollections.observableArrayList(personne.getPersonneQcms()));
+        analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(personne));
+        qcmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null) {
+                analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(newValue.getQcm()));
+                competenceTable.itemsProperty().bind(newValue.getQcm().competenceListProperty());
+            }else{
+                analyseResultatBox.getChildren().clear();
+                competenceTable.getItems().clear();
+            }
+        });
     }
+
 
     public void printAction(ActionEvent event) {
     }
@@ -230,12 +244,12 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                 personneQcm.setQcm(comboQcm.getValue());
                 personneQcm.setPersonne(personne);
                 java.util.Date date = new java.util.Date();
-                if(dateqcm.getValue() != null) {
+                if (dateqcm.getValue() != null) {
                     date = Date.valueOf(dateqcm.getValue());
                 }
                 personneQcm.setDateqcm(date);
                 double note = 0;
-                if(!txtNote.getText().isEmpty()){
+                if (!txtNote.getText().isEmpty()) {
                     note = Double.valueOf(txtNote.getText());
                 }
                 personneQcm.setNote(note);

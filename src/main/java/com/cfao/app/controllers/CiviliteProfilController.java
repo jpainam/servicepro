@@ -104,13 +104,19 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
             encoursColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
             acertifierColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
             certifierColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
+
             Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
                 @Override
                 protected ObservableList<PersonneCompetence> call() throws Exception {
                     return  FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(profilPersonne));
                 }
             };
+            new Thread(task).start();
             competenceTable.itemsProperty().bind(task.valueProperty());
+            task.setOnFailed(event -> {
+                task.getException().printStackTrace();
+                ServiceproUtil.notify("Erreur dans le thread de competence pop over");
+            });
             competenceTable.setVisibleRowCount(profilPersonne.getProfil().getCompetences().size() + 2);
             competenceTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             profilPopOver.setContentNode(competenceTable);

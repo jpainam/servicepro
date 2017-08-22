@@ -53,26 +53,39 @@ GLOBAL CSS
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
      -fx-cursor: hand;
 }
-.menu-bar {
-    -fx-background-color: derive(#1d1d1d,20%);
-
+.menu-bar{
+    -fx-background-color:#2f4f4f;
 }
-.context-menu {
-    -fx-background-color: derive(#1d1d1d,50%);
-}
-
-.menu-bar .label {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Light";
+.menu-bar .label{
     -fx-text-fill: white;
-    -fx-opacity: 0.9;
     -fx-font-weight: 500;
+    -fx-font-family: "Sergoe UI Light";
+    -fx-font-size: 12pt;
+
+}
+.menu-bar .menu-item .label {
+    -fx-text-fill: white;
+    -fx-font-weight: 500;
+    -fx-font-family: "Sergoe UI Light";
+    -fx-font-size: 12pt;
 }
 
-.menu .left-container {
+.menu-bar .menu-item:focused {
+     -fx-background-color: darkgray;
+}
+
+.menu-bar .menu-item:focused .label {
+    -fx-text-fill: blue;
+}
+
+.menu-bar .context-menu {
+    /*-fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";*/
     -fx-background-color: black;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+/*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
 }
-
 /**************
 SEARCH
 ***************/

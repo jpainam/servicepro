@@ -54,7 +54,6 @@ public class Model<T> {
                 return session;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         }
         return session;
@@ -73,7 +72,6 @@ public class Model<T> {
             Criteria criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         } finally {
             if(session.isOpen()) {
@@ -91,7 +89,6 @@ public class Model<T> {
             tx.commit();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         } finally {
             if(session.isOpen()) {
@@ -111,7 +108,6 @@ public class Model<T> {
             tx.commit();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
             return false;
         } finally {
@@ -131,7 +127,6 @@ public class Model<T> {
             tx.commit();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
             return false;
         } finally {
@@ -150,14 +145,13 @@ public class Model<T> {
             tx.commit();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
-            return false;
         } finally {
             if(session.isOpen()) {
                 session.close();
             }
         }
+        return false;
     }
 
 
@@ -187,15 +181,14 @@ public class Model<T> {
             return ((BigInteger) query.list().get(0)).longValue();
 
         }catch (Exception ex) {
-            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
-            return 0;
         }
         finally {
             if(session.isOpen()) {
                 session.close();
             }
         }
+        return 0;
     }
 
     public String queryCountCase(int cas) {
