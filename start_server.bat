@@ -1,0 +1,1 @@
+java -Xms750m -Xmx1550m -cp target/hsqldb-2.3.4.jar org.hsqldb.Server -database.0 file:data/servicepro -dbname.0 servicepro
