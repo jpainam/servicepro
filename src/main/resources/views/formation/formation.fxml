@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.paint.*?>
 <?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="764.0" prefWidth="1079.0" AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="764.0" prefWidth="1079.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
    <children>
         <SplitPane dividerPositions="0.3441258094357077" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -112,14 +104,14 @@
                                           <VBox maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER">
                                              <children>
                                                                 <Label text="Date de début" />
-                                                                <DatePicker fx:id="dateFin" prefHeight="25.0" prefWidth="190.0" />
+                                                                <DatePicker fx:id="dateDebut" prefHeight="25.0" prefWidth="190.0" />
                                                 <Separator prefWidth="200.0">
                                                    <VBox.margin>
                                                       <Insets bottom="5.0" top="5.0" />
                                                    </VBox.margin>
                                                 </Separator>
                                                                 <Label text="Date de fin" />
-                                                                <DatePicker fx:id="dateDebut" prefHeight="25.0" prefWidth="190.0" />
+                                                                <DatePicker fx:id="dateFin" prefHeight="25.0" prefWidth="190.0" />
                                              </children>
                                           </VBox>
                                                     </children>

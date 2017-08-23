@@ -15,9 +15,7 @@ import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -137,6 +135,36 @@ public class CiviliteController implements Initializable {
         });*/
         disableAllComponents(true);
         personneTable.setTableMenuButtonVisible(true);
+        /**
+         * GENERATION DU MATRICULE
+         */
+        comboPays.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(stateBtnNouveau == 1) {
+                if (newValue != null) {
+                    Task<Personne> task = new Task<Personne>() {
+                        @Override
+                        protected Personne call() throws Exception {
+                            return new PersonneModel().getLastPersonneByPays(newValue);
+                        }
+                    };
+                    new Thread(task).start();
+                    task.setOnSucceeded(event -> {
+                        if (task.getValue() != null) {
+                            Personne p = task.getValue();
+                            System.err.println(p.getMatricule());
+                            String matric = String.valueOf(Integer.parseInt(p.getMatricule().substring(3, p.getMatricule().length())) + 1);
+                            matric = new String(new char[5 - matric.length()]).replace("\0", "0") + matric;
+                            txtMatricule.setText(newValue.getIso() + "" + matric);
+                        } else {
+                            // Premier Civilite de ce pays
+                            String matric = String.valueOf((int)(Math.random() * 99999));
+                            matric = new String(new char[5 - matric.length()]).replace("\0", "0") + matric;
+                            txtMatricule.setText(newValue.getIso() + matric);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void buildcontent() {
@@ -168,7 +196,7 @@ public class CiviliteController implements Initializable {
         imageview.setImage(defaultImage);
         GlyphsDude.setIcon(tabDetails, FontAwesomeIcon.USER);
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
-        GlyphsDude.setIcon(tabCompetence,  FontAwesomeIcon.SLACK);
+        GlyphsDude.setIcon(tabCompetence, FontAwesomeIcon.SLACK);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
 
         GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
@@ -192,12 +220,7 @@ public class CiviliteController implements Initializable {
             final ContextMenu rowMenu = new ContextMenu();
             MenuItem viewPassportItem = new MenuItem("Afficher passport");
             GlyphsDude.setIcon(viewPassportItem, FontAwesomeIcon.FILE_ALT);
-            viewPassportItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    afficherPassport(row.getItem());
-                }
-            });
+            viewPassportItem.setOnAction(event -> afficherPassport(row.getItem()));
             MenuItem editItem = new MenuItem("Modifier/Edit");
             GlyphsDude.setIcon(editItem, FontAwesomeIcon.PENCIL);
             editItem.setOnAction(event -> clicModifier(event));
@@ -570,7 +593,7 @@ public class CiviliteController implements Initializable {
         if (!btnSuppr.isDisable() && personneTable.getSelectionModel().getSelectedItem() != null) {
             Personne p = personneTable.getSelectionModel().getSelectedItem();
             boolean confirm = AlertUtil.showConfirmationMessage("Suppression d'une civilité", "Etes vous sûr de vouloir supprimer " + p);
-            if(!confirm){
+            if (!confirm) {
                 return;
             }
             Task<Boolean> task = new Task<Boolean>() {
@@ -685,12 +708,9 @@ public class CiviliteController implements Initializable {
             }
         };
         new Thread(task).start();
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                if (!task.getValue()) {
-                    AlertUtil.showSimpleAlert("Information", "Fichier passport introuvable");
-                }
+        task.setOnSucceeded(event -> {
+            if (!task.getValue()) {
+                AlertUtil.showSimpleAlert("Information", "Fichier passport introuvable");
             }
         });
         task.setOnFailed(event -> {
@@ -698,4 +718,5 @@ public class CiviliteController implements Initializable {
             task.getException().printStackTrace();
         });
     }
+
 }

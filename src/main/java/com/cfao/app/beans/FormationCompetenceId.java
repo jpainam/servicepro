@@ -37,14 +37,15 @@ public class FormationCompetenceId implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         FormationCompetenceId that = (FormationCompetenceId) o;
-
-        if (formation != null ? !formation.equals(that.formation) : that.formation != null) return false;
-        return competence != null ? competence.equals(that.competence) : that.competence == null;
+        if(that.getCompetence().equals(this.getCompetence()) && that.getFormation().equals(this.getFormation())){
+            return true;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int result = formation != null ? formation.hashCode() : 0;
+        int result = getFormation() != null ? getFormation().hashCode() : 0;
         result = 31 * result + (competence != null ? competence.hashCode() : 0);
         return result;
     }

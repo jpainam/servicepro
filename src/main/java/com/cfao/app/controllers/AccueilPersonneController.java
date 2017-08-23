@@ -15,8 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
@@ -189,23 +187,20 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
             createChartPersonne();
         });
 
-        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                task.getException().printStackTrace();
-                System.err.println(task.getException());
-                ServiceproUtil.notify("Une erreur dans le thread Accueil personne");
-            }
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+            System.err.println(task.getException());
+            ServiceproUtil.notify("Une erreur dans le thread Accueil personne");
         });
         personneTable.setRowFactory(param -> {
             TableRow<Personne> row = new TableRow<>();
             row.hoverProperty().addListener((observable, oldValue, newValue) -> {
-                /*if (isHover()) {
+                if (isHover()) {
                     profilController.setPersonne(row.getItem());
                     profilController.buildProfilDetails();
                     personneDetailsPopOver.setContentNode(profilController);
                     personneDetailsPopOver.show(row);
-                }*/
+                }
             });
             return row;
         });

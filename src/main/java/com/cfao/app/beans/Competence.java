@@ -112,9 +112,7 @@ public class Competence implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Competence that = (Competence) o;
-
         if (idcompetence != null) {
             return this.getIdcompetence().equals(that.getIdcompetence());
         }

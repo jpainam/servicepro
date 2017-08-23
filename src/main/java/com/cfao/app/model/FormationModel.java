@@ -62,12 +62,7 @@ public class FormationModel extends Model<Formation> {
             criteria.setProjection(Projections.property("formation"));
             return criteria.list();
         } catch (Exception ex) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    AlertUtil.showErrorMessage(ex);
-                }
-            });
+            Platform.runLater(() -> AlertUtil.showErrorMessage(ex));
         } finally {
             if (session.isOpen()) {
                 session.close();
@@ -80,23 +75,37 @@ public class FormationModel extends Model<Formation> {
         Session session = getCurrentSession();
         try {
             session.beginTransaction();
-            /** Competences de la personne a certifier (non certifier) */
-            //CompetenceCertification certif = new CompetenceCertification("AC", "A Certifier");
+            /** Competence a certifier */
             Criteria competence = session.createCriteria(PersonneCompetence.class).add(
-                    Restrictions.eq("competenceCertification.certification", Constante.COMPETENCE_ACERTIFIER)
-            ).add(Restrictions.eq("personne", personne));
+                    Restrictions.eq("personne", personne)
+            ).add(Restrictions.eq("competenceCertification.certification", Constante.COMPETENCE_ACERTIFIER));
             competence.setProjection(Projections.property("competence"));
+            List<Competence> aCertifier = new ArrayList<>();
+            aCertifier.addAll(competence.list());
 
-            /** Formations qui couvre ces competence et qui n'ont pas n'ont pas deja debute */
-            if (competence.list().size() > 0) {
-                Criteria formations = session.createCriteria(FormationCompetence.class, "fc").add(
-                        Restrictions.in("fc.competence", competence.list())).setProjection(
-                        Projections.distinct(Projections.property("formation"))
-                ).
-                        createCriteria("fc.formation", "f").add(
-                        Restrictions.ge("f.datedebut", new Date())
-                );
-                return formations.list();
+            session.close();
+            session = getCurrentSession();
+            session.beginTransaction();
+            Criteria formationSuivie = session.createCriteria(FormationPersonne.class).add(
+                    Restrictions.eq("personne", personne)
+            );
+            formationSuivie.setProjection(Projections.property("formation"));
+            List<Formation> formationSuivieList = new ArrayList<>();
+            formationSuivieList.addAll(formationSuivie.list());
+            if(aCertifier.size() > 0) {
+                session.close();
+                session = getCurrentSession();
+                session.beginTransaction();
+                Criteria formation = session.createCriteria(FormationCompetence.class, "fc");
+                formation.add(Restrictions.in("fc.competence", aCertifier));
+                if(formationSuivieList.size() > 0) {
+                    formation.add(Restrictions.not(Restrictions.in("fc.formation", formationSuivieList)));
+                }
+                formation.setProjection(Projections.distinct(Projections.property("fc.formation")));
+                formation.createCriteria("fc.formation", "f").add(
+                        Restrictions.ge("f.datefin", new java.util.Date()
+                ));
+                return formation.list();
             }
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);

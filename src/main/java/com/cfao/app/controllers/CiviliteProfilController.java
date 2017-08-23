@@ -86,7 +86,7 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
         profilPopOver.setMinWidth(Double.NEGATIVE_INFINITY);
         VBox.setVgrow(competenceTable, Priority.ALWAYS);
         HBox.setHgrow(competenceTable, Priority.ALWAYS);
-        competenceTable.getColumns().addAll(intituleColum, encoursColumn, acertifierColumn, certifierColumn);
+        competenceTable.getColumns().addAll(intituleColum, encoursColumn, certifierColumn, acertifierColumn);
 
         intituleColum.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getCompetence()));
         encoursColumn.setCellFactory(param -> new CheckBoxTableCell<>());

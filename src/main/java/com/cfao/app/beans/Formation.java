@@ -235,6 +235,24 @@ public class Formation {
     public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
         this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Formation that = (Formation) o;
+        if(this.idformation.equals(that.idformation)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idformation != null ? idformation.hashCode() : 0;
+        result = 31 * result + (titre != null ? titre.hashCode() : 0);
+        return result;
+    }
 }
 
 

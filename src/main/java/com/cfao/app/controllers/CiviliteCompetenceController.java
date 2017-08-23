@@ -6,15 +6,12 @@ import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -116,58 +113,69 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
 
         setColumnFactories();
         intituleCompetenceColumn.setCellValueFactory(param -> param.getValue().competence());
-        encoursCompetenceColumn.setCellValueFactory(param -> param.getValue().encoursProperty());
-        acertifierCompetenceColumn.setCellValueFactory(param -> param.getValue().acertifierProperty());
-        certifieeCompetenceColumn.setCellValueFactory(param -> param.getValue().certifieeProperty());
+        encoursCompetenceColumn.setCellValueFactory(param -> {
+            BooleanProperty value = param.getValue().encoursProperty();
+            PersonneCompetence pc = param.getValue();
+            value.addListener((observable, oldValue, newValue) -> {
+                pc.setEncours(newValue);
+                if(newValue){
+                    pc.setCreatedAt(new java.util.Date());
+                    if(ServiceproUtil.getLoggedUser() != null){
+                        pc.setCertifiedBy(ServiceproUtil.getLoggedUser());
+                    }
+                    pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ENCOURS);
+                    new Model<>("PersonneCompetence").update(pc);
+                    pc.setCertifiee(false);
+                    pc.setAcertifier(false);
+                }
+            });
+            return value;
+        });
+        acertifierCompetenceColumn.setCellValueFactory(param -> {
+            BooleanProperty value = param.getValue().acertifierProperty();
+            PersonneCompetence pc = param.getValue();
+            value.addListener((observable, oldValue, newValue) -> {
+               pc.setAcertifier(newValue);
+               if(newValue){
+                   pc.setCreatedAt(new java.util.Date());
+                   if(ServiceproUtil.getLoggedUser() != null){
+                       pc.setCertifiedBy(ServiceproUtil.getLoggedUser());
+                   }
+                   pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ACERTIFIER);
+                   new Model<>("PersonneCompetence").update(pc);
+                   pc.setCertifiee(false);
+                   pc.setEncours(false);
+               }
+            });
+            return value;
+        });
+        certifieeCompetenceColumn.setCellValueFactory(param -> {
+            BooleanProperty value = param.getValue().certifieeProperty();
+            PersonneCompetence pc = param.getValue();
+            value.addListener((observable, oldValue, newValue) -> {
+                pc.setCertifiee(newValue);
+                if(newValue){
+                    pc.setCreatedAt(new java.util.Date());
+                    if(ServiceproUtil.getLoggedUser() != null){
+                        pc.setCertifiedBy(ServiceproUtil.getLoggedUser());
+                    }
+                    pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_CERTIFIEE);
+                    new Model<>("PersonneCompetence").update(pc);
+                    pc.setEncours(false);
+                    pc.setAcertifier(false);
+                }
+            });
+            return value;
+        });
         dateCertificationColumn.setCellValueFactory(param -> param.getValue().createdAtProperty());
         dateCertificationColumn.setCellFactory(new DateTimeTableCellFactory<>());
         certifierParColumn.setCellValueFactory(param -> param.getValue().certifiedByProperty());
     }
 
     private void setColumnFactories() {
-        encoursCompetenceColumn.setCellFactory(param ->
-                new CheckTable() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
-                            if (newValue != null && newValue) {
-                                PersonneCompetence pp = this.getTableView().getItems().get(this.getTableRow().getIndex());
-                                pp.setEncours(newValue);
-                                pp.setCertifiee(false);
-                                pp.setAcertifier(false);
-                            }
-                    }
-                });
-
-        acertifierCompetenceColumn.setCellFactory(param ->
-                new CheckTable() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
-                            if (newValue != null && newValue) {
-                                PersonneCompetence pp = this.getTableView().getItems().get(this.getIndex());
-                                pp.setAcertifier(newValue);
-                                pp.setCertifiee(false);
-                                pp.setEncours(false);
-                            }
-
-                    }
-                });
-
-        certifieeCompetenceColumn.setCellFactory(param ->
-                new CheckTable() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (this.getTableRow().getIndex() >= 0 && this.getTableView().getItems().size() > 0)
-                            if (newValue != null && newValue) {
-                                PersonneCompetence pp = this.getTableView().getItems().get(this.getTableRow().getIndex());
-                                pp.setCertifiee(newValue);
-                                pp.setEncours(false);
-                                pp.setAcertifier(false);
-                            }
-                    }
-                });
-
+        encoursCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        acertifierCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+        certifieeCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
     }
 
 
@@ -178,45 +186,10 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
                 btnEditerCertification.setText(ResourceBundle.getBundle("Bundle").getString("button.save.fr"));
                 editerCertification = true;
             } else {
-                //personne.getPersonneCompetences()
-                Task<Boolean> task = new Task<Boolean>() {
-                    @Override
-                    protected Boolean call() throws Exception {
-                        for (PersonneCompetence pc : personne.getPersonneCompetences()) {
-                            if (pc.isCertifiee())
-                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_CERTIFIEE);
-                            else if (pc.isEncours())
-                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ENCOURS);
-                            else if (pc.isAcertifier())
-                                pc.getCompetenceCertification().setCertification(Constante.COMPETENCE_ACERTIFIER);
-
-                            if (pc.isAcertifier() || pc.isEncours() || pc.isCertifiee()) {
-                                pc.setCreatedAt(new java.util.Date());
-                                if(ServiceproUtil.getLoggedUser() != null){
-                                    pc.setCertifiedBy(ServiceproUtil.getLoggedUser());
-                                }
-                                new Model<PersonneCompetence>().update(pc);
-                            }
-                        }
-                        return true;
-                    }
-                };
-                new Thread(task).start();
-                task.setOnSucceeded(event1 -> {
-                    if (task.getValue()) {
-                        editerCertification = false;
-                        btnEditerCertification.setText("Editer");
-                        competenceTable.setEditable(false);
-                        ServiceproUtil.notify("Sauvegarde OK");
-                    } else {
-                        ServiceproUtil.notify("Une erreur de sauvegarde s'est produite");
-                    }
-                });
-                task.setOnFailed(event12 -> {
-                    ServiceproUtil.notify("Erreur dans le Thread de competence certification");
-                    task.getException().printStackTrace();
-                    System.err.println(task.getException());
-                });
+                editerCertification = false;
+                btnEditerCertification.setText("Editer");
+                competenceTable.setEditable(false);
+                ServiceproUtil.notify("Sauvegarde OK");
             }
         }
     }
@@ -248,13 +221,10 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
                     ServiceproUtil.notify("Erreur de suppression");
                 }
             });
-            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    task.getException().printStackTrace();
-                    System.err.println(task.getException());
+            task.setOnFailed(event12 -> {
+                task.getException().printStackTrace();
+                System.err.println(task.getException());
 
-                }
             });
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la compétence à retirer de la civilité");
@@ -274,13 +244,10 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
             setColumnFactories();
 
             competenceTable.itemsProperty().bind(task.valueProperty());
-            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    ServiceproUtil.notify("Erreur dans le Thread [Filtrage certification]");
-                    task.getException().printStackTrace();
-                    System.err.println(task.getException());
-                }
+            task.setOnFailed(event1 -> {
+                ServiceproUtil.notify("Erreur dans le Thread [Filtrage certification]");
+                task.getException().printStackTrace();
+                System.err.println(task.getException());
             });
         }
     }
@@ -322,14 +289,13 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
                 } else {
                     ServiceproUtil.notify("Erreur d'ajout de profil");
                 }
-
             });
         }
     }
 
     public void buildCompetence() {
         if(personne != null) {
-            competenceTable.itemsProperty().bind(personne.personneCompetencesProperty());
+            competenceTable.setItems(FXCollections.observableArrayList(personne.getPersonneCompetences()));
         }
     }
 
@@ -389,11 +355,6 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
                 return personneCompetence;
             }
             return null;
-        }
-    }
-    abstract class CheckTable extends CheckBoxTableCell<PersonneCompetence, Boolean> implements ChangeListener<Boolean> {
-        public CheckTable() {
-            this.itemProperty().addListener(this);
         }
     }
 }

@@ -78,6 +78,14 @@ public class FormationPersonne  implements java.io.Serializable {
     public void setDocument(String document) {
         this.document.set(document);
     }
+
+    @Override
+    public String toString() {
+        return "FormationPersonne{" +
+                "formation=" + formation +
+                ", personne=" + personne +
+                '}';
+    }
 }
 
 

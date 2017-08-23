@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.CompetenceCertification;
+import com.cfao.app.beans.Pays;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.util.AlertUtil;
@@ -8,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -129,5 +131,25 @@ public class PersonneModel extends Model<Personne> {
             }
         }
         return 0;
+    }
+
+    public Personne getLastPersonneByPays(Pays pays) {
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Personne.class).add(
+                Restrictions.eq("pays", pays)
+            );
+            criteria.addOrder(Order.desc("matricule"));
+            criteria.setMaxResults(1);
+            return (Personne)criteria.uniqueResult();
+        }catch (Exception ex){
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return null;
     }
 }

@@ -90,7 +90,7 @@ public class Profil implements java.io.Serializable {
     }
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "profil_competence",  joinColumns = {
             @JoinColumn(name = "PROFIL", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)})

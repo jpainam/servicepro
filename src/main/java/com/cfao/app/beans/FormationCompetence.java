@@ -57,4 +57,23 @@ public class FormationCompetence implements Serializable {
     public void setId(FormationCompetenceId id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FormationCompetence that = (FormationCompetence) o;
+        if(that.getCompetence().equals(this.getCompetence()) && that.getFormation().equals(this.getFormation())){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = formation != null ? formation.hashCode() : 0;
+        result = 31 * result + (competence != null ? competence.hashCode() : 0);
+        return result;
+    }
 }

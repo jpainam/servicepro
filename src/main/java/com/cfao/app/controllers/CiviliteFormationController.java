@@ -1,10 +1,16 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.FormationPersonne;
 import com.cfao.app.beans.Personne;
+import com.cfao.app.model.FormationModel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.DateTableCellFactory;
+import com.cfao.app.util.ServiceproUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +30,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -36,6 +43,12 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     public TableColumn<FormationPersonne, String> titreFormationColumn;
     public TableColumn<FormationPersonne, LocalDate> datedebutFormationColumn;
     public TableColumn<FormationPersonne, LocalDate> datefinFormationColumn;
+
+    public TableView<Formation> souhaitTable;
+    public TableColumn<Formation, String> codeSouhaitColumn;
+    public TableColumn<Formation, String> titreSouhaitColumn;
+    public TableColumn<Formation, LocalDate> datefinSouhaitColumn;
+    public TableColumn<Formation, LocalDate> datedebutSouhaitColumn;
 
     public Button btnPreviousFormation;
     public Button btnNextFormation;
@@ -104,24 +117,53 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         ButtonUtil.print(btnPrintFormation);
 
         codeFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().codeformationProperty());
-
         titreFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().titreProperty());
-
         datedebutFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().datedebutProperty());
         datedebutFormationColumn.setCellFactory(new DateTableCellFactory<FormationPersonne>());
-
         datefinFormationColumn.setCellValueFactory(param -> param.getValue().getFormation().datefinProperty());
         datefinFormationColumn.setCellFactory(new DateTableCellFactory<>());
 
+        titreSouhaitColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+        codeSouhaitColumn.setCellValueFactory(param -> param.getValue().codeformationProperty());
+        datedebutSouhaitColumn.setCellValueFactory(param -> param.getValue().datedebutProperty());
+        datedebutSouhaitColumn.setCellFactory(new DateTableCellFactory<>());
+        datefinSouhaitColumn.setCellValueFactory(param -> param.getValue().datefinProperty());
+        datefinSouhaitColumn.setCellFactory(new DateTableCellFactory<>());
 
     }
 
 
     public void buildFormation() {
         formationTable.itemsProperty().bind(personne.formationPersonnesProperty());
+        //System.err.println(new FormationModel().getFormationsSouhaitees(personne));
+        Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
+            @Override
+            protected ObservableList<Formation> call() throws Exception {
+                List<Formation> list = new FormationModel().getFormationsSouhaitees(personne);
+                if(list != null) {
+                    return FXCollections.observableArrayList(list);
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(event -> {
+            if(task.getValue() != null){
+                souhaitTable.setItems(task.getValue());
+            }else{
+                souhaitTable.getItems().clear();
+            }
+        });
+
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+            ServiceproUtil.notify("Erreur dans le thread de souhait formation");
+        });
+
         if (swingController.getDocument() != null) {
             swingController.closeDocument();
         }
+
     }
 
 
