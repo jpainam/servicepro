@@ -10,13 +10,15 @@ import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -45,13 +47,12 @@ public class QCMController implements Initializable {
     public Button btnNouveau;
     public Button btnModifier;
     public Button btnSupprimer;
-    public Button btnAnnuler;
     public TableView<Competence> competenceTable;
     public TableColumn<Competence, Void> numeroCompetenceColumn;
     public TableColumn<Competence, String> descriptionCompetenceColumn;
     public TableColumn<Competence, Boolean> competenceColumn;
     public TableColumn<Competence, Boolean> connaissanceColumn;
-    public TableColumn<Competence, Boolean> possedeCompetenceColumn;
+    public TableColumn<Competence, Competence> possedeColumn;
     public StackPane competenceStackPane;
     private SearchBox searchBox = new SearchBox();
     public VBox vboxSearch;
@@ -59,11 +60,21 @@ public class QCMController implements Initializable {
     public Tab tabDetails;
 
     public QCMPersonneController personneController;
-
     public TableView<Qcm> qcmTable;
-    public QCMController(){
+
+    public VBox vboxFlowChart;
+    public VBox vboxFlowArea;
+
+    public QcmDiagram qcmDiagram = new QcmDiagram();
+    private boolean stateBtnModifier = false;
+    private boolean stateBtnNouveau = false;
+
+    private ObservableList<Competence> selectedItems;
+
+    public QCMController() {
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -73,11 +84,9 @@ public class QCMController implements Initializable {
         vboxSearch.getChildren().setAll(new Label("Tests :"), searchBox);
         initComponents();
 
-        qcmTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Qcm>() {
-            @Override
-            public void changed(ObservableValue<? extends Qcm> observable, Qcm oldValue, Qcm newValue) {
-                buildCompetenceTable(newValue);
-            }
+        qcmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            buildCompetenceTable(newValue);
+            buildFlowChart(newValue);
         });
         Task<ObservableList<QcmType>> task = new Task<ObservableList<QcmType>>() {
             @Override
@@ -94,10 +103,16 @@ public class QCMController implements Initializable {
 
         ButtonUtil.detailsTab(tabDetails);
         GlyphsDude.setIcon(tabPersonne, FontAwesomeIcon.USERS);
+
+    }
+
+    private void buildFlowChart(Qcm qcm) {
+        qcmDiagram.setQcm(qcm);
+        vboxFlowArea.getChildren().setAll(qcmDiagram.createPieChart());
     }
 
     private void buildCompetenceTable(Qcm qcm) {
-        if(qcm != null){
+        if (qcm != null) {
             comboTypeTest.setValue(qcm.getQcmType());
             txtBase.setText(qcm.getBase() + "");
             txtTitre.setText(qcm.getTitre());
@@ -107,10 +122,9 @@ public class QCMController implements Initializable {
         }
     }
 
-    private void initComponents(){
+    private void initComponents() {
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.edit(btnModifier);
-        ButtonUtil.cancel(btnAnnuler);
         ButtonUtil.print(btnPrint);
         ButtonUtil.previous(btnPrevious);
         ButtonUtil.next(btnNext);
@@ -133,8 +147,12 @@ public class QCMController implements Initializable {
         descriptionCompetenceColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
         connaissanceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
         competenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        possedeCompetenceColumn.setCellFactory(param -> new CheckBoxTableCell<>());
-        possedeCompetenceColumn.setCellValueFactory(param -> new SimpleBooleanProperty(true));
+        possedeColumn.setCellFactory(param -> {
+            SimpleBooleanProperty selected = new SimpleBooleanProperty(true);
+            CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
+            return cell;
+        });
+        possedeColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>());
 
         competenceColumn.setCellValueFactory(param -> {
             Competence competence = param.getValue();
@@ -166,27 +184,107 @@ public class QCMController implements Initializable {
     }
 
     public void nouveauAction(ActionEvent event) {
-        ServiceproUtil.emptyFields(txtBase, txtTitre);
-        ServiceproUtil.setDisable(false, comboTypeTest);
-        ServiceproUtil.setEditable(true, txtTitre, txtBase);
-        Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
-            @Override
-            protected ObservableList<Competence> call() throws Exception {
-                return FXCollections.observableArrayList(new CompetenceModel().getList());
-            }
-        };
-        competenceTable.itemsProperty().bind(task.valueProperty());
+        if(!stateBtnNouveau) {
+            ServiceproUtil.emptyFields(txtBase, txtTitre);
+            ServiceproUtil.setDisable(false, comboTypeTest);
+            ServiceproUtil.setEditable(true, txtTitre, txtBase);
+            Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+                @Override
+                protected ObservableList<Competence> call() throws Exception {
+                    return FXCollections.observableArrayList(new CompetenceModel().getList());
+                }
+            };
+            competenceTable.itemsProperty().bind(task.valueProperty());
 
-        ProgressIndicatorUtil.show(competenceStackPane, task);
-        new Thread(task).start();
+            ProgressIndicatorUtil.show(competenceStackPane, task);
+            new Thread(task).start();
+            stateBtnNouveau = true;
+        }else{
+            stateBtnNouveau = false;
+        }
     }
 
     public void modifierAction(ActionEvent event) {
+        Qcm qcm = qcmTable.getSelectionModel().getSelectedItem();
+        if(qcm == null){
+            return;
+        }
+        if(!stateBtnModifier){
+            ServiceproUtil.setDisable(false, comboTypeTest);
+            ServiceproUtil.setEditable(true, txtBase, txtTitre);
+            stateBtnModifier = true;
+            competenceTable.setEditable(true);
+            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+            selectedItems = FXCollections.observableArrayList();
+            Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
+                @Override
+                protected ObservableList<Competence> call() throws Exception {
+                    return FXCollections.observableArrayList(new CompetenceModel().getList());
+                }
+            };
+            competenceTable.itemsProperty().bind(task.valueProperty());
+            new Thread(task).start();
+            task.setOnSucceeded((WorkerStateEvent event1) -> {
+                possedeColumn.setCellFactory((TableColumn<Competence, Competence> param) -> {
+                    BooleanProperty selected = new SimpleBooleanProperty();
+                    CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
+
+                        Competence competence = task.getValue().get(index);
+                        if (qcm.getCompetences().contains(competence)) {
+                            selected.set(true);
+                        }
+                        return selected;
+                    });
+                    selected.addListener((obs, wasSelected, isNowSelected) -> {
+                        if (isNowSelected) {
+                            if (!selectedItems.contains(cell.getItem())) {
+                                selectedItems.add(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().select(cell.getItem());
+                        } else {
+                            if (selectedItems.contains(cell.getItem())) {
+                                selectedItems.remove(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                        }
+                    });
+
+                    selectedItems.addListener((ListChangeListener<Competence>) change -> {
+                        selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
+                    });
+                    cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                        selected.set(newValue != null && selectedItems.contains(newValue));
+                    });
+                    return cell;
+                });
+            });
+            task.setOnFailed(event12 -> {
+                task.getException().printStackTrace();
+                ServiceproUtil.notify("Erreur dans le thread de modification Qcm");
+            });
+            possedeColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
+
+        }else{
+            selectedItems.forEach(System.out::println);
+            Model<Qcm> model = new Model<>("Qcm");
+            qcm.setCompetences(selectedItems);
+            qcm.setBase(Integer.parseInt(txtBase.getText()));
+            qcm.setTitre(txtTitre.getText());
+            if (model.update(qcm)) {
+                ServiceproUtil.notify("Modification OK");
+                StageManager.loadContent("/views/qcm/qcm.fxml");
+            } else {
+                ServiceproUtil.notify("Erreur de modification");
+            }
+            /*competenceTable.setEditable(false);
+            stateBtnModifier = false;
+            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));*/
+        }
     }
 
     public void supprimerAction(ActionEvent event) {
         Qcm qcm = qcmTable.getSelectionModel().getSelectedItem();
-        if(qcm != null){
+        if (qcm != null) {
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -195,19 +293,15 @@ public class QCMController implements Initializable {
             };
             new Thread(task).start();
             task.setOnSucceeded(event1 -> {
-                if(task.getValue()){
+                if (task.getValue()) {
                     ServiceproUtil.notify("Suppression OK");
                     qcmTable.getItems().remove(qcm);
-                }else{
+                } else {
                     ServiceproUtil.notify("Erreur de suppression");
                 }
             });
-        }else{
+        } else {
             AlertUtil.showSimpleAlert("Information", "Vueillez d'abord choisir le test à supprimer");
         }
-    }
-
-    public void annulerAction(ActionEvent event) {
-        StageManager.loadContent("/views/qcm/qcm.fxml");
     }
 }
