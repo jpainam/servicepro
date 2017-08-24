@@ -1,3 +1,0 @@
-/*C2*/SET SCHEMA PUBLIC
-\u000a    alter table personnes \u000a        add column EXPIRE date
-\u000a    alter table personnes \u000a        add column PASSPORT varchar(255)

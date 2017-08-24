@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import java.awt.*;
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
  * Created by JP on 6/9/2017.
  */
 public class Main extends Application {
+    static Logger logger = Logger.getLogger(Main.class);
     public static Stage stage;
 
     // Directory separator
@@ -58,6 +60,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        logger.error("An error occured");
         launch(args);
     }
 

@@ -45,6 +45,7 @@ public class AlertUtil {
                 alert.setTitle("Error occured");
                 alert.setHeaderText("Error Occured");
                 alert.setContentText(ex.getLocalizedMessage());
+                new Log(ex).write();
 
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);

@@ -16,38 +16,15 @@
                   <children>
                       <MenuBar>
                           <menus>
-                              <Menu mnemonicParsing="false" text="Personnes">
+                              <Menu mnemonicParsing="false" text="Fichier">
                                   <items>
-                                      <MenuItem fx:id="menuCivilite" mnemonicParsing="false" onAction="#displayCivilite" text="Civilite" />
-                              <MenuItem fx:id="menuNouveauPersonne" mnemonicParsing="false" onAction="#add" text="Nouveau" />
-                              <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Formations" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Tests" />
-                              <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Entretiens" />
-                              <MenuItem mnemonicParsing="false" onAction="#displayCivilite" text="Certifications" />
+                                      <MenuItem mnemonicParsing="false" text="Se déconnecter" />
+                              <MenuItem mnemonicParsing="false" text="Quitter/Exit" />
                                   </items>
                               </Menu>
-                              <Menu mnemonicParsing="false" text="Formations">
-                                  <items>
-                                      <MenuItem mnemonicParsing="false" onAction="#showFormation" text="Liste des formation" />
-                                      <MenuItem mnemonicParsing="false" text="Nouvelle formation" />
-                                  </items>
-                              </Menu>
-                        <Menu mnemonicParsing="false" text="Compétences">
+                        <Menu mnemonicParsing="false" text="Personnel">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#showAction" text="Liste des compétences" />
-                              <MenuItem mnemonicParsing="false" onAction="#addAction" text="Nouvelle compétence" />
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Profils">
-                           <items>
-                               <MenuItem mnemonicParsing="false" onAction="#showProfil" text="Liste des Profils" />
-                              <MenuItem mnemonicParsing="false" text="Nouveau profil" />
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Tests">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Liste des tests" />
+                              <MenuItem mnemonicParsing="false" onAction="#showPersonnel" text="Liste des personnels" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Paramètres">
@@ -60,9 +37,10 @@
                               <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
                            </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Rapports">
+                        <Menu mnemonicParsing="false" text="?">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Liste des rapports" />
+                              <MenuItem mnemonicParsing="false" text="A Propos" />
+                              <MenuItem mnemonicParsing="false" text="Aide" />
                            </items>
                         </Menu>
                           </menus>

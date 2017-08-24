@@ -1,7 +1,6 @@
 package com.cfao.app.util;
 
 import com.cfao.app.StageManager;
-import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.BreadCrumbBar;
 
@@ -10,20 +9,17 @@ import java.util.HashMap;
 /**
  * Created by JP on 6/28/2017.
  */
-public class BreadcrumbUtil extends BreadCrumbBar<BreadCrumbItem> {
+public class BreadcrumbUtil extends BreadCrumbBar<BreadcrumbUtil.BreadCrumbItem> {
     public HashMap<String, TreeItem<BreadCrumbItem>> items = new HashMap<>();
 
     public BreadcrumbUtil() {
         super();
         this.setAutoNavigationEnabled(true);
-        setOnCrumbAction(new EventHandler<BreadCrumbActionEvent<BreadCrumbItem>>() {
-            @Override
-            public void handle(BreadCrumbActionEvent<BreadCrumbItem> event) {
-                TreeItem<BreadCrumbItem> treeItem = event.getSelectedCrumb();
-                BreadCrumbItem item = treeItem.getValue();
-                if(item.getFxmlFile() != null) {
-                    StageManager.loadContent(item.getFxmlFile());
-                }
+        setOnCrumbAction(event -> {
+            TreeItem<BreadCrumbItem> treeItem = event.getSelectedCrumb();
+            BreadCrumbItem item = treeItem.getValue();
+            if(item.getFxmlFile() != null) {
+                StageManager.loadContent(item.getFxmlFile());
             }
         });
         TreeItem<BreadCrumbItem> root = new TreeItem<>( new BreadCrumbItem("Accueil", "/views/accueil/accueil.fxml"));
@@ -70,37 +66,37 @@ public class BreadcrumbUtil extends BreadCrumbBar<BreadCrumbItem> {
             this.setSelectedCrumb(leaf);
         }
     }
-}
+    class BreadCrumbItem{
+        public  String libelle;
+        public String fxmlFile;
 
-class BreadCrumbItem{
-    public  String libelle;
-    public String fxmlFile;
+        public String getFxmlFile() {
+            return fxmlFile;
+        }
 
-    public String getFxmlFile() {
-        return fxmlFile;
+        public void setFxmlFile(String fxmlFile) {
+            this.fxmlFile = fxmlFile;
+        }
+
+        public BreadCrumbItem(String libelle, String fxmlFile) {
+            this.libelle = libelle;
+            this.fxmlFile = fxmlFile;
+        }
+        public BreadCrumbItem(String libelle) {
+            this(libelle, null);
+        }
+        public String getLibelle() {
+            return libelle;
+        }
+
+        public void setLibelle(String libelle) {
+            this.libelle = libelle;
+        }
+
+        @Override
+        public String toString() {
+            return libelle;
+        }
     }
 
-    public void setFxmlFile(String fxmlFile) {
-        this.fxmlFile = fxmlFile;
-    }
-
-    public BreadCrumbItem(String libelle, String fxmlFile) {
-        this.libelle = libelle;
-        this.fxmlFile = fxmlFile;
-    }
-    public BreadCrumbItem(String libelle) {
-        this(libelle, null);
-    }
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
-    @Override
-    public String toString() {
-        return libelle;
-    }
 }

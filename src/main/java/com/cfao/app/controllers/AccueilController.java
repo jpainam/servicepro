@@ -55,35 +55,36 @@ public class AccueilController implements Initializable {
             LoginController.serviceNotification.setOnSucceeded(event -> {
 
                 ArrayList<Map<String, String>> mapArray = LoginController.serviceNotification.getValue();
+                if(mapArray.size() > 0) {
+                    Map<String, String> mapCivilite = mapArray.get(0);
+                    Map<String, String> mapFormation = mapArray.get(1);
+                    Map<String, String> mapFormateur = mapArray.get(2);
+                    Map<String, String> mapProfil = mapArray.get(3);
 
-                Map<String, String> mapCivilite = mapArray.get(0);
-                Map<String, String> mapFormation = mapArray.get(1);
-                Map<String, String> mapFormateur = mapArray.get(2);
-                Map<String, String> mapProfil = mapArray.get(3);
+                    /**
+                     * MISE A JOUR DES LABLES
+                     */
+                    Platform.runLater(() -> {
+                        /** LABELS CIVILITE **/
+                        lblNbCivilite.setText(mapCivilite.get("info1"));
+                        lblCiviliteInfo1.setText(mapCivilite.get("info2") + " Dossiers Incomplets");
+                        lblCiviliteInfo2.setText(mapCivilite.get("info3") + " en Attente de Certification");
 
-                /**
-                 * MISE A JOUR DES LABLES
-                 */
-                Platform.runLater(()->{
-                    /** LABELS CIVILITE **/
-                    lblNbCivilite.setText(mapCivilite.get("info1"));
-                    lblCiviliteInfo1.setText(mapCivilite.get("info2") + " Dossiers Incomplets");
-                    lblCiviliteInfo2.setText(mapCivilite.get("info3") + " en Attente de Certification");
+                        /** LABELS FORMATIONS **/
+                        lblNbFormation.setText(mapFormation.get("info1"));
+                        lblFormationInfo1.setText(mapFormation.get("info2") + " terminées / " + mapFormation.get("info3") + " annulées");
+                        lblFormationInfo2.setText(mapFormation.get("info3") + " en préparation");
 
-                    /** LABELS FORMATIONS **/
-                    lblNbFormation.setText(mapFormation.get("info1"));
-                    lblFormationInfo1.setText(mapFormation.get("info2") + " terminées / "+mapFormation.get("info3")+ " annulées");
-                    lblFormationInfo2.setText(mapFormation.get("info3") + " en préparation");
+                        /** LABELS FORMATEURS **/
+                        lblNbFormateur.setText(mapFormateur.get("info1"));
 
-                    /** LABELS FORMATEURS **/
-                    lblNbFormateur.setText(mapFormateur.get("info1"));
-
-                    /** LABELS PROFIL **/
-                    lblNbprofil.setText(mapProfil.get("info1"));
-                    lblNbCompetence.setText(mapProfil.get("nbCompetence") + " Compétence");
-                    lblNbNiveau.setText(mapProfil.get("nbNiveau") + " Niveaux");
-                    lblNbTest.setText(mapProfil.get("nbTest") + " Tests");
-                });
+                        /** LABELS PROFIL **/
+                        lblNbprofil.setText(mapProfil.get("info1"));
+                        lblNbCompetence.setText(mapProfil.get("nbCompetence") + " Compétence");
+                        lblNbNiveau.setText(mapProfil.get("nbNiveau") + " Niveaux");
+                        lblNbTest.setText(mapProfil.get("nbTest") + " Tests");
+                    });
+                }
 
             });
     }
