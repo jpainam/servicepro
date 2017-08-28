@@ -60,7 +60,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        logger.error("An error occured");
         launch(args);
     }
 
