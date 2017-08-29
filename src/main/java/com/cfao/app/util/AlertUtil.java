@@ -23,6 +23,15 @@ public class AlertUtil {
 
         alert.showAndWait();
     }
+    public static void showWarningMessage(String title, String content) {
+        Alert alert = new Alert(AlertType.WARNING);
+        grayBackground(alert);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
 
     public static void showErrorMessage(String title, String content) {
         Alert alert = new Alert(AlertType.ERROR);

@@ -180,6 +180,16 @@ public class TemplateController implements Initializable, Controller {
         openParameterScene(ParametreController.TAB_SECTION);
     }
 
+    public void planificationModeleAction(ActionEvent event){
+        try{
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/planification/modele.fxml"));
+            content.getChildren().setAll(pane);
+        }catch (Exception ex){
+            logger.error(ex);
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
+
     public void exitAction(ActionEvent actionEvent) {
         try {
             new Login().start(new Stage());

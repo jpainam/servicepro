@@ -35,6 +35,7 @@
                               <!-- MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Gestion des Niveaux d'études" / -->
                               <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Gestion des Groupes" />
                               <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
+                              <MenuItem mnemonicParsing="false" onAction="#planificationModeleAction" text="Modèle de planification" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="?">

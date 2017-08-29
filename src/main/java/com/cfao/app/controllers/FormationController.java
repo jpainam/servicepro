@@ -25,12 +25,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -38,6 +41,7 @@ import java.util.ResourceBundle;
  * Created by JP on 6/19/2017.
  */
 public class FormationController implements Initializable {
+    static Logger logger = Logger.getLogger(FormationController.class);
     public TableView<Formation> formationTable;
     public TableColumn<Formation, String> titreColumn;
     public TableColumn<Formation, LocalDate> datedebutColumn;
@@ -60,6 +64,7 @@ public class FormationController implements Initializable {
     public Button btnModifier;
     public Button btnSupprimer;
     public Button btnAnnuler;
+    public Button btnGenererPlanification;
     public ListView<Personnel> listeViewFormateurs;
     public ComboBox<Typeformation> comboTypeformation;
     public Button btnAjouterSupport;
@@ -70,17 +75,20 @@ public class FormationController implements Initializable {
     public TableColumn<SupportFormation, String> titreSupportColumn;
     public StackPane formationStackPane;
 
+
     private SearchBox searchBox = new SearchBox();
 
     public Tab tabFormationDetail;
     public Tab tabCompetenceAssociee;
     public Tab tabParticipant;
+    public Tab tabPlanification;
 
     public FormationModel formationModel = new FormationModel();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
     private FormationParticipantController formationParticipantController;
     private FormationCompetenceController competenceController;
+    private FormationPlanificationController planificationController;
 
 
     @Override
@@ -112,9 +120,11 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
+        GlyphsDude.setIcon(tabPlanification, FontAwesomeIcon.CALENDAR);
         GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
         GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
         GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
+        GlyphsDude.setIcon(btnGenererPlanification, FontAwesomeIcon.CALENDAR);
         ButtonUtil.next(btnNext);
         ButtonUtil.previous(btnPrevious);
         ButtonUtil.print(btnPrint);
@@ -127,8 +137,10 @@ public class FormationController implements Initializable {
             protected Void call() throws Exception {
                 formationParticipantController = new FormationParticipantController();
                 competenceController = new FormationCompetenceController();
+                planificationController = new FormationPlanificationController();
                 tabParticipant.setContent(formationParticipantController);
                 tabCompetenceAssociee.setContent(competenceController);
+                tabPlanification.setContent(planificationController);
                 return null;
             }
         };
@@ -198,8 +210,10 @@ public class FormationController implements Initializable {
     }
 
     private void fillFormationFields(Formation formation) {
-        if (formation == null)
+        if (formation == null) {
+            btnGenererPlanification.setDisable(true);
             return;
+        }
         txtCode.setText(formation.getCodeformation());
         txtTitre.setText(formation.getTitre());
         txtDescription.setText(formation.getDescription());
@@ -213,9 +227,12 @@ public class FormationController implements Initializable {
         System.err.println(formation.getFormationPersonnes());
         formationParticipantController.setFormation(formation);
         competenceController.setFormation(formation);
+        planificationController.setFormation(formation);
 
         formationParticipantController.buildTable();
         competenceController.buildTable();
+        planificationController.buildTable();
+        btnGenererPlanification.setDisable(false);
 
     }
 
@@ -474,5 +491,64 @@ public class FormationController implements Initializable {
             ServiceproUtil.notify("Impression réussie");
         });
 
+    }
+
+    public void genererPlanificationAction(ActionEvent event){
+        Formation formation = formationTable.getSelectionModel().getSelectedItem();
+        if(formation == null){
+            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord choisir la formation");
+        }else{
+            List<Planification> planifications = formation.getPlanifications();
+            if(planifications != null && planifications.size() > 0){
+                // La formation a deja ete planifier, informer l'utilisateur
+                boolean goahead = AlertUtil.showConfirmationMessage("Attention", "Cette formation a déjà été planifiée.\n" +
+                        "Voulez-vous réinitialiser la planification?");
+                if(!goahead){
+                    return;
+                }
+                Task<ObservableList<PlanificationModele>> task = new Task<ObservableList<PlanificationModele>>() {
+                    @Override
+                    protected ObservableList<PlanificationModele> call() throws Exception {
+                        return FXCollections.observableArrayList(new Model<PlanificationModele>("PlanificationModele").getList());
+                    }
+                };
+                new Thread(task).start();
+                task.setOnFailed(event1 -> {
+                    logger.error(task.getException());
+                    task.getException().printStackTrace();
+                });
+                task.setOnSucceeded(event12 -> {
+                    List<Planification> tmpPlanifications = new ArrayList<>();
+                    for(PlanificationModele modele : task.getValue()){
+                        Planification planification = new Planification();
+                        planification.setFait(false);
+                        planification.setFormation(formation);
+                        planification.setRemarque(modele.getRemarque());
+                        planification.setSujet(modele.getSujet());
+                        planification.setTaches(modele.getTaches());
+                        planification.setTiming(modele.getTiming());
+                        tmpPlanifications.add(planification);
+                    }
+                    formation.setPlanifications(tmpPlanifications);
+                    Task<Void> task1 = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            new FormationModel().update(formation);
+                           // Mettre a jour la table des planifications si non automatique
+                            return null;
+                        }
+                    };
+                    new Thread(task1).start();
+                    task1.setOnFailed(event13 -> {
+                        task1.getException().printStackTrace();
+                        logger.error(task1.getException());
+                    });
+                    task1.setOnSucceeded(event14 -> tabPlanification.getTabPane().getSelectionModel().select(tabPlanification));
+                });
+            }else{
+                AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification\n " +
+                        "Vous pouvez créer un modèle de planification via le menu Paramètre");
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@
                      <items>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                   <children>
-                                      <Label text="Historique des formations" />
+                                      <Label text="Historique des formation" />
                               <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                  <children>
                                     <TableView fx:id="formationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
@@ -47,7 +47,7 @@
                               </VBox>
                             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
                                 <children>
-                              <Label text="Souhait des formations" />
+                              <Label text="Souhait des formation" />
                               <StackPane fx:id="historiqueStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                  <children>
                                     <TableView fx:id="souhaitTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">

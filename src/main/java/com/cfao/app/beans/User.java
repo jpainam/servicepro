@@ -1,6 +1,8 @@
 package com.cfao.app.beans;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import javax.persistence.*;
@@ -19,15 +21,14 @@ public class User implements java.io.Serializable {
     private SimpleIntegerProperty iduser = new SimpleIntegerProperty();
     private SimpleStringProperty login = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
-    private int profile;
+    private ObjectProperty<UserProfil> userProfil = new SimpleObjectProperty<>();
 
     public User() {
     }
 
-    public User(String login, String password, int profile) {
+    public User(String login, String password) {
         this.login.set(login);
         this.password.set(password);
-        this.profile = profile;
     }
 
     @Id @GeneratedValue(strategy=IDENTITY)
@@ -63,18 +64,23 @@ public class User implements java.io.Serializable {
     }
 
 
-    @Column(name="PROFILE", nullable=false)
-    public int getProfile() {
-        return this.profile;
-    }
-
-    public void setProfile(int profile) {
-        this.profile = profile;
-    }
-
     @Override
     public String toString() {
         return getLogin();
+    }
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="PROFILE", nullable=false)
+    public UserProfil getUserProfil() {
+        return userProfil.get();
+    }
+
+    public ObjectProperty<UserProfil> userProfilProperty() {
+        return userProfil;
+    }
+
+    public void setUserProfil(UserProfil userProfil) {
+        this.userProfil.set(userProfil);
     }
 }
 

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="764.0" prefWidth="1079.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
    <children>
         <SplitPane dividerPositions="0.3441258094357077" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -51,6 +53,8 @@
                                                         <Separator orientation="VERTICAL" />
                                                         <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
                                                         <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="btnGenererPlanification" disable="true" mnemonicParsing="false" onAction="#genererPlanificationAction" text="Génerer une planification" />
                                                     </items>
                                                 </ToolBar>
                                                 <HBox prefHeight="29.0" prefWidth="686.0" spacing="5.0">
@@ -196,6 +200,11 @@
 
                                     </content>
                                 </Tab>
+                        <Tab fx:id="tabPlanification" text="Planification de la formation">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
                             </tabs>
                         </TabPane>
                </children>

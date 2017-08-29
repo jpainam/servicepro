@@ -32,6 +32,7 @@ public class Formation {
     //Les deux font la meme chose
     private ListProperty<Personne> personnes = new SimpleListProperty<>();
     private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
+    private ListProperty<Planification> planifications = new SimpleListProperty<>();
 
     public Formation(){}
     public Formation(int idformation, String codeformation, Modele modele, String titre,
@@ -252,6 +253,19 @@ public class Formation {
         int result = idformation != null ? idformation.hashCode() : 0;
         result = 31 * result + (titre != null ? titre.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
+    public List<Planification> getPlanifications() {
+        return planifications.get();
+    }
+
+    public ListProperty<Planification> planificationsProperty() {
+        return planifications;
+    }
+
+    public void setPlanifications(List<Planification> planifications) {
+        this.planifications.set(FXCollections.observableArrayList(planifications));
     }
 }
 

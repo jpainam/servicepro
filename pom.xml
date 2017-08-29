@@ -141,9 +141,10 @@
             <version>LATEST</version>
         </dependency>
         <dependency>
-            <groupId>com.threerings</groupId>
-            <artifactId>getdown</artifactId>
-            <version>1.6.3</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17-beta1</version>
         </dependency>
+
     </dependencies>
 </project>
