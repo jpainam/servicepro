@@ -64,19 +64,19 @@ GLOBAL CSS
 
 }
 .menu-bar .menu-item .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: 500;
     -fx-font-family: "Sergoe UI Light";
     -fx-font-size: 12pt;
 }
 
-.menu-bar .menu-item:focused {
+/*.menu-bar .menu-item:focused {
      -fx-background-color: darkgray;
-}
+}*/
 
-.menu-bar .menu-item:focused .label {
+/*.menu-bar .menu-item:focused .label {
     -fx-text-fill: blue;
-}
+}*/
 
 /*.menu-bar .context-menu {
     /*-fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";*/
@@ -298,4 +298,7 @@ JFOenix CSS
 .popOver{
     margin:10;
     padding:10;
+}
+.non-fait{
+    -fx-background-color: #ff4500;
 }

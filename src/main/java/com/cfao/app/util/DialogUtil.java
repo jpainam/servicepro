@@ -24,4 +24,17 @@ public class DialogUtil {
         return dialog;
     }
 
+    public static  <R> javafx.scene.control.Dialog<R> dialogTemplate(String okButton, String cancelButton) {
+        javafx.scene.control.Dialog<R> dialog = new javafx.scene.control.Dialog<>();
+        Region region = new Region();
+        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
+        region.setVisible(false);
+        StageManager.getContentLayout().getChildren().add(region);
+        region.visibleProperty().bind(dialog.showingProperty());
+        ButtonType ok = new ButtonType(okButton, ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(ok, cancel);
+        return dialog;
+    }
+
 }

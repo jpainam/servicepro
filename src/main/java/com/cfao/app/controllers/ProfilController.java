@@ -117,7 +117,11 @@ public class ProfilController implements Initializable {
     }
 
     private void fillCompetenceTable(Profil profil) {
-        competenceTable.setItems(FXCollections.observableArrayList(profil.getCompetences()));
+        if(profil.getCompetences() != null) {
+            competenceTable.setItems(FXCollections.observableArrayList(profil.getCompetences()));
+        }else{
+            competenceTable.getItems().clear();
+        }
     }
 
     private void setColumnProperty(TableColumn<Competence, Boolean> tableColumn, int niveau) {

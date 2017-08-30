@@ -114,6 +114,10 @@ public class UserProfil implements java.io.Serializable {
         this.planificationsesValidation.set(FXCollections.observableArrayList(planificationsesValidation));
     }
 
+    @Override
+    public String toString() {
+        return getLibelle();
+    }
 }
 
 

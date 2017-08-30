@@ -4,7 +4,7 @@ package com.cfao.app.beans;
 
 
         import javafx.beans.property.*;
-        import javafx.collections.FXCollections;
+import javafx.collections.FXCollections;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,7 +21,7 @@ public class Tache  implements java.io.Serializable {
 
 
     private IntegerProperty idtache = new SimpleIntegerProperty();
-    private StringProperty libelle = new SimpleStringProperty();
+    private SimpleStringProperty libelle = new SimpleStringProperty();
     private ListProperty<Planification> planifications = new SimpleListProperty<>();
     private ListProperty<PlanificationModele> planificationModeles = new SimpleListProperty<>();
 
@@ -81,6 +81,10 @@ public class Tache  implements java.io.Serializable {
 
     public void setPlanificationModeles(List<PlanificationModele> planificationModeles) {
         this.planificationModeles.set(FXCollections.observableArrayList(planificationModeles));
+    }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
     }
 }
 

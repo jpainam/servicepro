@@ -69,6 +69,11 @@ public class ButtonUtil {
             GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_LEFT);
         }
     }
+    public static void excel(Button ... buttons){
+        for(Button button : buttons){
+            GlyphsDude.setIcon(button, FontAwesomeIcon.FILE_EXCEL_ALT);
+        }
+    }
     public static void detailsTab(Tab... tabs){
         for(Tab tab : tabs){
             GlyphsDude.setIcon(tab, FontAwesomeIcon.BUILDING_ALT);

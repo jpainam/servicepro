@@ -10,6 +10,7 @@ import com.cfao.app.util.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -136,16 +138,19 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         selectedItems = FXCollections.observableArrayList();
 
         task1.setOnSucceeded((WorkerStateEvent event) -> {
-            possedeColumn.setCellFactory(param -> {
+            possedeColumn.setCellFactory((TableColumn<Competence, Competence> param) -> {
                 BooleanProperty selected = new SimpleBooleanProperty();
-                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> {
-                    if(profil != null) {
-                        Competence competence = task1.getValue().get(index);
-                        if (profil.getCompetences().contains(competence)) {
-                            selected.set(true);
+                CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(new Callback<Integer, ObservableValue<Boolean>>() {
+                    @Override
+                    public ObservableValue<Boolean> call(Integer index) {
+                        if (profil != null) {
+                            Competence competence = task1.getValue().get(index);
+                            if (profil.getCompetences().contains(competence)) {
+                                selected.set(true);
+                            }
                         }
+                        return selected;
                     }
-                    return selected;
                 });
                 selected.addListener((obs, wasSelected, isNowSelected) -> {
                     if (isNowSelected) {

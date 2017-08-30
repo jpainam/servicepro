@@ -70,6 +70,10 @@ public class Document  implements java.io.Serializable {
         this.planifications.set(FXCollections.observableArrayList(planifications));
     }
 
+    @Override
+    public String toString(){
+        return getLibelle();
+    }
 
 
 
