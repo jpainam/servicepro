@@ -182,7 +182,7 @@ public class TemplateController implements Initializable, Controller {
 
     public void planificationModeleAction(ActionEvent event){
         try{
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/planification/modele.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/planification/planification.fxml"));
             content.getChildren().setAll(pane);
         }catch (Exception ex){
             logger.error(ex);

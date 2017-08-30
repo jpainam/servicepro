@@ -1,93 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="703.0" prefWidth="921.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.PersonnelController">
-   <children>
-      <SplitPane dividerPositions="0.342809364548495" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <VBox fx:id="vboxsearchBox" prefHeight="46.0" prefWidth="175.0" />
-                  <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="352.0" prefWidth="221.0" VBox.vgrow="ALWAYS">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="Noms et Prénoms" />
-                      <TableColumn prefWidth="75.0" text="Téléphone" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <ToolBar prefHeight="40.0" prefWidth="200.0">
-                    <items>
-                      <Button fx:id="btnPrintPersonnel" mnemonicParsing="false" onAction="#printPersonnelAction" />
-                        <Separator orientation="VERTICAL" />
-                        <Button fx:id="btnNouveauPersonnel" mnemonicParsing="false" onAction="#nouveauPersonnelAction" text="Nouveau/New" />
-                        <Button fx:id="btnModifierPersonnel" mnemonicParsing="false" onAction="#modifierPersonnelAction" text="Modifier/Edit" />
-                        <Separator orientation="VERTICAL" />
-                        <Button fx:id="btnSupprimerPersonnel" mnemonicParsing="false" onAction="#supprimerPersonnelAction" text="Supprimer/Delete" />
-                        <Button fx:id="btnAnnulerPersonnel" mnemonicParsing="false" onAction="#annulerPersonnelAction" text="Annuler/Cancel" />
-                    </items>
-                  </ToolBar>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <HBox prefHeight="49.0" prefWidth="591.0" spacing="10.0">
-                           <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="92.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label text="Nom" />
-                                    <TextField />
-                                 </children>
-                              </VBox>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label text="Prénom" />
-                                    <TextField />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="59.0" prefWidth="591.0" spacing="10.0">
-                           <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label text="Adresse" />
-                                    <TextField />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label text="Téléphone" />
-                                    <TextField />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <VBox prefHeight="99.0" prefWidth="591.0">
-                           <children>
-                              <Label text="Domaines" />
-                           </children>
-                        </VBox>
-                     </children>
-                     <padding>
+    <children>
+        <SplitPane dividerPositions="0.342809364548495" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                    <children>
+                        <VBox fx:id="vboxsearchBox" prefHeight="46.0" prefWidth="175.0" />
+                        <StackPane fx:id="personnelStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <TableView fx:id="personnelTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="352.0" prefWidth="221.0">
+                                    <columns>
+                                        <TableColumn fx:id="nomColumn" prefWidth="75.0" text="Noms et Prénoms" />
+                                        <TableColumn fx:id="telephoneColumn" prefWidth="75.0" text="Téléphone" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                </TableView>
+                            </children>
+                        </StackPane>
+                    </children>
+                    <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </VBox>
-        </items>
-      </SplitPane>
-   </children>
+                    </padding>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                            <items>
+                                <Button fx:id="btnPrintPersonnel" mnemonicParsing="false" onAction="#printPersonnelAction" />
+                                <Separator orientation="VERTICAL" />
+                                <Button fx:id="btnNouveauPersonnel" mnemonicParsing="false" onAction="#nouveauPersonnelAction" text="Nouveau/New" />
+                                <Button fx:id="btnModifierPersonnel" mnemonicParsing="false" onAction="#modifierPersonnelAction" text="Modifier/Edit" />
+                                <Separator orientation="VERTICAL" />
+                                <Button fx:id="btnSupprimerPersonnel" mnemonicParsing="false" onAction="#supprimerPersonnelAction" text="Supprimer/Delete" />
+                                <Button fx:id="btnAnnulerPersonnel" mnemonicParsing="false" onAction="#annulerPersonnelAction" text="Annuler/Cancel" />
+                            </items>
+                        </ToolBar>
+                        <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <HBox prefHeight="49.0" prefWidth="591.0" spacing="10.0">
+                                    <children>
+                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="92.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Nom" />
+                                                <TextField fx:id="txtNom" />
+                                            </children>
+                                        </VBox>
+                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Prénom" />
+                                                <TextField fx:id="txtPrenom" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="59.0" prefWidth="591.0" spacing="10.0">
+                                    <children>
+                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Adresse" />
+                                                <TextField fx:id="txtAdresse" />
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Téléphone" />
+                                                <TextField fx:id="txtTelephone" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <VBox fx:id="vBoxDomaine" prefHeight="99.0" prefWidth="591.0">
+                                    <children>
+                                        <Label text="Domaines" />
+                                    </children>
+                                </VBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                            </padding>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <VBox.margin>
+                                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                            </VBox.margin>
+                        </VBox>
+                    </children>
+                </VBox>
+            </items>
+        </SplitPane>
+    </children>
 </AnchorPane>

@@ -34,6 +34,7 @@ public class DialogUtil {
         ButtonType ok = new ButtonType(okButton, ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(ok, cancel);
+
         return dialog;
     }
 
