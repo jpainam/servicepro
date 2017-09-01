@@ -2,6 +2,7 @@ package com.cfao.app.model;
 
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.HibernateUtil;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,6 +17,7 @@ import java.util.List;
  * Created by JP on 6/9/2017.
  */
 public class Model<T> {
+    static org.apache.log4j.Logger logger = Logger.getLogger(Model.class);
     protected String table;
     protected String key;
     protected String tmpClass;
@@ -25,7 +27,8 @@ public class Model<T> {
     public Model() {
         //startServer();
     }
-    public void startServer(){
+
+    public void startServer() {
         try {
             HsqlProperties p = new HsqlProperties();
             p.setProperty("server.database.0", "file:/data/servicepro");
@@ -39,7 +42,7 @@ public class Model<T> {
             server.setErrWriter(null); // can use custom writer
             server.start();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -48,7 +51,7 @@ public class Model<T> {
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().getCurrentSession();
-           if(session == null){
+            if (session == null) {
                 session = HibernateUtil.getSessionFactory().openSession();
                 //transaction = session.beginTransaction();
                 return session;
@@ -74,7 +77,7 @@ public class Model<T> {
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
         } finally {
-            if(session.isOpen()) {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -91,7 +94,7 @@ public class Model<T> {
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
         } finally {
-            if(session.isOpen()) {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -111,7 +114,7 @@ public class Model<T> {
             AlertUtil.showErrorMessage(ex);
             return false;
         } finally {
-            if(session.isOpen()) {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -130,7 +133,7 @@ public class Model<T> {
             AlertUtil.showErrorMessage(ex);
             return false;
         } finally {
-            if(session.isOpen()) {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -147,7 +150,7 @@ public class Model<T> {
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
         } finally {
-            if(session.isOpen()) {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -172,7 +175,7 @@ public class Model<T> {
         getCurrentSession().close();
     }
 
-    public long countTemplate(int cas){
+    public long countTemplate(int cas) {
         String req = queryCountCase(cas);
         Session session = getCurrentSession();
         try {
@@ -180,11 +183,10 @@ public class Model<T> {
             Query query = session.createSQLQuery(req);
             return ((BigInteger) query.list().get(0)).longValue();
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
-        }
-        finally {
-            if(session.isOpen()) {
+        } finally {
+            if (session.isOpen()) {
                 session.close();
             }
         }
@@ -195,5 +197,23 @@ public class Model<T> {
         return "";
     }
 
+    public Integer truncate() {
+        Session s = getCurrentSession();
+        int rowsAffected = 0;
+        try {
+            s.beginTransaction();
+            String hql = "delete from " + tmpClass;
+            Query q = s.createQuery(hql);
+            rowsAffected = q.executeUpdate();
+        } catch (Exception e) {
+            logger.error(e);
+            AlertUtil.showErrorMessage(e);
+        }finally {
+            if(s.isOpen()){
+                s.close();
+            }
+        }
+        return rowsAffected;
+    }
 
 }

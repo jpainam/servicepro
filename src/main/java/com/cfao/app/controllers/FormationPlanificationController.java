@@ -1,5 +1,6 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
@@ -22,9 +23,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -244,7 +247,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
         Dialog<Boolean> dialog = DialogUtil.dialogTemplate("Terminer", "Annuler");
         dialog.setResizable(true);
         dialog.setHeaderText("Ajouter une planification");
-        FormationAddPlanificationController controller = new FormationAddPlanificationController();
+        PlanificationAddController controller = new PlanificationAddController();
         controller.setFormation(formation);
         dialog.getDialogPane().setContent(controller);
         dialog.setResultConverter(param -> {
@@ -344,12 +347,64 @@ public class FormationPlanificationController extends AnchorPane implements Init
     }
 
     public void importerExcelAction(ActionEvent event) {
+        if (formation == null) {
+            AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir une formation");
+            return;
+        }
         try {
 
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichiers Excel", "*.xls", "*.xlsx")
+            );
+            final File file = fileChooser.showOpenDialog(Main.stage);
+            final HashMap<String, Integer> params = getColParam();
+            if (file != null) {
+                Task<Boolean> task = new Task<Boolean>() {
+                    @Override
+                    protected Boolean call() throws Exception {
+                        ExcelFormation excelFormation = new ExcelFormation();
+                        excelFormation.setFormation(formation);
+                        return excelFormation.importerPlanification(file, params);
+                    }
+                };
+                ProgressIndicatorUtil.show(planificationStackPane, task);
+                new Thread(task).start();
+                task.setOnSucceeded(event1 -> {
+                    if (task.getValue()) {
+                        ServiceproUtil.notify("Fichier excel importé avec succès");
+                    } else {
+                        AlertUtil.showErrorMessage("Erreur", "Impossible d'importer le fichier excel");
+                    }
+                });
+                task.setOnFailed(event12 -> {
+                    task.getException().printStackTrace();
+                    logger.error(task.getException());
+                });
+            }
         } catch (Exception ex) {
             logger.error(ex);
             AlertUtil.showErrorMessage(ex);
         }
+    }
+    private HashMap<String, Integer> getColParam(){
+        Dialog<HashMap<String, Integer>> dialog = DialogUtil.dialogTemplate("Ok", "Annuler");
+        dialog.setHeaderText("Définir les paramètre Excel");
+
+        FormationImportExcelDialogController controller = new FormationImportExcelDialogController();
+        dialog.getDialogPane().setContent(controller);
+        dialog.setResultConverter(param -> {
+            if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                return controller.getData();
+            } else {
+                return null;
+            }
+        });
+        Optional<HashMap<String, Integer>> result = dialog.showAndWait();
+        if(result.isPresent()) {
+            return result.get();
+        }
+        return null;
     }
 
     public void exporterExcelAction(ActionEvent event) {

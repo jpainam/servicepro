@@ -14,7 +14,6 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0">
                <items>
                   <Button fx:id="btnNouveau" mnemonicParsing="false" onAction="#nouveauAction" />
-                  <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierAction" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#supprimerAction" />
                   <Separator orientation="VERTICAL" />
@@ -27,16 +26,16 @@
                </padding>
                <children>
                   <VBox fx:id="vboxSearch" prefHeight="40.0" prefWidth="590.0" />
-                  <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="planificationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn maxWidth="25.0" minWidth="25.0" prefWidth="25.0" text="N°" />
+                      <TableColumn fx:id="numeroColumn" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" text="N°" />
                         <TableColumn fx:id="sujetColumn" prefWidth="177.0" text="Sujet" />
                         <TableColumn fx:id="tacheColumn" prefWidth="236.0" text="Tache" />
                         <TableColumn fx:id="responsableColumn" prefWidth="211.0" text="Responsable" />
                         <TableColumn fx:id="validationColumn" prefWidth="75.0" text="Validation" />
                         <TableColumn fx:id="commentaireColumn" prefWidth="75.0" text="Commentaire" visible="false" />
                         <TableColumn fx:id="documentColumn" prefWidth="75.0" text="Document" />
-                        <TableColumn prefWidth="135.0" text="Timing" />
+                        <TableColumn fx:id="timingColumn" prefWidth="135.0" text="Timing" />
                         <TableColumn fx:id="remarqueColumn" prefWidth="75.0" text="Remarques" visible="false" />
                     </columns>
                      <columnResizePolicy>

@@ -20,8 +20,6 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -190,20 +188,20 @@ public class ProfilController implements Initializable {
             sortedList.comparatorProperty().bind(profilTable.comparatorProperty());
             profilTable.setItems(sortedList);
         });
-        /*profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             fillCompetenceTable(newValue);
-        });*/
+        });
         /*profilTable.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Profil>() {
             @Override
             public void onChanged(Change<? extends Profil> c) {
                 fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
             }
-        });*/
-        profilTable.setOnMouseClicked((MouseEvent event) -> {
+        });
+        /*profilTable.setOnMouseClicked((MouseEvent event) -> {
             if(event.getButton().equals(MouseButton.PRIMARY)){
                 fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
             }
-        });
+        });*/
     }
 
     public void clickNouveau(ActionEvent actionEvent) {

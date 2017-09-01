@@ -7,7 +7,6 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -28,7 +27,7 @@ public class PlanificationModele implements java.io.Serializable {
     private ObjectProperty<UserProfil> responsable = new SimpleObjectProperty<>();
     private ObjectProperty<UserProfil> validation = new SimpleObjectProperty<>();
     private SimpleIntegerProperty timing = new SimpleIntegerProperty();
-    private StringProperty remarque = new SimpleStringProperty();
+    private SimpleStringProperty remarque = new SimpleStringProperty();
     private StringProperty commentaire = new SimpleStringProperty();
 
     public PlanificationModele() {
@@ -75,13 +74,15 @@ public class PlanificationModele implements java.io.Serializable {
     }
 
 
-    @Column(name = "TIMING", nullable = false)
+    @Column(name = "TIMING")
     public Integer getTiming() {
         return this.timing.get();
     }
 
     public void setTiming(Integer timing) {
-        this.timing.set(timing);
+        if(timing != null) {
+            this.timing.set(timing);
+        }
     }
 
 
@@ -134,6 +135,30 @@ public class PlanificationModele implements java.io.Serializable {
 
     public void setDocuments(List<Document> documents) {
         this.documents.set(FXCollections.observableArrayList(documents));
+    }
+
+    public SimpleStringProperty remarqueProperty() {
+        return remarque;
+    }
+
+    public ObjectProperty<UserProfil> validation() {
+        return validation;
+    }
+
+    public ObjectProperty<UserProfil> responsable() {
+        return responsable;
+    }
+
+    public ListProperty<Document> documents() {
+        return documents;
+    }
+
+    public ObjectProperty<Sujet> sujetProperty() {
+        return sujet;
+    }
+
+    public ListProperty<Tache> tachesProperty() {
+        return taches;
     }
 }
 

@@ -92,7 +92,9 @@ public class Planification  implements java.io.Serializable {
     }
 
     public void setTiming(Integer timing) {
-        this.timing.set(timing);
+        if(timing != null) {
+            this.timing.set(timing);
+        }
     }
 
 
