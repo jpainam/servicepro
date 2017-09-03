@@ -31,24 +31,25 @@
         <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
+        <property name="hibernate.cache.use_query_cache">false</property>
 
         <!-- c3p0 connection pool parameters -->
-        <property name="hibernate.c3p0.min_size">15</property>
+        <!-- property name="hibernate.c3p0.min_size">15</property>
         <property name="hibernate.c3p0.max_size">100</property>
         <property name="hibernate.c3p0.timeout">6000</property>
         <property name="hibernate.c3p0.acquire_increment">5</property>
         <property name="hibernate.c3p0.max_statements">2000</property>
-        <property name="hibernate.c3p0.idle_test_period">6000</property>
+        <property name="hibernate.c3p0.idle_test_period">6000</property -->
 
         <!-- hibernate batching parameters -->
-        <property name="hibernate.jdbc.batch_size">30</property>
+        <!-- property name="hibernate.jdbc.batch_size">30</property>
         <property name="hibernate.order_inserts">true</property>
-        <property name="hibernate.order_updates">true</property>
+        <property name="hibernate.order_updates">true</property -->
 
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
         <mapping resource="mapping/modele.hbm.xml" />
-        <mapping resource="mapping/formateur.hbm.xml" />
+        <mapping resource="mapping/formationpersonnel.hbm.xml" />
 
         <mapping class="com.cfao.app.beans.Personne" />
         <mapping class="com.cfao.app.beans.Personnel" />
@@ -89,6 +90,7 @@
         <mapping class="com.cfao.app.beans.LangueParleeId" />
 
         <mapping class="com.cfao.app.beans.FormationPersonne" />
+        <mapping class="com.cfao.app.beans.SocieteFormatrice" />
         <mapping class="com.cfao.app.beans.FormationPersonneId" />
         <mapping class="com.cfao.app.beans.FormationCompetence" />
         <mapping class="com.cfao.app.beans.FormationCompetenceId" />

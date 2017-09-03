@@ -9,15 +9,15 @@ import java.io.Serializable;
  * Created by JP on 7/6/2017.
  */
 
-public class Formateur implements Serializable{
+public class FormationPersonnel implements Serializable{
     private ObjectProperty<Personnel> personnel = new SimpleObjectProperty<>();
     private ObjectProperty<Formation> formation = new SimpleObjectProperty<>();
 
-    public Formateur(ObjectProperty<Personnel> personnel, ObjectProperty<Formation> formation) {
+    public FormationPersonnel(ObjectProperty<Personnel> personnel, ObjectProperty<Formation> formation) {
         this.personnel = personnel;
         this.formation = formation;
     }
-    public Formateur(){}
+    public FormationPersonnel(){}
 
     public Personnel getPersonnel() {
         return personnel.get();
@@ -50,9 +50,9 @@ public class Formateur implements Serializable{
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Formateur){
-            Formateur formateur = (Formateur)obj;
-            if(formateur.getFormation().getIdformation() == this.getFormation().getIdformation() && formateur.getPersonnel().getIdpersonnel() == this.getPersonnel().getIdpersonnel()){
+        if(obj instanceof FormationPersonnel){
+            FormationPersonnel formationPersonnel = (FormationPersonnel)obj;
+            if(formationPersonnel.getFormation().getIdformation() == this.getFormation().getIdformation() && formationPersonnel.getPersonnel().getIdpersonnel() == this.getPersonnel().getIdpersonnel()){
                 return true;
             }
         }

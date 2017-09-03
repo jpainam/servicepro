@@ -23,8 +23,14 @@ public class Formation {
     private ObjectProperty<Typeformation> typeFormation = new SimpleObjectProperty<>();
     private SimpleObjectProperty<Date> datedebut = new SimpleObjectProperty<>();
     private SimpleObjectProperty<Date> datefin = new SimpleObjectProperty<>();
+    private SimpleStringProperty remarque = new SimpleStringProperty();
+    private SimpleIntegerProperty score = new SimpleIntegerProperty();
+    private SimpleStringProperty tp = new SimpleStringProperty();
 
+    // Les formateurs en tant que personnel
     private ListProperty<Personnel> personnels = new SimpleListProperty<>();
+    // Societe formatrice
+    private SimpleObjectProperty<SocieteFormatrice> societeFormatrice = new SimpleObjectProperty<>();
     private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
     private ListProperty<Competence> competences = new SimpleListProperty<>();
     //private SetProperty<Competence> prerequis = new SimpleSetProperty<>();
@@ -47,7 +53,7 @@ public class Formation {
         this.datefin.set(datefin);
     }
 
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="IDFORMATION", unique=true, nullable=false)
     public Integer getIdformation() {
         return this.idformation.get();
@@ -138,7 +144,7 @@ public class Formation {
     }
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="formateurs",  joinColumns = {
+    @JoinTable(name="formation_personnel",  joinColumns = {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) })
     public List<Personnel> getPersonnels() {
@@ -234,7 +240,9 @@ public class Formation {
     }
 
     public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
-        this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
+        if(formationPersonnes != null) {
+            this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
+        }
     }
 
     @Override
@@ -266,7 +274,66 @@ public class Formation {
     }
 
     public void setPlanifications(List<Planification> planifications) {
-        this.planifications.set(FXCollections.observableArrayList(planifications));
+        if(planifications != null) {
+            this.planifications.set(FXCollections.observableArrayList(planifications));
+        }
+    }
+
+    @Column(name = "REMARQUE")
+    public String getRemarque() {
+        return remarque.get();
+    }
+
+    public SimpleStringProperty remarqueProperty() {
+        return remarque;
+    }
+
+    public void setRemarque(String remarque) {
+        this.remarque.set(remarque);
+    }
+
+    @Column(name = "SCORE")
+    public Integer getScore() {
+        return score.get();
+    }
+
+    public SimpleIntegerProperty scoreProperty() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        if(score != null) {
+            this.score.set(score);
+        }
+    }
+
+    @Column(name = "TP", length = 10)
+    public String getTp() {
+        return tp.get();
+    }
+
+    public SimpleStringProperty tpProperty() {
+        return tp;
+    }
+
+    public void setTp(String tp) {
+        if(tp != null) {
+            this.tp.set(tp);
+        }
+    }
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SOCIETEFORMATRICE")
+    public SocieteFormatrice getSocieteFormatrice() {
+        return societeFormatrice.get();
+    }
+
+    public SimpleObjectProperty<SocieteFormatrice> societeFormatriceProperty() {
+        return societeFormatrice;
+    }
+
+    public void setSocieteFormatrice(SocieteFormatrice societeFormatrice) {
+        this.societeFormatrice.set(societeFormatrice);
     }
 }
 

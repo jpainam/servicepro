@@ -72,6 +72,7 @@ public class Model<T> {
         Session session = getCurrentSession();
         try {
             session.beginTransaction();
+            session.clear();
             Criteria criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
         } catch (Exception ex) {
@@ -112,12 +113,12 @@ public class Model<T> {
             return true;
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
-            return false;
         } finally {
             if (session.isOpen()) {
                 session.close();
             }
         }
+        return false;
     }
 
 
@@ -145,6 +146,24 @@ public class Model<T> {
             Transaction tx = session.beginTransaction();
             session.delete(type);
             session.flush();
+            tx.commit();
+            return true;
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return false;
+    }
+    public boolean delete(List<T> objects) {
+        Session session = getCurrentSession();
+        try {
+            Transaction tx = session.beginTransaction();
+            for(T t : objects) {
+                session.delete(t);
+            }
             tx.commit();
             return true;
         } catch (Exception ex) {

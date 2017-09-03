@@ -102,6 +102,7 @@ public class CiviliteController implements Initializable {
     public TableColumn<Personne, Societe> columnPersonneSociete;
     public TextField txtTelephone;
     public TextField txtEmail;
+    public TextField txtFonction;
 
     public CiviliteCompetenceController competenceController;
     public CiviliteFormationController formationController;
@@ -277,7 +278,7 @@ public class CiviliteController implements Initializable {
     }
 
     private void disableAllComponents(boolean bool) {
-        ServiceproUtil.setEditable(!bool, txtMatricule, txtNom, txtPrenom, txtMemo, txtTelephone, txtEmail);
+        ServiceproUtil.setEditable(!bool, txtMatricule, txtNom, txtPrenom, txtMemo, txtTelephone, txtEmail, txtFonction);
         ServiceproUtil.setDisable(bool, comboGroupe, comboPays, comboSociete, comboSection, comboPotentiel, comboAmbition,
                 comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees, datePassport);
     }
@@ -343,6 +344,7 @@ public class CiviliteController implements Initializable {
         txtTelephone.setText(person.getTelephone());
         txtEmail.setText(person.getEmail());
         txtPassport.setText(person.getPassport());
+        txtFonction.setText(person.getFonction());
 
         if (person.getDatenaiss() != null) {
             LocalDate date = new java.sql.Date(person.getDatenaiss().getTime()).toLocalDate();
@@ -438,6 +440,7 @@ public class CiviliteController implements Initializable {
         personne.setTelephone(txtTelephone.getText());
         personne.setEmail(txtEmail.getText());
         personne.setPassport(txtPassport.getText());
+        personne.setFonction(txtFonction.getText());
         if (datePassport.getValue() != null) {
             personne.setExpirationPassport(java.sql.Date.valueOf(datePassport.getValue()));
         }
@@ -533,7 +536,7 @@ public class CiviliteController implements Initializable {
         if (!btnModifier.isDisable() && personne != null)
             switch (stateBtnModifier) {
                 case 0:
-                    ServiceproUtil.setEditable(true, txtEmail, txtMatricule, txtMemo, txtNom, txtPrenom, txtTelephone);
+                    ServiceproUtil.setEditable(true, txtEmail, txtMatricule, txtMemo, txtNom, txtPrenom, txtTelephone, txtFonction);
                     ServiceproUtil.setDisable(true, btnNouveau, btnSuppr);
                     disableAllComponents(false);
                     btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));

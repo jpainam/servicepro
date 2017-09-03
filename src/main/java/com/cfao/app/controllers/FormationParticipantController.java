@@ -143,6 +143,8 @@ public class FormationParticipantController extends AnchorPane implements Initia
     }
 
     public void buildTable() {
+        participantTable.getItems().clear();
+        personneData.clear();
         if (formation == null)
             return;
         potentielPersonneColumn.setCellValueFactory(param -> {
@@ -185,7 +187,9 @@ public class FormationParticipantController extends AnchorPane implements Initia
                 filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> personneFilter.get(), personneFilter));
             }
         });
-        participantTable.setItems(FXCollections.observableArrayList(formation.getFormationPersonnes()));
+        if(formation.getFormationPersonnes() != null) {
+            participantTable.setItems(FXCollections.observableArrayList(formation.getFormationPersonnes()));
+        }
         ServiceproUtil.setDisable(true, participantToPersonne, participantToPersonneAll, personneToParticipant, personneToParticipantAll);
     }
 

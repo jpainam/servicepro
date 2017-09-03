@@ -10,21 +10,18 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,9 +30,11 @@ import java.util.ResourceBundle;
  * Created by JP on 6/11/2017.
  */
 public class ProfilController implements Initializable {
-    public TableColumn abbreviationColumn;
-    public TableColumn libelleColumn;
+    static Logger logger = Logger.getLogger(ProfilController.class);
+    public TableColumn<Profil, String> abbreviationColumn;
+    public TableColumn<Profil, String> libelleColumn;
     public TableView<Profil> profilTable;
+    public StackPane profilStackPane;
 
     public TableColumn<Competence, Boolean> fondamentalColumn;
     public TableColumn<Competence, Boolean> initialColumn;
@@ -65,12 +64,47 @@ public class ProfilController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
         setColumnSettings();
-        buildProfilTable();
+        //buildProfilTable();
         firstTab.setClosable(false);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        HBox.setHgrow(profilTable, Priority.ALWAYS);
+        profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.err.println(newValue);
+            fillCompetenceTable(newValue);
+        });
     }
     private void initComponents(){
+        abbreviationColumn.setCellValueFactory(param -> param.getValue().abbreviationProperty());
+        libelleColumn.setCellValueFactory(param -> param.getValue().libelleProperty());
+        Task<ObservableList<Profil>> task = new Task<ObservableList<Profil>>() {
+            @Override
+            protected ObservableList<Profil> call() throws Exception {
+                return FXCollections.observableArrayList(new Model<Profil>("Profil").getList());
+            }
+        };
+        ProgressIndicatorUtil.show(profilStackPane, task);
+        //profilTable.itemsProperty().bind(task.valueProperty());
+        new Thread(task).start();
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+                logger.error(task.getException());
+            }
+        });
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.err.println(task.getValue().size());
+                profilTable.setItems(task.getValue());
+            }
+        });
+        /*task.setOnSucceeded(event -> {
+            FilteredList<Profil> filteredList = new FilteredList<Profil>(task.getValue(), p -> true);
+            SortedList<Profil> sortedList = new SortedList<Profil>(filteredList);
+            sortedList.comparatorProperty().bind(profilTable.comparatorProperty());
+            profilTable.setItems(sortedList);
+        });*/
+
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         HBox.setHgrow(searchBox2, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -165,43 +199,6 @@ public class ProfilController implements Initializable {
         vbox.setRotate(-90);
         Group group = new Group(vbox);
         column.setGraphic(group);
-    }
-
-    /**
-     * Construire la table view profil
-     */
-    private void buildProfilTable() {
-        abbreviationColumn.setCellValueFactory(new PropertyValueFactory<>("abbreviation"));
-        libelleColumn.setCellValueFactory(new PropertyValueFactory<>("libelle"));
-        ProfilModel profilModel = new ProfilModel();
-
-        Task<ObservableList<Profil>> task = new Task<ObservableList<Profil>>() {
-            @Override
-            protected ObservableList<Profil> call() throws Exception {
-                return FXCollections.observableArrayList(profilModel.select());
-            }
-        };
-        task.run();
-        task.setOnSucceeded(event -> {
-            FilteredList<Profil> filteredList = new FilteredList<Profil>(task.getValue(), p -> true);
-            SortedList<Profil> sortedList = new SortedList<Profil>(filteredList);
-            sortedList.comparatorProperty().bind(profilTable.comparatorProperty());
-            profilTable.setItems(sortedList);
-        });
-        profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            fillCompetenceTable(newValue);
-        });
-        /*profilTable.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Profil>() {
-            @Override
-            public void onChanged(Change<? extends Profil> c) {
-                fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
-            }
-        });
-        /*profilTable.setOnMouseClicked((MouseEvent event) -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)){
-                fillCompetenceTable(profilTable.getSelectionModel().getSelectedItem());
-            }
-        });*/
     }
 
     public void clickNouveau(ActionEvent actionEvent) {

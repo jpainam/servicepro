@@ -50,7 +50,7 @@ public class PersonnelModel extends  Model<Personnel> {
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(Formateur.class);
+            Criteria criteria = session.createCriteria(FormationPersonnel.class);
             criteria.setProjection(Projections.countDistinct("personnel"));
             Long count = (Long)criteria.uniqueResult();
             return count.intValue();

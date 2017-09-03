@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.cfao.app.beans.Formateur" table="formateurs">
+    <class name="com.cfao.app.beans.FormationPersonnel" table="formation_personnel">
         <composite-id>
             <key-many-to-one name="personnel" class="com.cfao.app.beans.Personnel">
                 <column name="personnel"/>

@@ -7,10 +7,13 @@ import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.reports.ExcelFormation;
 import com.cfao.app.util.*;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -63,6 +66,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
     private SearchBox searchBox = new SearchBox();
     private boolean btnStateEditer = false;
 
+    public Button btnGenererPlanification;
+
     public FormationPlanificationController() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/planification.fxml"));
@@ -81,11 +86,14 @@ public class FormationPlanificationController extends AnchorPane implements Init
         searchBox.setMaxWidth(Double.MAX_VALUE);
         vboxSearch.getChildren().setAll(new Label("Planifications"), searchBox);
         planificationTable.setTableMenuButtonVisible(true);
+        planificationTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initComponents();
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.plusIcon(btnAjouter);
         ButtonUtil.edit(btnEditer);
         ButtonUtil.excel(btnImporterExcel, btnExporterExcel);
+        GlyphsDude.setIcon(btnGenererPlanification, FontAwesomeIcon.CALENDAR);
+
     }
 
     private void initComponents() {
@@ -234,9 +242,13 @@ public class FormationPlanificationController extends AnchorPane implements Init
     }
 
     public void buildTable() {
+        System.err.println(formation.getPlanifications());
         if (formation == null)
             return;
-        planificationTable.setItems(formation.planificationsProperty());
+        planificationTable.getItems().clear();
+        if(formation.getPlanifications() != null) {
+            planificationTable.setItems(FXCollections.observableArrayList(formation.getPlanifications()));
+        }
     }
 
     public void ajouterAction(ActionEvent event) {
@@ -281,23 +293,30 @@ public class FormationPlanificationController extends AnchorPane implements Init
     public void supprimerAction(ActionEvent event) {
         Planification planification = planificationTable.getSelectionModel().getSelectedItem();
         if (planification != null) {
+            List<Planification> planifications = new ArrayList<>(planificationTable.getSelectionModel().getSelectedItems());
             boolean goahead = AlertUtil.showConfirmationMessage("Etes-vous sûr de vouloir supprimer cette planification");
             if (goahead) {
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-                        return new Model<Planification>("Planification").delete(planification);
+
+                        if(planifications.size() > 1) {
+                            return new Model<Planification>("Planification").delete(planifications);
+                        }else{
+                            return new Model<Planification>("Planification").delete(planification);
+                        }
                     }
                 };
                 new Thread(task).start();
-                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-                        if (task.getValue()) {
+                task.setOnSucceeded(event12 -> {
+                    if (task.getValue()) {
+                        if(planifications.size() > 1) {
+                            formation.getPlanifications().removeAll(planifications);
+                        }else{
                             formation.getPlanifications().remove(planification);
-                        } else {
-                            ServiceproUtil.notify("Erreur dans la suppression de la planification");
                         }
+                    } else {
+                        ServiceproUtil.notify("Erreur dans la suppression de la planification");
                     }
                 });
                 task.setOnFailed(event1 -> {
@@ -413,7 +432,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
                 @Override
                 protected Void call() throws Exception {
                     ExcelFormation excelFormation = new ExcelFormation(formation);
-                    excelFormation.printPlanification();
+                    excelFormation.pivotTable();
                     return null;
                 }
             };
@@ -437,4 +456,71 @@ public class FormationPlanificationController extends AnchorPane implements Init
             AlertUtil.showErrorMessage(ex);
         }
     }
+    public void genererPlanificationAction(ActionEvent event) {
+        if (formation == null) {
+            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord choisir la formation");
+            return;
+        }
+        List<Planification> planifications = formation.getPlanifications();
+        if (planifications != null && planifications.size() > 0) {
+            // La formation a deja ete planifier, informer l'utilisateur
+            boolean goahead = AlertUtil.showConfirmationMessage("Attention", "Cette formation a déjà été planifiée.\n" +
+                    "Voulez-vous réinitialiser la planification?");
+            if (!goahead) {
+                return;
+            }
+        }
+        Task<ObservableList<PlanificationModele>> task = new Task<ObservableList<PlanificationModele>>() {
+            @Override
+            protected ObservableList<PlanificationModele> call() throws Exception {
+                return FXCollections.observableArrayList(new Model<PlanificationModele>("PlanificationModele").getList());
+            }
+        };
+        new Thread(task).start();
+        task.setOnFailed(event1 -> {
+            logger.error(task.getException());
+            task.getException().printStackTrace();
+        });
+        task.setOnSucceeded(event12 -> {
+            if(task.getValue() == null){
+                AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification\n " +
+                        "Vous pouvez créer un modèle de planification via le menu Paramètre");
+                return;
+            }
+            List<Planification> tmpPlanifications = new ArrayList<>();
+            for (PlanificationModele modele : task.getValue()) {
+                Planification planification = new Planification();
+                planification.setFait(false);
+                planification.setFormation(formation);
+                planification.setRemarque(modele.getRemarque());
+                planification.setSujet(modele.getSujet());
+                planification.setTaches(modele.getTaches());
+                planification.setTiming(modele.getTiming());
+                planification.setResponsable(modele.getResponsable());
+                planification.setValidation(modele.getValidation());
+                tmpPlanifications.add(planification);
+            }
+            formation.setPlanifications(tmpPlanifications);
+            Task<Void> task1 = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new FormationModel().update(formation);
+                    // Mettre a jour la table des planifications si non automatique
+                    return null;
+                }
+            };
+            new Thread(task1).start();
+            task1.setOnFailed(event13 -> {
+                task1.getException().printStackTrace();
+                logger.error(task1.getException());
+            });
+            task1.setOnSucceeded(event14 -> {
+                ServiceproUtil.notify("Planification générée avec succès");
+                planificationTable.itemsProperty().bind(formation.planificationsProperty());
+            });
+        });
+
+
+    }
+
 }

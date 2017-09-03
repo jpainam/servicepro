@@ -9,7 +9,6 @@ import com.cfao.app.reports.PrintFormation;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -32,8 +31,6 @@ import java.io.File;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -51,6 +48,9 @@ public class FormationController implements Initializable {
     public DatePicker dateDebut;
     public DatePicker dateFin;
     public TextArea txtDescription;
+    public TextField txtScore;
+    public TextField txtTP;
+    public TextArea txtRemarque;
     public ComboBox<Modele> comboModele;
     public ComboBox<EtatFormation> comboEtatformation;
     public ComboBox<Personnel> comboFormateur;
@@ -64,9 +64,10 @@ public class FormationController implements Initializable {
     public Button btnModifier;
     public Button btnSupprimer;
     public Button btnAnnuler;
-    public Button btnGenererPlanification;
+
     public ListView<Personnel> listeViewFormateurs;
     public ComboBox<Typeformation> comboTypeformation;
+    public ComboBox<SocieteFormatrice> comboSocieteFormatrice;
     public Button btnAjouterSupport;
     public Button btnSupprimerSupport;
     public Button btnAfficherSupport;
@@ -94,7 +95,7 @@ public class FormationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
-        formationTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Formation> observable, Formation oldValue, Formation newValue) -> {
+        formationTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             fillFormationFields(formationTable.getSelectionModel().getSelectedItem());
         });
         buildTable();
@@ -124,7 +125,7 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
         GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
         GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
-        GlyphsDude.setIcon(btnGenererPlanification, FontAwesomeIcon.CALENDAR);
+
         ButtonUtil.next(btnNext);
         ButtonUtil.previous(btnPrevious);
         ButtonUtil.print(btnPrint);
@@ -157,6 +158,7 @@ public class FormationController implements Initializable {
                 map.put("modele", FXCollections.observableList((new Model<Modele>("Modele")).getList()));
                 map.put("etatformation", FXCollections.observableList((new Model<EtatFormation>("EtatFormation")).getList()));
                 map.put("typeformation", FXCollections.observableList((new Model<Typeformation>("Typeformation")).getList()));
+                map.put("societeformatrice", FXCollections.observableList((new Model<SocieteFormatrice>("SocieteFormatrice")).getList()));
                 return map;
             }
         };
@@ -167,6 +169,7 @@ public class FormationController implements Initializable {
             comboModele.setItems((ObservableList<Modele>) map.get("modele"));
             comboEtatformation.setItems(map.get("etatformation"));
             comboTypeformation.setItems(map.get("typeformation"));
+            comboSocieteFormatrice.setItems(map.get("societeformatrice"));
         });
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
@@ -182,9 +185,9 @@ public class FormationController implements Initializable {
         btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSupprimer);
         ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur,
-                btnSupprimerFormateur, comboTypeformation);
-        ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin);
-        ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin);
+                btnSupprimerFormateur, comboTypeformation, comboSocieteFormatrice);
+        ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin, txtScore, txtTP);
+        ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin, txtScore, txtTP);
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override
             protected ObservableList<Formation> call() throws Exception {
@@ -211,20 +214,22 @@ public class FormationController implements Initializable {
 
     private void fillFormationFields(Formation formation) {
         if (formation == null) {
-            btnGenererPlanification.setDisable(true);
             return;
         }
         txtCode.setText(formation.getCodeformation());
         txtTitre.setText(formation.getTitre());
         txtDescription.setText(formation.getDescription());
+        txtScore.setText(formation.getScore() + "");
+        txtTP.setText(formation.getTp());
         comboModele.setValue(formation.getModele());
         comboEtatformation.setValue(formation.getEtatFormation());
         comboTypeformation.setValue(formation.getTypeFormation());
+        comboSocieteFormatrice.setValue(formation.getSocieteFormatrice());
         listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getPersonnels()));
         dateDebut.setValue(new java.sql.Date(formation.getDatedebut().getTime()).toLocalDate());
         dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
         supportTable.setItems(FXCollections.observableArrayList(formation.getSupportFormations()));
-        System.err.println(formation.getFormationPersonnes());
+        //System.err.println(formation.getFormationPersonnes());
         formationParticipantController.setFormation(formation);
         competenceController.setFormation(formation);
         planificationController.setFormation(formation);
@@ -232,7 +237,6 @@ public class FormationController implements Initializable {
         formationParticipantController.buildTable();
         competenceController.buildTable();
         planificationController.buildTable();
-        btnGenererPlanification.setDisable(false);
 
     }
 
@@ -243,10 +247,10 @@ public class FormationController implements Initializable {
             btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
             listeViewFormateurs.getItems().clear();
             ServiceproUtil.setDisable(true, btnModifier, btnSupprimer);
-            ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut);
-            ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
+            ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtTP);
+            ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtCode, txtTP);
             ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
-                    btnSupprimerFormateur, comboTypeformation);
+                    btnSupprimerFormateur, comboTypeformation, comboSocieteFormatrice);
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
@@ -256,10 +260,14 @@ public class FormationController implements Initializable {
             formation.setSupportFormations(supportTable.getItems());
             formation.setTitre(txtTitre.getText());
             formation.setDescription(txtDescription.getText());
+            formation.setScore(Integer.parseInt(txtScore.getText()));
+            formation.setTp(txtTP.getText());
+            formation.setRemarque(txtRemarque.getText());
             formation.setCodeformation(txtCode.getText());
             formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
             formation.setDatefin(Date.valueOf(dateFin.getValue()));
             formation.setTypeFormation(comboTypeformation.getValue());
+            formation.setSocieteFormatrice(comboSocieteFormatrice.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -289,9 +297,9 @@ public class FormationController implements Initializable {
                 btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
                 btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
                 ServiceproUtil.setDisable(true, btnNouveau, btnSupprimer);
-                ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut);
+                ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtRemarque, txtScore, txtTP);
                 ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur,
-                        btnAjouterFormateur, comboTypeformation);
+                        btnAjouterFormateur, comboTypeformation, comboSocieteFormatrice);
                 stateBtnModifier = 1;
             }
         } else {
@@ -302,10 +310,14 @@ public class FormationController implements Initializable {
             formation.setDatefin(Date.valueOf(dateFin.getValue()));
             formation.setTitre(txtTitre.getText());
             formation.setDescription(txtDescription.getText());
+            formation.setScore(Integer.parseInt(txtScore.getText()));
+            formation.setTp(txtTP.getText());
+            formation.setRemarque(txtRemarque.getText());
             formation.setEtatFormation(comboEtatformation.getValue());
             formation.setPersonnels(listeViewFormateurs.getItems());
             formation.setSupportFormations(supportTable.getItems());
             formation.setTypeFormation(comboTypeformation.getValue());
+            formation.setSocieteFormatrice(comboSocieteFormatrice.getValue());
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -388,7 +400,7 @@ public class FormationController implements Initializable {
     }
 
     public void ajouterSupportAction(ActionEvent actionEvent) {
-        if(stateBtnModifier == 0 && stateBtnNouveau == 0){
+        if (stateBtnModifier == 0 && stateBtnNouveau == 0) {
             AlertUtil.showSimpleAlert("Information", "Veuillez d'abord cliquer sur Modification ou Nouveau");
             return;
         }
@@ -429,7 +441,7 @@ public class FormationController implements Initializable {
     }
 
     public void supprimerSupportAction(ActionEvent actionEvent) {
-        if(stateBtnModifier == 0 && stateBtnNouveau == 0){
+        if (stateBtnModifier == 0 && stateBtnNouveau == 0) {
             AlertUtil.showSimpleAlert("Information", "Veuillez d'abord cliquer sur Modification ou Nouveau");
             return;
         }
@@ -491,64 +503,5 @@ public class FormationController implements Initializable {
             ServiceproUtil.notify("Impression réussie");
         });
 
-    }
-
-    public void genererPlanificationAction(ActionEvent event){
-        Formation formation = formationTable.getSelectionModel().getSelectedItem();
-        if(formation == null){
-            AlertUtil.showSimpleAlert("Information", "Veuillez d'abord choisir la formation");
-        }else{
-            List<Planification> planifications = formation.getPlanifications();
-            if(planifications != null && planifications.size() > 0){
-                // La formation a deja ete planifier, informer l'utilisateur
-                boolean goahead = AlertUtil.showConfirmationMessage("Attention", "Cette formation a déjà été planifiée.\n" +
-                        "Voulez-vous réinitialiser la planification?");
-                if(!goahead){
-                    return;
-                }
-                Task<ObservableList<PlanificationModele>> task = new Task<ObservableList<PlanificationModele>>() {
-                    @Override
-                    protected ObservableList<PlanificationModele> call() throws Exception {
-                        return FXCollections.observableArrayList(new Model<PlanificationModele>("PlanificationModele").getList());
-                    }
-                };
-                new Thread(task).start();
-                task.setOnFailed(event1 -> {
-                    logger.error(task.getException());
-                    task.getException().printStackTrace();
-                });
-                task.setOnSucceeded(event12 -> {
-                    List<Planification> tmpPlanifications = new ArrayList<>();
-                    for(PlanificationModele modele : task.getValue()){
-                        Planification planification = new Planification();
-                        planification.setFait(false);
-                        planification.setFormation(formation);
-                        planification.setRemarque(modele.getRemarque());
-                        planification.setSujet(modele.getSujet());
-                        planification.setTaches(modele.getTaches());
-                        planification.setTiming(modele.getTiming());
-                        tmpPlanifications.add(planification);
-                    }
-                    formation.setPlanifications(tmpPlanifications);
-                    Task<Void> task1 = new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            new FormationModel().update(formation);
-                           // Mettre a jour la table des planifications si non automatique
-                            return null;
-                        }
-                    };
-                    new Thread(task1).start();
-                    task1.setOnFailed(event13 -> {
-                        task1.getException().printStackTrace();
-                        logger.error(task1.getException());
-                    });
-                    task1.setOnSucceeded(event14 -> tabPlanification.getTabPane().getSelectionModel().select(tabPlanification));
-                });
-            }else{
-                AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification\n " +
-                        "Vous pouvez créer un modèle de planification via le menu Paramètre");
-            }
-        }
     }
 }

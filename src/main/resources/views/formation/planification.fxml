@@ -21,6 +21,8 @@
                   <Button fx:id="btnExporterExcel" mnemonicParsing="false" onAction="#exporterExcelAction" text="Exporter (.xls)" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="btnEditer" mnemonicParsing="false" onAction="#editerAction" text="Modifier/Edit" />
+                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="btnGenererPlanification" mnemonicParsing="false" onAction="#genererPlanificationAction" text="Génerer une planification" />
               </items>
             </ToolBar>
             <VBox fx:id="vboxSearch" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="928.0">

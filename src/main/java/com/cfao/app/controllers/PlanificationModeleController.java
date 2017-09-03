@@ -3,7 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
-import com.cfao.app.reports.ExcelFormation;
+import com.cfao.app.reports.PlanificationModeleRapport;
 import com.cfao.app.util.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
@@ -218,8 +218,8 @@ public class PlanificationModeleController extends AnchorPane implements Initial
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    ExcelFormation excelFormation = new ExcelFormation();
-                    excelFormation.printPlanificationModele();
+                    PlanificationModeleRapport rapport = new PlanificationModeleRapport();
+                    rapport.printPlanificationModele();
                     return null;
                 }
             };

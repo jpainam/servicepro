@@ -48,6 +48,7 @@ public class Personne implements java.io.Serializable {
     private ListProperty<FormationPersonne> formationPersonnes = new SimpleListProperty<>();
     private ObjectProperty<Date> expirationPassport = new SimpleObjectProperty<Date>();
     private SimpleStringProperty passport = new SimpleStringProperty();
+    private SimpleStringProperty fonction = new SimpleStringProperty();
 
 
     @Id
@@ -473,5 +474,18 @@ public class Personne implements java.io.Serializable {
 
     public void setExpirationPassport(Date expire) {
         this.expirationPassport.set(expire);
+    }
+
+    @Column(name = "FONCTION", length = 150)
+    public String getFonction() {
+        return fonction.get();
+    }
+
+    public SimpleStringProperty fonctionProperty() {
+        return fonction;
+    }
+
+    public void setFonction(String fonction) {
+        this.fonction.set(fonction);
     }
 }

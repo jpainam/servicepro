@@ -86,9 +86,6 @@ public class FormationCompetenceController extends AnchorPane implements Initial
         ButtonUtil.next(btnNextCompetence);
         ButtonUtil.previous(btnPreviousCompetence);
         ButtonUtil.print(btnPrintCompetence);
-    }
-
-    public void buildTable() {
         libelleCompetence.setCellValueFactory(param -> param.getValue().descriptionProperty());
         niveauCompetence.setCellValueFactory(param -> param.getValue().niveauProperty());
 
@@ -104,6 +101,12 @@ public class FormationCompetenceController extends AnchorPane implements Initial
             return cell;
         });
         possedeCompetence.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>());
+    }
+
+    public void buildTable() {
+        competenceTable.getItems().clear();
+        if(formation == null)
+            return;
         competenceTable.setItems(FXCollections.observableArrayList(formation.getCompetences()));
         possedeCompetence.setCellFactory(param -> {
             SimpleBooleanProperty selected = new SimpleBooleanProperty(true);

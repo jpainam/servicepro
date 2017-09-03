@@ -90,7 +90,7 @@ public class Profil implements java.io.Serializable {
     }
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "profil_competence",  joinColumns = {
             @JoinColumn(name = "PROFIL", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "COMPETENCE", nullable = false, updatable = false)})
@@ -103,15 +103,9 @@ public class Profil implements java.io.Serializable {
     }
 
     public void setCompetences(List<Competence> competences) {
-        this.competences.set(FXCollections.observableList(competences));
-    }
-    @Transient
-    public Competence getOriginalCompetence(Competence competence){
-        for(Competence original : this.competences){
-            if(original.getIdcompetence().equals(competence.getIdcompetence()))
-                return original;
+        if(competences != null) {
+            this.competences.set(FXCollections.observableList(competences));
         }
-        return null;
     }
 
     @Override
@@ -138,6 +132,10 @@ public class Profil implements java.io.Serializable {
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
 
         return result;
+    }
+
+    public SimpleStringProperty abbreviationProperty() {
+        return  abbreviation;
     }
 }
 

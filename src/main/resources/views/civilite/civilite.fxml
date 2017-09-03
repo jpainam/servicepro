@@ -65,64 +65,72 @@
                                                         </ToolBar>
                                                         <HBox prefHeight="120.0" prefWidth="648.0" spacing="10.0">
                                                             <children>
-                                                                <VBox prefHeight="129.0" prefWidth="491.0" HBox.hgrow="ALWAYS">
-                                                                    <children>
-                                                      <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
+                                                <GridPane hgap="10.0" HBox.hgrow="ALWAYS">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                                          <children>
-                                                            <VBox prefHeight="50.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                                               <children>
-                                                                                    <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
+                                                            <Label text="Nom / Name" />
+                                                            <TextField fx:id="txtNom" VBox.vgrow="NEVER" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="50.0" prefWidth="100.0">
+                                                         <children>
+                                                                              <Label fx:id="labelMatricule" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Matricule / Matric N°">
                                                                         </Label>
-                                                                                    <TextField fx:id="txtMatricule" editable="false" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="266.0" />
+                                                                              <TextField fx:id="txtMatricule" editable="false" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="266.0" />
+                                                         </children>
+                                                      </VBox>
+                                                                          <VBox GridPane.rowIndex="1">
+                                                                              <children>
+                                                                                  <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
+                                                                                        </Label>
+                                                                                  <TextField fx:id="txtPrenom" editable="false" maxWidth="1.7976931348623157E308" />
+                                                                              </children>
+                                                                          </VBox>
+                                                                          <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                              <children>
+                                                                                  <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Téléphone / Phone N°">
+                                                                                        </Label>
+                                                                                  <TextField fx:id="txtTelephone" editable="false" maxWidth="1.7976931348623157E308" />
+                                                                              </children>
+                                                                          </VBox>
+                                                                          <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                                                              <children>
+                                                                                  <Label text="Email" />
+                                                                                  <TextField fx:id="txtEmail" />
+                                                                              </children>
+                                                                          </VBox>
+                                                      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                         <children>
+                                                            <VBox HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                                        <Label text="Fonction" />
+                                                                  <TextField fx:id="txtFonction" maxWidth="1.7976931348623157E308" />
                                                                </children>
                                                             </VBox>
-                                                            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                            <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                                                                <children>
-                                                                  <Label text="Nom / Name" />
-                                                                  <TextField fx:id="txtNom" VBox.vgrow="NEVER" />
+                                                                  <Label text="Passport / Passport file" />
+                                                                  <TextField fx:id="txtPassport" editable="false" maxWidth="1.7976931348623157E308" onMouseClicked="#addPassportFile">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </TextField>
                                                                </children>
                                                             </VBox>
                                                          </children>
                                                       </HBox>
-                                                                        <HBox maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
-                                                                            <children>
-                                                                                <VBox HBox.hgrow="ALWAYS">
-                                                                                    <children>
-                                                                                        <Label fx:id="labelPrenom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Prenom / Surname">
-                                                                                        </Label>
-                                                                                        <TextField fx:id="txtPrenom" editable="false" maxWidth="1.7976931348623157E308" />
-                                                                                    </children>
-                                                                                </VBox>
-                                                                                <VBox HBox.hgrow="ALWAYS">
-                                                                                    <children>
-                                                                                        <Label fx:id="labelNom" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Téléphone / Phone N°">
-                                                                                        </Label>
-                                                                                        <TextField fx:id="txtTelephone" editable="false" maxWidth="1.7976931348623157E308" />
-                                                                                    </children>
-                                                                                </VBox>
-                                                                            </children>
-                                                                        </HBox>
-                                                                        <HBox maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                                                            <children>
-                                                                                <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                                                                    <children>
-                                                                                        <Label text="Email" />
-                                                                                        <TextField fx:id="txtEmail" />
-                                                                                    </children>
-                                                                                </VBox>
-                                                                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                                                                    <children>
-                                                                                        <Label text="Passport / Passport file" />
-                                                                                        <TextField fx:id="txtPassport" editable="false" onMouseClicked="#addPassportFile">
-                                                                     <cursor>
-                                                                        <Cursor fx:constant="HAND" />
-                                                                     </cursor></TextField>
-                                                                                    </children>
-                                                                                </VBox>
-                                                                            </children>
-                                                                        </HBox>
-                                                                    </children>
-                                                                </VBox>
+                                                   </children>
+                                                </GridPane>
                                                                 <VBox alignment="CENTER" prefHeight="115.0" prefWidth="127.0" HBox.hgrow="NEVER">
                                                                     <children>
                                                                         <Label fx:id="labelAge" alignment="CENTER" prefHeight="15.0" prefWidth="140.0" />

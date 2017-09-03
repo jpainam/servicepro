@@ -53,22 +53,32 @@
                                                         <Separator orientation="VERTICAL" />
                                                         <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />
                                                         <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#clickAnnuler" styleClass="actionButton" text="Annuler/Cancel" />
-                                          <Separator orientation="VERTICAL" />
-                                          <Button fx:id="btnGenererPlanification" disable="true" mnemonicParsing="false" onAction="#genererPlanificationAction" text="Génerer une planification" />
                                                     </items>
                                                 </ToolBar>
                                                 <HBox prefHeight="29.0" prefWidth="686.0" spacing="5.0">
                                                     <children>
+                                          <VBox minWidth="102.0" prefHeight="42.0" prefWidth="102.0" HBox.hgrow="NEVER">
+                                             <children>
+                                                              <Label minWidth="40.0" prefHeight="17.0" prefWidth="40.0" text="Code" HBox.hgrow="NEVER" />
+                                                              <TextField fx:id="txtCode" minWidth="75.0" prefHeight="25.0" prefWidth="181.0" HBox.hgrow="NEVER" />
+                                             </children>
+                                          </VBox>
                                           <VBox HBox.hgrow="ALWAYS">
                                              <children>
                                                               <Label minWidth="140.0" prefHeight="17.0" prefWidth="140.0" text="Titre" />
                                                               <TextField fx:id="txtTitre" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </VBox>
-                                          <VBox minWidth="200.0" prefHeight="40.0" prefWidth="200.0" HBox.hgrow="NEVER">
+                                          <VBox prefHeight="42.0" prefWidth="65.0" HBox.hgrow="NEVER">
                                              <children>
-                                                              <Label minWidth="40.0" prefHeight="17.0" prefWidth="40.0" text="Code" HBox.hgrow="NEVER" />
-                                                              <TextField fx:id="txtCode" minWidth="75.0" prefHeight="25.0" prefWidth="181.0" HBox.hgrow="NEVER" />
+                                                <Label text="Score" />
+                                                <TextField fx:id="txtScore" />
+                                             </children>
+                                          </VBox>
+                                          <VBox layoutX="621.0" layoutY="10.0" prefHeight="42.0" prefWidth="35.0">
+                                             <children>
+                                                <Label text="TP" />
+                                                <TextField fx:id="txtTP" />
                                              </children>
                                           </VBox>
                                                     </children>
@@ -78,46 +88,55 @@
                                                 </HBox>
                                                 <HBox maxWidth="1.7976931348623157E308" prefHeight="107.0" spacing="5.0" VBox.vgrow="NEVER">
                                                     <children>
-                                          <VBox maxWidth="1.7976931348623157E308" prefHeight="113.0" HBox.hgrow="ALWAYS">
+                                          <GridPane hgap="10.0" prefHeight="107.0" prefWidth="90.0" HBox.hgrow="ALWAYS">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
                                              <children>
-                                                              <Label minWidth="140.0" prefHeight="17.0" prefWidth="140.0" text="Modèle" HBox.hgrow="NEVER" />
-                                                              <ComboBox fx:id="comboModele" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
-                                                <Separator prefWidth="200.0">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" top="5.0" />
-                                                   </VBox.margin>
-                                                </Separator>
-                                                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="686.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <VBox prefHeight="200.0" prefWidth="100.0">
                                                    <children>
-                                                      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-                                                         <children>
-                                                                            <Label minWidth="140.0" prefWidth="140.0" text="Etat de la formation : " HBox.hgrow="NEVER" />
-                                                                            <ComboBox fx:id="comboEtatformation" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </VBox>
-                                                      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-                                                         <children>
-                                                            <Label minWidth="140.0" prefWidth="140.0" text="Type de la formation : " HBox.hgrow="NEVER" />
-                                                            <ComboBox fx:id="comboTypeformation" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </VBox>
+                                                                    <Label minWidth="140.0" prefHeight="17.0" prefWidth="140.0" text="Modèle" />
+                                                                    <ComboBox fx:id="comboModele" maxWidth="1.7976931348623157E308" minWidth="10.0" />
                                                    </children>
-                                                </HBox>
+                                                </VBox>
+                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1">
+                                                   <children>
+                                                                      <Label minWidth="140.0" prefWidth="140.0" text="Etat de la formation : " HBox.hgrow="NEVER" />
+                                                                      <ComboBox fx:id="comboEtatformation" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label minWidth="140.0" prefWidth="140.0" text="Type de la formation : " HBox.hgrow="NEVER" />
+                                                      <ComboBox fx:id="comboTypeformation" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox GridPane.columnIndex="2">
+                                                   <children>
+                                                                      <Label text="Date de début" />
+                                                                      <DatePicker fx:id="dateDebut" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="190.0" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                   <children>
+                                                                      <Label text="Date de fin" />
+                                                                      <DatePicker fx:id="dateFin" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="190.0" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                                   <children>
+                                                      <Label text="Société formatrice" />
+                                                      <ComboBox fx:id="comboSocieteFormatrice" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
+                                                   </children>
+                                                </VBox>
                                              </children>
-                                          </VBox>
-                                          <VBox maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER">
-                                             <children>
-                                                                <Label text="Date de début" />
-                                                                <DatePicker fx:id="dateDebut" prefHeight="25.0" prefWidth="190.0" />
-                                                <Separator prefWidth="200.0">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" top="5.0" />
-                                                   </VBox.margin>
-                                                </Separator>
-                                                                <Label text="Date de fin" />
-                                                                <DatePicker fx:id="dateFin" prefHeight="25.0" prefWidth="190.0" />
-                                             </children>
-                                          </VBox>
+                                          </GridPane>
                                                     </children>
                                                     <VBox.margin>
                                                         <Insets left="10.0" right="10.0" />
@@ -130,6 +149,12 @@
                                              <children>
                                                               <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Description" />
                                                               <TextArea fx:id="txtDescription" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </VBox>
+                                          <VBox layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Remarque" />
+                                                <TextArea fx:id="txtRemarque" maxWidth="1.7976931348623157E308" minWidth="10.0" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </VBox>
                                                     </children>
