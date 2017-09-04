@@ -17,14 +17,24 @@ public class HibernateUtil {
     private static ServiceRegistry serviceRegistry;
     private static final String HIBERNATE_CONFIG = "/hibernate.cfg.xml";
 
-    private synchronized static SessionFactory buildSessionFactory(){
+    private synchronized static SessionFactory buildSessionFactory() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
         try {
             Configuration configuration = new Configuration();
-            configuration.configure(HIBERNATE_CONFIG);
+            configuration.configure();
+
+            configuration.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+
+            configuration.setProperty("hibernate.connection.url", "jdbc:hsqldb:file:data/servicepro");
+
+            configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+            configuration.setProperty("hibernate.connection.username", "sa");
+
+            //configuration.configure(HIBERNATE_CONFIG);
+
             serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             return configuration.buildSessionFactory(serviceRegistry);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -37,14 +47,16 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
-    public synchronized static SessionFactory getSessionFactory(){
-        if(sessionFactory == null){
+
+    public synchronized static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
             sessionFactory = buildSessionFactory();
         }
         return sessionFactory;
 
     }
-    public synchronized static void shutdown(){
+
+    public synchronized static void shutdown() {
         getSessionFactory().close();
     }
 

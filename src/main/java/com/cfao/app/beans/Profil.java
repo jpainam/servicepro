@@ -119,7 +119,7 @@ public class Profil implements java.io.Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Profil profil = (Profil) o;
-        if(profil.getIdprofil().equals(profil.getIdprofil())){
+        if(profil.getIdprofil().equals(this.getIdprofil())){
             return true;
         }
         return false;

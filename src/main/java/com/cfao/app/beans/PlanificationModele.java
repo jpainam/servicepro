@@ -134,7 +134,9 @@ public class PlanificationModele implements java.io.Serializable {
     }
 
     public void setDocuments(List<Document> documents) {
-        this.documents.set(FXCollections.observableArrayList(documents));
+        if(documents != null) {
+            this.documents.set(FXCollections.observableArrayList(documents));
+        }
     }
 
     public SimpleStringProperty remarqueProperty() {

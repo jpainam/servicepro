@@ -1,6 +1,5 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
@@ -26,11 +25,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,11 +56,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
     public Button btnAjouter;
     public Button btnSupprimer;
     public Button btnEditer;
-    public Button btnImporterExcel;
+    /* public Button btnImporterExcel;*/
     public Button btnExporterExcel;
-
-    public VBox vboxSearch;
-    private SearchBox searchBox = new SearchBox();
     private boolean btnStateEditer = false;
 
     public Button btnGenererPlanification;
@@ -82,16 +76,13 @@ public class FormationPlanificationController extends AnchorPane implements Init
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        HBox.setHgrow(searchBox, Priority.ALWAYS);
-        searchBox.setMaxWidth(Double.MAX_VALUE);
-        vboxSearch.getChildren().setAll(new Label("Planifications"), searchBox);
         planificationTable.setTableMenuButtonVisible(true);
         planificationTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initComponents();
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.plusIcon(btnAjouter);
         ButtonUtil.edit(btnEditer);
-        ButtonUtil.excel(btnImporterExcel, btnExporterExcel);
+        ButtonUtil.excel(btnExporterExcel);
         GlyphsDude.setIcon(btnGenererPlanification, FontAwesomeIcon.CALENDAR);
 
     }
@@ -242,12 +233,13 @@ public class FormationPlanificationController extends AnchorPane implements Init
     }
 
     public void buildTable() {
-        System.err.println(formation.getPlanifications());
+        //System.err.println(formation.getPlanifications());
         if (formation == null)
             return;
         planificationTable.getItems().clear();
-        if(formation.getPlanifications() != null) {
-            planificationTable.setItems(FXCollections.observableArrayList(formation.getPlanifications()));
+        if (formation.getPlanifications() != null) {
+            //planificationTable.setItems(FXCollections.observableArrayList(formation.getPlanifications()));
+            planificationTable.itemsProperty().bind(formation.planificationsProperty());
         }
     }
 
@@ -280,6 +272,13 @@ public class FormationPlanificationController extends AnchorPane implements Init
                     }
                 };
                 new Thread(task).start();
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        ServiceproUtil.notify("Planification ajoutée avec succès");
+                        planificationTable.refresh();
+                    }
+                });
                 task.setOnFailed(event1 -> {
                     task.getException().printStackTrace();
                     logger.error(task.getException());
@@ -300,9 +299,9 @@ public class FormationPlanificationController extends AnchorPane implements Init
                     @Override
                     protected Boolean call() throws Exception {
 
-                        if(planifications.size() > 1) {
+                        if (planifications.size() > 1) {
                             return new Model<Planification>("Planification").delete(planifications);
-                        }else{
+                        } else {
                             return new Model<Planification>("Planification").delete(planification);
                         }
                     }
@@ -310,9 +309,9 @@ public class FormationPlanificationController extends AnchorPane implements Init
                 new Thread(task).start();
                 task.setOnSucceeded(event12 -> {
                     if (task.getValue()) {
-                        if(planifications.size() > 1) {
+                        if (planifications.size() > 1) {
                             formation.getPlanifications().removeAll(planifications);
-                        }else{
+                        } else {
                             formation.getPlanifications().remove(planification);
                         }
                     } else {
@@ -365,7 +364,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
         }
     }
 
-    public void importerExcelAction(ActionEvent event) {
+    /*public void importerExcelAction(ActionEvent event) {
         if (formation == null) {
             AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir une formation");
             return;
@@ -405,8 +404,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
             logger.error(ex);
             AlertUtil.showErrorMessage(ex);
         }
-    }
-    private HashMap<String, Integer> getColParam(){
+    }*/
+    /*private HashMap<String, Integer> getColParam(){
         Dialog<HashMap<String, Integer>> dialog = DialogUtil.dialogTemplate("Ok", "Annuler");
         dialog.setHeaderText("Définir les paramètre Excel");
 
@@ -425,14 +424,14 @@ public class FormationPlanificationController extends AnchorPane implements Init
         }
         return null;
     }
-
+*/
     public void exporterExcelAction(ActionEvent event) {
         try {
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
                     ExcelFormation excelFormation = new ExcelFormation(formation);
-                    excelFormation.pivotTable();
+                    excelFormation.printPlanification();
                     return null;
                 }
             };
@@ -456,6 +455,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
             AlertUtil.showErrorMessage(ex);
         }
     }
+
     public void genererPlanificationAction(ActionEvent event) {
         if (formation == null) {
             AlertUtil.showSimpleAlert("Information", "Veuillez d'abord choisir la formation");
@@ -482,13 +482,15 @@ public class FormationPlanificationController extends AnchorPane implements Init
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(event12 -> {
-            if(task.getValue() == null){
+            if (task.getValue() == null) {
                 AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification\n " +
                         "Vous pouvez créer un modèle de planification via le menu Paramètre");
                 return;
             }
             List<Planification> tmpPlanifications = new ArrayList<>();
-            for (PlanificationModele modele : task.getValue()) {
+            Iterator<PlanificationModele> modeles = task.getValue().iterator();
+            while (modeles.hasNext()) {
+                PlanificationModele modele = modeles.next();
                 Planification planification = new Planification();
                 planification.setFait(false);
                 planification.setFormation(formation);
@@ -504,8 +506,10 @@ public class FormationPlanificationController extends AnchorPane implements Init
             Task<Void> task1 = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
+                    new Model<Planification>("Planification").delete(formation.getPlanifications());
                     new FormationModel().update(formation);
                     // Mettre a jour la table des planifications si non automatique
+                    planificationTable.refresh();
                     return null;
                 }
             };

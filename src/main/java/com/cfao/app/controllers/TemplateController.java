@@ -20,16 +20,24 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.action.Action;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -47,7 +55,7 @@ public class TemplateController implements Initializable, Controller {
     public ProgressBar progressBar;
     public StackPane shortcutContent;
     //public StackPane rappelContent;
-    public Button exitButton;
+    public Label exitButton;
 
     public NotificationPane notificationPane = new NotificationPane(new StackPane());
 
@@ -59,8 +67,14 @@ public class TemplateController implements Initializable, Controller {
     public Label caretLabel;
     public Label userNameLabel;
     public Label currentLogTimeLabel;
-    public StackPane contentPane;
+    // public StackPane contentPane;
+
+    /** MENU */
     public StackPane principalLayout;
+    public MenuItem menuQuitter;
+    public MenuItem menuImporter;
+    public MenuItem menuExporter;
+    public MenuItem menuListePersonne;
 
 
     BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
@@ -70,38 +84,22 @@ public class TemplateController implements Initializable, Controller {
 
     public void initialize(URL location, ResourceBundle resources) {
         StageManager.setMainController(this);
+        initComponents();
         breadCrumbContainer.getItems().add(breadCrumb);
         try {
             cfaoLogo.setImage(new Image(getClass().getResourceAsStream(ResourceBundle.getBundle("Application").getString("app.logo"))));
 
-            GlyphsDude.setIcon(exitButton, FontAwesomeIcon.SIGN_OUT, "1.5em");
-
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.USER);
-            icon.setGlyphSize(40);
-            icon.setFill(Color.DARKBLUE);
-            userLabel.setGraphic(icon);
-            GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
             if (ServiceproUtil.getLoggedUser() != null) {
                 userNameLabel.setText(ServiceproUtil.getLoggedUser().getLogin());
             }
             currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
-
             Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
             shortcutContent.getChildren().setAll(leftMenuPane);
-
             notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
                 notificationPane.hide();
             }));
-
             notificationStack.getChildren().add(notificationPane);
             StageManager.setNotificationPane(notificationPane);
-
-            /*DatePickerSkin datePickerSkin = new DatePickerSkin(new DatePicker(LocalDate.now()));
-            Node popupContent = datePickerSkin.getPopupContent();
-            calendarPanel.getChildren().setAll(popupContent);*/
-            //Pane rappelContentPane = FXMLLoader.load(getClass().getResource("/views/rappel/rappel.fxml"));
-            //rappelContent.getChildren().addAll(rappelContentPane);
-            // Charger la vue accueil
             Pane accueil = FXMLLoader.load(getClass().getResource(FXMLView.ACCUEIL.getFXMLFile()));
             content.getChildren().setAll(accueil);
 
@@ -109,9 +107,31 @@ public class TemplateController implements Initializable, Controller {
             ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         }
-        //content.getChildren().setAll(button);
     }
 
+    private void initComponents(){
+        FontAwesomeIconView exitIcon = new FontAwesomeIconView(FontAwesomeIcon.SIGN_OUT);
+        exitIcon.setGlyphSize(30);
+        exitIcon.setFill(Color.DARKBLUE);
+        exitButton.setGraphic(exitIcon);
+        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.USER);
+        icon.setGlyphSize(30);
+        icon.setFill(Color.DARKBLUE);
+        userLabel.setGraphic(icon);
+        GlyphsDude.setIcon(caretLabel, FontAwesomeIcon.CARET_DOWN);
+        /** MENU CONFIGURATION */
+        menuExporter.setGraphic(new ImageView(new Image("images/icons/database_go.png")));
+        menuImporter.setGraphic(new ImageView(new Image("images/icons/folder_database.png")));
+        menuQuitter.setGraphic(new ImageView(new Image("images/icons/sign_out.png")));
+        menuListePersonne.setGraphic(new ImageView(new Image("images/icons/personnel.png")));
+
+        menuQuitter.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+        menuExporter.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
+        menuImporter.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
+        menuImporter.setMnemonicParsing(true);
+        menuExporter.setMnemonicParsing(true);
+        menuQuitter.setMnemonicParsing(true);
+    }
 
     @Override
     public void setContent(Node node) {
@@ -180,22 +200,12 @@ public class TemplateController implements Initializable, Controller {
         openParameterScene(ParametreController.TAB_SECTION);
     }
 
-    public void planificationModeleAction(ActionEvent event){
-        try{
+    public void planificationModeleAction(ActionEvent event) {
+        try {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/planification/planification.fxml"));
             content.getChildren().setAll(pane);
-        }catch (Exception ex){
-            logger.error(ex);
-            AlertUtil.showErrorMessage(ex);
-        }
-    }
-
-    public void exitAction(ActionEvent actionEvent) {
-        try {
-            new Login().start(new Stage());
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.close();
         } catch (Exception ex) {
+            logger.error(ex);
             AlertUtil.showErrorMessage(ex);
         }
     }
@@ -272,6 +282,61 @@ public class TemplateController implements Initializable, Controller {
             logger.error(ex);
             AlertUtil.showErrorMessage(ex);
         }
+    }
+
+    public void exitButton(MouseEvent mouseEvent) {
+        try {
+            new Login().start(new Stage());
+            //Stage stage = (Stage) ((Node) .getSource()).getScene().getWindow();
+            Stage stage = Main.stage;
+            stage.close();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
+    public void importerBDAction(ActionEvent event){
+
+    }
+    public void exporterBDAction(ActionEvent event){
+        try{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichiers Zip", "*.zip")
+            );
+            File zipFile = fileChooser.showSaveDialog(Main.stage);
+            if(zipFile != null) {
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("data.dir")).toAbsolutePath();
+                if (Files.notExists(path)) {
+                    Files.createDirectories(path);
+                }
+                ZipUtil.compress(zipFile, path.toFile());
+                /*Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+
+                        ZipUtil.compress(zipFile, path.toFile());
+                        return null;
+                    }
+                };
+                StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+                new Thread(task);
+                task.setOnSucceeded(event1 -> {
+                    StageManager.getProgressBar().progressProperty().unbind();
+                    StageManager.getProgressBar().setProgress(0);
+                });
+                task.setOnFailed(event12 -> {
+                    task.getException().printStackTrace();
+                    logger.error(task.getException());
+                });
+                */
+            }
+        }catch (Exception ex){
+            logger.error(ex);
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
+
+    public void quitterAction(ActionEvent event) {
     }
 
     class ChangePassword {

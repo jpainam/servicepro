@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
@@ -9,111 +11,128 @@
 <?import javafx.scene.layout.*?>
 
 <StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
-   <children>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
-          <children>
-              <StackPane fx:id="contentPane" alignment="TOP_LEFT" prefHeight="23.0" prefWidth="910.0">
-                  <children>
-                      <MenuBar>
-                          <menus>
-                              <Menu mnemonicParsing="false" text="Fichier">
-                                  <items>
-                                      <MenuItem mnemonicParsing="false" text="Se déconnecter" />
-                              <MenuItem mnemonicParsing="false" text="Quitter/Exit" />
-                                  </items>
-                              </Menu>
-                        <Menu mnemonicParsing="false" text="Personnel">
-                           <items>
-                              <MenuItem mnemonicParsing="false" onAction="#showPersonnel" text="Liste des personnels" />
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Paramètres">
-                           <items>
-                              <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Gestion des Utilisateurs" />
-                              <!-- MenuItem mnemonicParsing="false" onAction="#profilAction" text="Gestion des Profils" / -->
-                              <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Gestion des Sociétés" />
-                              <!-- MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Gestion des Niveaux d'études" / -->
-                              <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Gestion des Groupes" />
-                              <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
-                              <MenuItem mnemonicParsing="false" onAction="#planificationModeleAction" text="Modèle de planification" />
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="?">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="A Propos" />
-                              <MenuItem mnemonicParsing="false" text="Aide" />
-                           </items>
-                        </Menu>
-                          </menus>
-                      </MenuBar>
-                  </children>
-              </StackPane>
-            <BorderPane prefHeight="30.0" prefWidth="910.0" style="-fx-background-color: white;">
-               <left>
-                      <ImageView fx:id="cfaoLogo" fitHeight="54.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
-               </left>
-               <center>
-                  <StackPane fx:id="notificationStack" maxWidth="-Infinity" prefHeight="54.0" prefWidth="453.0" style="-fx-alignment: center; -fx-background-color: white;" BorderPane.alignment="CENTER" />
-               </center>
-               <right>
-                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="userLabel" alignment="CENTER" contentDisplay="CENTER" />
-                        <Label fx:id="caretLabel" onMousePressed="#showProfilPopOver" style="-fx-cursor: hand;" />
-                        <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label fx:id="userNameLabel" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-font-weight: bold;" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
-                              <Label fx:id="currentLogTimeLabel" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS" />
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </VBox>
-                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitAction" prefHeight="29.0" prefWidth="81.0" styleClass="btn-deconnexion" text="Exit" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS" StackPane.alignment="CENTER_RIGHT" />
-                     </children>
-                     <BorderPane.margin>
+    <children>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+            <children>
+                <HBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="1063.0">
+                    <children>
+                        <MenuBar maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="330.0" HBox.hgrow="ALWAYS">
+                            <menus>
+                                <Menu text="_Fichier">
+                                    <items>
+                              <MenuItem fx:id="menuImporter" onAction="#importerBDAction" text="_Importer les données (*.zip)">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="I" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="menuExporter" onAction="#exporterBDAction" text="_Exporter les données (*.zip)" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                                        <MenuItem fx:id="menuQuitter" onAction="#quitterAction" text="_Quitter/Exit" />
+                                    </items>
+                                </Menu>
+                                <Menu text="_Personnel">
+                                    <items>
+                                        <MenuItem fx:id="menuListePersonne" onAction="#showPersonnel" text="Liste des personnels">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator></MenuItem>
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="_Paramètres">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Gestion des Utilisateurs" />
+                                        <!-- MenuItem mnemonicParsing="false" onAction="#profilAction" text="Gestion des Profils" / -->
+                                        <MenuItem mnemonicParsing="false" onAction="#societeAction" text="Gestion des Sociétés" />
+                                        <!-- MenuItem mnemonicParsing="false" onAction="#niveauEtudeaction" text="Gestion des Niveaux d'études" / -->
+                                        <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Gestion des Groupes" />
+                                        <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
+                                        <MenuItem mnemonicParsing="false" onAction="#planificationModeleAction" text="Modèle de planification" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="_?">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="A Propos" />
+                                        <MenuItem mnemonicParsing="false" text="Aide" />
+                                    </items>
+                                </Menu>
+                            </menus>
+                        </MenuBar>
+                  <StackPane fx:id="notificationStack" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="467.0" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="328.0" spacing="10.0">
+                            <children>
+                                <Label fx:id="userLabel" alignment="CENTER" contentDisplay="CENTER" />
+                                <Label fx:id="caretLabel" onMousePressed="#showProfilPopOver" style="-fx-cursor: hand;" />
+                                <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label fx:id="userNameLabel" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-font-weight: bold;" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
+                                        <Label fx:id="currentLogTimeLabel" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS" />
+                                    </children>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                </VBox>
+                                <Label fx:id="exitButton" onMousePressed="#exitButton" prefHeight="15.0" prefWidth="36.0">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Label>
+                            </children>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                        </HBox>
+                    </children>
+                    <padding>
                         <Insets right="10.0" />
-                     </BorderPane.margin>
-                  </HBox>
-               </right>
-            </BorderPane>
-             <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" pannable="true" VBox.vgrow="ALWAYS">
-                <content>
-                 <StackPane fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
-                     <children>
-                         <SplitPane dividerPositions="0.1238390092879257" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                             <items>
-                           <StackPane fx:id="shortcutContent" prefHeight="453.0" prefWidth="27.0" SplitPane.resizableWithParent="false">
-                              <children>
+                    </padding>
+                </HBox>
+                <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" pannable="true" VBox.vgrow="ALWAYS">
+                    <content>
+                        <StackPane fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="365.0" prefWidth="910.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <SplitPane dividerPositions="0.1238390092879257" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                    <items>
+                                        <VBox prefHeight="633.0" prefWidth="103.0" style="-fx-background-color: white;" SplitPane.resizableWithParent="false">
+                                            <children>
+                                          <ImageView fx:id="cfaoLogo" fitHeight="87.0" fitWidth="117.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </ImageView>
+                                                <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="546.0" prefWidth="84.0" VBox.vgrow="ALWAYS">
+                                                    <children>
 
-                     </children>
-                           </StackPane>
-                           <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
-                              <children>
-                                 <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="34.0" prefWidth="848.0" VBox.vgrow="NEVER" />
-                                  <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
-                              </children>
-         
-                           </VBox>
-                             </items>
-                         </SplitPane>
-                     </children>
-                 </StackPane>
-                </content>
-             </ScrollPane>
-              <HBox fx:id="highlightPane" alignment="TOP_RIGHT" prefHeight="11.0" prefWidth="910.0" style="-fx-background-color: #2f4f4f;" VBox.vgrow="SOMETIMES">
-                  <children>
-                  <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
-      
-                  </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-              </HBox>
-          </children>
-      </VBox>
-   </children>
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                        </VBox>
+
+                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="363.0" prefWidth="606.0" style="-fx-border-radius: 30;">
+                                            <children>
+                                                <ToolBar fx:id="breadCrumbContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="34.0" prefWidth="848.0" VBox.vgrow="NEVER" />
+                                                <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
+                                            </children>
+
+                                        </VBox>
+                                    </items>
+                                </SplitPane>
+                            </children>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+                <HBox fx:id="highlightPane" alignment="TOP_RIGHT" prefHeight="11.0" prefWidth="910.0" style="-fx-background-color: #2f4f4f;" VBox.vgrow="SOMETIMES">
+                    <children>
+                        <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
+
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
 </StackPane>

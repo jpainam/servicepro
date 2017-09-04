@@ -19,6 +19,8 @@
 
         <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
         <property name="hibernate.connection.password"></property>
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
 
 

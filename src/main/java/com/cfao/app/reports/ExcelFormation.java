@@ -3,7 +3,6 @@ package com.cfao.app.reports;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,10 +17,10 @@ import org.apache.poi.xssf.usermodel.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -172,25 +171,7 @@ public class ExcelFormation extends ExcelReport {
             cell.setCellStyle(defaultStyle);
             line++;
         }
-        for (int colNum = 0; colNum < titres.length; colNum++) {
-            sheet.autoSizeColumn(colNum);
-        }
-
-        setBorderToAllCells(0, sheet.getLastRowNum(), 0, titres.length);
-
-        File file = new File(ResourceBundle.getBundle("Bundle").getString("document.dir") + File.separator + "workbook.xlsx");
-        FileOutputStream fileOut = new FileOutputStream(file);
-        workbook.write(fileOut);
-        fileOut.close();
-        Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
-        if (Files.notExists(path)) {
-            Files.createDirectories(path);
-        }
-        String document = path.toString() + File.separator + "workbook.xlsx";
-        File f = new File((document));
-        if (f.exists() && !f.isDirectory()) {
-            ServiceproUtil.openDocument(f);
-        }
+        finalize();
     }
 
     public boolean importerPlanification(File file, HashMap<String, Integer> colParam) {

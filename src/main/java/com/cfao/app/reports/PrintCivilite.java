@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by JP on 8/14/2017.
  */
-public class PrintCivilite extends Report {
+public class PrintCivilite extends PdfReport {
     CivilitePhoto civilitePhoto = new CivilitePhoto();
     public PrintCivilite(){
         super();

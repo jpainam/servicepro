@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by JP on 7/13/2017.
  */
-public class PrintFormation extends Report {
+public class PrintFormation extends PdfReport {
     FormationModel formationModel;
     HashMap<String, Object> parameters;
     public PrintFormation(){

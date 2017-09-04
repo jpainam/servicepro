@@ -68,7 +68,6 @@ public class ProfilController implements Initializable {
         firstTab.setClosable(false);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.err.println(newValue);
             fillCompetenceTable(newValue);
         });
     }

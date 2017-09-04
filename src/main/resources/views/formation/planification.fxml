@@ -17,7 +17,6 @@
                 <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterAction" />
                   <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#supprimerAction" />
                   <Separator orientation="VERTICAL" />
-                  <Button fx:id="btnImporterExcel" mnemonicParsing="false" onAction="#importerExcelAction" text="Importer (.xls)" />
                   <Button fx:id="btnExporterExcel" mnemonicParsing="false" onAction="#exporterExcelAction" text="Exporter (.xls)" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="btnEditer" mnemonicParsing="false" onAction="#editerAction" text="Modifier/Edit" />
@@ -25,11 +24,6 @@
                   <Button fx:id="btnGenererPlanification" mnemonicParsing="false" onAction="#genererPlanificationAction" text="Génerer une planification" />
               </items>
             </ToolBar>
-            <VBox fx:id="vboxSearch" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="928.0">
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </VBox.margin>
-            </VBox>
             <StackPane fx:id="planificationStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <children>
                   <TableView fx:id="planificationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

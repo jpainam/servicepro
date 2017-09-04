@@ -30,6 +30,7 @@ public class ExcelReport {
 
     public ExcelReport() {
         headerStyle = workbook.createCellStyle();
+
         Font font = workbook.createFont();
         font.setFontHeightInPoints((short) 13);
         font.setBold(true);
@@ -65,8 +66,16 @@ public class ExcelReport {
         defaultStyle.setBorderBottom(BorderStyle.THIN);
         defaultStyle.setBorderLeft(BorderStyle.THIN);
         //defaultStyle.setLeftBorderColor(IndexedColors.GREEN.getIndex());
+        font = workbook.createFont();
+        font.setFontName("Verdana");
         defaultStyle.setBorderRight((BorderStyle.THIN));
         defaultStyle.setBorderTop((BorderStyle.THIN));
+
+        /*org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCol cTCol = sheet.getCTWorksheet().getColsArray(0).addNewCol();
+        cTCol.setMin(1);
+        cTCol.setMax(16384);
+        cTCol.setWidth(12.7109375);
+        cTCol.setStyle(defaultStyle.getIndex());*/
 
         /** TABLE Options */
         // Create

@@ -145,7 +145,18 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.17-beta1</version>
         </dependency>
-
+        <!-- dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1212</version>
+        </dependency -->
+        <!-- dependency>
+            <groupId>com.hxtt</groupId>
+            <artifactId>hxtt</artifactId>
+            <version>5.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/hxtt-5.2.jar</systemPath>
+        </dependency -->
 
     </dependencies>
 </project>

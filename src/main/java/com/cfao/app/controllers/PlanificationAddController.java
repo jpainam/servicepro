@@ -188,7 +188,7 @@ public class PlanificationAddController extends AnchorPane implements Initializa
             planification.setFormation(formation);
             planification.setDocuments(comboDocument.getCheckModel().getCheckedItems());
             formation.getPlanifications().add(planification);
-            System.out.println("Ajout de la planification");
+            //System.out.println("Ajout de la planification");
             /** Netoyer les champs */
             selectedItems.clear();
             comboDocument.getCheckModel().clearChecks();

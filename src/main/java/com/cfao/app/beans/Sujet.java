@@ -74,7 +74,9 @@ public class Sujet implements java.io.Serializable {
     }
 
     public void setPlanificationModeles(List<PlanificationModele> planificationModeles) {
-        this.planificationModeles.set(FXCollections.observableArrayList(planificationModeles));
+        if(planificationModeles != null) {
+            this.planificationModeles.set(FXCollections.observableArrayList(planificationModeles));
+        }
     }
 
     @Override

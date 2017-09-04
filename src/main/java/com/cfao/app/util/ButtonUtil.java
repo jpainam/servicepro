@@ -49,24 +49,24 @@ public class ButtonUtil {
             GlyphsDude.setIcon(button, FontAwesomeIcon.FILE);
         }
     }
-    public static void angle_right(Button ... buttons){
+    public static void angle_up(Button ... buttons){
         for(Button button : buttons){
-            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_RIGHT);
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_UP);
         }
     }
-    public static void angle_left(Button ... buttons){
+    public static void angle_down(Button ... buttons){
         for(Button button : buttons){
-            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_LEFT);
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOWN);
         }
     }
-    public static void angle_double_right(Button ... buttons){
+    public static void angle_double_up(Button ... buttons){
         for(Button button : buttons){
-            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_RIGHT);
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_UP);
         }
     }
-    public static void angle_double_left(Button ... buttons){
+    public static void angle_double_down(Button ... buttons){
         for(Button button : buttons){
-            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_LEFT);
+            GlyphsDude.setIcon(button, FontAwesomeIcon.ANGLE_DOUBLE_DOWN);
         }
     }
     public static void excel(Button ... buttons){

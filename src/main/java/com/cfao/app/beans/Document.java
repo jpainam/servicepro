@@ -67,7 +67,9 @@ public class Document  implements java.io.Serializable {
     }
 
     public void setPlanifications(List<Planification> planifications) {
-        this.planifications.set(FXCollections.observableArrayList(planifications));
+        if(planifications != null) {
+            this.planifications.set(FXCollections.observableArrayList(planifications));
+        }
     }
 
     @Override

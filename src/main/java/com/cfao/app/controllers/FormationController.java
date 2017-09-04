@@ -83,13 +83,15 @@ public class FormationController implements Initializable {
     public Tab tabCompetenceAssociee;
     public Tab tabParticipant;
     public Tab tabPlanification;
+    public Tab tabPersonne;
 
     public FormationModel formationModel = new FormationModel();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
-    private FormationParticipantController formationParticipantController;
+    private FormationPersonneController personneController;
     private FormationCompetenceController competenceController;
     private FormationPlanificationController planificationController;
+    private FormationParticipantController participantController;
 
 
     @Override
@@ -120,6 +122,7 @@ public class FormationController implements Initializable {
         GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
+        GlyphsDude.setIcon(tabPersonne, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabFormationDetail, FontAwesomeIcon.BUILDING_ALT);
         GlyphsDude.setIcon(tabPlanification, FontAwesomeIcon.CALENDAR);
         GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
@@ -136,10 +139,12 @@ public class FormationController implements Initializable {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                formationParticipantController = new FormationParticipantController();
+                personneController = new FormationPersonneController();
+                participantController = new FormationParticipantController();
                 competenceController = new FormationCompetenceController();
                 planificationController = new FormationPlanificationController();
-                tabParticipant.setContent(formationParticipantController);
+                tabParticipant.setContent(participantController);
+                tabPersonne.setContent(personneController);
                 tabCompetenceAssociee.setContent(competenceController);
                 tabPlanification.setContent(planificationController);
                 return null;
@@ -230,11 +235,16 @@ public class FormationController implements Initializable {
         dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
         supportTable.setItems(FXCollections.observableArrayList(formation.getSupportFormations()));
         //System.err.println(formation.getFormationPersonnes());
-        formationParticipantController.setFormation(formation);
+        personneController.setFormation(formation);
+        participantController.setFormation(formation);
         competenceController.setFormation(formation);
         planificationController.setFormation(formation);
 
-        formationParticipantController.buildTable();
+        /** Realise l'injection pour la classe FormationController */
+        personneController.setParticipantTable(participantController.getParticipantTable());
+        personneController.buildTable();
+        participantController.setPersonneData(personneController.getPersonneData());
+        participantController.buildTable();
         competenceController.buildTable();
         planificationController.buildTable();
 

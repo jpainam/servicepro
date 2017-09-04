@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 7/13/2017.
  */
-public class Report {
+public class PdfReport {
 
     protected Image logo;
     protected String destination;
@@ -35,7 +35,7 @@ public class Report {
     protected PdfWriter writer;
     protected PdfDocument pdf;
 
-    public Report() {
+    public PdfReport() {
 
         try {
             URL filename = getClass().getResource(ResourceBundle.getBundle("Application").getString("app.logo.transparent"));

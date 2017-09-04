@@ -10,6 +10,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.*;
 
 import java.time.Period;
 import java.util.Date;
@@ -73,21 +75,37 @@ public class ListeInscriptionRapport extends ExcelReport {
                 row = sheet.createRow(line);
                 row.createCell(col++).setCellValue(i);
                 /** Pays */
-                row.createCell(col++).setCellValue(p.getPays().getNamefr());
+                cell = row.createCell(col++);
+                cell.setCellStyle(defaultStyle);
+                cell.setCellValue(p.getPays().getNamefr());
                 /** Filiale */
-                row.createCell(col++).setCellValue(p.getSociete().getNom());
+                cell = row.createCell(col++);
+                cell.setCellValue(p.getSociete().getNom());
+                cell.setCellStyle(defaultStyle);
                 /** Prenom */
-                row.createCell(col++).setCellValue(p.getPrenom());
+                cell = row.createCell(col++);
+                cell.setCellValue(p.getPrenom());
+                cell.setCellStyle(defaultStyle);
                 /** Nom */
-                row.createCell(col++).setCellValue(p.getNom());
+                cell = row.createCell(col++);
+                cell.setCellValue(p.getNom());
+                cell.setCellStyle(defaultStyle);
                 /** Fonction */
-                row.createCell(col++).setCellValue(p.getFonction());
+                cell = row.createCell(col++);
+                cell.setCellValue(p.getFonction());
+                cell.setCellStyle(defaultStyle);
                 /** Formation */
-                row.createCell(col++).setCellValue(f.getTitre());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getTitre());
+                cell.setCellStyle(defaultStyle);
                 /** Formateur */
-                row.createCell(col++).setCellValue(f.getSocieteFormatrice().getLibelle());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getSocieteFormatrice().getLibelle());
+                cell.setCellStyle(defaultStyle);
                 /** Type */
-                row.createCell(col++).setCellValue(f.getTypeFormation().getLibelle());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getTypeFormation().getLibelle());
+                cell.setCellStyle(defaultStyle);
                 /** Date */
                 cell = row.createCell(col++);
                 cell.setCellStyle(shortDateStyle);
@@ -97,45 +115,75 @@ public class ListeInscriptionRapport extends ExcelReport {
                 Period diff = Period.between(f.datedebutProperty().get(), f.datefinProperty().get());
                // int diffInDays = (int) ((f.getDatefin().getTime() - f.getDatedebut().getTime()) / (1000 * 60 * 60 * 24));
                 cell.setCellValue(diff.getDays());
+                cell.setCellStyle(defaultStyle);
 
                 /** Score */
-                row.createCell(col++).setCellValue(f.getScore());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getScore());
+                cell.setCellStyle(defaultStyle);
                 /** TP */
-                row.createCell(col++).setCellValue(f.getTp());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getTp());
+                cell.setCellStyle(defaultStyle);
                 /** Remarque */
-                row.createCell(col++).setCellValue(f.getRemarque());
+                cell = row.createCell(col++);
+                cell.setCellValue(f.getRemarque());
+                cell.setCellStyle(defaultStyle);
                 line++;
                 i++;
             }
         }
-
-        /*AreaReference reference = new AreaReference(
-                new CellReference(0, 0), new CellReference(sheet.getLastRowNum(), titres.length));
-        if(reference == null){
-            System.err.println("Ref is null");
-        }
-        table.setCellReferences(reference);*/
         sheet.createFreezePane(0, 2);
-
-        //Create some data to build the pivot table on
-
-        AreaReference source = new AreaReference(new CellReference(0, 0), new CellReference(sheet.getLastRowNum(), titres.length));
-        CellReference position = new CellReference("A1");
-        // Create a pivot table on this sheet, with H5 as the top-left cell..
-        // The pivot table's data source is on the same sheet in A1:D4
-        XSSFPivotTable pivotTable = sheet.createPivotTable(source, position);
-        //Configure the pivot table
-        //Use first column as row label
-        pivotTable.addRowLabel(4); // Nom
-        //Sum up the second column
-        pivotTable.addColumnLabel(DataConsolidateFunction.COUNT, 5);
-        //Set the third column as filter
-        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, 2);
-        //Add filter on forth column
-        pivotTable.addReportFilter(1); // Pays
-        pivotTable.addReportFilter(2); // Filiale
+        AreaReference source = new AreaReference(new CellReference(1, 1), new CellReference(sheet.getLastRowNum(), titres.length - 1));
+        //AreaReference source = new AreaReference("B2:N14", SpreadsheetVersion.EXCEL2007);
+        // Position du debut du pivot table dans le second sheet
+        CellReference position = new CellReference("A6");
+        XSSFSheet pivotSheet = workbook.createSheet("Extraction");
+        XSSFPivotTable pivotTable = pivotSheet.createPivotTable(source, position, sheet);
+        pivotTable.addRowLabel(3); // Nom
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, 9, "Somme Nbre jour");
+        addColumLabels(pivotTable, 5, STItemType.DEFAULT);
+        pivotTable.addReportFilter(0); // Pays
+        pivotTable.addReportFilter(1); // Filiale
         pivotTable.addReportFilter(8); // Date
 
+        /** Deuxieme pivot table */
+        pivotSheet = workbook.createSheet("Extraction (2)");
+        pivotTable = pivotSheet.createPivotTable(source, position, sheet);
+        pivotTable.addRowLabel(0); // Pays
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, 9, "Somme Nbre jour");
+        pivotTable.addColumnLabel(DataConsolidateFunction.COUNT, 3, "Nombre de Nom");
+        //addColumLabels(pivotTable, 3, STItemType.COUNT);
+        pivotTable.addReportFilter(8); // Date
         finalize();
     }
+
+
+    public  void addColumLabels(XSSFPivotTable pivotTable, int columnIndex, STItemType.Enum sttItemType) {
+        AreaReference pivotArea = pivotTable.getPivotCacheDefinition().getPivotArea(sheet.getWorkbook());
+        int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
+        CTPivotFields pivotFields = pivotTable.getCTPivotTableDefinition().getPivotFields();
+
+        CTPivotField pivotField = CTPivotField.Factory.newInstance();
+        CTItems items = pivotField.addNewItems();
+
+        pivotField.setAxis(STAxis.AXIS_COL);
+        pivotField.setShowAll(false);
+        for (int i = 0; i <= lastColIndex; i++) {
+            items.addNewItem().setT(sttItemType);
+        }
+        items.setCount(items.sizeOfItemArray());
+        pivotFields.setPivotFieldArray(columnIndex, pivotField);
+
+        // colfield should be added for the second one.
+        CTColFields colFields;
+        if (pivotTable.getCTPivotTableDefinition().getColFields() != null) {
+            colFields = pivotTable.getCTPivotTableDefinition().getColFields();
+        } else {
+            colFields = pivotTable.getCTPivotTableDefinition().addNewColFields();
+        }
+        colFields.addNewField().setX(columnIndex);
+        colFields.setCount(colFields.sizeOfFieldArray());
+    }
 }
+

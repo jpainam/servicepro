@@ -26,18 +26,18 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                     <children>
-                  <Label text="Libellé de la tache" />
-                  <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
-                     <children>
-                        <TextField maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                        <Button disable="true" mnemonicParsing="false" text="Valider" />
-                     </children>
-                  </HBox>
+                        <Label text="Libellé de la tache" />
+                        <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+                            <children>
+                                <TextField fx:id="txtTache" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="btnValider" disable="true" mnemonicParsing="false" onAction="#validerAction" text="Valider" />
+                            </children>
+                        </HBox>
                         <Label text="Liste des taches de planification" />
-                        <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tachePlanificationTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn maxWidth="35.0" minWidth="35.0" prefWidth="35.0" text="N°" />
-                                <TableColumn prefWidth="75.0" text="Libellé de la tache" />
+                                <TableColumn fx:id="columnNumero" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" text="N°" />
+                                <TableColumn fx:id="columnLibelle" prefWidth="75.0" text="Libellé de la tache" />
                             </columns>
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

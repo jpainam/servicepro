@@ -54,38 +54,24 @@ GLOBAL CSS
      -fx-cursor: hand;
 }
 .menu-bar{
-    -fx-background-color:#2f4f4f;
+    /*-fx-background-color:#2f4f4f;*/
+    -fx-background-color: transparent;
 }
+
 .menu-bar .label{
-    -fx-text-fill: white;
+    /*-fx-text-fill: white;
     -fx-font-weight: 500;
     -fx-font-family: "Sergoe UI Light";
-    -fx-font-size: 12pt;
+    -fx-font-size: 12pt;*/
 
 }
 .menu-bar .menu-item .label {
-    -fx-text-fill: black;
+    /*-fx-text-fill: black;
     -fx-font-weight: 500;
     -fx-font-family: "Sergoe UI Light";
-    -fx-font-size: 12pt;
+    -fx-font-size: 12pt;*/
 }
 
-/*.menu-bar .menu-item:focused {
-     -fx-background-color: darkgray;
-}*/
-
-/*.menu-bar .menu-item:focused .label {
-    -fx-text-fill: blue;
-}*/
-
-/*.menu-bar .context-menu {
-    /*-fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";*/
-    /*-fx-background-color: black;
-    -fx-background-insets: 0, 1, 2;
-    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
-/*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
-    /*-fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
-}*/
 /**************
 SEARCH
 ***************/
@@ -299,6 +285,70 @@ JFOenix CSS
     margin:10;
     padding:10;
 }
+/** Utiliser dans planification pour tache fait ou non fait */
 .non-fait{
     -fx-background-color: #ff4500;
+}
+/****
+    NOTIFICATION PANE
+ ******/
+.notification-bar>.pane {
+    -fx-background-color: #373e48;
+    -fx-padding: 5 5 5 5;
+    /*-fx-background-insets: 0, 1, 2;*/
+    -fx-text-fill: white;
+}
+
+.notification-bar>.pane .title {
+    -fx-font-size: 1.333em; /*16px;*/
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.notification-bar>.pane .label {
+    -fx-font-size: 1.333em; /*16px;*/
+    -fx-text-fill:white;
+    -fx-alignment: top-left;
+}
+
+/******************************************************************************
+ *
+ * Close button
+ *
+ *****************************************************************************/
+
+.notification-bar>.pane .close-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0 0 0 0;
+    -fx-alignment: center;
+}
+
+.notification-bar > .pane .close-button:hover {
+     -fx-background-color: linear-gradient(#a3a3a3, #8b8b8b 34%, #777777 36%, #777777 63%, #8b8b8b 65%, #adadad);
+}
+
+.notification-bar>.pane .close-button:pressed {
+     -fx-background-color: linear-gradient(#a3a3a3, #8b8b8b 34%, #777777 36%, #777777 63%, #8b8b8b 65%, #adadad);
+
+}
+
+.notification-bar>.pane .close-button>.graphic {
+     -fx-background-color: #fff;
+     -fx-scale-shape: false;
+     -fx-padding: 4.5 4.5 4.5 4.5; /* Graphic is 9x9 px */
+}
+
+.notification-bar>.pane .close-button:hover>.graphic {
+     -fx-background-color: #fff;
+}
+
+.notification-bar>.pane .close-button:pressed>.graphic {
+     -fx-background-color: #fff;
+}
+
+.notification-bar>.pane .close-button>.graphic {
+     -fx-shape:
+    "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
 }

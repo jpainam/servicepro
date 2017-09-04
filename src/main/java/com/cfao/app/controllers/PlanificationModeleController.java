@@ -189,7 +189,6 @@ public class PlanificationModeleController extends AnchorPane implements Initial
                     @Override
                     protected Void call() throws Exception {
                         Model<PlanificationModele> model = new Model<>("PlanificationModele");
-                        model.truncate();
                         for (PlanificationModele pm : planificationTable.getItems()) {
                             model.save(pm);
                         }
