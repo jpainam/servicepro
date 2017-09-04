@@ -69,7 +69,9 @@ public class TemplateController implements Initializable, Controller {
     public Label currentLogTimeLabel;
     // public StackPane contentPane;
 
-    /** MENU */
+    /**
+     * MENU
+     */
     public StackPane principalLayout;
     public MenuItem menuQuitter;
     public MenuItem menuImporter;
@@ -109,7 +111,7 @@ public class TemplateController implements Initializable, Controller {
         }
     }
 
-    private void initComponents(){
+    private void initComponents() {
         FontAwesomeIconView exitIcon = new FontAwesomeIconView(FontAwesomeIcon.SIGN_OUT);
         exitIcon.setGlyphSize(30);
         exitIcon.setFill(Color.DARKBLUE);
@@ -294,44 +296,39 @@ public class TemplateController implements Initializable, Controller {
             AlertUtil.showErrorMessage(ex);
         }
     }
-    public void importerBDAction(ActionEvent event){
 
+    public void importerBDAction(ActionEvent event) {
+        LoginController.stopServiceNotification();
+        HibernateUtil.shutdown();
+        System.err.println("Test");
     }
-    public void exporterBDAction(ActionEvent event){
-        try{
+
+    public void exporterBDAction(ActionEvent event) {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(
                     new FileChooser.ExtensionFilter("Fichiers Zip", "*.zip")
             );
             File zipFile = fileChooser.showSaveDialog(Main.stage);
-            if(zipFile != null) {
+            if (zipFile != null) {
+                /*
+                Si le dossier data se trouve dans le AppData user directory
+                File appDataDir = ServiceproUtil.getAppDataDir("servicepro", true);
+                File dataFile = new File(appDataDir.getAbsolutePath() + File.separator + ResourceBundle.getBundle("Bundle").getString("data.dir"));
+                */
                 Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("data.dir")).toAbsolutePath();
                 if (Files.notExists(path)) {
                     Files.createDirectories(path);
                 }
-                ZipUtil.compress(zipFile, path.toFile());
-                /*Task<Void> task = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-
-                        ZipUtil.compress(zipFile, path.toFile());
-                        return null;
-                    }
-                };
-                StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
-                new Thread(task);
-                task.setOnSucceeded(event1 -> {
-                    StageManager.getProgressBar().progressProperty().unbind();
-                    StageManager.getProgressBar().setProgress(0);
-                });
-                task.setOnFailed(event12 -> {
-                    task.getException().printStackTrace();
-                    logger.error(task.getException());
-                });
-                */
+                System.err.println(zipFile);
+                //ZipUtil.zipDirectory(dataFile, zipFile);
+                ZipUtil.zipDirectory(path.toFile(), zipFile);
+                ServiceproUtil.notify("Database exportée avec succès");
+                ServiceproUtil.openDocument(zipFile);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error(ex);
+            ex.printStackTrace();
             AlertUtil.showErrorMessage(ex);
         }
     }

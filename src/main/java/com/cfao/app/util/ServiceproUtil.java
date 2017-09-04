@@ -157,4 +157,22 @@ public class ServiceproUtil {
         }
     }
 
+    // Whether Windows/Mac
+    static boolean isWindows = (System.getProperty("os.name").indexOf("Windows") >= 0);
+    static boolean isMac = (System.getProperty("os.name").indexOf("Mac OS X") >= 0);
+    /**
+     * Returns the AppData or Application Support directory file.
+     */
+    public static File getAppDataDir(String aName, boolean doCreate) {
+        // Get user home + AppDataDir (platform specific) + name (if provided)
+        String dir = System.getProperty("user.home");
+        if (isWindows) dir += File.separator + "AppData" + File.separator + "Local";
+        else if (isMac) dir += File.separator + "Library" + File.separator + "Application Support";
+        if (aName != null) dir += File.separator + aName;
+
+        // Create file, actual directory (if requested) and return
+        File dfile = new File(dir);
+        if (doCreate && aName != null) dfile.mkdirs();
+        return dfile;
+    }
 }

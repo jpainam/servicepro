@@ -186,4 +186,7 @@ public class LoginController implements Initializable {
         serviceNotification.setMaximumCumulativePeriod(Duration.minutes(10));
         serviceNotification.start();
     }
+    public static void stopServiceNotification(){
+        serviceNotification.cancel();
+    }
 }
