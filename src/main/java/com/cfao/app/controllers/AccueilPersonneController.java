@@ -1,15 +1,12 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
-import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.util.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -30,6 +27,7 @@ import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -253,30 +251,36 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
     private void buildProfilTable(Personne personne) {
         if (personne != null) {
             profilTable.setItems(FXCollections.observableArrayList(personne.getProfilPersonnes()));
-            profilTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfilPersonne>() {
-                @Override
-                public void changed(ObservableValue<? extends ProfilPersonne> observable, ProfilPersonne oldValue, ProfilPersonne newValue) {
-                    Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
-                        @Override
-                        protected ObservableList<PersonneCompetence> call() throws Exception {
-                            if(newValue != null) {
-                                return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+            profilTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
+                    @Override
+                    protected ObservableList<PersonneCompetence> call() throws Exception {
+                        if(newValue != null) {
+                            List<PersonneCompetence> competenceList = newValue.getPersonne().getPersonneCompetences();
+                            List<Competence> competenceProfil = newValue.getProfil().getCompetences();
+                            ObservableList<PersonneCompetence> observableList = FXCollections.observableArrayList();
+                            for(PersonneCompetence pc : competenceList){
+                                if(competenceProfil.contains(pc.getCompetence())){
+                                    observableList.add(pc);
+                                }
                             }
-                            return null;
+                            //return FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(newValue));
+                            return observableList;
                         }
-                    };
-                    new Thread(task).start();
-                    competenceTable.itemsProperty().bind(task.valueProperty());
-                    if (newValue != null) {
-                        competenceTable.setVisibleRowCount(newValue.getProfil().getCompetences().size() + 2);
-                        profilPopOver.setContentNode(competenceTable);
-                        profilPopOver.show(profilTable);
+                        return null;
                     }
-                    task.setOnFailed(event -> {
-                        ServiceproUtil.notify("Erreur dans le thread de profil table");
-                        task.getException().printStackTrace();
-                    });
+                };
+                new Thread(task).start();
+                competenceTable.itemsProperty().bind(task.valueProperty());
+                if (newValue != null) {
+                    competenceTable.setVisibleRowCount(newValue.getProfil().getCompetences().size() + 2);
+                    profilPopOver.setContentNode(competenceTable);
+                    profilPopOver.show(profilTable);
                 }
+                task.setOnFailed(event -> {
+                    ServiceproUtil.notify("Erreur dans le thread de profil table");
+                    task.getException().printStackTrace();
+                });
             });
         } else {
             profilTable.getItems().clear();

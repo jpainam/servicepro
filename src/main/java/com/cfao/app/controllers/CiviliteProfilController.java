@@ -1,7 +1,6 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
-import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.DialogUtil;
@@ -28,6 +27,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -108,7 +108,16 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
             Task<ObservableList<PersonneCompetence>> task = new Task<ObservableList<PersonneCompetence>>() {
                 @Override
                 protected ObservableList<PersonneCompetence> call() throws Exception {
-                    return  FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(profilPersonne));
+                    List<PersonneCompetence> competenceList = profilPersonne.getPersonne().getPersonneCompetences();
+                    List<Competence> competenceProfil = profilPersonne.getProfil().getCompetences();
+                    ObservableList<PersonneCompetence> observableList = FXCollections.observableArrayList();
+                    for(PersonneCompetence pc : competenceList){
+                        if(competenceProfil.contains(pc.getCompetence())){
+                            observableList.add(pc);
+                        }
+                    }
+                    //return  FXCollections.observableArrayList(new CompetenceModel().getCompetencePersonneByProfil(profilPersonne));
+                    return observableList;
                 }
             };
             new Thread(task).start();

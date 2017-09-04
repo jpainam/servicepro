@@ -26,7 +26,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.NotificationPane;
@@ -298,33 +298,54 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void importerBDAction(ActionEvent event) {
-        LoginController.stopServiceNotification();
-        HibernateUtil.shutdown();
-        System.err.println("Test");
+        try {
+            LoginController.stopServiceNotification();
+
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Import Database");
+            File defaultDirectory =new File(System.getProperty("user.home"));
+            chooser.setInitialDirectory(defaultDirectory);
+            File selectedDirectory = chooser.showDialog(Main.stage);
+            //HibernateUtil.shutdown();
+            if(selectedDirectory != null) {
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("data.dir")).toAbsolutePath();
+                ServiceproUtil.copyDirs(selectedDirectory, path.toFile());
+                AlertUtil.showWarningMessage("Shutdown", "Redemarrer l'application");
+                System.exit(0);
+                //Main.stage.close();
+            }
+            //new Login().start(new Stage());
+        }catch (Exception e){
+            AlertUtil.showErrorMessage(e);
+            logger.error(e);
+        }
     }
 
     public void exporterBDAction(ActionEvent event) {
         try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Fichiers Zip", "*.zip")
-            );
-            File zipFile = fileChooser.showSaveDialog(Main.stage);
-            if (zipFile != null) {
+
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Export Database");
+            File defaultDirectory =new File(System.getProperty("user.home"));
+            chooser.setInitialDirectory(defaultDirectory);
+            File selectedDirectory = chooser.showDialog(Main.stage);
+            if (selectedDirectory != null) {
                 /*
                 Si le dossier data se trouve dans le AppData user directory
                 File appDataDir = ServiceproUtil.getAppDataDir("servicepro", true);
                 File dataFile = new File(appDataDir.getAbsolutePath() + File.separator + ResourceBundle.getBundle("Bundle").getString("data.dir"));
+                Path = dataFile.toPath();
                 */
                 Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("data.dir")).toAbsolutePath();
                 if (Files.notExists(path)) {
                     Files.createDirectories(path);
                 }
-                System.err.println(zipFile);
+                System.err.println(path.toFile());
                 //ZipUtil.zipDirectory(dataFile, zipFile);
-                ZipUtil.zipDirectory(path.toFile(), zipFile);
+                //ZipUtil.zipDirectory(path.toFile(), zipFile);
+                ServiceproUtil.copyDirs(path.toFile(), selectedDirectory);
                 ServiceproUtil.notify("Database exportée avec succès");
-                ServiceproUtil.openDocument(zipFile);
+                ServiceproUtil.openDocument(selectedDirectory);
             }
         } catch (Exception ex) {
             logger.error(ex);

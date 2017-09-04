@@ -18,9 +18,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -34,6 +37,7 @@ public class ServiceproUtil {
 
     /**
      * Definir les panel qui reste deroule dans le panel accordion
+     *
      * @param accordion
      * @param expandedPane
      */
@@ -42,14 +46,14 @@ public class ServiceproUtil {
         accordion.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> observable, TitledPane oldPane, TitledPane newPane) -> {
             // This value will change to false if there's (at least) one pane that is in "expanded" state, so we don't have to expand anything manually
             boolean expand = true;
-            for(TitledPane pane: accordion.getPanes()) {
-                if(pane.isExpanded()) {
+            for (TitledPane pane : accordion.getPanes()) {
+                if (pane.isExpanded()) {
                     expand = false;
                 }
             }
         /* Here we already know whether we need to expand the old pane again */
-            if((expand == true) && (oldPane != null)) {
-                Platform.runLater( () -> {
+            if ((expand == true) && (oldPane != null)) {
+                Platform.runLater(() -> {
                     accordion.setExpandedPane(oldPane);
                 });
             }
@@ -58,27 +62,30 @@ public class ServiceproUtil {
 
     /**
      * Notification Panel
+     *
      * @param sms
      */
-    public static void notify(String sms){
+    public static void notify(String sms) {
         NotificationPane notif = StageManager.getNotificationPane();
         notif.setText(sms);
         notif.show();
         PauseTransition delay = new PauseTransition(Duration.seconds(5));
-        delay.setOnFinished( event -> notif.hide());
+        delay.setOnFinished(event -> notif.hide());
         delay.play();
     }
 
     /**
      * Toast Notification
+     *
      * @param sms
      */
-    public static void toast(String sms){
+    public static void toast(String sms) {
 
     }
 
     /**
      * L'utilisateur connecte
+     *
      * @return
      */
     public static User getLoggedUser() {
@@ -87,15 +94,18 @@ public class ServiceproUtil {
 
     /**
      * Date de derniere connexion
+     *
      * @return
      */
     public static String getLoggedTime() {
         return loggedTime;
     }
-    public static void setLoggedUser(User user){
+
+    public static void setLoggedUser(User user) {
         ServiceproUtil.loggedUser = user;
     }
-    public static void setLoggedTime(Calendar cal){
+
+    public static void setLoggedTime(Calendar cal) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
         loggedTime = dateFormat.format(cal.getTime());
     }
@@ -110,9 +120,11 @@ public class ServiceproUtil {
             AlertUtil.showSimpleAlert("Information", "Erreur d'ouverture du lien");
         }
     }
+
     public static void openDocument(String document) {
         openDocument(new File(document));
     }
+
     public static void openDocument(File file) {
         try {
             Desktop.getDesktop().open(file);
@@ -121,38 +133,41 @@ public class ServiceproUtil {
         }
     }
 
-    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon, double iconSize){
+    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon, double iconSize) {
         FontAwesomeIconView icon = new FontAwesomeIconView(fontAwesomeIcon);
         icon.setGlyphSize(iconSize);
         icon.setFill(Color.WHITE);
         button.setGraphic(icon);
     }
-    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon){
+
+    public static void setButtonIcon(Button button, FontAwesomeIcon fontAwesomeIcon) {
         setButtonIcon(button, fontAwesomeIcon, 1.5);
     }
-    public static void emptyFields(Control... controls){
-        for(Control control : controls){
+
+    public static void emptyFields(Control... controls) {
+        for (Control control : controls) {
             // TextField, TextArea
-            if(control instanceof TextInputControl) {
-                ((TextInputControl)control).setText("");
-            }else if(control instanceof DatePicker){
-                ((DatePicker)control).setValue(LocalDate.now());
+            if (control instanceof TextInputControl) {
+                ((TextInputControl) control).setText("");
+            } else if (control instanceof DatePicker) {
+                ((DatePicker) control).setValue(LocalDate.now());
             }
         }
     }
-    public static void setEditable( boolean b, Control ... controls){
-        for(Control control : controls){
+
+    public static void setEditable(boolean b, Control... controls) {
+        for (Control control : controls) {
             // TextField, TextArea
-            if(control instanceof TextInputControl){
+            if (control instanceof TextInputControl) {
                 ((TextInputControl) control).setEditable(b);
-            }else if(control instanceof DatePicker){
+            } else if (control instanceof DatePicker) {
                 ((DatePicker) control).setEditable(b);
             }
         }
     }
 
-    public static void setDisable(boolean b, Control ... controls) {
-        for(Control control : controls){
+    public static void setDisable(boolean b, Control... controls) {
+        for (Control control : controls) {
             control.setDisable(b);
         }
     }
@@ -160,6 +175,7 @@ public class ServiceproUtil {
     // Whether Windows/Mac
     static boolean isWindows = (System.getProperty("os.name").indexOf("Windows") >= 0);
     static boolean isMac = (System.getProperty("os.name").indexOf("Mac OS X") >= 0);
+
     /**
      * Returns the AppData or Application Support directory file.
      */
@@ -174,5 +190,28 @@ public class ServiceproUtil {
         File dfile = new File(dir);
         if (doCreate && aName != null) dfile.mkdirs();
         return dfile;
+    }
+
+    /**
+     * Copier tout le contenu de fromDir a toDir
+     *
+     * @param fromDir
+     * @param toDir
+     */
+    public static void copyDirs(File fromDir, File toDir) throws Exception {
+        File[] listFiles = fromDir.listFiles();
+        java.util.List<String> notCopy = new ArrayList();
+        notCopy.add("servicepro.log");
+        notCopy.add("servicepro.lck");
+        for (File file : listFiles) {
+            System.out.println("Adding " + file.getAbsolutePath());
+            File toFile = new File(toDir.getAbsolutePath(), file.getName());
+            if (file.isDirectory()) {
+                copyDirs(file, toFile);
+            }
+            if (!notCopy.contains(file.getName())) {
+                Files.copy(file.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
 }

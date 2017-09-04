@@ -40,19 +40,7 @@ public class Login extends Application {
         stage.setTitle("Page de Connexion");
         stage.setScene(scene);
         stage.show();
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                new PersonneModel().getList();
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnFailed(event -> {
-            logger.error(task.getException());
-            task.getException().printStackTrace();
-        });
-        task.setOnSucceeded(event -> System.out.println("Successful DB Test"));
+
     }
 
     public static void main(String[] args) {

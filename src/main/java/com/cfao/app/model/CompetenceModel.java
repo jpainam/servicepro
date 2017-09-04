@@ -143,7 +143,7 @@ public class CompetenceModel extends Model<Competence> {
         return null;
     }
 
-    public List<PersonneCompetence> getCompetencePersonneByProfil(ProfilPersonne profilPersonne) {
+    /*public List<PersonneCompetence> getCompetencePersonneByProfil(ProfilPersonne profilPersonne) {
         Session session = getCurrentSession();
         try{
             session.beginTransaction();
@@ -162,7 +162,7 @@ public class CompetenceModel extends Model<Competence> {
             }
         }
         return null;
-    }
+    }*/
 
     /*public List<ProfilCompetence> getProfilByCompetence(Competence competence) {
         Session session = getCurrentSession();
