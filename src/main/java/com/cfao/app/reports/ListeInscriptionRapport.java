@@ -100,7 +100,11 @@ public class ListeInscriptionRapport extends ExcelReport {
                 cell.setCellStyle(defaultStyle);
                 /** Formateur */
                 cell = row.createCell(col++);
-                cell.setCellValue(f.getSocieteFormatrice().getLibelle());
+                if(f.getSocieteFormatrice() != null) {
+                    cell.setCellValue(f.getSocieteFormatrice().getLibelle());
+                }else{
+                    cell.setCellValue("");
+                }
                 cell.setCellStyle(defaultStyle);
                 /** Type */
                 cell = row.createCell(col++);

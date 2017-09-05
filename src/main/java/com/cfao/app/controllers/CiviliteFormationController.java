@@ -8,6 +8,7 @@ import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.DateTableCellFactory;
 import com.cfao.app.util.ServiceproUtil;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -140,7 +141,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
             @Override
             protected ObservableList<Formation> call() throws Exception {
                 List<Formation> list = new FormationModel().getFormationsSouhaitees(personne);
-                if(list != null) {
+                if (list != null) {
                     return FXCollections.observableArrayList(list);
                 }
                 return null;
@@ -148,9 +149,9 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
         };
         new Thread(task).start();
         task.setOnSucceeded(event -> {
-            if(task.getValue() != null){
+            if (task.getValue() != null) {
                 souhaitTable.setItems(task.getValue());
-            }else{
+            } else {
                 souhaitTable.getItems().clear();
             }
         });
@@ -167,61 +168,67 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
     }
 
 
-
     public void setPersonne(Personne personne) {
         this.personne = personne;
     }
 
 
-
     private void createViewer(AnchorPane Pane) {
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
+            /*SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    // create the viewer ri components.
-                    swingController.setIsEmbeddedComponent(true);
-                    PropertiesManager properties = new PropertiesManager(System.getProperties(),
-                            ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
-
-                    // read/store the font cache.
-                    ResourceBundle messageBundle = ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE);
-                    new FontPropertiesManager(properties, System.getProperties(), messageBundle);
-                    properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_OPEN, "true");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SAVE, "true");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_PRINT, "true");
-                    // hide the status bar
-                    properties.set(PropertiesManager.PROPERTY_SHOW_STATUSBAR, "false");
-                    // hide a few toolbars, just to show how the prefered size of the viewer changes.
-                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_FIT, "false");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ROTATE, "true");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_TOOL, "false");
-
-                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ANNOTATION, "false");
-
-                    properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ZOOM, "true");
-                    properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SEARCH, "false");
-                    properties.set(PropertiesManager.PROPERTY_HIDE_UTILITYPANE, "false");
-
-
-                    swingController.getDocumentViewController().setAnnotationCallback(
-                            new org.icepdf.ri.common.MyAnnotationCallback(swingController.getDocumentViewController()));
-
-                    SwingViewBuilder factory = new SwingViewBuilder(swingController, properties);
-
-                    viewerPanel = factory.buildViewerPanel();
-                    viewerPanel.revalidate();
-
-                    SwingNode swingNode = new SwingNode();
-                    swingNode.setContent(viewerPanel);
-                    AnchorPane.setLeftAnchor(swingNode, 0.0);
-                    AnchorPane.setRightAnchor(swingNode, 0.0);
-                    AnchorPane.setTopAnchor(swingNode, 0.0);
-                    AnchorPane.setBottomAnchor(swingNode, 0.0);
-                    Pane.getChildren().add(swingNode);
 
                 }
+            });*/
+            SwingUtilities.invokeLater(() -> {
+                // create the viewer ri components.
+                swingController.setIsEmbeddedComponent(true);
+                PropertiesManager properties = new PropertiesManager(System.getProperties(),
+                        ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
+
+                // read/store the font cache.
+                ResourceBundle messageBundle = ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE);
+                new FontPropertiesManager(properties, System.getProperties(), messageBundle);
+                properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1");
+                properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_OPEN, "true");
+                properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SAVE, "true");
+                properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_PRINT, "true");
+                // hide the status bar
+                properties.set(PropertiesManager.PROPERTY_SHOW_STATUSBAR, "false");
+                // hide a few toolbars, just to show how the prefered size of the viewer changes.
+                properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_FIT, "false");
+                properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ROTATE, "true");
+                properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_TOOL, "false");
+
+                properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ANNOTATION, "false");
+
+                properties.set(PropertiesManager.PROPERTY_SHOW_TOOLBAR_ZOOM, "true");
+                properties.set(PropertiesManager.PROPERTY_SHOW_UTILITY_SEARCH, "false");
+                properties.set(PropertiesManager.PROPERTY_HIDE_UTILITYPANE, "false");
+
+
+                swingController.getDocumentViewController().setAnnotationCallback(
+                        new org.icepdf.ri.common.MyAnnotationCallback(swingController.getDocumentViewController()));
+
+                SwingViewBuilder factory = new SwingViewBuilder(swingController, properties);
+
+                viewerPanel = factory.buildViewerPanel();
+                viewerPanel.revalidate();
+
+                SwingNode swingNode = new SwingNode();
+
+                swingNode.setContent(viewerPanel);
+                AnchorPane.setLeftAnchor(swingNode, 0.0);
+                AnchorPane.setRightAnchor(swingNode, 0.0);
+                AnchorPane.setTopAnchor(swingNode, 0.0);
+                AnchorPane.setBottomAnchor(swingNode, 0.0);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Pane.getChildren().add(swingNode);
+                    }
+                });
             });
         } catch (Exception e) {
             e.printStackTrace();

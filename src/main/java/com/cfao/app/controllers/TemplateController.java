@@ -6,7 +6,10 @@ import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.User;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.*;
+import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.BreadcrumbUtil;
+import com.cfao.app.util.FXMLView;
+import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -20,9 +23,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -127,9 +127,9 @@ public class TemplateController implements Initializable, Controller {
         menuQuitter.setGraphic(new ImageView(new Image("images/icons/sign_out.png")));
         menuListePersonne.setGraphic(new ImageView(new Image("images/icons/personnel.png")));
 
-        menuQuitter.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+        /*menuQuitter.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         menuExporter.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
-        menuImporter.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
+        menuImporter.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));*/
         menuImporter.setMnemonicParsing(true);
         menuExporter.setMnemonicParsing(true);
         menuQuitter.setMnemonicParsing(true);

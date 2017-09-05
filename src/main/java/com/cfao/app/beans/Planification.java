@@ -160,7 +160,9 @@ public class Planification implements java.io.Serializable {
     }
 
     public void setValidation(UserProfil validation) {
-        this.validation.set(validation);
+        if(validation != null) {
+            this.validation.set(validation);
+        }
     }
 
     @ManyToMany(fetch = FetchType.LAZY)

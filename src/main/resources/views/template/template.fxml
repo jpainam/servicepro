@@ -18,19 +18,26 @@
                     <children>
                         <MenuBar maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="330.0" HBox.hgrow="ALWAYS">
                             <menus>
-                                <Menu text="_Fichier">
+                                <Menu text="Fichier">
                                     <items>
-                              <MenuItem fx:id="menuImporter" onAction="#importerBDAction" text="_Importer les données (*.zip)">
+                              <MenuItem fx:id="menuImporter" onAction="#importerBDAction" text="Changer de base de données">
                                  <accelerator>
-                                    <KeyCodeCombination alt="UP" code="I" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                    <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                  </accelerator>
                               </MenuItem>
-                              <MenuItem fx:id="menuExporter" onAction="#exporterBDAction" text="_Exporter les données (*.zip)" />
+                              <MenuItem mnemonicParsing="false" text="Sauvegarder les données" />
+                              <MenuItem fx:id="menuExporter" onAction="#exporterBDAction" text="Exporter les données">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator></MenuItem>
                               <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem fx:id="menuQuitter" onAction="#quitterAction" text="_Quitter/Exit" />
+                                        <MenuItem fx:id="menuQuitter" onAction="#quitterAction" text="Quitter/Exit">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator></MenuItem>
                                     </items>
                                 </Menu>
-                                <Menu text="_Personnel">
+                                <Menu text="Personnel">
                                     <items>
                                         <MenuItem fx:id="menuListePersonne" onAction="#showPersonnel" text="Liste des personnels">
                                  <accelerator>
@@ -38,7 +45,7 @@
                                  </accelerator></MenuItem>
                                     </items>
                                 </Menu>
-                                <Menu mnemonicParsing="false" text="_Paramètres">
+                                <Menu text="_Paramètres">
                                     <items>
                                         <MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Gestion des Utilisateurs" />
                                         <!-- MenuItem mnemonicParsing="false" onAction="#profilAction" text="Gestion des Profils" / -->
