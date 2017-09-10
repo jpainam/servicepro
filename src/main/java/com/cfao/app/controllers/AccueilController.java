@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class AccueilController implements Initializable {
     public Label lblCiviliteInfo1;
     public Label lblCiviliteInfo2;
     public Label lblNbFormation;
-    public Label lblNbFormateur;
+
     public Label lblNbprofil;
     public Label lblFormationInfo2;
     public Label lblFormationInfo1;
@@ -42,6 +43,8 @@ public class AccueilController implements Initializable {
     public Label lblNbCompetence;
     public Label lblNbNiveau;
     public Label lblNbTest;
+    public VBox vboxPlanification;
+    public Label lblNbPlanification;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,7 +61,7 @@ public class AccueilController implements Initializable {
                 if(mapArray.size() > 0) {
                     Map<String, String> mapCivilite = mapArray.get(0);
                     Map<String, String> mapFormation = mapArray.get(1);
-                    Map<String, String> mapFormateur = mapArray.get(2);
+                    Map<String, String> mapPlanification = mapArray.get(2);
                     Map<String, String> mapProfil = mapArray.get(3);
 
                     /**
@@ -75,8 +78,8 @@ public class AccueilController implements Initializable {
                         lblFormationInfo1.setText(mapFormation.get("info2") + " terminées / " + mapFormation.get("info3") + " annulées");
                         lblFormationInfo2.setText(mapFormation.get("info3") + " en préparation");
 
-                        /** LABELS FORMATEURS **/
-                        lblNbFormateur.setText(mapFormateur.get("info1"));
+                        /** LABELS Planifications **/
+                        lblNbPlanification.setText(mapPlanification.get("info1"));
 
                         /** LABELS PROFIL **/
                         lblNbprofil.setText(mapProfil.get("info1"));

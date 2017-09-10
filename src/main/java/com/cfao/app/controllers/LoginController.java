@@ -1,6 +1,7 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.Main;
+import com.cfao.app.beans.Planification;
 import com.cfao.app.beans.User;
 import com.cfao.app.model.*;
 import com.cfao.app.util.AlertUtil;
@@ -134,6 +135,7 @@ public class LoginController implements Initializable {
                         listMap.add(buildMapFormation());
                         listMap.add(buildMapFormateur());
                         listMap.add(buildMapProfil());
+                        listMap.add(buildMapPlanification());
                         return listMap;
                     }
                 };
@@ -166,6 +168,14 @@ public class LoginController implements Initializable {
                 return labelsformation;
             }
 
+            private Map<String,String> buildMapPlanification() {
+                Map<String, String> labelsPlanifications = new HashMap<>();
+                Model<Planification> model = new Model<>("Planification");
+                labelsPlanifications.put("info1", String.valueOf(model.getList().size()));
+
+                return labelsPlanifications;
+            }
+
             private Map<String,String> buildMapCivilite() {
                 Map<String, String> labelsCivilite = new HashMap<>();
                 PersonneModel personneModel = new PersonneModel();
@@ -186,6 +196,9 @@ public class LoginController implements Initializable {
         serviceNotification.setMaximumCumulativePeriod(Duration.minutes(10));
         serviceNotification.start();
     }
+
+
+
     public static void stopServiceNotification(){
         serviceNotification.cancel();
     }
