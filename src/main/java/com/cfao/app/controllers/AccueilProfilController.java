@@ -5,7 +5,6 @@ import com.cfao.app.beans.Formation;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.PersonneCompetence;
 import com.cfao.app.model.FormationModel;
-import com.cfao.app.model.PersonneModel;
 import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
@@ -23,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.util.List;
@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
  * Created by JP on 8/14/2017.
  */
 public class AccueilProfilController extends AnchorPane implements Initializable {
+    static Logger logger = Logger.getLogger(AccueilProfilController.class);
     private Personne personne;
     public Button btnPrintProfil;
     public Label lblCompetence;
@@ -113,7 +114,7 @@ public class AccueilProfilController extends AnchorPane implements Initializable
                 @Override
                 protected ObservableList<Formation> call() throws Exception {
                     List<Formation> formationList = new FormationModel().getFormationsSouhaitees(personne);
-                    if(formationList != null) {
+                    if (formationList != null) {
                         return FXCollections.observableArrayList(formationList);
                     }
                     return null;
@@ -121,9 +122,9 @@ public class AccueilProfilController extends AnchorPane implements Initializable
             };
             new Thread(task).start();
             task.setOnSucceeded(event -> {
-                if(task.getValue() != null) {
+                if (task.getValue() != null) {
                     lblFormationSouhaitee.setText(task.getValue().size() + "");
-                }else{
+                } else {
                     lblFormationSouhaitee.setText("0");
                 }
             });
@@ -140,11 +141,7 @@ public class AccueilProfilController extends AnchorPane implements Initializable
             @Override
             protected Void call() throws Exception {
                 PrintCivilite print = new PrintCivilite();
-                //if (personne != null) {
-                    //print.showDetails(personne);
-                personne = new PersonneModel().getList().get(0);
-                    print.printDetails(personne);
-                //}
+                print.printDetails(personne);
                 return null;
             }
         };
@@ -154,6 +151,10 @@ public class AccueilProfilController extends AnchorPane implements Initializable
             StageManager.getProgressBar().progressProperty().unbind();
             StageManager.getProgressBar().setProgress(0);
             ServiceproUtil.notify("Impression réussie");
+        });
+        task.setOnFailed(event12 -> {
+            task.getException().printStackTrace();
+            logger.error(task.getException());
         });
     }
 }

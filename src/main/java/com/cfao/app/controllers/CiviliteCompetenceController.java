@@ -1,9 +1,11 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.PersonneModel;
+import com.cfao.app.reports.CiviliteExcel;
 import com.cfao.app.util.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -18,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
+import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -30,6 +33,7 @@ import java.util.ResourceBundle;
  * Created by JP on 7/25/2017.
  */
 public class CiviliteCompetenceController extends AnchorPane implements Initializable {
+    static Logger logger = Logger.getLogger(CiviliteCompetenceController.class);
     public TableColumn<PersonneCompetence, Competence> intituleCompetenceColumn;
 
     public TableColumn<PersonneCompetence, Boolean> encoursCompetenceColumn;
@@ -81,7 +85,8 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
     private void initComponents() {
         ButtonUtil.next(btnNextCompetence);
         ButtonUtil.previous(btnPreviousCompetence);
-        ButtonUtil.print(btnPrintCompetence);
+        //ButtonUtil.print(btnPrintCompetence);
+        ButtonUtil.excel(btnPrintCompetence);
         ButtonUtil.edit(btnEditerCertification);
         Task<ObservableList<CompetenceCertification>> task = new Task<ObservableList<CompetenceCertification>>() {
             @Override
@@ -201,6 +206,35 @@ public class CiviliteCompetenceController extends AnchorPane implements Initiali
     }
 
     public void printCompetenceAction(ActionEvent event) {
+        if (personne == null) {
+            AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir une civilité");
+            return;
+        }
+        try {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    CiviliteExcel civiliteExcel = new CiviliteExcel();
+                   civiliteExcel.printCompetence(personne);
+                    return null;
+                }
+            };
+
+            StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+            new Thread(task).start();
+            task.setOnSucceeded(event1 -> {
+                StageManager.getProgressBar().progressProperty().unbind();
+                StageManager.getProgressBar().setProgress(0);
+                ServiceproUtil.notify("Impression réussie");
+            });
+            task.setOnFailed(event12 -> {
+                logger.error(task.getException());
+                task.getException().printStackTrace();
+            });
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+            logger.error(ex);
+        }
     }
 
     public void supprimerCompetenceAction(ActionEvent event) {

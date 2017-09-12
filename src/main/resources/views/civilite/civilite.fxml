@@ -54,7 +54,8 @@
                                                             <items>
                                                                 <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#clicPrev" styleClass="onlyIcon" />
                                                                 <Button fx:id="btnNext" mnemonicParsing="false" onAction="#clicNext" styleClass="onlyIcon" />
-                                                                <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
+                                                                <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printCiviliteAction" styleClass="onlyIcon" />
+                                                <Button fx:id="btnPrintExcel" mnemonicParsing="false" onAction="#printExcelCivilite" />
                                                                 <Separator orientation="VERTICAL" />
                                                                 <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
                                                                 <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier/Edit" />

@@ -374,6 +374,7 @@ public class TemplateController implements Initializable, Controller {
         stage.setHeight(100);
         stage.setScene(scene);
         stage.show();
+
         try {
             Updater updater = new Updater();
             boolean bool = updater.checkForUpdates();

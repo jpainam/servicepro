@@ -27,6 +27,7 @@ public class PrintCivilite extends PdfReport {
     public PrintCivilite(){
         super();
     }
+
     public void printDetails(Personne personne) throws Exception {
         URL filename = civilitePhoto.getImagePath(personne);
         Image photo = new Image(ImageDataFactory.create(filename));

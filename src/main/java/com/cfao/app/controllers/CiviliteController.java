@@ -4,6 +4,8 @@ import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.*;
+import com.cfao.app.reports.CiviliteExcel;
+import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -15,7 +17,9 @@ import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -23,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import org.apache.log4j.Logger;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
@@ -40,6 +45,7 @@ import java.util.ResourceBundle;
  * Created by JP on 6/9/2017.
  */
 public class CiviliteController implements Initializable {
+    static Logger logger = Logger.getLogger(CiviliteController.class);
 
     /**
      * TableView des Personne
@@ -114,6 +120,7 @@ public class CiviliteController implements Initializable {
     public StackPane personneStackPane;
 
     public Label searchLabelStat = new Label();
+    public Button btnPrintExcel;
     private ObservableList<Personne> masterData = FXCollections.observableArrayList();
     private FilteredList<Personne> filteredList = new FilteredList<Personne>(masterData, p -> true);
     private SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
@@ -140,7 +147,7 @@ public class CiviliteController implements Initializable {
          * GENERATION DU MATRICULE
          */
         comboPays.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(stateBtnNouveau == 1) {
+            if (stateBtnNouveau == 1) {
                 if (newValue != null) {
                     Task<Personne> task = new Task<Personne>() {
                         @Override
@@ -158,7 +165,7 @@ public class CiviliteController implements Initializable {
                             txtMatricule.setText(newValue.getIso() + "" + matric);
                         } else {
                             // Premier Civilite de ce pays
-                            String matric = String.valueOf((int)(Math.random() * 99999));
+                            String matric = String.valueOf((int) (Math.random() * 99999));
                             matric = new String(new char[5 - matric.length()]).replace("\0", "0") + matric;
                             txtMatricule.setText(newValue.getIso() + matric);
                         }
@@ -199,6 +206,7 @@ public class CiviliteController implements Initializable {
         GlyphsDude.setIcon(tabFormation, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabCompetence, FontAwesomeIcon.SLACK);
         GlyphsDude.setIcon(tabTest, FontAwesomeIcon.SITEMAP);
+        ButtonUtil.excel(btnPrintExcel);
 
         GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
         GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
@@ -722,4 +730,67 @@ public class CiviliteController implements Initializable {
         });
     }
 
+    public void printCiviliteAction(ActionEvent event) {
+        final Personne personne = personneTable.getSelectionModel().getSelectedItem();
+        if (null == personne) {
+            AlertUtil.showWarningMessage("Attention", "Veuillez choisir la personne à imprimer");
+            return;
+        }
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                PrintCivilite print = new PrintCivilite();
+                print.printDetails(personne);
+
+                return null;
+            }
+        };
+        StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+        new Thread(task).start();
+        task.setOnSucceeded(event1 -> {
+            StageManager.getProgressBar().progressProperty().unbind();
+            StageManager.getProgressBar().setProgress(0);
+            ServiceproUtil.notify("Impression réussie");
+        });
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+                logger.error(task.getException());
+            }
+        });
+    }
+
+    public void printExcelCivilite(ActionEvent event) {
+        Personne personne = personneTable.getSelectionModel().getSelectedItem();
+        if (personne == null) {
+            AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir une civilité");
+            return;
+        }
+        try {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    CiviliteExcel civiliteExcel = new CiviliteExcel();
+                    civiliteExcel.printDetails(personne);
+                    return null;
+                }
+            };
+
+            StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+            new Thread(task).start();
+            task.setOnSucceeded(event1 -> {
+                StageManager.getProgressBar().progressProperty().unbind();
+                StageManager.getProgressBar().setProgress(0);
+                ServiceproUtil.notify("Impression réussie");
+            });
+            task.setOnFailed(event12 -> {
+                logger.error(task.getException());
+                task.getException().printStackTrace();
+            });
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+            logger.error(ex);
+        }
+    }
 }
