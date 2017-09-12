@@ -4,7 +4,7 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.reports.ExcelFormation;
+import com.cfao.app.reports.FormationExcel;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -381,7 +381,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-                        ExcelFormation excelFormation = new ExcelFormation();
+                        FormationExcel excelFormation = new FormationExcel();
                         excelFormation.setFormation(formation);
                         return excelFormation.importerPlanification(file, params);
                     }
@@ -430,8 +430,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    ExcelFormation excelFormation = new ExcelFormation(formation);
-                    excelFormation.printPlanification();
+                    FormationExcel formationExcel = new FormationExcel(formation);
+                    formationExcel.printPlanification();
                     return null;
                 }
             };

@@ -59,6 +59,7 @@
                                 <Menu mnemonicParsing="false" text="_?">
                                     <items>
                                         <MenuItem mnemonicParsing="false" text="A Propos" />
+                              <MenuItem fx:id="mnuMiseAjour" mnemonicParsing="false" onAction="#miseAjourAction" text="Mises à jour" />
                                         <MenuItem mnemonicParsing="false" text="Aide" />
                                     </items>
                                 </Menu>

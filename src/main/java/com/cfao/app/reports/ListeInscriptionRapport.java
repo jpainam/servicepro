@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by JP on 9/2/2017.
  */
-public class ListeInscriptionRapport extends ExcelReport {
+public class ListeInscriptionRapport extends ExcelRapport {
     public ListeInscriptionRapport(){
         super();
     }
@@ -159,35 +159,7 @@ public class ListeInscriptionRapport extends ExcelReport {
         pivotTable.addColumnLabel(DataConsolidateFunction.COUNT, 3, "Nombre de Nom");
         //addColumLabels(pivotTable, 3, STItemType.COUNT);
         pivotTable.addReportFilter(8); // Date
-        finalize();
-    }
-
-
-    public  void addColumLabels(XSSFPivotTable pivotTable, int columnIndex, STItemType.Enum sttItemType) {
-        AreaReference pivotArea = pivotTable.getPivotCacheDefinition().getPivotArea(sheet.getWorkbook());
-        int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
-        CTPivotFields pivotFields = pivotTable.getCTPivotTableDefinition().getPivotFields();
-
-        CTPivotField pivotField = CTPivotField.Factory.newInstance();
-        CTItems items = pivotField.addNewItems();
-
-        pivotField.setAxis(STAxis.AXIS_COL);
-        pivotField.setShowAll(false);
-        for (int i = 0; i <= lastColIndex; i++) {
-            items.addNewItem().setT(sttItemType);
-        }
-        items.setCount(items.sizeOfItemArray());
-        pivotFields.setPivotFieldArray(columnIndex, pivotField);
-
-        // colfield should be added for the second one.
-        CTColFields colFields;
-        if (pivotTable.getCTPivotTableDefinition().getColFields() != null) {
-            colFields = pivotTable.getCTPivotTableDefinition().getColFields();
-        } else {
-            colFields = pivotTable.getCTPivotTableDefinition().addNewColFields();
-        }
-        colFields.addNewField().setX(columnIndex);
-        colFields.setCount(colFields.sizeOfFieldArray());
+        terminer();
     }
 }
 

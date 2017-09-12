@@ -3,6 +3,7 @@ package com.cfao.app.util;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
 
 /**
@@ -72,6 +73,11 @@ public class ButtonUtil {
     public static void excel(Button ... buttons){
         for(Button button : buttons){
             GlyphsDude.setIcon(button, FontAwesomeIcon.FILE_EXCEL_ALT);
+        }
+    }
+    public static void excel(Hyperlink... hyperlinks){
+        for(Hyperlink hyperlink : hyperlinks){
+            GlyphsDude.setIcon(hyperlink, FontAwesomeIcon.FILE_EXCEL_ALT);
         }
     }
     public static void detailsTab(Tab... tabs){

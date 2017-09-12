@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by JP on 9/2/2017.
  */
-public class PlanificationModeleRapport extends ExcelReport {
+public class PlanificationModeleRapport extends ExcelRapport {
     public PlanificationModeleRapport(){
         super();
         timingPassed = timingStyle(true);
@@ -136,6 +136,6 @@ public class PlanificationModeleRapport extends ExcelReport {
             cell.setCellStyle(defaultStyle);
             line++;
         }
-        finalize();
+        terminer();
     }
 }

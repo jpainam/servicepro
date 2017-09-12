@@ -6,10 +6,7 @@ import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.User;
 import com.cfao.app.model.Model;
-import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.BreadcrumbUtil;
-import com.cfao.app.util.FXMLView;
-import com.cfao.app.util.ServiceproUtil;
+import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -19,7 +16,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +27,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
@@ -47,7 +47,7 @@ import java.util.function.Consumer;
  */
 public class TemplateController implements Initializable, Controller {
 
-    private static final String EMPTY_FIELD = "VIDE";
+    public static String jarName = "servicepro-1.0-SNAPSHOT.jar";
     @FXML
     public AnchorPane content;
     @FXML
@@ -77,6 +77,7 @@ public class TemplateController implements Initializable, Controller {
     public MenuItem menuImporter;
     public MenuItem menuExporter;
     public MenuItem menuListePersonne;
+    public MenuItem mnuMiseAjour;
 
 
     BreadcrumbUtil breadCrumb = new BreadcrumbUtil();
@@ -126,7 +127,7 @@ public class TemplateController implements Initializable, Controller {
         menuImporter.setGraphic(new ImageView(new Image("images/icons/folder_database.png")));
         menuQuitter.setGraphic(new ImageView(new Image("images/icons/sign_out.png")));
         menuListePersonne.setGraphic(new ImageView(new Image("images/icons/personnel.png")));
-
+        mnuMiseAjour.setGraphic(new ImageView(new Image("images/icons/update.png")));
         /*menuQuitter.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         menuExporter.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
         menuImporter.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));*/
@@ -303,11 +304,11 @@ public class TemplateController implements Initializable, Controller {
 
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Import Database");
-            File defaultDirectory =new File(System.getProperty("user.home"));
+            File defaultDirectory = new File(System.getProperty("user.home"));
             chooser.setInitialDirectory(defaultDirectory);
             File selectedDirectory = chooser.showDialog(Main.stage);
             //HibernateUtil.shutdown();
-            if(selectedDirectory != null) {
+            if (selectedDirectory != null) {
                 Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("data.dir")).toAbsolutePath();
                 ServiceproUtil.copyDirs(selectedDirectory, path.toFile());
                 AlertUtil.showWarningMessage("Shutdown", "Redemarrer l'application");
@@ -315,7 +316,7 @@ public class TemplateController implements Initializable, Controller {
                 //Main.stage.close();
             }
             //new Login().start(new Stage());
-        }catch (Exception e){
+        } catch (Exception e) {
             AlertUtil.showErrorMessage(e);
             logger.error(e);
         }
@@ -326,7 +327,7 @@ public class TemplateController implements Initializable, Controller {
 
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Export Database");
-            File defaultDirectory =new File(System.getProperty("user.home"));
+            File defaultDirectory = new File(System.getProperty("user.home"));
             chooser.setInitialDirectory(defaultDirectory);
             File selectedDirectory = chooser.showDialog(Main.stage);
             if (selectedDirectory != null) {
@@ -355,6 +356,37 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void quitterAction(ActionEvent event) {
+    }
+
+    public void miseAjourAction(ActionEvent event) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        VBox loading = new VBox(20);
+        loading.setAlignment(Pos.CENTER);
+        loading.setMaxWidth(Region.USE_PREF_SIZE);
+        loading.setMaxHeight(Region.USE_PREF_SIZE);
+        loading.getChildren().add(new ProgressBar());
+        loading.getChildren().add(new Label("Check for update"));
+
+        BorderPane root = new BorderPane(loading);
+        Scene scene = new Scene(root);
+        stage.setWidth(200);
+        stage.setHeight(100);
+        stage.setScene(scene);
+        stage.show();
+        try {
+            Updater updater = new Updater();
+            boolean bool = updater.checkForUpdates();
+            if (!bool) {
+                AlertUtil.showSimpleAlert("Mises à jour", "Aucune mise à jour disponible");
+            } else {
+                AlertUtil.showSimpleAlert("Mises à jour", "Mises à jour disponible \n" +
+                        "Redémarrer puis Exécuter Updater.exe afin de procéder à la mise à jour");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        stage.close();
     }
 
     class ChangePassword {

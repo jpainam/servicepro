@@ -2,22 +2,23 @@ package com.cfao.app.reports;
 
 import com.cfao.app.util.ServiceproUtil;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
  * Created by JP on 8/30/2017.
  */
-public class ExcelReport {
+public class ExcelRapport {
     public XSSFWorkbook workbook = new XSSFWorkbook();
     public CellStyle headerStyle, defaultStyle, redStyle, wrapStyle, redBackground, dateStyle;
     public CellStyle shortDateStyle;
@@ -28,7 +29,7 @@ public class ExcelReport {
     CellStyle timingPassed;
     CellStyle timingNotPassed;
 
-    public ExcelReport() {
+    public ExcelRapport() {
         headerStyle = workbook.createCellStyle();
 
         Font font = workbook.createFont();
@@ -107,6 +108,9 @@ public class ExcelReport {
         Cell cell;
         for (int i = region.getFirstRow(); i < region.getLastRow(); i++) {
             Row row = sheet.getRow(i);
+            if(row == null){
+                row = sheet.createRow(i);
+            }
             for (int j = region.getFirstColumn(); j < region.getLastColumn(); j++) {
                 cell = row.getCell(j);
                 if (cell != null) {
@@ -124,13 +128,18 @@ public class ExcelReport {
     }
     //myStyle.setRotation((short) 120);
 
+    public void terminer() throws Exception{
+        terminer(true);
+    }
     /**
      * Finalise le fichier excel, l'imprime et l'ouvre
      */
-    public void finalize() throws Exception{
+    public void terminer(boolean autoSizeColumn) throws Exception {
         Row row = sheet.getRow(sheet.getLastRowNum());
-        for (int colNum = 0; colNum < row.getLastCellNum(); colNum++) {
-            sheet.autoSizeColumn(colNum);
+        if (autoSizeColumn) {
+            for (int colNum = 0; colNum < row.getLastCellNum(); colNum++) {
+                sheet.autoSizeColumn(colNum);
+            }
         }
 
         setBorderToAllCells(0, sheet.getLastRowNum(), 0, row.getLastCellNum());
@@ -167,5 +176,47 @@ public class ExcelReport {
         cs.setDataFormat(
                 createHelper.createDataFormat().getFormat("dddd, dd mmmm, yyyy"));
         return cs;
+    }
+
+    public void addColumLabels(XSSFPivotTable pivotTable, int columnIndex, STItemType.Enum sttItemType) {
+        AreaReference pivotArea = pivotTable.getPivotCacheDefinition().getPivotArea(sheet.getWorkbook());
+        int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
+        CTPivotFields pivotFields = pivotTable.getCTPivotTableDefinition().getPivotFields();
+
+        CTPivotField pivotField = CTPivotField.Factory.newInstance();
+        CTItems items = pivotField.addNewItems();
+
+        pivotField.setAxis(STAxis.AXIS_COL);
+        pivotField.setShowAll(false);
+        for (int i = 0; i <= lastColIndex; i++) {
+            items.addNewItem().setT(sttItemType);
+        }
+        items.setCount(items.sizeOfItemArray());
+        pivotFields.setPivotFieldArray(columnIndex, pivotField);
+
+        // colfield should be added for the second one.
+        CTColFields colFields;
+        if (pivotTable.getCTPivotTableDefinition().getColFields() != null) {
+            colFields = pivotTable.getCTPivotTableDefinition().getColFields();
+        } else {
+            colFields = pivotTable.getCTPivotTableDefinition().addNewColFields();
+        }
+        colFields.addNewField().setX(columnIndex);
+        colFields.setCount(colFields.sizeOfFieldArray());
+    }
+
+    protected void createCell(int column, String content, CellStyle cellStyle) {
+        XSSFCell cell = row.createCell(column);
+        cell.setCellStyle(cellStyle);
+
+        cell.setCellValue(content);
+    }
+    protected  void createCell(int column, String content){
+        createCell(column, content, defaultStyle);
+    }
+    public void createCell(int column, Date date, CellStyle cellStyle){
+        XSSFCell cell = row.createCell(column);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(date);
     }
 }
