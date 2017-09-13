@@ -31,7 +31,8 @@ public class ExcelRapport {
 
     public ExcelRapport() {
         headerStyle = workbook.createCellStyle();
-
+        timingNotPassed = timingStyle(false);
+        timingPassed = timingStyle(true);
         Font font = workbook.createFont();
         font.setFontHeightInPoints((short) 13);
         font.setBold(true);
@@ -208,7 +209,11 @@ public class ExcelRapport {
     protected void createCell(int column, String content, CellStyle cellStyle) {
         XSSFCell cell = row.createCell(column);
         cell.setCellStyle(cellStyle);
-
+        cell.setCellValue(content);
+    }
+    protected void createCell(int column, double content, CellStyle cellStyle) {
+        XSSFCell cell = row.createCell(column);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(content);
     }
     protected  void createCell(int column, String content){

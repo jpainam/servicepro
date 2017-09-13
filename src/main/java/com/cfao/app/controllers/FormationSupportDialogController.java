@@ -3,17 +3,20 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.Support;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ServiceproUtil;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -30,6 +33,7 @@ public class FormationSupportDialogController extends AnchorPane implements Init
     public Label fileStatus;
     public TableColumn<Support, String> codeSupportColumn;
     public TableColumn<Support, String> titreSupportColumn;
+    public TableColumn<Support, String> fichierSupportColumn;
     public TableView<Support> supportTable;
     public TextField txtCodeSupport;
     public TextField txtTitreSupport;
@@ -50,16 +54,18 @@ public class FormationSupportDialogController extends AnchorPane implements Init
     public Support getSupport() {
         if (txtCodeSupport.getText().isEmpty() || txtTitreSupport.getText().isEmpty() || fileStatus.getText().isEmpty()) {
             if (supportTable.getSelectionModel().getSelectedItem() == null) {
-                AlertUtil.showSimpleAlert("Information", "Veuillez choisir un support ou remplir tous les champs nécessaires");
+                AlertUtil.showSimpleAlert("Information", "Veuillez choisir un support ou remplir tous les champs et choisir un fichier");
             } else {
                 return supportTable.getSelectionModel().getSelectedItem();
             }
         } else {
             if (this.destination != null) {
+                System.err.println(destination);
                 Support support = new Support();
                 support.setCode(txtCodeSupport.getText());
                 support.setLien(destination);
                 support.setTitre(txtTitreSupport.getText());
+                new Model<Support>("Support").save(support);
                 return support;
             }
         }
@@ -69,11 +75,30 @@ public class FormationSupportDialogController extends AnchorPane implements Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initComponents();
+        supportTable.setRowFactory(param -> {
+            final TableRow<Support> row = new TableRow<>();
+            final ContextMenu rowMenu = new ContextMenu();
+            MenuItem viewPassportItem = new MenuItem("Ouvrir le support");
+            GlyphsDude.setIcon(viewPassportItem, FontAwesomeIcon.FILE_ALT);
+            viewPassportItem.setOnAction(event -> afficherSupport(row.getItem()));
+            MenuItem removeItem = new MenuItem("Supprimer/Delete");
+            GlyphsDude.setIcon(removeItem, FontAwesomeIcon.TRASH);
+            removeItem.setOnAction(event -> supprimerSupport(row.getItem()));
+            rowMenu.getItems().addAll(viewPassportItem, new SeparatorMenuItem(), removeItem);
+
+            // only display context menu for non-null items:
+            row.contextMenuProperty().bind(
+                    Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                            .then(rowMenu)
+                            .otherwise((ContextMenu) null));
+            return row;
+        });
     }
 
     private void initComponents() {
         codeSupportColumn.setCellValueFactory(cellValue -> cellValue.getValue().codeProperty());
         titreSupportColumn.setCellValueFactory(param -> param.getValue().titreProperty());
+        fichierSupportColumn.setCellValueFactory(param -> param.getValue().lienProperty());
         buildSupportTable();
     }
 
@@ -105,9 +130,9 @@ public class FormationSupportDialogController extends AnchorPane implements Init
                     to.toFile().mkdir();
                 }
 
-                String chemin = to.toString() + File.separator + file.getName();
-
-                Files.copy(from, Paths.get(chemin), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                File toFile = new File(to.toString(), file.getName());
+                destination = file.getName();
+                Files.copy(from, toFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
                 fileStatus.setText(file.getName());
             }
         } catch (Exception ex) {
@@ -115,4 +140,43 @@ public class FormationSupportDialogController extends AnchorPane implements Init
             AlertUtil.showErrorMessage(ex);
         }
     }
+
+    public void afficherSupport(Support support) {
+        Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+        File file = new File(path.toString(), support.getLien());
+        if (file.exists() && !file.isDirectory()) {
+            ServiceproUtil.openDocument(file);
+        } else {
+            AlertUtil.showWarningMessage("Fichier", "Fichier introuvable");
+        }
+    }
+
+    public void supprimerSupport(Support support) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+                File file = new File(path.toString(), support.getLien());
+                if (file.exists() && !file.isDirectory()) {
+                    file.delete();
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+            }
+        });
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.out.println("Suppression OK");
+                supportTable.getItems().remove(support);
+            }
+        });
+    }
+
 }

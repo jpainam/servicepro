@@ -217,16 +217,16 @@ public class FormationExcel extends ExcelRapport {
         XSSFCell cell = row.createCell(0);
         cell.setCellValue(formation.getTitre());
         cell.setCellStyle(headerStyle);
-        sheet.addMergedRegion(new CellRangeAddress(line, line, 0, 4));
+        sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 5));
         cell = row.createCell(6);
-        cell.setCellStyle(dateStyle);
+        cell.setCellStyle(shortDateStyle);
         cell.setCellValue(new Date());
-        sheet.addMergedRegion(new CellRangeAddress(line, line, 6, 9));
+        sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 6, 7));
         row = sheet.createRow(line++);
-        createCell(0, "Start : ");
-        createCell(1, formation.getDatedebut(), shortDateStyle);
-        createCell(5, "End : ");
-        createCell(6, formation.getDatefin(), shortDateStyle);
+        createCell(1, "Start : ");
+        createCell(2, formation.getDatedebut(), shortDateStyle);
+        createCell(6, "End : ");
+        createCell(7, formation.getDatefin(), shortDateStyle);
 
         line++;
         row = sheet.createRow(line);
@@ -244,7 +244,7 @@ public class FormationExcel extends ExcelRapport {
         List<FormationPersonne> formationPersonnes = formation.getFormationPersonnes();
         for (FormationPersonne fp : formationPersonnes) {
             Personne p = fp.getPersonne();
-            Formation f = fp.getFormation();
+
             col = 0;
             row = sheet.createRow(line);
             row.createCell(col++).setCellValue(i);

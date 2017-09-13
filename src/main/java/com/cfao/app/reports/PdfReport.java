@@ -1,6 +1,7 @@
 package com.cfao.app.reports;
 
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ServiceproUtil;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.events.Event;
@@ -46,7 +47,7 @@ public class PdfReport {
 
             Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
             destination = path.toString();
-            writer = new PdfWriter(destination + File.separator + "test.pdf");
+            writer = new PdfWriter(destination + File.separator + "document.pdf");
             writer.setSmartMode(true);
             pdf = new PdfDocument(writer);
             document = new Document(pdf);
@@ -104,7 +105,7 @@ public class PdfReport {
                 canvas.closePathStroke();
 
                 canvas.moveText(34, 20);
-                canvas.showText("Bernard Pierre");
+                canvas.showText(ServiceproUtil.getLoggedUser().getLogin().toUpperCase());
 
                 DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
                 canvas.moveText(250, 0);

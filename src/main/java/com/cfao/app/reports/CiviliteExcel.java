@@ -189,16 +189,7 @@ public class CiviliteExcel extends ExcelRapport {
         cell = row.createCell(5);
         cell.setCellStyle(shortDateStyle);
         cell.setCellValue(new Date());
-
         row = sheet.createRow(line++);
-        String[] titres = {"N°", "Description", "Niveau", "Competence", "Connaissance", "Certification"};
-        row = sheet.createRow(line++);
-        for (int i = 0; i < titres.length; i++) {
-            cell = row.createCell(i);
-            cell.setCellStyle(headerStyle);
-            cell.setCellValue(titres[i]);
-        }
-
         getPrintCompetence(personne, line, false);
         sheet.createFreezePane(0, 3);
         terminer();
@@ -206,7 +197,7 @@ public class CiviliteExcel extends ExcelRapport {
 
     public void getPrintCompetence(Personne personne, short line, boolean merged) {
         XSSFCell cell;
-        row = sheet.createRow(line++);
+        //row = sheet.createRow(line++);
         String[] titres = {"N°", "Description", "Niveau", "Competence", "Connaissance", "Certification"};
         row = sheet.createRow(line);
         for (int i = 0; i < titres.length; i++) {
@@ -256,15 +247,18 @@ public class CiviliteExcel extends ExcelRapport {
             switch (pc.getCompetenceCertification().getCertification()) {
                 case "CE":
                     cell.setCellValue("Certifiée");
+                    cell.setCellStyle(defaultStyle);
                     break;
                 case "AC":
+                    cell.setCellStyle(timingPassed);
                     cell.setCellValue("A Certifier");
                     break;
                 case "EN":
+                    cell.setCellStyle(timingNotPassed);
                     cell.setCellValue("En cours");
                     break;
             }
-            cell.setCellStyle(defaultStyle);
+
             line++;
             i++;
         }
@@ -315,6 +309,7 @@ public class CiviliteExcel extends ExcelRapport {
         List<ProfilPersonne> profils = p.getProfilPersonnes();
         if (null != profils) {
             row = sheet.createRow(line++);
+            row = sheet.createRow(line++);
             createCell(0, "Profil", headerStyle);
             sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 3));
             row = sheet.createRow(line++);
@@ -325,7 +320,7 @@ public class CiviliteExcel extends ExcelRapport {
             for (ProfilPersonne pp : profils) {
                 row = sheet.createRow(line++);
                 Profil profil = pp.getProfil();
-                createCell(0, i + "", defaultStyle);
+                createCell(0, i, defaultStyle);
                 createCell(1, profil.getAbbreviation(), defaultStyle);
                 createCell(2, profil.getLibelle(), defaultStyle);
                 i++;
@@ -334,6 +329,7 @@ public class CiviliteExcel extends ExcelRapport {
 
         List<Poste> postes = p.getPostes();
         if (null != postes) {
+            row = sheet.createRow(line++);
             row = sheet.createRow(line++);
             createCell(0, "Postes", headerStyle);
             sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 3));
@@ -346,7 +342,7 @@ public class CiviliteExcel extends ExcelRapport {
             int i = 1;
             for (Poste poste : postes) {
                 row = sheet.createRow(line++);
-                createCell(0, i + "", defaultStyle);
+                createCell(0, i, defaultStyle);
                 createCell(1, poste.getTitre(), defaultStyle);
                 createCell(2, poste.getSociete().getNom(), defaultStyle);
                 createCell(3, poste.getDatedebut(), shortDateStyle);
@@ -357,8 +353,33 @@ public class CiviliteExcel extends ExcelRapport {
         row = sheet.createRow(line++);
         createCell(0, "Compétences", headerStyle);
         sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 3));
+        row = sheet.createRow(line++);
         getPrintCompetence(p, (short) (line - 1), true);
-
+        line = (short) (line + p.getPersonneCompetences().size());
+        /** Tests */
+        List<PersonneQcm> qcms = p.getPersonneQcms();
+        if (null != qcms) {
+            row = sheet.createRow(line++);
+            row = sheet.createRow(line++);
+            createCell(0, "Tests", headerStyle);
+            sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 3));
+            row = sheet.createRow(line++);
+            createCell(0, "N°", headerStyle);
+            createCell(1, "Titre du test", headerStyle);
+            createCell(2, "Type du test", headerStyle);
+            createCell(3, "Note", headerStyle);
+            createCell(4, "Base", headerStyle);
+            int i = 1;
+            for (PersonneQcm pq : qcms) {
+                row = sheet.createRow(line++);
+                createCell(0, i, defaultStyle);
+                createCell(1, pq.getQcm().getTitre(), defaultStyle);
+                createCell(2, pq.getQcm().getQcmType().getLibelle(), defaultStyle);
+                createCell(3, pq.getNote(), defaultStyle);
+                createCell(4, pq.getQcm().getBase(), defaultStyle);
+                i++;
+            }
+        }
         terminer();
     }
 }

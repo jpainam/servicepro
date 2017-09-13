@@ -74,7 +74,9 @@ public class UserProfil implements java.io.Serializable {
     }
 
     public void setPlanificationModelesResponsable(List<PlanificationModele> planificationModelesResponsable) {
-        this.planificationModelesResponsable.set(FXCollections.observableArrayList(planificationModelesResponsable));
+        if(planificationModelesResponsable != null) {
+            this.planificationModelesResponsable.set(FXCollections.observableArrayList(planificationModelesResponsable));
+        }
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "validation")
@@ -83,7 +85,9 @@ public class UserProfil implements java.io.Serializable {
     }
 
     public void setPlanificationModelesValidation(List<PlanificationModele> planificationModelesValidation) {
-        this.planificationModelesValidation.set(FXCollections.observableArrayList(planificationModelesValidation));
+        if(planificationModelesValidation != null) {
+            this.planificationModelesValidation.set(FXCollections.observableArrayList(planificationModelesValidation));
+        }
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfil")
@@ -92,7 +96,9 @@ public class UserProfil implements java.io.Serializable {
     }
 
     public void setUsers(List<User> users) {
-        this.users.set(FXCollections.observableArrayList(users));
+        if(users != null) {
+            this.users.set(FXCollections.observableArrayList(users));
+        }
     }
 
 
@@ -102,7 +108,9 @@ public class UserProfil implements java.io.Serializable {
     }
 
     public void setPlanificationsesResponsable(List<Planification> planificationsesResponsable) {
-        this.planificationsesResponsable.set(FXCollections.observableArrayList(planificationsesResponsable));
+        if(planificationsesResponsable != null) {
+            this.planificationsesResponsable.set(FXCollections.observableArrayList(planificationsesResponsable));
+        }
     }
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="validation")
@@ -111,7 +119,9 @@ public class UserProfil implements java.io.Serializable {
     }
 
     public void setPlanificationsesValidation(List<Planification> planificationsesValidation) {
-        this.planificationsesValidation.set(FXCollections.observableArrayList(planificationsesValidation));
+        if(planificationsesValidation != null) {
+            this.planificationsesValidation.set(FXCollections.observableArrayList(planificationsesValidation));
+        }
     }
 
     @Override

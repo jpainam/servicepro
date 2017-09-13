@@ -172,6 +172,6 @@ public class PrintCivilite extends PdfReport {
         document.add(new Paragraph("Tests").setFont(bold).setUnderline());
         document.add(qcmTable);
         close();
-        ServiceproUtil.openDocument(destination + File.separator + "test.pdf");
+        ServiceproUtil.openDocument(destination + File.separator + "document.pdf");
     }
 }

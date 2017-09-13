@@ -70,7 +70,9 @@ public class PlanificationModele implements java.io.Serializable {
     }
 
     public void setTaches(List<Tache> taches) {
-        this.taches.set(FXCollections.observableArrayList(taches));
+        if(taches != null) {
+            this.taches.set(FXCollections.observableArrayList(taches));
+        }
     }
 
 

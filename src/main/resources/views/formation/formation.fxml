@@ -172,31 +172,7 @@
                                                                                         <ListView fx:id="listeViewFormateurs" maxWidth="1.7976931348623157E308" minWidth="10.0" prefHeight="164.0" prefWidth="326.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
                                                                                     </children>
                                                                                 </VBox>
-                                                                                <HBox spacing="10.0" HBox.hgrow="ALWAYS">
-                                                                                    <children>
-                                                                                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                                                                            <children>
-                                                                                                <Label text="Supports" />
-                                                                                                <TableView fx:id="supportTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
-                                                                                                    <columns>
-                                                                                                        <TableColumn fx:id="codeSupportColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Code" />
-                                                                                                        <TableColumn fx:id="titreSupportColumn" prefWidth="75.0" text="Titre" />
-                                                                                                    </columns>
-                                                                                                    <columnResizePolicy>
-                                                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                                                                    </columnResizePolicy>
-                                                                                                </TableView>
-                                                                                            </children>
-                                                                                        </VBox>
-                                                                                        <VBox alignment="BOTTOM_CENTER" prefHeight="181.0" prefWidth="9.0" spacing="10.0" HBox.hgrow="NEVER">
-                                                                                            <children>
-                                                                                                <Button fx:id="btnAjouterSupport" mnemonicParsing="false" onAction="#ajouterSupportAction" />
-                                                                                                <Button fx:id="btnSupprimerSupport" mnemonicParsing="false" onAction="#supprimerSupportAction" />
-                                                                                                <Button fx:id="btnAfficherSupport" mnemonicParsing="false" onAction="#afficherSupportAction" />
-                                                                                            </children>
-                                                                                        </VBox>
-                                                                                    </children>
-                                                                                </HBox>
+                                                                                <HBox fx:id="supportContainer" spacing="10.0" HBox.hgrow="ALWAYS" />
                                                                             </children>
                                                                             <VBox.margin>
                                                                                 <Insets left="10.0" right="10.0" />

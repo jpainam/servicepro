@@ -188,6 +188,9 @@ public class Formation {
     public List<Competence> getCompetences() {
         return this.competences.get();
     }
+    public ListProperty<Competence> competencesProperty(){
+        return competences;
+    }
 
     public void setCompetences(List<Competence> competences) {
         if(competences != null) {
@@ -334,6 +337,10 @@ public class Formation {
 
     public void setSocieteFormatrice(SocieteFormatrice societeFormatrice) {
         this.societeFormatrice.set(societeFormatrice);
+    }
+
+    public ListProperty<SupportFormation> supportFormationsProperty() {
+        return supportFormations;
     }
 }
 

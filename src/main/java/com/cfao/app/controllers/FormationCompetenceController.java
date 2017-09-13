@@ -107,7 +107,10 @@ public class FormationCompetenceController extends AnchorPane implements Initial
         competenceTable.getItems().clear();
         if(formation == null)
             return;
-        competenceTable.setItems(FXCollections.observableArrayList(formation.getCompetences()));
+        if(formation.getCompetences() != null) {
+            //competenceTable.setItems(FXCollections.observableArrayList(formation.getCompetences()));
+            competenceTable.itemsProperty().bind(formation.competencesProperty());
+        }
         possedeCompetence.setCellFactory(param -> {
             SimpleBooleanProperty selected = new SimpleBooleanProperty(true);
             CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);

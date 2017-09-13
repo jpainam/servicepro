@@ -506,7 +506,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
             Task<Void> task1 = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    new Model<Planification>("Planification").delete(formation.getPlanifications());
+                    //new Model<Planification>("Planification").delete(formation.getPlanifications());
                     new FormationModel().update(formation);
                     // Mettre a jour la table des planifications si non automatique
                     planificationTable.refresh();

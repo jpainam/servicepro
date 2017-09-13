@@ -23,12 +23,12 @@ public class HibernateUtil {
             Configuration configuration = new Configuration();
             configuration.configure();
 
-            configuration.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+            /*configuration.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
 
             configuration.setProperty("hibernate.connection.url", "jdbc:hsqldb:file:data/servicepro");
 
             configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-            configuration.setProperty("hibernate.connection.username", "sa");
+            configuration.setProperty("hibernate.connection.username", "sa");*/
 
             //configuration.configure(HIBERNATE_CONFIG);
 

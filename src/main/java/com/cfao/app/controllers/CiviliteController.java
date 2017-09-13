@@ -210,11 +210,11 @@ public class CiviliteController implements Initializable {
 
         GlyphsDude.setIcon(btnNext, FontAwesomeIcon.ARROW_RIGHT);
         GlyphsDude.setIcon(btnPrevious, FontAwesomeIcon.ARROW_LEFT);
-        GlyphsDude.setIcon(btnPrint, FontAwesomeIcon.PRINT);
-        GlyphsDude.setIcon(btnSuppr, FontAwesomeIcon.TRASH);
-        GlyphsDude.setIcon(btnModifier, FontAwesomeIcon.PENCIL);
-        GlyphsDude.setIcon(btnNouveau, FontAwesomeIcon.FILE);
-        GlyphsDude.setIcon(btnAnnuler, FontAwesomeIcon.SHARE_SQUARE);
+        ButtonUtil.print(btnPrint);
+        ButtonUtil.delete(btnSuppr);
+        ButtonUtil.edit(btnModifier);
+        ButtonUtil.add(btnNouveau);
+        ButtonUtil.cancel(btnAnnuler);
 
         personneTable.setRowFactory(param -> {
             final TableRow<Personne> row = new TableRow<>();
@@ -480,7 +480,7 @@ public class CiviliteController implements Initializable {
                 case 0:
                     ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
                     disableAllComponents(false);
-                    btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                    ButtonUtil.save(btnNouveau);
                     this.stateBtnNouveau = 1;
                     profilController.setActive(true);
                     posteController.setActive(true);
@@ -498,7 +498,7 @@ public class CiviliteController implements Initializable {
     }
 
     /*
-        bool == true for save, and false for update
+        bool == true for add, and false for update
      */
     private void savePersonne(Personne personne) {
 
