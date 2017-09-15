@@ -6,9 +6,8 @@ import com.cfao.app.beans.Qcm;
 import com.cfao.app.beans.QcmType;
 import com.cfao.app.model.CompetenceModel;
 import com.cfao.app.model.Model;
+import com.cfao.app.reports.QCMExcel;
 import com.cfao.app.util.*;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -27,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
  * Created by JP on 8/1/2017.
  */
 public class QCMController implements Initializable {
+    static Logger logger = Logger.getLogger(QCMController.class);
     public TableColumn<Qcm, String> titreColumn;
     public TableColumn<Qcm, QcmType> typeColumn;
     public StackPane qcmStackPane;
@@ -56,20 +57,21 @@ public class QCMController implements Initializable {
     public StackPane competenceStackPane;
     private SearchBox searchBox = new SearchBox();
     public VBox vboxSearch;
-    public Tab tabPersonne;
     public Tab tabDetails;
+    public VBox hboxPersonneAssocie;
 
     public QCMPersonneController personneController;
     public TableView<Qcm> qcmTable;
 
-    public VBox vboxFlowChart;
+    public VBox vboxPersonnePotentiel;
     public VBox vboxFlowArea;
 
-    public QcmDiagram qcmDiagram = new QcmDiagram();
+    public QCMDiagram QCMDiagram = new QCMDiagram();
     private boolean stateBtnModifier = false;
     private boolean stateBtnNouveau = false;
 
     private ObservableList<Competence> selectedItems;
+    private QCMPotentielController potentielController;
 
     public QCMController() {
 
@@ -87,6 +89,7 @@ public class QCMController implements Initializable {
         qcmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             buildCompetenceTable(newValue);
             buildFlowChart(newValue);
+
         });
         Task<ObservableList<QcmType>> task = new Task<ObservableList<QcmType>>() {
             @Override
@@ -99,16 +102,15 @@ public class QCMController implements Initializable {
         task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
 
         personneController = new QCMPersonneController();
-        tabPersonne.setContent(personneController);
-
+        hboxPersonneAssocie.getChildren().setAll(personneController);
         ButtonUtil.detailsTab(tabDetails);
-        GlyphsDude.setIcon(tabPersonne, FontAwesomeIcon.USERS);
-
+        potentielController = new QCMPotentielController();
+        vboxPersonnePotentiel.getChildren().setAll(potentielController);
     }
 
     private void buildFlowChart(Qcm qcm) {
-        qcmDiagram.setQcm(qcm);
-        vboxFlowArea.getChildren().setAll(qcmDiagram.createPieChart());
+        QCMDiagram.setQcm(qcm);
+        vboxFlowArea.getChildren().setAll(QCMDiagram.createPieChart());
     }
 
     private void buildCompetenceTable(Qcm qcm) {
@@ -119,6 +121,8 @@ public class QCMController implements Initializable {
             competenceTable.setItems(FXCollections.observableArrayList(qcm.getCompetences()));
             personneController.setQcm(qcm);
             personneController.buildPersonneTable();
+            potentielController.setQcm(qcm);
+            potentielController.buildTable();
         }
     }
 
@@ -184,7 +188,7 @@ public class QCMController implements Initializable {
     }
 
     public void nouveauAction(ActionEvent event) {
-        if(!stateBtnNouveau) {
+        if (!stateBtnNouveau) {
             ServiceproUtil.emptyFields(txtBase, txtTitre);
             ServiceproUtil.setDisable(false, comboTypeTest);
             ServiceproUtil.setEditable(true, txtTitre, txtBase);
@@ -195,21 +199,69 @@ public class QCMController implements Initializable {
                 }
             };
             competenceTable.itemsProperty().bind(task.valueProperty());
-
             ProgressIndicatorUtil.show(competenceStackPane, task);
             new Thread(task).start();
             stateBtnNouveau = true;
-        }else{
+            competenceTable.setEditable(true);
+            ButtonUtil.save(btnNouveau);
+            selectedItems = FXCollections.observableArrayList();
+            task.setOnSucceeded((WorkerStateEvent event1) -> {
+                possedeColumn.setCellFactory((TableColumn<Competence, Competence> param) -> {
+                    BooleanProperty selected = new SimpleBooleanProperty();
+                    CheckBoxTableCell<Competence, Competence> cell = new CheckBoxTableCell<>(index -> selected);
+                    selected.addListener((obs, wasSelected, isNowSelected) -> {
+                        if (isNowSelected) {
+                            if (!selectedItems.contains(cell.getItem())) {
+                                selectedItems.add(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().select(cell.getItem());
+                        } else {
+                            if (selectedItems.contains(cell.getItem())) {
+                                selectedItems.remove(cell.getItem());
+                            }
+                            competenceTable.getSelectionModel().clearSelection(cell.getIndex());
+                        }
+                    });
+
+                    selectedItems.addListener((ListChangeListener<Competence>) change -> {
+                        selected.set(cell.getItem() != null && selectedItems.contains(cell.getItem()));
+                    });
+                    cell.itemProperty().addListener((observable, oldValue, newValue) -> {
+                        selected.set(newValue != null && selectedItems.contains(newValue));
+                    });
+                    return cell;
+                });
+            });
+            task.setOnFailed(event12 -> {
+                task.getException().printStackTrace();
+                ServiceproUtil.notify("Erreur dans le thread de modification Qcm");
+            });
+            possedeColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
+
+        } else {
             stateBtnNouveau = false;
+            selectedItems.forEach(System.out::println);
+            Model<Qcm> model = new Model<>("Qcm");
+            Qcm qcm = new Qcm();
+            qcm.setCompetences(selectedItems);
+            qcm.setBase(Integer.parseInt(txtBase.getText()));
+            qcm.setTitre(txtTitre.getText());
+            qcm.setQcmType(comboTypeTest.getValue());
+            if (model.save(qcm)) {
+                ServiceproUtil.notify("Ajout OK");
+                StageManager.loadContent("/views/qcm/qcm.fxml");
+            } else {
+                ServiceproUtil.notify("Erreur d'ajout");
+            }
         }
     }
 
     public void modifierAction(ActionEvent event) {
         Qcm qcm = qcmTable.getSelectionModel().getSelectedItem();
-        if(qcm == null){
+        if (qcm == null) {
             return;
         }
-        if(!stateBtnModifier){
+        if (!stateBtnModifier) {
             ServiceproUtil.setDisable(false, comboTypeTest);
             ServiceproUtil.setEditable(true, txtBase, txtTitre);
             stateBtnModifier = true;
@@ -264,12 +316,13 @@ public class QCMController implements Initializable {
             });
             possedeColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
 
-        }else{
+        } else {
             selectedItems.forEach(System.out::println);
             Model<Qcm> model = new Model<>("Qcm");
             qcm.setCompetences(selectedItems);
             qcm.setBase(Integer.parseInt(txtBase.getText()));
             qcm.setTitre(txtTitre.getText());
+            qcm.setQcmType(comboTypeTest.getValue());
             if (model.update(qcm)) {
                 ServiceproUtil.notify("Modification OK");
                 StageManager.loadContent("/views/qcm/qcm.fxml");
@@ -285,6 +338,10 @@ public class QCMController implements Initializable {
     public void supprimerAction(ActionEvent event) {
         Qcm qcm = qcmTable.getSelectionModel().getSelectedItem();
         if (qcm != null) {
+            boolean gohead = AlertUtil.showConfirmationMessage("Attention", "Etes vous sûr de vouloir supprimer " + qcm.getTitre() + " ?");
+            if (!gohead) {
+                return;
+            }
             Task<Boolean> task = new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
@@ -296,12 +353,46 @@ public class QCMController implements Initializable {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Suppression OK");
                     qcmTable.getItems().remove(qcm);
+                    StageManager.loadContent("/views/qcm/qcm.fxml");
                 } else {
                     ServiceproUtil.notify("Erreur de suppression");
                 }
             });
         } else {
             AlertUtil.showSimpleAlert("Information", "Vueillez d'abord choisir le test à supprimer");
+        }
+    }
+
+    public void printAction(ActionEvent event) {
+        Qcm qcm = qcmTable.getSelectionModel().getSelectedItem();
+        if (qcm == null) {
+            AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir un Test");
+            return;
+        }
+        try {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    QCMExcel qcmExcel = new QCMExcel();
+                    qcmExcel.printDetails(qcm);
+                    return null;
+                }
+            };
+
+            StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+            new Thread(task).start();
+            task.setOnSucceeded(event1 -> {
+                StageManager.getProgressBar().progressProperty().unbind();
+                StageManager.getProgressBar().setProgress(0);
+                ServiceproUtil.notify("Impression réussie");
+            });
+            task.setOnFailed(event12 -> {
+                logger.error(task.getException());
+                task.getException().printStackTrace();
+            });
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+            logger.error(ex);
         }
     }
 }

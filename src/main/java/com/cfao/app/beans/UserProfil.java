@@ -34,7 +34,8 @@ public class UserProfil implements java.io.Serializable {
     }
 
 
-    public UserProfil(String libelle) {
+    public UserProfil(Integer iduserprofil, String libelle) {
+        this.setIduserprofil(iduserprofil);
         this.libelle.set(libelle);
     }
 

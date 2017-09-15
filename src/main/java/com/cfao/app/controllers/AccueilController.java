@@ -53,12 +53,13 @@ public class AccueilController implements Initializable {
         personneStatContent.getChildren().setAll(personneController);
         notificationUpdate();
     }
+
     private void notificationUpdate() {
-        if(LoginController.serviceNotification != null)
+        if (LoginController.serviceNotification != null)
             LoginController.serviceNotification.setOnSucceeded(event -> {
 
                 ArrayList<Map<String, String>> mapArray = LoginController.serviceNotification.getValue();
-                if(mapArray.size() > 0) {
+                if (mapArray != null && mapArray.size() > 0) {
                     Map<String, String> mapCivilite = mapArray.get(0);
                     Map<String, String> mapFormation = mapArray.get(1);
                     Map<String, String> mapPlanification = mapArray.get(2);
@@ -91,7 +92,6 @@ public class AccueilController implements Initializable {
 
             });
     }
-
 
 
     private void initComponents() {

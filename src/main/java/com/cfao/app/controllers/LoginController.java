@@ -81,7 +81,7 @@ public class LoginController implements Initializable {
                     ServiceproUtil.setLoggedUser(task.getValue());
                     ServiceproUtil.setLoggedTime(Calendar.getInstance());
                     try {
-                        startServiceNotification();
+                        //startServiceNotification();
                         new Main().start(new Stage());
                         stage.close();
                     } catch (Exception ex) {

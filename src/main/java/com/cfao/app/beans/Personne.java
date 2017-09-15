@@ -13,7 +13,7 @@ import java.util.List;
  * Created by JP on 6/10/2017.
  */
 @Entity
-@Table(name="personnes"
+@Table(name = "personnes"
 )
 public class Personne implements java.io.Serializable {
 
@@ -53,7 +53,7 @@ public class Personne implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getIdpersonne() {
+    public Integer getIdpersonne() {
         return idpersonne.get();
     }
 
@@ -61,7 +61,7 @@ public class Personne implements java.io.Serializable {
         return idpersonne;
     }
 
-    public void setIdpersonne(int idpersonne) {
+    public void setIdpersonne(Integer idpersonne) {
         this.idpersonne.set(idpersonne);
     }
 
@@ -119,7 +119,7 @@ public class Personne implements java.io.Serializable {
 
     @Column(name = "EMAIL")
     public String getEmail() {
-        if(email.isNull().get()){
+        if (email.isNull().get()) {
             return "";
         }
         return email.get();
@@ -162,7 +162,7 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATENAISS")
     public Date getDatenaiss() {
-        if(datenaiss != null) {
+        if (datenaiss != null) {
             return datenaiss.get();
         }
         return new Date(0l);
@@ -179,10 +179,10 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATECONTRAT")
     public Date getDatecontrat() {
-        if(fincontrat != null) {
+        if (fincontrat != null) {
             return fincontrat.get();
         }
-        return  new Date(0l);
+        return new Date(0l);
     }
 
     public ObjectProperty<Date> fincontratProperty() {
@@ -346,9 +346,9 @@ public class Personne implements java.io.Serializable {
     }
 
     @ManyToMany
-    @JoinTable(name="formation_personne", joinColumns =
-    @JoinColumn(name="PERSONNE", nullable=false, updatable=false) , inverseJoinColumns =
-    @JoinColumn(name="FORMATION", nullable=false, updatable=false))
+    @JoinTable(name = "formation_personne", joinColumns =
+    @JoinColumn(name = "PERSONNE", nullable = false, updatable = false), inverseJoinColumns =
+    @JoinColumn(name = "FORMATION", nullable = false, updatable = false))
     public List<Formation> getFormations() {
         return formations.get();
     }
@@ -358,11 +358,11 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setFormations(List<Formation> formations) {
-        if(formations != null)
+        if (formations != null)
             this.formations.set(FXCollections.observableList(formations));
     }
 
-    @OneToMany(mappedBy="personne", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
     public List<PersonneCompetence> getPersonneCompetences() {
         return personneCompetences.get();
     }
@@ -372,14 +372,14 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
-        if(personneCompetences != null)
+        if (personneCompetences != null)
             this.personneCompetences.set(FXCollections.observableList(personneCompetences));
     }
 
     @Transient
-    public List<Competence> getCompetences(){
+    public List<Competence> getCompetences() {
         List<Competence> competenceList = new ArrayList<>();
-        for(PersonneCompetence co : personneCompetences){
+        for (PersonneCompetence co : personneCompetences) {
             competenceList.add(co.getCompetence());
         }
         return competenceList;
@@ -395,11 +395,11 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setPersonneQcms(List<PersonneQcm> personneQcms) {
-        if(personneQcms!= null)
+        if (personneQcms != null)
             this.personneQcms.set(FXCollections.observableList(personneQcms));
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="personne")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "personne")
     public List<FormationPersonne> getFormationPersonnes() {
         return formationPersonnes.get();
     }
@@ -409,7 +409,7 @@ public class Personne implements java.io.Serializable {
     }
 
     public void setFormationPersonnes(List<FormationPersonne> formationPersonnes) {
-        if(formationPersonnes != null) {
+        if (formationPersonnes != null) {
             this.formationPersonnes.set(FXCollections.observableArrayList(formationPersonnes));
         }
     }
@@ -432,16 +432,17 @@ public class Personne implements java.io.Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.getNom() + " " + this.getPrenom();
     }
 
     public ObjectProperty<LocalDate> datecontratProperty() {
-        if(fincontrat != null) {
+        if (fincontrat != null) {
             return new SimpleObjectProperty<>(new java.sql.Date(fincontrat.get().getTime()).toLocalDate());
         }
         return new SimpleObjectProperty<>(new java.sql.Date(new Date(0l).getTime()).toLocalDate());
     }
+
     @Column(name = "PASSPORT")
     public String getPassport() {
         return passport.get();
@@ -458,7 +459,7 @@ public class Personne implements java.io.Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "EXPIRE")
     public Date getExpirationPassport() {
-        if(expirationPassport != null){
+        if (expirationPassport != null) {
             return expirationPassport.get();
         }
         return new Date(0l); //0 date
@@ -466,7 +467,7 @@ public class Personne implements java.io.Serializable {
     }
 
     public ObjectProperty<LocalDate> expirationPassportProperty() {
-        if(expirationPassport != null){
+        if (expirationPassport != null) {
             return new SimpleObjectProperty<>(new java.sql.Date(expirationPassport.get().getTime()).toLocalDate());
         }
         return new SimpleObjectProperty<>(new java.sql.Date(new Date(0l).getTime()).toLocalDate());
@@ -488,4 +489,14 @@ public class Personne implements java.io.Serializable {
     public void setFonction(String fonction) {
         this.fonction.set(fonction);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Personne) {
+            Personne p = (Personne) o;
+            return p.getIdpersonne().equals(this.getIdpersonne());
+        }
+        return false;
+    }
+
 }

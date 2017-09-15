@@ -266,7 +266,7 @@ public class Formation {
         return result;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation", cascade = CascadeType.ALL)
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
     @OrderBy("timing ASC")
     public List<Planification> getPlanifications() {
         return planifications.get();

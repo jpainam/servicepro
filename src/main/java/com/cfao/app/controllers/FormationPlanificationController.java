@@ -5,14 +5,16 @@ import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.reports.FormationExcel;
-import com.cfao.app.util.*;
+import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ButtonUtil;
+import com.cfao.app.util.DialogUtil;
+import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -23,7 +25,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
@@ -236,11 +240,10 @@ public class FormationPlanificationController extends AnchorPane implements Init
         //System.err.println(formation.getPlanifications());
         if (formation == null)
             return;
-        planificationTable.getItems().clear();
-        if (formation.getPlanifications() != null) {
+        //if (formation.getPlanifications() != null) {
             //planificationTable.setItems(FXCollections.observableArrayList(formation.getPlanifications()));
             planificationTable.itemsProperty().bind(formation.planificationsProperty());
-        }
+        //}
     }
 
     public void ajouterAction(ActionEvent event) {
@@ -298,7 +301,6 @@ public class FormationPlanificationController extends AnchorPane implements Init
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-
                         if (planifications.size() > 1) {
                             return new Model<Planification>("Planification").delete(planifications);
                         } else {
@@ -311,8 +313,10 @@ public class FormationPlanificationController extends AnchorPane implements Init
                     if (task.getValue()) {
                         if (planifications.size() > 1) {
                             formation.getPlanifications().removeAll(planifications);
+                            //planificationTable.getItems().removeAll(planifications);
                         } else {
                             formation.getPlanifications().remove(planification);
+                            //planificationTable.getItems().remove(planification);
                         }
                     } else {
                         ServiceproUtil.notify("Erreur dans la suppression de la planification");
@@ -470,10 +474,35 @@ public class FormationPlanificationController extends AnchorPane implements Init
                 return;
             }
         }
-        Task<ObservableList<PlanificationModele>> task = new Task<ObservableList<PlanificationModele>>() {
+        Task<Boolean> task = new Task<Boolean>() {
             @Override
-            protected ObservableList<PlanificationModele> call() throws Exception {
-                return FXCollections.observableArrayList(new Model<PlanificationModele>("PlanificationModele").getList());
+            protected Boolean call() throws Exception {
+                List<PlanificationModele> modeles = new Model<PlanificationModele>("PlanificationModele").getList();
+                if (modeles == null) {
+                    AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification n'a été défini\n " +
+                            "Vous pouvez créer un modèle de planification via le menu Paramètre");
+                    return false;
+                }
+                List<Planification> tmp = new ArrayList<>();
+                Iterator<PlanificationModele> iterator = modeles.iterator();
+                while (iterator.hasNext()) {
+                    PlanificationModele modele = iterator.next();
+                    Planification planification = new Planification();
+                    planification.setFait(false);
+                    planification.setFormation(formation);
+                    planification.setRemarque(modele.getRemarque());
+                    planification.setSujet(modele.getSujet());
+                    planification.setTaches(modele.getTaches());
+                    planification.setTiming(modele.getTiming());
+                    planification.setResponsable(modele.getResponsable());
+                    planification.setValidation(modele.getValidation());
+                    tmp.add(planification);
+                }
+                formation.setPlanifications(tmp);
+                new Model<Formation>("Formation").update(formation);
+                //new Model<Planification>("Planification").saveOrUpdate(planification);
+
+                return true;
             }
         };
         new Thread(task).start();
@@ -482,46 +511,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(event12 -> {
-            if (task.getValue() == null) {
-                AlertUtil.showWarningMessage("Impossible", "Aucun modèle de planification\n " +
-                        "Vous pouvez créer un modèle de planification via le menu Paramètre");
-                return;
-            }
-            List<Planification> tmpPlanifications = new ArrayList<>();
-            Iterator<PlanificationModele> modeles = task.getValue().iterator();
-            while (modeles.hasNext()) {
-                PlanificationModele modele = modeles.next();
-                Planification planification = new Planification();
-                planification.setFait(false);
-                planification.setFormation(formation);
-                planification.setRemarque(modele.getRemarque());
-                planification.setSujet(modele.getSujet());
-                planification.setTaches(modele.getTaches());
-                planification.setTiming(modele.getTiming());
-                planification.setResponsable(modele.getResponsable());
-                planification.setValidation(modele.getValidation());
-                tmpPlanifications.add(planification);
-            }
-            formation.setPlanifications(tmpPlanifications);
-            Task<Void> task1 = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    //new Model<Planification>("Planification").delete(formation.getPlanifications());
-                    new FormationModel().update(formation);
-                    // Mettre a jour la table des planifications si non automatique
-                    planificationTable.refresh();
-                    return null;
-                }
-            };
-            new Thread(task1).start();
-            task1.setOnFailed(event13 -> {
-                task1.getException().printStackTrace();
-                logger.error(task1.getException());
-            });
-            task1.setOnSucceeded(event14 -> {
-                ServiceproUtil.notify("Planification générée avec succès");
-                planificationTable.itemsProperty().bind(formation.planificationsProperty());
-            });
+            planificationTable.refresh();
+            ServiceproUtil.notify("Planification générée avec succès");
         });
 
 

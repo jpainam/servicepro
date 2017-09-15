@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by JP on 8/23/2017.
  */
-public class QcmDiagram {
+public class QCMDiagram {
     private Qcm qcm;
 
     public void setQcm(Qcm qcm) {

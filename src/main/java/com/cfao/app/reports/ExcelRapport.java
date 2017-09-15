@@ -211,6 +211,11 @@ public class ExcelRapport {
         cell.setCellStyle(cellStyle);
         cell.setCellValue(content);
     }
+    protected void createCell(int column, String content, CellStyle cellStyle, XSSFRow xssfRow) {
+        XSSFCell cell = xssfRow.createCell(column);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(content);
+    }
     protected void createCell(int column, double content, CellStyle cellStyle) {
         XSSFCell cell = row.createCell(column);
         cell.setCellStyle(cellStyle);

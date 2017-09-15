@@ -166,7 +166,7 @@ JFOenix CSS
 .button{
     -fx-cursor: hand;
 }
-/*.button {
+.button-profil {
     -fx-cursor: hand;
    -fx-background-color:
            #000000,
@@ -177,8 +177,8 @@ JFOenix CSS
        -fx-background-radius: 3,2,2,2;
        -fx-text-fill: white;
        -fx-font-size: 12px;
-}*/
-.button:pressed{
+}
+.button:pressed, .button-profil:pressed{
    -fx-background-color:
                     #000000,
                     linear-gradient(#5a61af, #51536d),

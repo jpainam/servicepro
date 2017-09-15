@@ -354,9 +354,7 @@ public class FormationController implements Initializable {
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
-        buildTable();
-        stateBtnNouveau = 0;
-        stateBtnModifier = 0;
+       StageManager.loadContent("/views/formation/formation.fxml");
     }
 
     public void ajouterFormateur(ActionEvent actionEvent) {

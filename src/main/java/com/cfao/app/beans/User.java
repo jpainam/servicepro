@@ -22,6 +22,7 @@ public class User implements java.io.Serializable {
     private SimpleStringProperty login = new SimpleStringProperty();
     private SimpleStringProperty password = new SimpleStringProperty();
     private ObjectProperty<UserProfil> userProfil = new SimpleObjectProperty<>();
+    private ObjectProperty<Personnel> personnel = new SimpleObjectProperty<>();
 
     public User() {
     }
@@ -81,6 +82,20 @@ public class User implements java.io.Serializable {
 
     public void setUserProfil(UserProfil userProfil) {
         this.userProfil.set(userProfil);
+    }
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="PERSONNEL")
+    public Personnel getPersonnel() {
+        return personnel.get();
+    }
+
+    public ObjectProperty<Personnel> personnelProperty() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel.set(personnel);
     }
 }
 

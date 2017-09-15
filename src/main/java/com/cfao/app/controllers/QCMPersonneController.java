@@ -2,14 +2,16 @@ package com.cfao.app.controllers;
 
 import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
-import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.SearchBox;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -22,8 +24,6 @@ import java.util.ResourceBundle;
 public class QCMPersonneController extends AnchorPane implements Initializable{
 
     private Qcm qcm = null;
-    public Button btnPrintPersonne;
-    public Label lblTitreQcm;
     public TableView<PersonneQcm> personneTable;
     public TableColumn<PersonneQcm, String> matriculePersonneColumn;
     public TableColumn<PersonneQcm, String> nomPersonneColumn;
@@ -52,7 +52,6 @@ public class QCMPersonneController extends AnchorPane implements Initializable{
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ButtonUtil.print(btnPrintPersonne);
         searchBoxPersonne.getChildren().addAll(new Label("Personnes"), searchBox);
         matriculePersonneColumn.setCellValueFactory(param -> param.getValue().getPersonne().matriculeProperty());
         nomPersonneColumn.setCellValueFactory(param -> {
@@ -84,10 +83,6 @@ public class QCMPersonneController extends AnchorPane implements Initializable{
         this.qcm = qcm;
     }
     public void buildPersonneTable(){
-        lblTitreQcm.setText(qcm.getTitre());
         personneTable.setItems(FXCollections.observableArrayList(qcm.getPersonneQcms()));
-    }
-    public void printAction(javafx.event.ActionEvent event) {
-
     }
 }

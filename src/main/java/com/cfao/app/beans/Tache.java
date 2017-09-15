@@ -23,13 +23,14 @@ public class Tache implements java.io.Serializable {
     private IntegerProperty idtache = new SimpleIntegerProperty();
     private SimpleStringProperty libelle = new SimpleStringProperty();
     private ListProperty<Planification> planifications = new SimpleListProperty<>();
-    private ListProperty<PlanificationModele> planificationModeles = new SimpleListProperty<>();
+    //private ListProperty<PlanificationModele> planificationModeles = new SimpleListProperty<>();
 
     public Tache() {
     }
 
 
-    public Tache(String libelle) {
+    public Tache(Integer idtache, String libelle) {
+        this.setIdtache(idtache);
         this.libelle.set(libelle);
     }
 
@@ -75,7 +76,7 @@ public class Tache implements java.io.Serializable {
         }
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    /*@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "planification_modele_tache", joinColumns = {
             @JoinColumn(name = "TACHE", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "PLANIFICATIONMODELE", nullable = false, updatable = false)})
@@ -87,7 +88,7 @@ public class Tache implements java.io.Serializable {
         if (planificationModeles != null) {
             this.planificationModeles.set(FXCollections.observableArrayList(planificationModeles));
         }
-    }
+    }*/
 
     public SimpleStringProperty libelleProperty() {
         return libelle;

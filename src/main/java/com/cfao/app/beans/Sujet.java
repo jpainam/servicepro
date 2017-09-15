@@ -24,15 +24,15 @@ public class Sujet implements java.io.Serializable {
     private IntegerProperty idsujet = new SimpleIntegerProperty();
     private StringProperty libelle = new SimpleStringProperty();
     private ListProperty<Planification> planifications = new SimpleListProperty<>();
-    private ListProperty<PlanificationModele> planificationModeles = new SimpleListProperty<>();
+    //private ListProperty<PlanificationModele> planificationModeles = new SimpleListProperty<>();
 
     public Sujet() {
     }
-
-
-    public Sujet(String libelle) {
-        this.libelle.set(libelle);
+    public Sujet(Integer idsujet, String libelle){
+        this.setIdsujet(idsujet);
+        this.setLibelle(libelle);
     }
+
     public Sujet(String libelle, Set<Planification> planifications) {
         this.libelle.set(libelle);
         this.planifications.set(FXCollections.observableArrayList(planifications));
@@ -68,7 +68,7 @@ public class Sujet implements java.io.Serializable {
     }
 
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="sujet")
+    /*@OneToMany(fetch=FetchType.LAZY, mappedBy="sujet")
     public List<PlanificationModele> getPlanificationModeles() {
         return planificationModeles.get();
     }
@@ -78,7 +78,7 @@ public class Sujet implements java.io.Serializable {
             this.planificationModeles.set(FXCollections.observableArrayList(planificationModeles));
         }
     }
-
+*/
     @Override
     public String toString(){
         return getLibelle();

@@ -46,74 +46,79 @@
                            <content>
                               <SplitPane dividerPositions="0.5159151193633952" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                 <items>
-                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
-                                       <children>
-                                          <ToolBar layoutX="-14.0" layoutY="29.0" prefHeight="40.0" prefWidth="200.0">
-                                            <items>
-                                              <Button fx:id="btnPrevious" mnemonicParsing="false" />
-                                                <Button fx:id="btnNext" mnemonicParsing="false" />
-                                                <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnPrint" mnemonicParsing="false" />
-                                                <Separator orientation="VERTICAL" />
-                                                <Button fx:id="btnNouveau" mnemonicParsing="false" onAction="#nouveauAction" styleClass="actionButton" text="Nouveau/New" />
-                                                <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierAction" styleClass="actionButton" text="Modifier/Edit" />
-                                                <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#supprimerAction" styleClass="actionButton" text="Supprimer/Delete" />
-                                            </items>
-                                          </ToolBar>
-                                          <HBox maxWidth="1.7976931348623157E308" prefHeight="36.0" prefWidth="417.0" spacing="5.0" VBox.vgrow="NEVER">
+                                    <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL">
+                                       <items>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                              <children>
-                                                <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="181.0" HBox.hgrow="ALWAYS">
+                                                <ToolBar layoutX="-14.0" layoutY="29.0" prefHeight="40.0" prefWidth="200.0">
+                                                  <items>
+                                                    <Button fx:id="btnPrevious" mnemonicParsing="false" />
+                                                      <Button fx:id="btnNext" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printAction" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="btnNouveau" mnemonicParsing="false" onAction="#nouveauAction" styleClass="actionButton" text="Nouveau/New" />
+                                                      <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierAction" styleClass="actionButton" text="Modifier/Edit" />
+                                                      <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#supprimerAction" styleClass="actionButton" text="Supprimer/Delete" />
+                                                  </items>
+                                                </ToolBar>
+                                                <HBox maxWidth="1.7976931348623157E308" prefHeight="36.0" prefWidth="417.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
-                                                      <Label text="Titre du Test" />
-                                                      <TextField fx:id="txtTitre" promptText="Titre du Test" />
+                                                      <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="181.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Titre du Test" />
+                                                            <TextField fx:id="txtTitre" promptText="Titre du Test" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Type du Test" />
+                                                            <ComboBox fx:id="comboTypeTest" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="17.0" VBox.vgrow="NEVER" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="42.0" prefWidth="50.0" HBox.hgrow="NEVER">
+                                                         <children>
+                                                            <Label text="Base" VBox.vgrow="NEVER" />
+                                                            <TextField fx:id="txtBase" alignment="CENTER_RIGHT" promptText="Base" text="100" />
+                                                         </children>
+                                                      </VBox>
                                                    </children>
-                                                </VBox>
-                                                <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-                                                   <children>
-                                                      <Label text="Type du Test" />
-                                                      <ComboBox fx:id="comboTypeTest" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="17.0" VBox.vgrow="NEVER" />
-                                                   </children>
-                                                </VBox>
-                                                <VBox prefHeight="42.0" prefWidth="50.0" HBox.hgrow="NEVER">
-                                                   <children>
-                                                      <Label text="Base" VBox.vgrow="NEVER" />
-                                                      <TextField fx:id="txtBase" alignment="CENTER_RIGHT" promptText="Base" text="100" />
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets left="5.0" right="5.0" />
-                                             </VBox.margin>
-                                          </HBox>
-                                          <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                                             <children>
-                                                <TableView fx:id="competenceTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                                                  <columns>
-                                                    <TableColumn fx:id="numeroCompetenceColumn" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
-                                                    <TableColumn fx:id="descriptionCompetenceColumn" prefWidth="75.0" text="Intitulé de la compétence" />
-                                                      <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
-                                                      <TableColumn fx:id="connaissanceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Connaissance" />
-                                                      <TableColumn fx:id="possedeColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Possède" />
-                                                  </columns>
-                                                   <columnResizePolicy>
-                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                   </columnResizePolicy>
                                                    <VBox.margin>
-                                                      <Insets bottom="10.0" left="10.0" right="10.0" />
+                                                      <Insets left="5.0" right="5.0" />
                                                    </VBox.margin>
-                                                   <StackPane.margin>
-                                                      <Insets bottom="5.0" left="5.0" right="5.0" />
-                                                   </StackPane.margin>
-                                                </TableView>
+                                                </HBox>
+                                                <StackPane fx:id="competenceStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                   <children>
+                                                      <TableView fx:id="competenceTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                        <columns>
+                                                          <TableColumn fx:id="numeroCompetenceColumn" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" text="#" />
+                                                          <TableColumn fx:id="descriptionCompetenceColumn" prefWidth="75.0" text="Intitulé de la compétence" />
+                                                            <TableColumn fx:id="competenceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Compétence" />
+                                                            <TableColumn fx:id="connaissanceColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Connaissance" />
+                                                            <TableColumn fx:id="possedeColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Possède" />
+                                                        </columns>
+                                                         <columnResizePolicy>
+                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" />
+                                                         </VBox.margin>
+                                                         <StackPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" />
+                                                         </StackPane.margin>
+                                                      </TableView>
+                                                   </children>
+                                                </StackPane>
                                              </children>
-                                          </StackPane>
-                                       </children>
-                                    </VBox>
+                                          </VBox>
+                                          <VBox fx:id="vboxPersonnePotentiel" prefHeight="200.0" prefWidth="100.0" />
+                                       </items>
+                                    </SplitPane>
                                     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                        <children>
                                           <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
                                             <items>
-                                                <VBox fx:id="vboxFlowChart" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox fx:id="hboxPersonneAssocie" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
                                                 <VBox fx:id="vboxFlowArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" />
                                             </items>
                                           </SplitPane>
@@ -122,11 +127,6 @@
                                 </items>
                               </SplitPane>
                            </content>
-                      </Tab>
-                      <Tab fx:id="tabPersonne" text="Associations : Personnes et Tets">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
                       </Tab>
                     </tabs>
                   </TabPane>

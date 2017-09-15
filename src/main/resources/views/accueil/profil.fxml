@@ -8,7 +8,6 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import com.jfoenix.controls.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import de.jensd.fx.glyphs.materialdesignicons.*?>
 <?import javafx.geometry.Insets?>
@@ -46,7 +45,7 @@
           <Label fx:id="lblFormationSuivie" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="196.0" layoutY="191.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
           <Label fx:id="lblFormationSouhaitee" alignment="CENTER_RIGHT" layoutX="196.0" layoutY="221.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
           <Label fx:id="lblTest" alignment="CENTER_RIGHT" layoutX="196.0" layoutY="250.0" prefHeight="17.0" prefWidth="60.0" text="00" textFill="#918dbc" />
-          <Button fx:id="btnPrintProfil" layoutX="75.0" layoutY="284.0" onAction="#printProfilAction" prefHeight="30.0" prefWidth="124.0" text="Imprimer profil" textFill="WHITE">
+          <Button fx:id="btnPrintProfil" layoutX="75.0" layoutY="284.0" onAction="#printProfilAction" prefHeight="30.0" prefWidth="124.0" styleClass="button-profil" text="Imprimer profil" textFill="WHITE">
               <font>
                   <Font name="Roboto Medium" size="15.0" />
               </font>

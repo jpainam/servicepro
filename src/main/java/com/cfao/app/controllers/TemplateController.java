@@ -4,14 +4,19 @@ import com.cfao.app.Controller;
 import com.cfao.app.Login;
 import com.cfao.app.Main;
 import com.cfao.app.StageManager;
+import com.cfao.app.beans.Personnel;
 import com.cfao.app.beans.User;
 import com.cfao.app.model.Model;
+import com.cfao.app.model.PersonnelModel;
+import com.cfao.app.model.UserModel;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
@@ -227,22 +233,60 @@ public class TemplateController implements Initializable, Controller {
         profilPopOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
         profilPopOver.setContentNode(popOverContent);
         profilPopOver.show(caretLabel);
-        profilLink.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                AlertUtil.showSimpleAlert("Implémentation", "Fonctionnalité indisponible");
-            }
+        profilLink.setOnAction((ActionEvent event) -> {
+            Dialog<Pair<String, Personnel>> dialog = DialogUtil.dialogTemplate("Modifier", "Annuler");
+            dialog.setHeaderText("Changer le profil : " + ServiceproUtil.getLoggedUser().getLogin());
+            DialogProfilController controller = new DialogProfilController();
+            dialog.getDialogPane().setContent(controller);
+            dialog.setResultConverter((ButtonType param) -> {
+                if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                    return controller.getData();
+                } else {
+                    return null;
+                }
+            });
+            Optional<Pair<String, Personnel>> result = dialog.showAndWait();
+            result.ifPresent(pairs -> {
+                Task<Boolean> task = new Task<Boolean>() {
+                    @Override
+                    protected Boolean call() throws Exception {
+                        /** Rechercher si le nouveau login existe deja */
+                        User user = new UserModel().getByLogin(pairs.getKey());
+                        if (null == user) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+                new Thread(task).start();
+                task.setOnFailed(event1 -> {
+                    logger.error(task.getException());
+                    task.getException().printStackTrace();
+                });
+                task.setOnSucceeded(event12 -> {
+                    try {
+                        if (!task.getValue()) {
+                            AlertUtil.showWarningMessage("Attention", "Utilisateur avec le login " +
+                                    pairs.getKey() + " existe déjà\nChoisissez un autre nom d'utilisateur");
+                        } else {
+                            User user = ServiceproUtil.getLoggedUser();
+                            user.setLogin(pairs.getKey());
+                            user.setPersonnel(pairs.getValue());
+                            new Model<User>("User").update(user);
+                            //Model.getCurrentSession().
+                            Main.stage.close();
+                            new Login().start(new Stage());
+                        }
+                    } catch (Exception ex) {
+                        logger.error(ex);
+                        ex.printStackTrace();
+                    }
+                });
+            });
         });
         changePasswordLink.setOnAction(event -> {
-            Dialog<ChangePassword> dialog = new Dialog<>();
-            Region region = new Region();
-            region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
-            region.setVisible(false);
-            StageManager.getContentLayout().getChildren().add(region);
-            region.visibleProperty().bind(dialog.showingProperty());
-            ButtonType okButton = new ButtonType("Changer", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-            dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+            Dialog<ChangePassword> dialog = DialogUtil.dialogTemplate("Changer", "Annuler");
             dialog.setHeaderText("Changer son mot de passe");
             DialogPasswordController controller = new DialogPasswordController();
             dialog.getDialogPane().setContent(controller);
@@ -426,6 +470,50 @@ public class TemplateController implements Initializable, Controller {
         public ChangePassword getData() {
             ChangePassword cp = new ChangePassword(ancienPwd.getText(), newPwd.getText());
             return cp;
+        }
+    }
+
+    class DialogProfilController extends AnchorPane implements Initializable {
+
+        @FXML
+        public ComboBox<Personnel> comboPersonnel;
+        @FXML
+        public TextField txtLogin;
+
+        public DialogProfilController() {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/user/profil.fxml"));
+                loader.setRoot(this);
+                loader.setController(this);
+                loader.load();
+            } catch (Exception ex) {
+                AlertUtil.showErrorMessage(ex);
+            }
+        }
+
+        @Override
+        public void initialize(URL location, ResourceBundle resources) {
+            txtLogin.setText(ServiceproUtil.getLoggedUser().getLogin());
+            Task<ObservableList<Personnel>> task = new Task<ObservableList<Personnel>>() {
+                @Override
+                protected ObservableList<Personnel> call() throws Exception {
+                    return FXCollections.observableArrayList(new PersonnelModel().getList());
+                }
+            };
+            new Thread(task).start();
+            comboPersonnel.itemsProperty().bind(task.valueProperty());
+            task.setOnFailed(event -> {
+                logger.error(task.getException());
+                task.getException().printStackTrace();
+            });
+            comboPersonnel.setValue(ServiceproUtil.getLoggedUser().getPersonnel());
+        }
+
+        public Pair<String, Personnel> getData() {
+            if (txtLogin.getText() != null && !txtLogin.getText().isEmpty() && comboPersonnel.getValue() != null) {
+                return new Pair<>(txtLogin.getText(), comboPersonnel.getValue());
+            }
+            return null;
         }
     }
 }

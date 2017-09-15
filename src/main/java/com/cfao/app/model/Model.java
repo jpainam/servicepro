@@ -122,16 +122,12 @@ public class Model<T> {
     }
 
 
-    public boolean update(T type) {
+    public synchronized boolean update(T type) {
         Session session = getCurrentSession();
         try {
-            Transaction tx = session.beginTransaction();
+            session.beginTransaction();
             session.update(type);
-            /** Erreur lever par certain update q la session es deja close */
-            if (session.isOpen()) {
-                session.flush();
-                tx.commit();
-            }
+            session.getTransaction().commit();
             return true;
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);

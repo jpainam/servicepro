@@ -104,7 +104,6 @@ public class FormationCompetenceController extends AnchorPane implements Initial
     }
 
     public void buildTable() {
-        competenceTable.getItems().clear();
         if(formation == null)
             return;
         if(formation.getCompetences() != null) {
