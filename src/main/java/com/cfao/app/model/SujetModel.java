@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Sujet;
+import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -25,5 +26,21 @@ public class SujetModel extends Model<Sujet> {
             e.printStackTrace();
         }
         return false;
+    }
+    public Sujet getById(Integer identifier) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Sujet.class);
+            criteria.add(Restrictions.eq("idsujet", identifier));
+            return (Sujet) criteria.uniqueResult();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
     }
 }

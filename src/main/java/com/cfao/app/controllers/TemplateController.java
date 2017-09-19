@@ -52,8 +52,6 @@ import java.util.function.Consumer;
  * Created by JP on 6/9/2017.
  */
 public class TemplateController implements Initializable, Controller {
-
-    public static String jarName = "servicepro-1.0-SNAPSHOT.jar";
     @FXML
     public AnchorPane content;
     @FXML
@@ -345,6 +343,7 @@ public class TemplateController implements Initializable, Controller {
     public void importerBDAction(ActionEvent event) {
         try {
             LoginController.stopServiceNotification();
+            //LoginController.stopServicePlanification();
 
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Import Database");

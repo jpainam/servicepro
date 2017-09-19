@@ -133,7 +133,7 @@ public class QCMController implements Initializable {
         ButtonUtil.previous(btnPrevious);
         ButtonUtil.next(btnNext);
         ButtonUtil.add(btnNouveau);
-        titreColumn.setCellValueFactory(param -> param.getValue().titre());
+        titreColumn.setCellValueFactory(param -> param.getValue().titreProperty());
         typeColumn.setCellValueFactory(param -> new SimpleObjectProperty(param.getValue().getQcmType()));
         Model<Qcm> model = new Model<>("Qcm");
         model.getList();
@@ -244,7 +244,9 @@ public class QCMController implements Initializable {
             Model<Qcm> model = new Model<>("Qcm");
             Qcm qcm = new Qcm();
             qcm.setCompetences(selectedItems);
-            qcm.setBase(Integer.parseInt(txtBase.getText()));
+            if(!txtBase.getText().isEmpty()){
+                qcm.setBase(Integer.parseInt(txtBase.getText()));
+            }
             qcm.setTitre(txtTitre.getText());
             qcm.setQcmType(comboTypeTest.getValue());
             if (model.save(qcm)) {

@@ -14,7 +14,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.apache.log4j.Logger;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
@@ -35,6 +38,7 @@ import java.util.ResourceBundle;
  * Created by armel on 10/07/2017.
  */
 public class CiviliteProfilController extends AnchorPane implements Initializable {
+    static Logger logger = Logger.getLogger(CiviliteProfilController.class);
     /**
      * TableView des Profils d'une personne
      */
@@ -111,8 +115,8 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
                     List<PersonneCompetence> competenceList = profilPersonne.getPersonne().getPersonneCompetences();
                     List<Competence> competenceProfil = profilPersonne.getProfil().getCompetences();
                     ObservableList<PersonneCompetence> observableList = FXCollections.observableArrayList();
-                    for(PersonneCompetence pc : competenceList){
-                        if(competenceProfil.contains(pc.getCompetence())){
+                    for (PersonneCompetence pc : competenceList) {
+                        if (competenceProfil.contains(pc.getCompetence())) {
                             observableList.add(pc);
                         }
                     }
@@ -179,8 +183,26 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
     }
 
     public void deleteProfil(ActionEvent actionEvent) {
-        if (tableProfil.getSelectionModel().getSelectedItem() != null) {
-            tableProfil.getItems().remove(tableProfil.getSelectionModel().getSelectedItem());
+        ProfilPersonne profil = tableProfil.getSelectionModel().getSelectedItem();
+        if (profil != null) {
+            //tableProfil.getItems().remove(tableProfil.getSelectionModel().getSelectedItem());
+            personne.getProfilPersonnes().remove(profil);
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new Model<ProfilPersonne>("ProfilPersonne").delete(profil);
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    logger.error(task.getException());
+                    task.getException().printStackTrace();
+                }
+            });
+
         }
     }
 
@@ -190,7 +212,8 @@ public class CiviliteProfilController extends AnchorPane implements Initializabl
 
     public void buildProfil() {
         if (personne != null) {
-            tableProfil.setItems(FXCollections.observableArrayList(personne.getProfilPersonnes()));
+            //tableProfil.setItems(FXCollections.observableArrayList(personne.getProfilPersonnes()));
+            tableProfil.itemsProperty().bind(personne.profilPersonnesProperty());
         }
     }
 

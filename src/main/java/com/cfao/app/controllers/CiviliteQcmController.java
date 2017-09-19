@@ -4,7 +4,6 @@ import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.*;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +30,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
     public Button btnDeaffecterQcm;
     public Button btnAffecterQcm;
     public TableView<PersonneQcm> qcmTable;
-    public TableColumn<PersonneQcm, Qcm> titreColumn;
+    public TableColumn<PersonneQcm, String> titreColumn;
     public TableColumn<PersonneQcm, String> noteColumn;
     public TableColumn<PersonneQcm, LocalDate> dateQcmColumn;
     private Personne personne = null;
@@ -65,7 +64,7 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         ButtonUtil.plusIcon(btnAffecterQcm);
         ButtonUtil.minusIcon(btnDeaffecterQcm);
         ButtonUtil.print(btnPrint);
-        titreColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getQcm()));
+        titreColumn.setCellValueFactory(param -> param.getValue().getQcm().titreProperty());
         dateQcmColumn.setCellValueFactory(param -> param.getValue().dateqcmProperty());
         dateQcmColumn.setCellFactory(new DateTableCellFactory<PersonneQcm>());
         noteColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getNote() + " / " + param.getValue().getQcm().getBase()));
@@ -75,9 +74,10 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null || empty) {
-                        setGraphic(null);
+                        setText(null);
+                        //setGraphic(null);
                     } else {
-                        setGraphic(new Label(item));
+                        setText(item);
                     }
                 }
             };
@@ -99,15 +99,17 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         }
         qcmDiagram.setPersonne(personne);
         qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
-        qcmTable.setItems(FXCollections.observableArrayList(personne.getPersonneQcms()));
+        //System.out.println(personne.getPersonneQcms());
+        //qcmTable.setItems(FXCollections.observableArrayList(personne.getPersonneQcms()));
+        qcmTable.itemsProperty().bind(personne.personneQcmsProperty());
         analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(personne));
         qcmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null) {
+            if (newValue != null) {
                 analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(newValue.getQcm()));
                 competenceTable.itemsProperty().bind(newValue.getQcm().competenceListProperty());
-            }else{
+            } else {
                 analyseResultatBox.getChildren().clear();
-                competenceTable.getItems().clear();
+                //competenceTable.getItems().clear();
             }
         });
     }
@@ -169,28 +171,33 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
-                        System.out.println(personneQcm);
-                        return model.save(personneQcm);
+                        if (!personne.getPersonneQcms().contains(personneQcm)) {
+                            return model.save(personneQcm);
+                        } else {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertUtil.showWarningMessage("Attention",
+                                            personne.getNom() + " possède déjà une note pour le test " + personneQcm.getQcm().getTitre() +
+                                                    "\n Désaffecter lui ce test avant de l'ajouter de nouveau");
+                                }
+                            });
+                            return false;
+                        }
                     }
                 };
                 new Thread(task).start();
                 task.setOnSucceeded(event1 -> {
                     if (task.getValue()) {
-                        Platform.runLater(() -> {
-                            qcmTable.getItems().add(personneQcm);
-                            personne.setPersonneQcms(qcmTable.getItems());
+                        //qcmTable.getItems().add(personneQcm);
+                        //personne.setPersonneQcms(qcmTable.getItems());
+                        if (!personne.getPersonneQcms().contains(personneQcm)) {
+                            personne.getPersonneQcms().add(personneQcm);
                             qcmDiagramPane.getChildren().setAll(qcmDiagram.createChart());
                             ServiceproUtil.notify("Affectation Réussie");
-                        });
+                        }
 
                     } else {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ServiceproUtil.notify("Erreur d'ajout du test");
-                            }
-                        });
-
                     }
                 });
                 task.setOnFailed(event12 -> {

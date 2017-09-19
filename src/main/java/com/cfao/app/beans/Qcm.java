@@ -70,7 +70,7 @@ public class Qcm implements java.io.Serializable {
         this.titre.set(titre);
     }
 
-    public SimpleStringProperty titre() {
+    public SimpleStringProperty titreProperty() {
         return this.titre;
     }
 

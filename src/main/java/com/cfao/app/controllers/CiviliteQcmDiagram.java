@@ -84,7 +84,7 @@ public class CiviliteQcmDiagram {
         series.setName(qcm.getTitre());
         HashMap<Double, Double> map = new HashMap<>();
         for (PersonneQcm personneQcm : qcm.getPersonneQcms()) {
-            System.err.println(personneQcm.getNote() + "=" + personneQcm.getPersonne().getNom());
+            //System.err.println(personneQcm.getNote() + "=" + personneQcm.getPersonne().getNom());
             if (map.get(personneQcm.getNote()) != null) {
                 double n = map.get(personneQcm.getNote());
                 map.put(personneQcm.getNote(), ++n);

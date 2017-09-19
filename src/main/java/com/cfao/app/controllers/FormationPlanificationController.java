@@ -4,6 +4,8 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
+import com.cfao.app.model.SujetModel;
+import com.cfao.app.model.TacheModel;
 import com.cfao.app.reports.FormationExcel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
@@ -483,6 +485,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
                             "Vous pouvez créer un modèle de planification via le menu Paramètre");
                     return false;
                 }
+                new Model<Planification>("Planification").delete(formation.getPlanifications());
                 List<Planification> tmp = new ArrayList<>();
                 Iterator<PlanificationModele> iterator = modeles.iterator();
                 while (iterator.hasNext()) {
@@ -491,16 +494,21 @@ public class FormationPlanificationController extends AnchorPane implements Init
                     planification.setFait(false);
                     planification.setFormation(formation);
                     planification.setRemarque(modele.getRemarque());
-                    planification.setSujet(modele.getSujet());
-                    planification.setTaches(modele.getTaches());
+                    planification.setSujet(new SujetModel().getById(modele.getSujet().getIdsujet()));
+                    List<Tache> taches = new ArrayList<>();
+                    TacheModel tacheModel = new TacheModel();
+                    for(Tache t : modele.getTaches()){
+                        taches.add(tacheModel.getById(t.getIdtache()));
+                    }
+                    planification.setTaches(taches);
                     planification.setTiming(modele.getTiming());
                     planification.setResponsable(modele.getResponsable());
                     planification.setValidation(modele.getValidation());
                     tmp.add(planification);
+                    new Model<Planification>("Planification").save(planification);
                 }
                 formation.setPlanifications(tmp);
-                new Model<Formation>("Formation").update(formation);
-                //new Model<Planification>("Planification").saveOrUpdate(planification);
+                //new Model<Formation>("Formation").update(formation);
 
                 return true;
             }

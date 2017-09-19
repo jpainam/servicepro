@@ -80,7 +80,7 @@ public class ProfilAddEditController extends AnchorPane implements Initializable
         competenceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initComponents();
         ButtonUtil.cancel(btnAnnuler);
-        ButtonUtil.add(btnValider);
+        ButtonUtil.save(btnValider);
     }
 
     private void initComponents() {

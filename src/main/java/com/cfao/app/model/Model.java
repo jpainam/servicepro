@@ -234,5 +234,21 @@ public class Model<T> {
         }
         return rowsAffected;
     }
+    public List<Object[]> query(String req) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Query query = session.createSQLQuery(req);
+            return query.list();
+
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 
 }

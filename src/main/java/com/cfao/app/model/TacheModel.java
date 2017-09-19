@@ -1,6 +1,7 @@
 package com.cfao.app.model;
 
 import com.cfao.app.beans.Tache;
+import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -24,5 +25,22 @@ public class TacheModel extends Model<Tache> {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public Tache getById(Integer identifier) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Tache.class);
+            criteria.add(Restrictions.eq("idtache", identifier));
+            return (Tache) criteria.uniqueResult();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
     }
 }

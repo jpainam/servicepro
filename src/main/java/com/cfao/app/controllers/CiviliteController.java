@@ -159,7 +159,6 @@ public class CiviliteController implements Initializable {
                     task.setOnSucceeded(event -> {
                         if (task.getValue() != null) {
                             Personne p = task.getValue();
-                            System.err.println(p.getMatricule());
                             String matric = String.valueOf(Integer.parseInt(p.getMatricule().substring(3, p.getMatricule().length())) + 1);
                             matric = new String(new char[5 - matric.length()]).replace("\0", "0") + matric;
                             txtMatricule.setText(newValue.getIso() + "" + matric);

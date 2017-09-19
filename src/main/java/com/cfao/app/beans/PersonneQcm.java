@@ -73,9 +73,9 @@ public class PersonneQcm implements java.io.Serializable {
     public String toString() {
         return "PersonneQcm{" +
                 "id=" + id +
-                ", personne=" + personne.get() +
+                ", personne=" + personne.get().getNom() +
                 ", note=" + note +
-                ", qcm=" + qcm.get() +
+                ", qcm=" + qcm.get().getTitre() +
                 '}';
     }
 
@@ -129,6 +129,21 @@ public class PersonneQcm implements java.io.Serializable {
 
     public void setCreatedAt(Date createat) {
         this.createdAt.set(createat);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersonneQcm that = (PersonneQcm) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
 

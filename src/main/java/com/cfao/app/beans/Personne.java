@@ -385,7 +385,7 @@ public class Personne implements java.io.Serializable {
         return competenceList;
     }
 
-    @OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "personne")
     public List<PersonneQcm> getPersonneQcms() {
         return personneQcms.get();
     }

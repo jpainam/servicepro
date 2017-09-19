@@ -78,7 +78,7 @@ public class RapportControllerOld implements Initializable {
         nomPersonneColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getNom() + " " + param.getValue().getPrenom()));
         personneSocieteColumn.setCellValueFactory(param -> param.getValue().societe());
         titreFormationColumn.setCellValueFactory(param -> param.getValue().titreProperty());
-        titreQcmColumn.setCellValueFactory(param -> param.getValue().titre());
+        titreQcmColumn.setCellValueFactory(param -> param.getValue().titreProperty());
         Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
             @Override
             protected ObservableMap<String, ObservableList> call() throws Exception {
