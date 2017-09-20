@@ -102,14 +102,27 @@ public class CiviliteQcmController extends AnchorPane implements Initializable {
         //System.out.println(personne.getPersonneQcms());
         //qcmTable.setItems(FXCollections.observableArrayList(personne.getPersonneQcms()));
         qcmTable.itemsProperty().bind(personne.personneQcmsProperty());
+        qcmTable.getSelectionModel().selectFirst();
         analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(personne));
         qcmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(newValue.getQcm()));
-                competenceTable.itemsProperty().bind(newValue.getQcm().competenceListProperty());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        analyseResultatBox.getChildren().setAll(qcmDiagram.analyseResultChart(newValue.getQcm()));
+                        competenceTable.setItems(FXCollections.observableArrayList(newValue.getQcm().getCompetences()));
+                    }
+                });
+                //competenceTable.itemsProperty().bind(newValue.getQcm().competenceListProperty());
             } else {
-                analyseResultatBox.getChildren().clear();
-                //competenceTable.getItems().clear();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        analyseResultatBox.getChildren().clear();
+                        competenceTable.getItems().clear();
+                    }
+                });
+
             }
         });
     }

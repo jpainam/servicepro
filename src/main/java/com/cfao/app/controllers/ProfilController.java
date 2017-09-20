@@ -93,8 +93,8 @@ public class ProfilController implements Initializable {
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                System.err.println(task.getValue().size());
                 profilTable.setItems(task.getValue());
+                profilTable.getSelectionModel().selectFirst();
             }
         });
         /*task.setOnSucceeded(event -> {

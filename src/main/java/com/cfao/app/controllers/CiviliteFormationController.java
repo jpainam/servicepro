@@ -136,6 +136,7 @@ public class CiviliteFormationController extends AnchorPane implements Initializ
 
     public void buildFormation() {
         formationTable.itemsProperty().bind(personne.formationPersonnesProperty());
+        formationTable.getSelectionModel().selectFirst();
         //System.err.println(new FormationModel().getFormationsSouhaitees(personne));
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
             @Override

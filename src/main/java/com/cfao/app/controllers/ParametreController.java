@@ -1,6 +1,8 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.util.FXMLView;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -23,12 +25,14 @@ public class ParametreController implements Initializable{
     public static final int TAB_NIVEAUETUDE = 4;
     public static final int TAB_SECTION = 5;
     public static final int TAB_GROUPE = 6;
+    public static final int TAB_DOMAINE = 7;
 
 
     public Tab tabUtilsateur;
     //public Tab tabProfil;
     public Tab tabSociete;
     public Tab tabGroupe;
+    public Tab tabDomaine;
     //public Tab tabNiveauetude;
     public Tab tabSection;
     public TabPane tabPane;
@@ -48,6 +52,7 @@ public class ParametreController implements Initializable{
         tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
         tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
         tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
+        tabDomaine.setContent(getTabContent("/views/domaine/domaine.fxml"));
         //tabNiveauetude.setContent(getTabContent("/views/niveauetude/niveauetude.fxml"));
         singleSelectionModel = tabPane.getSelectionModel();
 
@@ -70,6 +75,7 @@ public class ParametreController implements Initializable{
         tabSection.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("section.icon")));
         tabSociete.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("societe.icon")));
         tabGroupe.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("groupe.icon")));
+        GlyphsDude.setIcon(tabDomaine, FontAwesomeIcon.DASHBOARD);
     }
     public Tab getActiveTab(){
         switch (activeTab){
@@ -79,6 +85,7 @@ public class ParametreController implements Initializable{
             //case TAB_PROFIL: return tabProfil;
             case TAB_SECTION: return tabSection;
             case TAB_SOCIETE: return tabSociete;
+            case TAB_DOMAINE: return tabDomaine;
         }
         return tabSociete;
     }

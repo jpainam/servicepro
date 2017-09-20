@@ -47,6 +47,7 @@ public class PersonnelController implements Initializable{
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
     public Personnel personnel = null;
+    public ComboBox<Personnel> comboPersonnel;
 
 
     private SearchBox searchBox = new SearchBox();
@@ -145,6 +146,7 @@ public class PersonnelController implements Initializable{
             map = task.getValue();
             personnelTable.getItems().setAll(map.get("personnel"));
             comboDomaines.getItems().setAll(map.get("domaine"));
+            comboPersonnel.setItems(map.get("personnel"));
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());

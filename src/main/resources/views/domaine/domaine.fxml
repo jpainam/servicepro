@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.DomaineController">
+   <children>
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Liste des domaines" />
+                  <TableView fx:id="domaineTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="libelleColumn" prefWidth="75.0" text="Libellé du domaine" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab text="Détails sur un domaine">
+                        <content>
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                      <items>
+                                        <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterAction" />
+                                          <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierAction" />
+                                          <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#supprimerAction" />
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="btnAnnuler" mnemonicParsing="false" onAction="#annulerAction" />
+                                      </items>
+                                    </ToolBar>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <VBox>
+                                             <children>
+                                                <Label text="Libellé du domaine" />
+                                                <TextField fx:id="txtLibelle" />
+                                             </children>
+                                          </VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label text="Personnels possédant ce domaine" />
+                                                <TableView fx:id="personnelTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                  <columns>
+                                                    <TableColumn fx:id="paysColumn" prefWidth="75.0" text="Pays" />
+                                                    <TableColumn fx:id="nomColumn" prefWidth="75.0" text="Noms et Prénoms" />
+                                                      <TableColumn fx:id="adresseColumn" prefWidth="75.0" text="Adresse" />
+                                                      <TableColumn fx:id="telephoneColumn" prefWidth="75.0" text="Téléphone" />
+                                                  </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </VBox>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

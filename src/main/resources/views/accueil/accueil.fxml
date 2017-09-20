@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -16,9 +17,21 @@
                      <children>
                         <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="lblNbCivilite" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="79.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités" />
-                               <Label contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #009ABF;" text="Plus d'info" />
+                              <Label fx:id="lblNbCivilite" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="79.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Civilités">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                               <Label contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" maxWidth="1.7976931348623157E308" onMouseClicked="#civiliteBoxNotification" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #009ABF;" text="Plus d'info">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Label>
                            </children>
                         </VBox>
                         <VBox layoutY="12.0" prefHeight="128.0" prefWidth="112.0" HBox.hgrow="ALWAYS">
@@ -44,9 +57,21 @@
                      <children>
                         <VBox alignment="BOTTOM_LEFT" layoutY="103.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="91.0">
                            <children>
-                              <Label fx:id="lblNbFormation" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations" />
-                               <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="85.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #008548;" text="Plus d'info" />
+                              <Label fx:id="lblNbFormation" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Formations">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                               <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#formationNotification" prefHeight="25.0" prefWidth="85.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #008548;" text="Plus d'info">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Label>
                            </children>
                         </VBox>
                         <VBox HBox.hgrow="ALWAYS">
@@ -79,9 +104,21 @@
                      <children>
                         <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="91.0">
                            <children>
-                              <Label fx:id="lblNbPlanification" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="100.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Planifications" />
-                               <Label layoutX="2.0" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #B13C2E;" text="Plus d'info" />
+                              <Label fx:id="lblNbPlanification" maxWidth="1.7976931348623157E308" prefHeight="0.0" prefWidth="86.0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" text="0">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="100.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Planifications">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                               <Label layoutX="2.0" layoutY="1.0" maxWidth="1.7976931348623157E308" onMouseClicked="#planificationNotification" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #B13C2E;" text="Plus d'info">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
 
                            </children>
                            <HBox.margin>
@@ -116,9 +153,21 @@
                      <children>
                         <VBox alignment="BOTTOM_LEFT" layoutY="101.0" maxWidth="1.7976931348623157E308" prefHeight="128.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="lblNbprofil" maxWidth="1.7976931348623157E308" prefHeight="3.0" prefWidth="79.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
-                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils" />
-                              <Label contentDisplay="CENTER" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #C37D0E;" text="Plus d'info" />
+                              <Label fx:id="lblNbprofil" maxWidth="1.7976931348623157E308" prefHeight="3.0" prefWidth="79.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;" text="0">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                              <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="145.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white;" text="Profils">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
+                              <Label contentDisplay="CENTER" layoutY="1.0" maxWidth="1.7976931348623157E308" onMouseClicked="#profilNotification" prefHeight="25.0" prefWidth="155.0" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F0F0F0; -fx-background-color: #C37D0E;" text="Plus d'info">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></Label>
                            </children>
                         </VBox>
                         <VBox layoutY="12.0" prefHeight="66.0" prefWidth="106.0" HBox.hgrow="ALWAYS">

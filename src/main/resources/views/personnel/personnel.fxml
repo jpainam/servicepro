@@ -32,71 +32,81 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </VBox>
-                <VBox prefHeight="200.0" prefWidth="100.0">
-                    <children>
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
-                            <items>
-                                <Button fx:id="btnPrintPersonnel" mnemonicParsing="false" onAction="#printPersonnelAction" />
-                                <Separator orientation="VERTICAL" />
-                                <Button fx:id="btnNouveauPersonnel" mnemonicParsing="false" onAction="#nouveauPersonnelAction" text="Nouveau/New" />
-                                <Button fx:id="btnModifierPersonnel" mnemonicParsing="false" onAction="#modifierPersonnelAction" text="Modifier/Edit" />
-                                <Separator orientation="VERTICAL" />
-                                <Button fx:id="btnSupprimerPersonnel" mnemonicParsing="false" onAction="#supprimerPersonnelAction" text="Supprimer/Delete" />
-                                <Button fx:id="btnAnnulerPersonnel" mnemonicParsing="false" onAction="#annulerPersonnelAction" text="Annuler/Cancel" />
-                            </items>
-                        </ToolBar>
-                        <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <HBox prefHeight="49.0" prefWidth="591.0" spacing="10.0">
-                                    <children>
-                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="92.0" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Label text="Nom" />
-                                                <TextField fx:id="txtNom" />
-                                            </children>
-                                        </VBox>
-                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Label text="Prénom" />
-                                                <TextField fx:id="txtPrenom" />
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </HBox>
-                                <HBox prefHeight="59.0" prefWidth="591.0" spacing="10.0">
-                                    <children>
-                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Label text="Adresse" />
-                                                <TextField fx:id="txtAdresse" />
-                                            </children>
-                                        </VBox>
-                                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Label text="Téléphone" />
-                                                <TextField fx:id="txtTelephone" />
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </HBox>
-                                <VBox fx:id="vBoxDomaine" prefHeight="99.0" prefWidth="591.0">
-                                    <children>
-                                        <Label text="Domaines" />
-                                    </children>
-                                </VBox>
-                            </children>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
-                            </padding>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                            <VBox.margin>
-                                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                            </VBox.margin>
-                        </VBox>
-                    </children>
-                </VBox>
+            <TabPane>
+               <tabs>
+                  <Tab closable="false" text="Détails sur le personnel">
+                     <content>
+                            <VBox prefHeight="200.0" prefWidth="100.0">
+                                <children>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                        <items>
+                                            <Button fx:id="btnPrintPersonnel" mnemonicParsing="false" onAction="#printPersonnelAction" />
+                                            <Separator orientation="VERTICAL" />
+                                            <Button fx:id="btnNouveauPersonnel" mnemonicParsing="false" onAction="#nouveauPersonnelAction" text="Nouveau/New" />
+                                            <Button fx:id="btnModifierPersonnel" mnemonicParsing="false" onAction="#modifierPersonnelAction" text="Modifier/Edit" />
+                                            <Separator orientation="VERTICAL" />
+                                            <Button fx:id="btnSupprimerPersonnel" mnemonicParsing="false" onAction="#supprimerPersonnelAction" text="Supprimer/Delete" />
+                                            <Button fx:id="btnAnnulerPersonnel" mnemonicParsing="false" onAction="#annulerPersonnelAction" text="Annuler/Cancel" />
+                                        </items>
+                                    </ToolBar>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                                        <children>
+                                            <HBox prefHeight="49.0" prefWidth="591.0" spacing="10.0">
+                                                <children>
+                                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="92.0" HBox.hgrow="ALWAYS">
+                                                        <children>
+                                                            <Label text="Nom" />
+                                                            <TextField fx:id="txtNom" />
+                                                        </children>
+                                                    </VBox>
+                                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                        <children>
+                                                            <Label text="Prénom" />
+                                                            <TextField fx:id="txtPrenom" />
+                                                        </children>
+                                                    </VBox>
+                                                </children>
+                                            </HBox>
+                                            <HBox prefHeight="59.0" prefWidth="591.0" spacing="10.0">
+                                                <children>
+                                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                        <children>
+                                                            <Label text="Adresse" />
+                                                            <TextField fx:id="txtAdresse" />
+                                                        </children>
+                                                    </VBox>
+                                                    <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                        <children>
+                                                            <Label text="Téléphone" />
+                                                            <TextField fx:id="txtTelephone" />
+                                                        </children>
+                                                    </VBox>
+                                                </children>
+                                            </HBox>
+                                            <VBox fx:id="vBoxDomaine" prefHeight="59.0" prefWidth="491.0">
+                                                <children>
+                                                    <Label text="Domaines" />
+                                                </children>
+                                            </VBox>
+                                    <CheckBox mnemonicParsing="false" text="Est n plus 1" />
+                                    <ComboBox fx:id="comboPersonnel" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="N+1" />
+                                        </children>
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                        </padding>
+                                        <opaqueInsets>
+                                            <Insets />
+                                        </opaqueInsets>
+                                        <VBox.margin>
+                                            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                                        </VBox.margin>
+                                    </VBox>
+                                </children>
+                            </VBox>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
             </items>
         </SplitPane>
     </children>

@@ -15,7 +15,9 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -146,6 +148,13 @@ public class CompetenceController implements Initializable{
             }
         };
         competenceTable.itemsProperty().bind(task.valueProperty());
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                competenceTable.getSelectionModel().selectFirst();
+
+            }
+        });
         ProgressIndicatorUtil.show(competenceStackPane, task);
         new Thread(task).start();
         Task<ObservableList<Niveau>> task1 = new Task<ObservableList<Niveau>>() {

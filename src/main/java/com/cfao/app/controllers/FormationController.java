@@ -188,7 +188,7 @@ public class FormationController implements Initializable {
         };
         ProgressIndicatorUtil.show(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
-        listeViewFormateurs.getItems().clear();
+        //listeViewFormateurs.getItems().clear();
         formationTable.setRowFactory((TableView<Formation> param) -> {
             final TableRow<Formation> row = new TableRow<>();
             final Tooltip tooltip = new Tooltip();
@@ -202,6 +202,18 @@ public class FormationController implements Initializable {
             return row;
         });
         new Thread(task).start();
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                formationTable.getSelectionModel().selectFirst();
+                fillFormationFields(formationTable.getSelectionModel().getSelectedItem());
+            }
+        });
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+            logger.error(task.getException());
+            AlertUtil.showSimpleAlert("Erreur", task.getException().getMessage());
+        });
     }
 
     private void fillFormationFields(Formation formation) {

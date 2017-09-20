@@ -144,6 +144,7 @@ public class QCMController implements Initializable {
             }
         };
         qcmTable.itemsProperty().bind(task.valueProperty());
+        task.setOnSucceeded(event -> qcmTable.getSelectionModel().selectFirst());
         ProgressIndicatorUtil.show(qcmStackPane, task);
         new Thread(task).start();
         task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));

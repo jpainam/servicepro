@@ -108,7 +108,11 @@ public class ListeInscriptionRapport extends ExcelRapport {
                 cell.setCellStyle(defaultStyle);
                 /** Type */
                 cell = row.createCell(col++);
-                cell.setCellValue(f.getTypeFormation().getLibelle());
+                if(f.getTypeFormation() != null) {
+                    cell.setCellValue(f.getTypeFormation().getLibelle());
+                }else{
+                    cell.setCellValue("");
+                }
                 cell.setCellStyle(defaultStyle);
                 /** Date */
                 cell = row.createCell(col++);

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.AccueilCiviliteBoxController">
+   <children>
+      <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Dossiers incomplets" />
+                  <TableView fx:id="dossierTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="numeroDossier" minWidth="25.0" prefWidth="25.0" text="N°" />
+                      <TableColumn fx:id="paysDossierColumn" prefWidth="75.0" text="Pays" />
+                      <TableColumn fx:id="nomDossierColumn" prefWidth="75.0" text="Noms et Prénoms" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="Attentes de certification" />
+                  <TableView fx:id="attenteTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="numeroAttente" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" text="N°" />
+                      <TableColumn fx:id="paysAttenteColumn" prefWidth="75.0" text="Pays" />
+                      <TableColumn fx:id="nomAttenteColumn" prefWidth="75.0" text="Noms et Prénoms" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

@@ -4,16 +4,22 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.reports.PrintCivilite;
+import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,7 +30,7 @@ import java.util.ResourceBundle;
  * Created by JP on 6/21/2017.
  */
 public class AccueilController implements Initializable {
-
+    static Logger logger = Logger.getLogger(AccueilController.class);
 
     public AnchorPane personneStatContent;
     public AccueilPersonneController personneController;
@@ -130,4 +136,25 @@ public class AccueilController implements Initializable {
     }
 
 
+    public void planificationNotification(MouseEvent mouseEvent) {
+
+    }
+
+    public void profilNotification(MouseEvent mouseEvent) {
+        StageManager.loadContent("/views/profil/profil.fxml");
+    }
+
+    public void formationNotification(MouseEvent mouseEvent) {
+    }
+
+    public void civiliteBoxNotification(MouseEvent mouseEvent) {
+        try {
+            Dialog dialog = DialogUtil.dialogTemplate("Ok", "Annuler");
+            dialog.getDialogPane().setContent(FXMLLoader.load(getClass().getResource("/views/accueil/civiliteBox.fxml")));
+            dialog.showAndWait();
+        } catch (Exception ex) {
+            logger.error(ex);
+            AlertUtil.showErrorMessage(ex);
+        }
+    }
 }

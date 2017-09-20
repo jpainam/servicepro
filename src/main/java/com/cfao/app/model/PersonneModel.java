@@ -1,14 +1,12 @@
 package com.cfao.app.model;
 
-import com.cfao.app.beans.CompetenceCertification;
-import com.cfao.app.beans.Pays;
-import com.cfao.app.beans.Personne;
-import com.cfao.app.beans.PersonneCompetence;
+import com.cfao.app.beans.*;
 import com.cfao.app.util.AlertUtil;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -97,9 +95,9 @@ public class PersonneModel extends Model<Personne> {
         Session session = getCurrentSession();
         try {
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(
-                    Restrictions.eq("competenceCertification.certification", "EN")
-            );
+            LogicalExpression log = Restrictions.or(Restrictions.eq("competenceCertification.certification", "EN"),
+                    Restrictions.eq("competenceCertification.certification", "AC"));
+            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(log);
             criteria.setProjection(Projections.countDistinct("personne"));
             Long count = (Long) criteria.uniqueResult();
             return count.intValue();
@@ -111,6 +109,26 @@ public class PersonneModel extends Model<Personne> {
             }
         }
         return 0;
+    }
+
+    public List<Personne> personneCompetenceEncours() {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            LogicalExpression log = Restrictions.or(Restrictions.eq("competenceCertification.certification", "EN"),
+                    Restrictions.eq("competenceCertification.certification", "AC"));
+            Criteria criteria = session.createCriteria(PersonneCompetence.class).add(log);
+            criteria.setProjection(Projections.distinct(Projections.property("personne")));
+            return criteria.list();
+        } catch (Exception ex) {
+            logger.error(ex);
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
     }
 
     public Integer countPersonnePassportNull() {
@@ -133,20 +151,38 @@ public class PersonneModel extends Model<Personne> {
         return 0;
     }
 
-    public Personne getLastPersonneByPays(Pays pays) {
+    public List<Personne> personnePassportNull() {
         Session session = getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             Criteria criteria = session.createCriteria(Personne.class).add(
-                Restrictions.eq("pays", pays)
+                    Restrictions.or(Restrictions.isNull("passport"), Restrictions.eq("passport", ""))
+            );
+            return criteria.list();
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public Personne getLastPersonneByPays(Pays pays) {
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Personne.class).add(
+                    Restrictions.eq("pays", pays)
             );
             criteria.addOrder(Order.desc("matricule"));
             criteria.setMaxResults(1);
-            return (Personne)criteria.uniqueResult();
-        }catch (Exception ex){
+            return (Personne) criteria.uniqueResult();
+        } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
-        }finally {
-            if(session.isOpen()){
+        } finally {
+            if (session.isOpen()) {
                 session.close();
             }
         }

@@ -37,6 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -97,7 +98,7 @@ public class CiviliteController implements Initializable {
 
     public TitledPane posteAccordeon;
     public TitledPane profilAccordeon;
-    public Accordion accordeon;
+    //public Accordion accordeon;
 
     public ObservableMap<String, ObservableList> map;
     public TextArea txtMemo;
@@ -133,7 +134,7 @@ public class CiviliteController implements Initializable {
         //searchLabelStat.textProperty().bind(new SimpleIntegerProperty(filteredList.size()).asString());
         hboxSearch.getChildren().setAll(new HBox(new Label("Civilité "), searchLabelStat), searchBox);
 
-        ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
+        //ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
         /*Platform.runLater(() -> {
             personneTable.requestFocus();
             if(personneTable.getItems().size() > 0) {
@@ -192,6 +193,13 @@ public class CiviliteController implements Initializable {
     }
 
     private void initComponents() {
+        /*ComboAutoCompletionUtil.autoCompleteComboBoxPlus(comboPays, (typedText, objectToCompare) -> {
+            if (typedText.toLowerCase().equals(objectToCompare.getNamefr())) {
+                System.err.println(typedText);
+                return true;
+            }
+            return false;
+        });*/
 
         comboLanguesParlees = new CheckComboBox(FXCollections.observableArrayList());
         comboLanguesParlees.setMaxWidth(Double.MAX_VALUE);
@@ -277,6 +285,11 @@ public class CiviliteController implements Initializable {
             comboContrat.setItems(map.get("contrat"));
             comboAmbition.setItems(map.get("ambition"));
             comboLangue.setItems(map.get("langue"));
+            List<String> data = new ArrayList<>();
+            for(Pays p : comboPays.getItems()) {
+                data.add(p.getNamefr());
+            }
+            new ComboAutoCompletionUtil<>(comboPays, data);
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
@@ -304,6 +317,8 @@ public class CiviliteController implements Initializable {
             sortedList.comparatorProperty().bind(personneTable.comparatorProperty());
             searchLabelStat.setText("(" + filteredList.size() + ")");
             personneTable.setItems(sortedList);
+            personneTable.getSelectionModel().selectFirst();
+
         });
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(p -> {
             if (newValue == null || newValue.isEmpty()) {
@@ -546,7 +561,8 @@ public class CiviliteController implements Initializable {
                     ServiceproUtil.setEditable(true, txtEmail, txtMatricule, txtMemo, txtNom, txtPrenom, txtTelephone, txtFonction);
                     ServiceproUtil.setDisable(true, btnNouveau, btnSuppr);
                     disableAllComponents(false);
-                    btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                    //btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                    ButtonUtil.save(btnModifier);
                     this.stateBtnModifier = 1;
                     profilController.setActive(true);
                     posteController.setActive(true);

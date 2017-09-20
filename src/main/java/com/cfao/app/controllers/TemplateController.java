@@ -206,6 +206,9 @@ public class TemplateController implements Initializable, Controller {
     public void sectionAction(ActionEvent actionEvent) {
         openParameterScene(ParametreController.TAB_SECTION);
     }
+    public void domaineAction(ActionEvent actionEvent){
+        openParameterScene(ParametreController.TAB_DOMAINE);
+    }
 
     public void planificationModeleAction(ActionEvent event) {
         try {
@@ -431,6 +434,10 @@ public class TemplateController implements Initializable, Controller {
             ex.printStackTrace();
         }
         stage.close();
+    }
+
+    public void showAccueil(MouseEvent mouseEvent) {
+        StageManager.loadContent("/views/accueil/accueil.fxml");
     }
 
     class ChangePassword {

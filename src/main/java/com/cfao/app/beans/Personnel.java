@@ -21,6 +21,7 @@ public class Personnel implements java.io.Serializable {
     private SimpleStringProperty prenom = new SimpleStringProperty();
     private SimpleStringProperty adresse = new SimpleStringProperty();
     private SimpleStringProperty telephone = new SimpleStringProperty();
+    private SimpleObjectProperty<Pays> pays = new SimpleObjectProperty<>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<Domaine> domaines = new SimpleListProperty<>();
 
@@ -126,6 +127,33 @@ public class Personnel implements java.io.Serializable {
 
     public void setDomaines(List<Domaine> domaines) {
         this.domaines.set(FXCollections.observableArrayList(domaines));
+    }
+
+    public SimpleStringProperty nomProperty() {
+        return nom;
+    }
+
+    public SimpleStringProperty adresseProperty() {
+        return adresse;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "PAYS")
+    public Pays getPays() {
+        return pays.get();
+    }
+
+    public SimpleObjectProperty<Pays> paysProperty() {
+        return pays;
+    }
+
+    public void setPays(Pays pays) {
+        this.pays.set(pays);
+    }
+
+    public SimpleStringProperty telephoneProperty() {
+        return telephone;
     }
 }
 

@@ -54,6 +54,7 @@
                                         <MenuItem mnemonicParsing="false" onAction="#groupeAction" text="Gestion des Groupes" />
                                         <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
                                         <MenuItem mnemonicParsing="false" onAction="#planificationModeleAction" text="Modèle de planification" />
+                              <MenuItem mnemonicParsing="false" onAction="#domaineAction" text="Gestion des Domaines" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="_?">
@@ -105,10 +106,13 @@
                                     <items>
                                         <VBox prefHeight="633.0" prefWidth="103.0" style="-fx-background-color: white;" SplitPane.resizableWithParent="false">
                                             <children>
-                                          <ImageView fx:id="cfaoLogo" fitHeight="87.0" fitWidth="117.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
+                                          <ImageView fx:id="cfaoLogo" fitHeight="87.0" fitWidth="117.0" onMouseClicked="#showAccueil" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </ImageView>
                                                 <StackPane fx:id="shortcutContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="546.0" prefWidth="84.0" VBox.vgrow="ALWAYS">
                                                     <children>
