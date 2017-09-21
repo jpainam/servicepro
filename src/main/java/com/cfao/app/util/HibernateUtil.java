@@ -39,7 +39,7 @@ public class HibernateUtil {
                 @Override
                 public void run() {
                     Notifications.create().title("Connexion à la Base de données")
-                            .text("Impossible d'ouvrir une connexion à la Base de données ").showError();
+                    .text("Impossible d'ouvrir une connexion à la Base de données ").showError();
                     AlertUtil.showErrorMessage(ex);
                 }
             });

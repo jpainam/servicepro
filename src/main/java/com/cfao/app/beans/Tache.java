@@ -93,6 +93,11 @@ public class Tache implements java.io.Serializable {
     public SimpleStringProperty libelleProperty() {
         return libelle;
     }
+
+    @Override
+    public String toString(){
+        return this.getLibelle();
+    }
 }
 
 

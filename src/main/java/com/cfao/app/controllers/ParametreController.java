@@ -49,7 +49,7 @@ public class ParametreController implements Initializable{
         //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         setTabIcon();
         tabSociete.setContent(getTabContent(FXMLView.SOCIETE.getFXMLFile()));
-        tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
+        //tabUtilsateur.setContent(getTabContent(FXMLView.USER.getFXMLFile()));
         tabGroupe.setContent(getTabContent(FXMLView.GROUPE.getFXMLFile()));
         tabSection.setContent(getTabContent(FXMLView.SECTION.getFXMLFile()));
         tabDomaine.setContent(getTabContent("/views/domaine/domaine.fxml"));
@@ -69,7 +69,7 @@ public class ParametreController implements Initializable{
         return null;
     }
     public void setTabIcon(){
-        tabUtilsateur.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("utilisateur.icon")));
+        //tabUtilsateur.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("utilisateur.icon")));
         //tabProfil.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("profil.icon")));
         //tabNiveauetude.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("niveauetude.icon")));
         tabSection.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("section.icon")));
@@ -79,7 +79,7 @@ public class ParametreController implements Initializable{
     }
     public Tab getActiveTab(){
         switch (activeTab){
-            case TAB_UTILISATEUR: return tabUtilsateur;
+            //case TAB_UTILISATEUR: return tabUtilsateur;
             case TAB_GROUPE: return tabGroupe;
             //case TAB_NIVEAUETUDE: return tabNiveauetude;
             //case TAB_PROFIL: return tabProfil;

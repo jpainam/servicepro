@@ -103,6 +103,9 @@
         <mapping class="com.cfao.app.beans.Planification" />
         <mapping class="com.cfao.app.beans.PlanificationModele" />
 
+        <mapping class="com.cfao.app.beans.SupportCompetence" />
+        <mapping class="com.cfao.app.beans.SupportCompetenceId" />
+
 
 
           </session-factory>

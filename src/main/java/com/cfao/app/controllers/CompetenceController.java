@@ -66,8 +66,10 @@ public class CompetenceController implements Initializable{
     public CheckBox chkConnaissance;
     public int stateBtnModifier = 0;
     public int stateBtnAjouter = 0;
+    public VBox vboxSupport;
 
     CompetencePersonneController personneController;
+    CompetenceSupportController supportController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,7 +87,9 @@ public class CompetenceController implements Initializable{
         ServiceproUtil.setEditable(false, txtLibelleCompetence);
         ServiceproUtil.setDisable(true,chkCompetence,chkConnaissance, comboNiveau);
         personneController = new CompetencePersonneController();
+        supportController = new CompetenceSupportController();
         competenceTabPersonne.setContent(personneController);
+        vboxSupport.getChildren().setAll(supportController);
         ButtonUtil.detailsTab(competenceTabDetails);
         GlyphsDude.setIcon(competenceTabPersonne, FontAwesomeIcon.USERS);
         HBox.setHgrow(searchBox, Priority.ALWAYS);
@@ -186,7 +190,9 @@ public class CompetenceController implements Initializable{
 
     private  void buildPersonneTable(Competence competence){
         personneController.setCompetence(competence);
+        supportController.setCompetence(competence);
         personneController.buildTable();
+        supportController.buildTable();
     }
     public void clickNouveau(ActionEvent actionEvent) {
         if(stateBtnAjouter == 0) {

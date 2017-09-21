@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.*;
 
 /**
@@ -105,6 +106,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
             }, cell.emptyProperty(), cell.indexProperty()));
             return cell;
         });
+        Period p;
+
         commentaireColumn.setCellValueFactory(param -> param.getValue().commentaireProperty());
         remarqueColumn.setCellValueFactory(param -> param.getValue().remarqueProperty());
         validationColumn.setCellValueFactory(param -> param.getValue().validation());
@@ -246,6 +249,20 @@ public class FormationPlanificationController extends AnchorPane implements Init
             //planificationTable.setItems(FXCollections.observableArrayList(formation.getPlanifications()));
             planificationTable.itemsProperty().bind(formation.planificationsProperty());
         //}
+        planificationTable.setRowFactory(param -> {
+            final TableRow<Planification> row = new TableRow<>();
+            final ContextMenu rowMenu = new ContextMenu();
+            MenuItem alertMenu = new MenuItem("Activer/Désactiver l'alerte");
+            GlyphsDude.setIcon(alertMenu, FontAwesomeIcon.INFO);
+            alertMenu.setOnAction(event -> activerAlerte(row.getItem()));
+            rowMenu.getItems().addAll(alertMenu);
+            // only display context menu for non-null items:
+            row.contextMenuProperty().bind(
+                    Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                            .then(rowMenu)
+                            .otherwise((ContextMenu) null));
+            return row;
+        });
     }
 
     public void ajouterAction(ActionEvent event) {
@@ -504,6 +521,7 @@ public class FormationPlanificationController extends AnchorPane implements Init
                     planification.setTiming(modele.getTiming());
                     planification.setResponsable(modele.getResponsable());
                     planification.setValidation(modele.getValidation());
+                    planification.setAlert(true);
                     tmp.add(planification);
                     new Model<Planification>("Planification").save(planification);
                 }
@@ -523,7 +541,14 @@ public class FormationPlanificationController extends AnchorPane implements Init
             ServiceproUtil.notify("Planification générée avec succès");
         });
 
-
+    }
+    private void activerAlerte(Planification planification){
+        if(planification.isAlert()){
+            planification.setAlert(false);
+        }else{
+            planification.setAlert(true);
+        }
+        new Model<Planification>("Planification").update(planification);
     }
 
 }

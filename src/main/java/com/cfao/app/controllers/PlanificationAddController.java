@@ -181,6 +181,7 @@ public class PlanificationAddController extends AnchorPane implements Initializa
             planification.setTiming(comboTiming.getValue());
             planification.setSujet(comboSujet.getValue());
             planification.setFait(false);
+            planification.setAlert(true);
             planification.setResponsable(comboResponsable.getValue());
             planification.setValidation(comboValidation.getValue());
             planification.setRemarque(txtRemarque.getText());

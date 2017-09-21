@@ -73,6 +73,7 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
+                              <Slider blockIncrement="1.0" min="-100.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                               <Label fx:id="Documents" text="Documents" />
                               <VBox fx:id="vboxDocument" prefHeight="52.0" prefWidth="338.0" />
                            </children>

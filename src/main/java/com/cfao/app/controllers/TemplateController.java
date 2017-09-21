@@ -13,6 +13,7 @@ import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -346,7 +347,7 @@ public class TemplateController implements Initializable, Controller {
     public void importerBDAction(ActionEvent event) {
         try {
             LoginController.stopServiceNotification();
-            //LoginController.stopServicePlanification();
+            LoginController.stopServicePlanification();
 
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Import Database");
@@ -402,6 +403,9 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void quitterAction(ActionEvent event) {
+        Main.tray.remove(Main.trayIcon);
+        Platform.exit();
+        System.exit(0);
     }
 
     public void miseAjourAction(ActionEvent event) {

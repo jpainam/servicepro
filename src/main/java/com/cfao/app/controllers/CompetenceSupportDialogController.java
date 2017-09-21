@@ -26,10 +26,7 @@ import java.net.URL;
 import java.nio.file.*;
 import java.util.ResourceBundle;
 
-/**
- * Created by JP on 7/11/2017.
- */
-public class FormationSupportDialogController extends AnchorPane implements Initializable {
+public class CompetenceSupportDialogController extends AnchorPane implements Initializable {
     public Label fileStatus;
     public TableColumn<Support, String> codeSupportColumn;
     public TableColumn<Support, String> titreSupportColumn;
@@ -39,9 +36,9 @@ public class FormationSupportDialogController extends AnchorPane implements Init
     public TextField txtTitreSupport;
     private String destination = null;
 
-    public FormationSupportDialogController() {
+    public CompetenceSupportDialogController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/addSupportDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/competence/addSupportDialog.fxml"));
             loader.setRoot(this);
             loader.setController(this);
             loader.load();

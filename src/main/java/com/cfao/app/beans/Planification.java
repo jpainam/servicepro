@@ -32,6 +32,9 @@ public class Planification implements java.io.Serializable {
     private StringProperty remarque = new SimpleStringProperty();
     private StringProperty commentaire = new SimpleStringProperty();
 
+    private IntegerProperty duration = new SimpleIntegerProperty(0);
+    private BooleanProperty alert = new SimpleBooleanProperty();
+
 
     public Planification() {
     }
@@ -160,7 +163,7 @@ public class Planification implements java.io.Serializable {
     }
 
     public void setValidation(UserProfil validation) {
-        if(validation != null) {
+        if (validation != null) {
             this.validation.set(validation);
         }
     }
@@ -217,6 +220,38 @@ public class Planification implements java.io.Serializable {
 
     public ListProperty<Document> documents() {
         return documents;
+    }
+
+    @Column(name = "ALERT", length = 1, columnDefinition = "boolean default true")
+    public boolean isAlert() {
+        return alert.get();
+    }
+
+    public BooleanProperty alertProperty() {
+        return alert;
+    }
+
+    public void setAlert(Boolean alert) {
+        this.alert.set(alert);
+    }
+
+    @Transient
+    public int getDuration() {
+        return duration.get();
+    }
+
+    public IntegerProperty durationProperty() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration.set(duration);
+    }
+
+
+    @Override
+    public String toString(){
+        return this.getSujet() + " " + this.getTaches();
     }
 }
 

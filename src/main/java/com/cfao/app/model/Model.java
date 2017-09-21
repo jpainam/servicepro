@@ -122,12 +122,13 @@ public class Model<T> {
     }
 
 
-    public synchronized boolean update(T type) {
+    public boolean update(T type) {
         Session session = getCurrentSession();
         try {
-            session.beginTransaction();
+            Transaction tx = session.beginTransaction();
             session.update(type);
-            session.getTransaction().commit();
+            session.flush();
+            tx.commit();
             return true;
         } catch (Exception ex) {
             AlertUtil.showErrorMessage(ex);
@@ -156,12 +157,11 @@ public class Model<T> {
         }
         return false;
     }
-
     public boolean delete(List<T> objects) {
         Session session = getCurrentSession();
         try {
             Transaction tx = session.beginTransaction();
-            for (T t : objects) {
+            for(T t : objects) {
                 session.delete(t);
             }
             tx.commit();
@@ -227,13 +227,15 @@ public class Model<T> {
         } catch (Exception e) {
             logger.error(e);
             AlertUtil.showErrorMessage(e);
-        } finally {
-            if (s.isOpen()) {
+        }finally {
+            if(s.isOpen()){
                 s.close();
             }
         }
         return rowsAffected;
     }
+
+
     public List<Object[]> query(String req) {
         Session session = getCurrentSession();
         try {
@@ -250,5 +252,8 @@ public class Model<T> {
         }
         return null;
     }
+
+
+
 
 }

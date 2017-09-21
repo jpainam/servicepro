@@ -7,7 +7,6 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.*?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.SectionController">
     <children>
@@ -37,7 +36,7 @@
                     <children>
                         <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                             <tabs>
-                                <Tab text="Détails des sections">
+                                <Tab closable="false" text="Détails des sections">
                                     <content>
                                         <VBox layoutY="-445.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="705.0">
                                             <children>
@@ -47,7 +46,7 @@
                                                         <Button fx:id="btnNext" mnemonicParsing="false" styleClass="onlyIcon" />
                                                         <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="onlyIcon" />
                                                         <Separator orientation="VERTICAL" />
-                                                        <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
+                                                        <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" text="Nouveau/New" textFill="#1a1a1b" />
                                                         <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
                                                         <Separator orientation="VERTICAL" />
                                                         <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#clickSupprimer" styleClass="actionButton" text="Supprimer/Delete" />

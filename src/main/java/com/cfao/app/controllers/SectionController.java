@@ -3,6 +3,7 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.Section;
 import com.cfao.app.model.SectionModel;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.SearchBox;
 import com.cfao.app.util.ServiceproUtil;
 import javafx.beans.value.ChangeListener;
@@ -34,6 +35,9 @@ public class SectionController implements Initializable {
     public TextField txtLibelle;
     public Button btnAnnuler;
     public ListView<Section> sectionListView;
+    public Button btnPrevious;
+    public Button btnNext;
+    public Button btnPrint;
     private SearchBox searchBox = new SearchBox();
     public int stateBtnNouveau = 0;
     public int stateBtnModifier = 0;
@@ -45,6 +49,13 @@ public class SectionController implements Initializable {
     }
 
     private void initiComponents() {
+        ButtonUtil.cancel(btnAnnuler);
+        ButtonUtil.edit(btnModifier);
+        ButtonUtil.add(btnNouveau);
+        ButtonUtil.print(btnPrint);
+        ButtonUtil.next(btnNext);
+        ButtonUtil.delete(btnSupprimer);
+        ButtonUtil.previous(btnPrevious);
         Label label = new Label("Sections : ");
         HBox.setHgrow(searchBox, Priority.ALWAYS);
         searchBox.setMaxWidth(Double.MAX_VALUE);
@@ -58,7 +69,7 @@ public class SectionController implements Initializable {
         sectionListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Section>() {
             @Override
             public void changed(ObservableValue<? extends Section> observable, Section oldValue, Section newValue) {
-                if(sectionListView.getSelectionModel().getSelectedItem() != null){
+                if (sectionListView.getSelectionModel().getSelectedItem() != null) {
                     Section section = sectionListView.getSelectionModel().getSelectedItem();
                     txtLibelle.setText(section.getLibelle());
                 }
@@ -77,16 +88,16 @@ public class SectionController implements Initializable {
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
-        btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+        ButtonUtil.edit(btnModifier);
         ServiceproUtil.setDisable(true, btnModifier);
         if (stateBtnNouveau == 0) {
             ServiceproUtil.emptyFields(txtLibelle);
             ServiceproUtil.setEditable(true, txtLibelle);
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+            ButtonUtil.save(btnNouveau);
             stateBtnNouveau = 1;
         } else {
             stateBtnNouveau = 0;
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
+            ButtonUtil.add(btnNouveau);
             ServiceproUtil.setDisable(false, btnModifier);
             if (!txtLibelle.getText().isEmpty()) {
                 Section section = new Section();
@@ -105,15 +116,15 @@ public class SectionController implements Initializable {
 
     public void clickModifier(ActionEvent actionEvent) {
         if (sectionListView.getSelectionModel().getSelectedItem() != null) {
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
+            ButtonUtil.add(btnNouveau);
             ServiceproUtil.setDisable(true, btnNouveau);
             if (stateBtnModifier == 0) {
                 stateBtnModifier = 1;
                 ServiceproUtil.setEditable(true, txtLibelle);
-                btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                ButtonUtil.save(btnModifier);
             } else {
                 stateBtnModifier = 0;
-                btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+                ButtonUtil.edit(btnModifier);
                 ServiceproUtil.setDisable(false, btnNouveau);
                 ServiceproUtil.setEditable(false, txtLibelle);
                 Section section = sectionListView.getSelectionModel().getSelectedItem();

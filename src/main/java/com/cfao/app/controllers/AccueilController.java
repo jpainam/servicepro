@@ -1,13 +1,16 @@
 package com.cfao.app.controllers;
 
+import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
+import com.cfao.app.beans.Planification;
 import com.cfao.app.model.PersonneModel;
 import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -16,13 +19,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.Lighting;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
 
+import java.awt.*;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -58,6 +70,43 @@ public class AccueilController implements Initializable {
         personneController = new AccueilPersonneController();
         personneStatContent.getChildren().setAll(personneController);
         notificationUpdate();
+        notificationPlanificationUpdate();
+
+        Slider slider=new Slider();
+        slider.setMin(0.0);
+        slider.setMax(10.0);
+        slider.setMinWidth(30);
+        slider.setMaxWidth(Double.MAX_VALUE);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(59);
+        slider.setBlockIncrement(1.0);
+        slider.setId("ControlSlider");
+        slider.setEffect(new Lighting());
+
+        HBox.setHgrow(slider, Priority.ALWAYS);
+        //setTimeSlider(TimeUnit.MINUTES);
+        slider.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                //logger.debug("Slider Value:" +slider.getValue());
+                //syncSliderToTimeline(slider.getValue());
+                System.err.println(slider.getValue());
+            }
+        });
+        slider.setLabelFormatter(new StringConverter<Double>() {
+            @Override
+            public String toString(Double n) {
+                if (n < 60) return ""+n.intValue();
+                Double d=new Double(n/60);
+                return ""+d.intValue();
+            }
+
+            @Override
+            public Double fromString(String s) {
+                return new Double(s);
+            }
+        });
     }
 
     private void notificationUpdate() {
@@ -157,4 +206,74 @@ public class AccueilController implements Initializable {
             AlertUtil.showErrorMessage(ex);
         }
     }
+    private void notificationPlanificationUpdate() {
+        System.err.println("Je commence");
+        if(LoginController.servicePlanification != null) {
+            LoginController.servicePlanification.setOnSucceeded(event -> {
+                ArrayList<ObservableList<Planification>> array = LoginController.servicePlanification.getValue();
+                ObservableList<Planification> planif1 = array.get(0);
+                ObservableList<Planification> planif2 = array.get(1);
+                ObservableList<Planification> planif3 = array.get(2);
+                ObservableList<Planification> planif4 = array.get(3);
+
+                if (!planif1.isEmpty()) {
+                    for (Planification planification : planif1) {
+                        Platform.runLater(() -> {
+                            System.out.println(planification.getSujet().getLibelle());
+                        });
+                    }
+                }
+
+                if (!planif2.isEmpty()) {
+                    for (Planification planification : planif2) {
+                        Platform.runLater(() -> {
+                            System.out.println(planification.getSujet().getLibelle());
+                        });
+                    }
+                }
+                if (!planif3.isEmpty()) {
+
+                    for (Planification planification : planif3) {
+                        Platform.runLater(() -> {
+                            System.out.println(planification.getSujet().getLibelle());
+                        });
+                    }
+
+                }
+
+                if (!planif4.isEmpty()) {
+                    for (Planification planification : planif4) {
+                        Platform.runLater(() -> {
+                            System.out.println(planification.getSujet().getLibelle());
+                        });
+                    }
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                        iconView.setFill(Color.YELLOW);
+                        iconView.setGlyphSize(30);*/
+                        DateFormat timeFormat = SimpleDateFormat.getTimeInstance();
+                        Main.trayIcon.displayMessage(
+                                "Sujet : Envoi des lettre",
+                                "Taches : Réception, compilation des réponses\n" +
+                                        "Emission lettres d'invitation\n" +
+                                        "Envoi des lettres d'invitation et confirmation de réservation d'hôtel"
+                                        + timeFormat.format(new Date()),
+                                TrayIcon.MessageType.INFO
+                        );
+                        /*Notifications.create().title().graphic(iconView)
+                                .text("Réception, compilation des réponses\n" +
+                                        "Emission lettres d'invitation\n" +
+                                        "Envoi des lettres d'invitation et confirmation de réservation d'hôtel").show();*/
+                    }
+                });
+            });
+        }
+        LoginController.servicePlanification.setOnFailed(event -> {
+            System.out.println(event.getSource().getMessage());
+        });
+    }
+
 }

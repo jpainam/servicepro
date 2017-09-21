@@ -8,6 +8,8 @@ import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.Constante;
 import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -25,7 +27,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
+import java.math.BigInteger;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 
@@ -38,7 +43,8 @@ public class LoginController implements Initializable {
     public Label errorLabel;
     public VBox connexionPane;
     public StackPane loadingStackContainer;
-    public static ScheduledService<ArrayList<Map<String,String>>> serviceNotification;
+    public static ScheduledService<ArrayList<Map<String, String>>> serviceNotification;
+    public static ScheduledService<ArrayList<ObservableList<Planification>>> servicePlanification;
 
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,6 +88,7 @@ public class LoginController implements Initializable {
                     ServiceproUtil.setLoggedTime(Calendar.getInstance());
                     try {
                         startServiceNotification();
+                        startServicePlanification();
                         new Main().start(new Stage());
                         stage.close();
                     } catch (Exception ex) {
@@ -124,12 +131,12 @@ public class LoginController implements Initializable {
     }
 
     private void startServiceNotification() {
-        serviceNotification = new ScheduledService<ArrayList<Map<String,String>>>() {
+        serviceNotification = new ScheduledService<ArrayList<Map<String, String>>>() {
             @Override
-            protected Task <ArrayList<Map<String,String>>> createTask() {
-                return new Task<ArrayList<Map<String,String>>>() {
+            protected Task<ArrayList<Map<String, String>>> createTask() {
+                return new Task<ArrayList<Map<String, String>>>() {
                     @Override
-                    protected ArrayList<Map<String,String>> call() throws Exception {
+                    protected ArrayList<Map<String, String>> call() throws Exception {
                         ArrayList<Map<String, String>> listMap = new ArrayList<>();
                         listMap.add(buildMapCivilite());
                         listMap.add(buildMapFormation());
@@ -141,24 +148,24 @@ public class LoginController implements Initializable {
                 };
             }
 
-            private Map<String,String> buildMapProfil() {
+            private Map<String, String> buildMapProfil() {
                 Map<String, String> labelsProfil = new HashMap<>();
                 ProfilModel profilModel = new ProfilModel();
                 labelsProfil.put("info1", String.valueOf(profilModel.getList().size()));
                 labelsProfil.put("nbCompetence", new CompetenceModel().getList().size() + "");
-                labelsProfil.put("nbNiveau",new Model<>("Niveau").getList().size() + "");
+                labelsProfil.put("nbNiveau", new Model<>("Niveau").getList().size() + "");
                 labelsProfil.put("nbTest", new Model<>("Qcm").getList().size() + "");
                 return labelsProfil;
             }
 
-            private Map<String,String> buildMapFormateur() {
+            private Map<String, String> buildMapFormateur() {
                 Map<String, String> labelsformateur = new HashMap<>();
                 PersonnelModel personnelModel = new PersonnelModel();
                 labelsformateur.put("info1", String.valueOf(personnelModel.countFormateurs()));
                 return labelsformateur;
             }
 
-            private Map<String,String> buildMapFormation() {
+            private Map<String, String> buildMapFormation() {
                 Map<String, String> labelsformation = new HashMap<>();
                 FormationModel formationModel = new FormationModel();
                 labelsformation.put("info1", String.valueOf(formationModel.getList().size()));
@@ -168,7 +175,7 @@ public class LoginController implements Initializable {
                 return labelsformation;
             }
 
-            private Map<String,String> buildMapPlanification() {
+            private Map<String, String> buildMapPlanification() {
                 Map<String, String> labelsPlanifications = new HashMap<>();
                 Model<Planification> model = new Model<>("Planification");
                 labelsPlanifications.put("info1", String.valueOf(model.getList().size()));
@@ -176,7 +183,7 @@ public class LoginController implements Initializable {
                 return labelsPlanifications;
             }
 
-            private Map<String,String> buildMapCivilite() {
+            private Map<String, String> buildMapCivilite() {
                 Map<String, String> labelsCivilite = new HashMap<>();
                 PersonneModel personneModel = new PersonneModel();
                 // Nbre de civilite
@@ -198,8 +205,89 @@ public class LoginController implements Initializable {
     }
 
 
-
-    public static void stopServiceNotification(){
+    public static void stopServiceNotification() {
         serviceNotification.cancel();
     }
+
+    public void startServicePlanification() {
+        ResourceBundle resource = ResourceBundle.getBundle("Bundle");
+        servicePlanification = new ScheduledService<ArrayList<ObservableList<Planification>>>() {
+            @Override
+            protected Task<ArrayList<ObservableList<Planification>>> createTask() {
+                return new Task<ArrayList<ObservableList<Planification>>>() {
+                    @Override
+                    protected ArrayList<ObservableList<Planification>> call() throws Exception {
+
+                        ArrayList<ObservableList<Planification>> array = new ArrayList<>();
+                        PlanificationModel model = new PlanificationModel();
+                        ObservableList<Planification> list1, list2, list3, list4, planifications;
+                        list1 = FXCollections.observableArrayList();
+                        list2 = FXCollections.observableArrayList();
+                        list3 = FXCollections.observableArrayList();
+                        list4 = FXCollections.observableArrayList();
+                        planifications = FXCollections.observableList(new PlanificationModel().getListToAlert());
+
+                        for (Planification p : planifications) {
+                            LocalDate dateDebFormation = new java.sql.Date(p.getFormation().getDatedebut().getTime()).toLocalDate();
+                            LocalDate dateFinFormation = new java.sql.Date(p.getFormation().getDatefin().getTime()).toLocalDate();
+                            LocalDate dateactuel = LocalDate.now();
+                            int timing = p.getTiming();
+                            int timeAlert = Integer.valueOf(resource.getString("planification.alertTime"));
+                            if (timing > 0) {
+                                if ((Period.between(dateactuel, dateDebFormation).getDays() - timing) >= 0) {
+                                    p.setDuration((Period.between(dateDebFormation, dateactuel).getDays() + timing));
+                                    list1.add(p);
+                                }
+                                if (((Period.between(dateactuel, dateDebFormation).getDays() - timing) > (-timeAlert)) &&
+                                        (Period.between(dateactuel, dateDebFormation).getDays() - timing) <= 0) {
+                                    p.setDuration(Math.abs((Period.between(dateactuel, dateDebFormation).getDays() - timing)));
+                                    list2.add(p);
+                                }
+                            }
+                            if (timing < 0) {
+                                if (((Period.between(dateDebFormation, dateactuel).getDays() + timing) <= 0) &&
+                                        (Period.between(dateFinFormation, dateactuel).getDays() >= 0)) {
+                                    p.setDuration(Math.abs((Period.between(dateDebFormation, dateactuel).getDays() + timing)));
+                                    list3.add(p);
+                                }
+                                if (((Period.between(dateDebFormation, dateactuel).getDays() + timing) >= 0) &&
+                                        (Period.between(dateFinFormation, dateactuel).getDays() + timing) > timeAlert) {
+                                    p.setDuration((Period.between(dateDebFormation, dateactuel).getDays() + timing));
+                                    list4.add(p);
+                                }
+
+                            }
+                        }
+
+                        array.add(list1);
+                        array.add(list2);
+                        array.add(list3);
+                        array.add(list4);
+                        return array;
+                    }
+
+                    private void fillObservableList(ObservableList<Planification> planif, ObservableList list, PlanificationModel model) {
+                        Iterator iterator = list.iterator();
+                        while (iterator.hasNext()) {
+                            Object[] tab = (Object[]) iterator.next();
+                            Planification tmp = model.getById((int) tab[0]);
+                            BigInteger i = (BigInteger) tab[tab.length - 1];
+                            tmp.setDuration(i.intValue());
+                            planif.add(tmp);
+                        }
+                    }
+                };
+            }
+        };
+        servicePlanification.setPeriod(Duration.seconds(2));
+        servicePlanification.setRestartOnFailure(true);
+        servicePlanification.setMaximumFailureCount(50);
+        servicePlanification.start();
+
+    }
+
+    public static void stopServicePlanification() {
+        servicePlanification.cancel();
+    }
+
 }

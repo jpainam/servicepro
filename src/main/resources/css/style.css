@@ -347,3 +347,10 @@ JFOenix CSS
      -fx-shape:
     "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
 }
+.notification-bar{
+    -fx-font-size: 0.8em;
+     -fx-font-weight: 100;
+}
+.pane{
+     -fx-background-color: #fff;
+}

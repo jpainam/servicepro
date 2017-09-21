@@ -1,11 +1,11 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.StageManager;
-import com.cfao.app.beans.Formation;
+import com.cfao.app.beans.Competence;
 import com.cfao.app.beans.Support;
-import com.cfao.app.beans.SupportFormation;
+import com.cfao.app.beans.SupportCompetence;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -29,21 +28,21 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 9/13/2017.
  */
-public class FormationSupportController extends AnchorPane implements Initializable {
-    static Logger logger = Logger.getLogger(FormationSupportController.class);
-    private Formation formation;
+public class CompetenceSupportController extends AnchorPane implements Initializable {
+    static Logger logger = Logger.getLogger(CompetenceSupportController.class);
 
-    public Button btnAjouterSupport;
-    public Button btnSupprimerSupport;
-    public Button btnAfficherSupport;
-    public TableView<SupportFormation> supportTable;
-    public TableColumn<SupportFormation, String> codeSupportColumn;
-    public TableColumn<SupportFormation, String> titreSupportColumn;
-    public TableColumn<SupportFormation, String> fichierSupportColumn;
+    public Button btnAjouter;
+    public Button btnSupprimer;
+    public Button btnAfficher;
+    public TableView<SupportCompetence> supportTable;
+    public TableColumn<SupportCompetence, String> codeColumn;
+    public TableColumn<SupportCompetence, String> titreColumn;
+    public TableColumn<SupportCompetence, String> lienColumn;
+    private Competence competence;
 
-    public FormationSupportController() {
+    public CompetenceSupportController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formation/support.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/competence/support.fxml"));
             loader.setRoot(this);
             loader.setController(this);
             loader.load();
@@ -52,9 +51,6 @@ public class FormationSupportController extends AnchorPane implements Initializa
         }
     }
 
-    public void setFormation(Formation formation) {
-        this.formation = formation;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,44 +58,35 @@ public class FormationSupportController extends AnchorPane implements Initializa
     }
 
     private void initComponents() {
-        codeSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
-        titreSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
-        fichierSupportColumn.setCellValueFactory(param -> param.getValue().getSupport().lienProperty());
-        GlyphsDude.setIcon(btnAfficherSupport, FontAwesomeIcon.FILE_PDF_ALT);
-        GlyphsDude.setIcon(btnAjouterSupport, FontAwesomeIcon.PLUS_SQUARE);
-        GlyphsDude.setIcon(btnSupprimerSupport, FontAwesomeIcon.MINUS_SQUARE);
+        codeColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
+        titreColumn.setCellValueFactory(param -> param.getValue().getSupport().titreProperty());
+        lienColumn.setCellValueFactory(param -> param.getValue().getSupport().lienProperty());
+        GlyphsDude.setIcon(btnAfficher, FontAwesomeIcon.FILE_PDF_ALT);
+        GlyphsDude.setIcon(btnAjouter, FontAwesomeIcon.PLUS_SQUARE);
+        GlyphsDude.setIcon(btnSupprimer, FontAwesomeIcon.MINUS_SQUARE);
 
     }
 
-    public void ajouterSupportAction(ActionEvent actionEvent) {
+    public void ajouterAction(ActionEvent actionEvent) {
 
-        javafx.scene.control.Dialog<Support> dialog = new javafx.scene.control.Dialog<>();
-        Region region = new Region();
-        region.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
-        region.setVisible(false);
-        StageManager.getContentLayout().getChildren().add(region);
-        region.visibleProperty().bind(dialog.showingProperty());
+        Dialog<Support> dialog = DialogUtil.dialogTemplate("Ajouter", "Annuler");
         try {
-            dialog.setTitle("Supports - Formation");
-            dialog.setHeaderText("Associer des supports à la formation");
-            ButtonType okButton = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-            dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
-            FormationSupportDialogController formationSupportDialogController = new FormationSupportDialogController();
-            dialog.getDialogPane().setContent(formationSupportDialogController);
+            dialog.setTitle("Supports - Compétence");
+            dialog.setHeaderText("Associer des supports à une compétence");
+            CompetenceSupportDialogController competenceSupportDialogController = new CompetenceSupportDialogController();
+            dialog.getDialogPane().setContent(competenceSupportDialogController);
             dialog.setResultConverter(param -> {
                 if (param.getButtonData() == ButtonBar.ButtonData.OK_DONE)
-                    return formationSupportDialogController.getSupport();
+                    return competenceSupportDialogController.getSupport();
                 else
                     return null;
             });
             Optional<Support> result = dialog.showAndWait();
             result.ifPresent(support -> {
                 boolean existDeja = false;
-                Iterator<SupportFormation> iterator = formation.getSupportFormations().iterator();
+                Iterator<SupportCompetence> iterator = competence.getSupportCompetences().iterator();
                 while (!existDeja && iterator.hasNext()) {
-                    SupportFormation sp = iterator.next();
+                    SupportCompetence sp = iterator.next();
                     if (sp.getSupport().getIdsupport().equals(support.getIdsupport())) {
                         existDeja = true;
                     }
@@ -108,17 +95,16 @@ public class FormationSupportController extends AnchorPane implements Initializa
                     if(support.getIdsupport() == null) {
                         new Model<Support>("Support").save(support);
                     }
-
-                    SupportFormation sp = new SupportFormation();
-                    sp.setSupport(support);
-                    sp.setFormation(formation);
-                    sp.getId().setFormation(formation.getIdformation());
-                    sp.getId().setSupport(support.getIdsupport());
-                    formation.getSupportFormations().add(sp);
+                    SupportCompetence sc = new SupportCompetence();
+                    sc.setSupport(support);
+                    sc.setCompetence(competence);
+                    sc.getId().setCompetence(competence.getIdcompetence());
+                    sc.getId().setSupport(support.getIdsupport());
+                    sc.getCompetence().getSupportCompetences().add(sc);
                     Task<Void> task = new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            new Model<SupportFormation>("SupportFormation").saveOrUpdate(sp);
+                            new Model<SupportCompetence>("SupportCompetence").saveOrUpdate(sc);
                             return null;
                         }
                     };
@@ -138,17 +124,17 @@ public class FormationSupportController extends AnchorPane implements Initializa
     }
 
 
-    public void supprimerSupportAction(ActionEvent actionEvent) {
+    public void supprimerAction(ActionEvent actionEvent) {
 
         if (supportTable.getSelectionModel().getSelectedItem() != null) {
-            SupportFormation support = supportTable.getSelectionModel().getSelectedItem();
+            SupportCompetence support = supportTable.getSelectionModel().getSelectedItem();
             //supportTable.getItems().remove(support);
-            formation.getSupportFormations().remove(support);
+            competence.getSupportCompetences().remove(support);
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    //new FormationModel().update(formation);
-                    new Model<SupportFormation>("SupportFormation").delete(support);
+                    //new Model<Competence>("Competence").update(competence);
+                    new Model<SupportCompetence>("SupportFormation").delete(support);
                     return null;
                 }
             };
@@ -159,11 +145,11 @@ public class FormationSupportController extends AnchorPane implements Initializa
             });
             task.setOnSucceeded(event -> ServiceproUtil.notify("Suppression OK"));
         } else {
-            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le support à supprimer de la formation");
+            AlertUtil.showSimpleAlert("Information", "Veuillez choisir le support à supprimer de la compétence");
         }
     }
 
-    public void afficherSupportAction(ActionEvent actionEvent) {
+    public void afficherAction(ActionEvent actionEvent) {
         if (supportTable.getSelectionModel().getSelectedItem() != null) {
             try {
                 Support support = supportTable.getSelectionModel().getSelectedItem().getSupport();
@@ -184,8 +170,12 @@ public class FormationSupportController extends AnchorPane implements Initializa
     }
 
     public void buildTable() {
-        if (formation.getSupportFormations() != null) {
-            supportTable.itemsProperty().bind(formation.supportFormationsProperty());
+        if (competence.getSupportCompetences() != null) {
+            supportTable.itemsProperty().bind(competence.supportCompetencesProperty());
         }
+    }
+
+    public void setCompetence(Competence competence) {
+        this.competence = competence;
     }
 }

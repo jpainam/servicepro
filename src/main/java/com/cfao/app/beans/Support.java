@@ -23,6 +23,7 @@ public class Support implements java.io.Serializable {
     private SimpleStringProperty titre = new SimpleStringProperty();
     private SimpleStringProperty lien = new SimpleStringProperty();
     private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
+    private ListProperty<SupportCompetence> supportCompetences = new SimpleListProperty<>();
 
     public Support() {
     }
@@ -111,6 +112,21 @@ public class Support implements java.io.Serializable {
                 ", titre=" + titre.get() +
                 ", lien=" + lien.get() +
                 '}';
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "support", cascade = CascadeType.ALL)
+    public List<SupportCompetence> getSupportCompetences() {
+        return supportCompetences.get();
+    }
+
+    public ListProperty<SupportCompetence> supportCompetencesProperty() {
+        return supportCompetences;
+    }
+
+    public void setSupportCompetences(List<SupportCompetence> supportCompetences) {
+        if(supportCompetences != null) {
+            this.supportCompetences.set(FXCollections.observableArrayList(supportCompetences));
+        }
     }
 }
 

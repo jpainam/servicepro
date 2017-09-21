@@ -19,6 +19,7 @@ public class Competence implements java.io.Serializable {
     private ListProperty<Profil> profils = new SimpleListProperty<>();
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
+    private ListProperty<SupportCompetence> supportCompetences = new SimpleListProperty<>();
     private ListProperty<Qcm> qcms = new SimpleListProperty();
 
     public Competence() {
@@ -154,6 +155,21 @@ public class Competence implements java.io.Serializable {
     public void setQcms(List<Qcm> qcms) {
         if(qcms != null) {
             this.qcms.set(FXCollections.observableArrayList(qcms));
+        }
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="competence")
+    public List<SupportCompetence> getSupportCompetences() {
+        return supportCompetences.get();
+    }
+
+    public ListProperty<SupportCompetence> supportCompetencesProperty() {
+        return supportCompetences;
+    }
+
+    public void setSupportCompetences(List<SupportCompetence> supportCompetences) {
+        if(supportCompetences != null) {
+            this.supportCompetences.set(FXCollections.observableArrayList(supportCompetences));
         }
     }
 }
