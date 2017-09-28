@@ -77,10 +77,7 @@
         <mapping class="com.cfao.app.beans.ProfilPersonneId" />
         <mapping class="com.cfao.app.beans.Poste" />
         <mapping class="com.cfao.app.beans.Competence" />
-
-        <mapping class="com.cfao.app.beans.Support" />
         <mapping class="com.cfao.app.beans.SupportFormation" />
-        <mapping class="com.cfao.app.beans.SupportFormationId" />
 
         <mapping class="com.cfao.app.beans.PersonneCompetence" />
         <mapping class="com.cfao.app.beans.PersonneCompetenceId" />
@@ -106,9 +103,6 @@
         <mapping class="com.cfao.app.beans.PlanificationModele" />
 
         <mapping class="com.cfao.app.beans.SupportCompetence" />
-        <mapping class="com.cfao.app.beans.SupportCompetenceId" />
-
-
 
           </session-factory>
 </hibernate-configuration>

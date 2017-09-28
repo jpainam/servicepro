@@ -158,7 +158,7 @@ public class Formation {
         }
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="formation", cascade = CascadeType.ALL)
     public List<SupportFormation> getSupportFormations() {
         return this.supportFormations.get();
     }

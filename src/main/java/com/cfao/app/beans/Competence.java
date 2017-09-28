@@ -20,6 +20,7 @@ public class Competence implements java.io.Serializable {
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<PersonneCompetence> personneCompetences = new SimpleListProperty<>();
     private ListProperty<SupportCompetence> supportCompetences = new SimpleListProperty<>();
+
     private ListProperty<Qcm> qcms = new SimpleListProperty();
 
     public Competence() {
@@ -162,7 +163,7 @@ public class Competence implements java.io.Serializable {
         }
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="competence")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="competence", cascade = CascadeType.ALL)
     public List<SupportCompetence> getSupportCompetences() {
         return supportCompetences.get();
     }

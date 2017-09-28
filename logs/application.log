@@ -1,1 +1,3 @@
 2017-09-26 14:34:55 ERROR SqlExceptionHelper:146 - Cannot add or update a child row: a foreign key constraint fails (`servicepro`.`formations`, CONSTRAINT `FK_5y40esjd0jhj0kc4q4hy7h2hi` FOREIGN KEY (`LIEUFORMATION`) REFERENCES `lieu_formation` (`IDLIEU`))
+2017-09-28 22:03:01 ERROR SqlExceptionHelper:146 - integrity constraint violation: NOT NULL check constraint; SYS_CT_10285 table: SUPPORT_FORMATION column: SUPPORT
+2017-09-28 22:11:37 ERROR SqlExceptionHelper:146 - integrity constraint violation: unique constraint or index violation; SYS_PK_10142 table: FORMATION_PERSONNE
