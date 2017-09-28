@@ -9,7 +9,6 @@ import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,7 +36,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -92,6 +90,7 @@ public class CiviliteController implements Initializable {
     public ComboBox<Potentiel> comboPotentiel;
     public ComboBox<Contrat> comboContrat;
     public ComboBox<Langue> comboLangue;
+    public ComboBox<Agence> comboAgence;
     public VBox hboxSearch;
     public SearchBox searchBox = new SearchBox();
 
@@ -136,10 +135,10 @@ public class CiviliteController implements Initializable {
 
         //ServiceproUtil.setAccordionExpanded(accordeon, profilAccordeon);
         /*Platform.runLater(() -> {
-            personneTable.requestFocus();
-            if(personneTable.getItems().size() > 0) {
-                personneTable.getSelectionModel().select(0);
-                personneTable.getFocusModel().focus(0);
+            formationTable.requestFocus();
+            if(formationTable.getItems().size() > 0) {
+                formationTable.getSelectionModel().select(0);
+                formationTable.getFocusModel().focus(0);
             }
         });*/
         disableAllComponents(true);
@@ -264,6 +263,7 @@ public class CiviliteController implements Initializable {
                 map.put("societe", FXCollections.observableList((new SocieteModel()).getList()));
                 map.put("section", FXCollections.observableList((new SectionModel()).getList()));
                 map.put("groupe", FXCollections.observableList((new GroupeModel()).getList()));
+                map.put("agence", FXCollections.observableList((new Model<Agence>("Agence")).getList()));
                 map.put("pays", FXCollections.observableList((new Model<Pays>("Pays")).getList()));
                 map.put("langue", FXCollections.observableList(new Model<Langue>("Langue").getList()));
                 map.put("potentiel", FXCollections.observableList(new Model<Potentiel>("Potentiel").getList()));
@@ -284,12 +284,8 @@ public class CiviliteController implements Initializable {
             comboPotentiel.setItems(map.get("potentiel"));
             comboContrat.setItems(map.get("contrat"));
             comboAmbition.setItems(map.get("ambition"));
+            comboAgence.setItems(map.get("agence"));
             comboLangue.setItems(map.get("langue"));
-            List<String> data = new ArrayList<>();
-            for(Pays p : comboPays.getItems()) {
-                data.add(p.getNamefr());
-            }
-            new ComboAutoCompletionUtil<>(comboPays, data);
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
@@ -300,7 +296,7 @@ public class CiviliteController implements Initializable {
     private void disableAllComponents(boolean bool) {
         ServiceproUtil.setEditable(!bool, txtMatricule, txtNom, txtPrenom, txtMemo, txtTelephone, txtEmail, txtFonction);
         ServiceproUtil.setDisable(bool, comboGroupe, comboPays, comboSociete, comboSection, comboPotentiel, comboAmbition,
-                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees, datePassport);
+                comboLangue, comboContrat, datePicker, dateFincontrat, comboLanguesParlees, datePassport, comboAgence);
     }
 
     private void buildtablePersonne() {
@@ -392,6 +388,7 @@ public class CiviliteController implements Initializable {
         comboGroupe.setValue(person.getGroupe());
         comboContrat.setValue(person.getContrat());
         comboAmbition.setValue(person.getAmbition());
+        comboAgence.setValue(person.getAgence());
         comboLangue.setValue(person.getLangue());
         comboPotentiel.setValue(person.getPotentiel());
 
@@ -426,7 +423,7 @@ public class CiviliteController implements Initializable {
         });
     }
 
-    private void updateLangue(List<Langue> listLangue) {
+    /*private void updateLangue(List<Langue> listLangue) {
         comboLanguesParlees.getCheckModel().clearChecks();
         Task<int[]> task = new Task<int[]>() {
             @Override
@@ -452,6 +449,19 @@ public class CiviliteController implements Initializable {
                 comboLanguesParlees.getCheckModel().checkIndices(task.getValue());
             });
         });
+    }**/
+    private void updateLangue(List<Langue> listLangue) {
+        comboLanguesParlees.getCheckModel().clearChecks();
+        int index = 0;
+        for (Langue l : comboLanguesParlees.getItems()) {
+            Iterator<Langue> iterator = listLangue.iterator();
+            while (iterator.hasNext()) {
+                if (l.equals(iterator.next())) {
+                    comboLanguesParlees.getCheckModel().check(index);
+                }
+            }
+            index++;
+        }
     }
 
     private void setPersonneParameters(Personne personne) {
@@ -483,6 +493,7 @@ public class CiviliteController implements Initializable {
         personne.setContrat(comboContrat.getValue());
         personne.setLangue(comboLangue.getValue());
         personne.setAmbition(comboAmbition.getValue());
+        personne.setAgence(comboAgence.getValue());
         personne.setPotentiel(comboPotentiel.getValue());
         personne.setPhoto(civilitePhoto.getCurrentPhoto());
         System.err.println(civilitePhoto.getCurrentPhoto());
@@ -494,6 +505,7 @@ public class CiviliteController implements Initializable {
                 case 0:
                     ServiceproUtil.setDisable(true, btnModifier, btnSuppr);
                     disableAllComponents(false);
+                    ServiceproUtil.emptyFields(txtFonction, txtTelephone, txtMemo, txtEmail, txtPrenom, txtNom, txtMatricule, txtPassport);
                     ButtonUtil.save(btnNouveau);
                     this.stateBtnNouveau = 1;
                     profilController.setActive(true);
@@ -516,9 +528,23 @@ public class CiviliteController implements Initializable {
      */
     private void savePersonne(Personne personne) {
 
-        Task<Boolean> task = new Task<Boolean>() {
+        Task<Integer> task = new Task<Integer>() {
             @Override
-            protected Boolean call() throws Exception {
+            protected Integer call() throws Exception {
+                boolean personneExisteDeja = false;
+                Iterator<Personne> iterator = new Model<Personne>("Personne").getList().iterator();
+                while (iterator.hasNext() && !personneExisteDeja) {
+                    Personne p = iterator.next();
+                    if (p.getNom().toLowerCase().contains(txtNom.getText().toLowerCase()) && p.getPrenom().toLowerCase().contains(txtPrenom.getText().toLowerCase())) {
+                        personneExisteDeja = true;
+                    }
+                    if (p.getMatricule().toLowerCase().equals(txtMatricule.getText().toLowerCase())) {
+                        personneExisteDeja = true;
+                    }
+                }
+                if (personneExisteDeja) {
+                    return 2;
+                }
                 if (profilController.getItems().size() > 0) {
                     for (ProfilPersonne p : profilController.getItems())
                         p.setPersonne(personne);
@@ -530,21 +556,32 @@ public class CiviliteController implements Initializable {
                         p.setPersonne(personne);
                 }
                 personne.setPostes(posteController.getItems());
-                boolean bool;
                 PersonneModel model = new PersonneModel();
-                bool = model.save(personne);
-                return bool;
+                if (model.save(personne)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
         };
         new Thread(task).start();
         task.setOnSucceeded(event -> {
-            if (task.getValue()) {
-                //personneTable.getSelectionModel().select(personne);
+            if (task.getValue() == 1) {
+                //formationTable.getSelectionModel().select(personne);
                 ServiceproUtil.notify("Ajout OK");
                 StageManager.loadContent("/views/civilite/civilite.fxml");
-                System.out.println("Good");
-            } else {
+            } else if (task.getValue() == 0) {
                 ServiceproUtil.notify("Erreur d'ajout");
+            } else if (task.getValue() == 2) {
+                String sms = "Civilité " + txtNom.getText() + " et " + txtPrenom.getText();
+                if (!txtMatricule.getText().isEmpty()) {
+                    sms += " ou " + txtMatricule.getText();
+                }
+                sms += " existe déjà\nChanger le nom, le prénom ou le matricule";
+                AlertUtil.showWarningMessage("Alerte de doublon", sms);
+                StageManager.loadContent("/views/civilite/civilite.fxml");
+            } else {
+                ServiceproUtil.notify("Ne dois jamais arriver");
             }
         });
         task.setOnFailed(event -> {
@@ -632,8 +669,8 @@ public class CiviliteController implements Initializable {
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Suppression OK");
-                    /*personneTable.getSelectionModel().selectPrevious();
-                    personneTable.getItems().remove(p);*/
+                    /*formationTable.getSelectionModel().selectPrevious();
+                    formationTable.getItems().remove(p);*/
                     StageManager.loadContent("/views/civilite/civilite.fxml");
                 } else {
                     ServiceproUtil.notify("Erreur de suppression");

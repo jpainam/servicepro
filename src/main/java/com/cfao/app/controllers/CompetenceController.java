@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
 /**
  * Created by JP on 6/14/2017.
  */
-public class CompetenceController implements Initializable{
+public class CompetenceController implements Initializable {
     public Button btnNouveau;
     public Button btnModifier;
     public Button btnSupprimer;
@@ -76,7 +76,8 @@ public class CompetenceController implements Initializable{
         initComponents();
         buildCompetenceTable();
     }
-    private void initComponents(){
+
+    private void initComponents() {
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.edit(btnModifier);
         ButtonUtil.add(btnNouveau);
@@ -85,7 +86,7 @@ public class CompetenceController implements Initializable{
         ButtonUtil.next(btnNext);
         ButtonUtil.previous(btnPrevious);
         ServiceproUtil.setEditable(false, txtLibelleCompetence);
-        ServiceproUtil.setDisable(true,chkCompetence,chkConnaissance, comboNiveau);
+        ServiceproUtil.setDisable(true, chkCompetence, chkConnaissance, comboNiveau);
         personneController = new CompetencePersonneController();
         supportController = new CompetenceSupportController();
         competenceTabPersonne.setContent(personneController);
@@ -130,19 +131,23 @@ public class CompetenceController implements Initializable{
 
         competenceColumn.setCellValueFactory(param -> {
             Competence competence = param.getValue();
-            if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
-                return new SimpleBooleanProperty(true);
-            } else {
-                return new SimpleBooleanProperty(false);
+            if (competence.getType() != null) {
+                if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                    return new SimpleBooleanProperty(true);
+                }
             }
+            return new SimpleBooleanProperty(false);
+
         });
         connaissanceColumn.setCellValueFactory(param -> {
             Competence competence = param.getValue();
-            if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
-                return new SimpleBooleanProperty(true);
-            } else {
-                return new SimpleBooleanProperty(false);
+            if (competence.getType() != null) {
+                if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                    return new SimpleBooleanProperty(true);
+                }
             }
+            return new SimpleBooleanProperty(false);
+
         });
         CompetenceModel competenceModel = new CompetenceModel();
         Task<ObservableList<Competence>> task = new Task<ObservableList<Competence>>() {
@@ -171,106 +176,157 @@ public class CompetenceController implements Initializable{
         new Thread(task1).start();
     }
 
-    public void buildFormationTable(Competence competence){
-        if(competence == null)
+    public void buildFormationTable(Competence competence) {
+        if (competence == null)
             return;
         txtLibelleCompetence.setText(competence.getDescription());
         comboNiveau.setValue(competence.getNiveau());
         chkCompetence.setSelected(false);
         chkConnaissance.setSelected(false);
-        if(competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)){
-            chkConnaissance.setSelected(true);
-        }else if(competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)){
-            chkCompetence.setSelected(true);
+        if (competence.getType() != null) {
+            if (competence.getType().equals(Constante.CONNAISSANCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                chkConnaissance.setSelected(true);
+            }
+            if (competence.getType().equals(Constante.COMPETENCE) || competence.getType().equals(Constante.CONNAISSANCE_COMPETENCE)) {
+                chkCompetence.setSelected(true);
+            }
         }
-
-        formationTable.setItems(FXCollections.observableArrayList(competence.getFormations()));
-        profilTable.setItems(FXCollections.observableArrayList(competence.getProfils()));
+        if(competence.getFormations() != null) {
+            formationTable.setItems(FXCollections.observableArrayList(competence.getFormations()));
+        }
+        if(competence.getProfils() != null) {
+            profilTable.setItems(FXCollections.observableArrayList(competence.getProfils()));
+        }
     }
 
-    private  void buildPersonneTable(Competence competence){
+    private void buildPersonneTable(Competence competence) {
         personneController.setCompetence(competence);
         supportController.setCompetence(competence);
         personneController.buildTable();
         supportController.buildTable();
     }
+
     public void clickNouveau(ActionEvent actionEvent) {
-        if(stateBtnAjouter == 0) {
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+        if (stateBtnAjouter == 0) {
+            ButtonUtil.save(btnNouveau);
             ServiceproUtil.emptyFields(txtLibelleCompetence);
             chkConnaissance.setSelected(false);
             chkCompetence.setSelected(false);
             ServiceproUtil.setEditable(true, txtLibelleCompetence);
             ServiceproUtil.setDisable(false, comboNiveau, chkConnaissance, chkCompetence);
             stateBtnAjouter = 1;
-        }else{
+        } else {
             Competence competence = new Competence();
-            if(chkCompetence.isSelected() && chkConnaissance.isSelected()){
+            if (chkCompetence.isSelected() && chkConnaissance.isSelected()) {
                 competence.setType(Constante.CONNAISSANCE_COMPETENCE);
-            }else if(chkConnaissance.isSelected()) {
+            } else if (chkConnaissance.isSelected()) {
                 competence.setType(Constante.CONNAISSANCE);
-            }else if(chkCompetence.isSelected()){
+            } else if (chkCompetence.isSelected()) {
                 competence.setType(Constante.COMPETENCE);
             }
             competence.setDescription(txtLibelleCompetence.getText());
             competence.setNiveau(comboNiveau.getValue());
-            CompetenceModel model = new CompetenceModel();
-            if(model.save(competence)){
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new Model<Competence>("Competence").save(competence);
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(event -> {
                 ServiceproUtil.notify("Ajout OK");
-                StageManager.loadContent("/views/competence/competence.fxml");
-            }else{
+                //StageManager.loadContent("/views/competence/competence.fxml");
+                competenceTable.getItems().add(competence);
+                ButtonUtil.add(btnNouveau);
+                stateBtnAjouter = 0;
+                competenceTable.getSelectionModel().select(competence);
+            });
+            task.setOnFailed(event -> {
                 ServiceproUtil.notify("Une erreur s'est produite");
-            }
-            stateBtnAjouter = 0;
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
+                task.getException().printStackTrace();
+                System.err.println(task.getException());
+            });
+            /*stateBtnAjouter = 0;
+            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));/*/
         }
     }
 
     public void clickModifier(ActionEvent actionEvent) {
-        if(competenceTable.getSelectionModel().getSelectedItem() == null)
+        if (competenceTable.getSelectionModel().getSelectedItem() == null)
             return;
-        if(stateBtnModifier == 0) {
-            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+        if (stateBtnModifier == 0) {
+            ButtonUtil.save(btnModifier);
             ServiceproUtil.setEditable(true, txtLibelleCompetence);
             ServiceproUtil.setDisable(false, comboNiveau, chkConnaissance, chkCompetence);
             stateBtnModifier = 1;
-        }else{
+        } else {
             Competence competence = competenceTable.getSelectionModel().getSelectedItem();
-            if(chkCompetence.isSelected() && chkConnaissance.isSelected()){
+            if (chkCompetence.isSelected() && chkConnaissance.isSelected()) {
                 competence.setType(Constante.CONNAISSANCE_COMPETENCE);
-            }else if(chkConnaissance.isSelected()) {
+            } else if (chkConnaissance.isSelected()) {
                 competence.setType(Constante.CONNAISSANCE);
-            }else if(chkCompetence.isSelected()){
+            } else if (chkCompetence.isSelected()) {
                 competence.setType(Constante.COMPETENCE);
             }
             competence.setDescription(txtLibelleCompetence.getText());
             competence.setNiveau(comboNiveau.getValue());
-            CompetenceModel model = new CompetenceModel();
-            if(model.update(competence)){
-                ServiceproUtil.notify("Modification OK");
-                StageManager.loadContent("/views/competence/competence.fxml");
-            }else{
-                ServiceproUtil.notify("Une erreur s'est produite");
-            }
-            stateBtnModifier = 0;
-            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new Model<Competence>("Competence").update(competence);
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    ServiceproUtil.notify("Modification OK");
+                    ButtonUtil.edit(btnModifier);
+                    stateBtnModifier = 0;
+                    competenceTable.getSelectionModel().select(competence);
+                    //StageManager.loadContent("/views/competence/competence.fxml");
+                }
+            });
+            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    ServiceproUtil.notify("Une erreur s'est produite");
+                }
+            });
         }
     }
 
     public void clickSupprimer(ActionEvent actionEvent) {
-        if(competenceTable.getSelectionModel().getSelectedItem() != null) {
+        if (competenceTable.getSelectionModel().getSelectedItem() != null) {
             Competence competence = competenceTable.getSelectionModel().getSelectedItem();
             boolean okay = AlertUtil.showConfirmationMessage("Suppression", "Etes vous sûr de vouloir supprimer " + competence);
-            if(okay){
-               CompetenceModel model = new CompetenceModel();
-               if(model.delete(competence)){
-                   ServiceproUtil.notify("Suppression OK");
-                   StageManager.loadContent("/views/competence/competence.fxml");
-               }else{
-                   ServiceproUtil.notify("Erreur de suppression");
-               }
+            if (okay) {
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        new Model<Competence>("Competence").delete(competence);
+                        return null;
+                    }
+                };
+                new Thread(task).start();
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        ServiceproUtil.notify("Suppression OK");
+                        competenceTable.getItems().remove(competence);
+                    }
+                });
+                task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        ServiceproUtil.notify("Erreur de suppression");
+                    }
+                });
+
             }
-        }else{
+        } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la compétence à supprimer");
         }
     }
@@ -280,13 +336,13 @@ public class CompetenceController implements Initializable{
     }
 
     public void previousAction(ActionEvent event) {
-        if(competenceTable.getSelectionModel().getSelectedIndex() > 0){
+        if (competenceTable.getSelectionModel().getSelectedIndex() > 0) {
             competenceTable.getSelectionModel().selectPrevious();
         }
     }
 
     public void nextAction(ActionEvent event) {
-        if(competenceTable.getSelectionModel().getSelectedIndex() < competenceTable.getItems().size()){
+        if (competenceTable.getSelectionModel().getSelectedIndex() < competenceTable.getItems().size()) {
             competenceTable.getSelectionModel().selectNext();
         }
     }

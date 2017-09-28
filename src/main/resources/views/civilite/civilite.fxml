@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="727.0" prefWidth="950.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
     <children>
         <SplitPane dividerPositions="0.20698924731182797" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
             <items>
@@ -40,7 +35,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </VBox>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="666.0" prefWidth="1034.0">
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="666.0" prefWidth="765.0">
                     <children>
                         <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                             <tabs>
@@ -165,7 +160,7 @@
                                                             </padding>
                                                         </HBox>
                                                         <Separator />
-                                                        <GridPane fx:id="gridB" hgap="10.0" minHeight="-Infinity" prefHeight="171.0" prefWidth="857.0">
+                                                        <GridPane fx:id="gridB" hgap="10.0" minHeight="-Infinity" prefHeight="200.0" prefWidth="645.0">
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -176,9 +171,11 @@
                                                 <RowConstraints maxHeight="30.0" minHeight="16.0" prefHeight="16.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="53.0" minHeight="20.0" prefHeight="38.0" vgrow="SOMETIMES" />
                                                                 <RowConstraints maxHeight="44.0" minHeight="13.0" prefHeight="25.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                                                                <RowConstraints maxHeight="49.0" minHeight="16.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                                <RowConstraints maxHeight="40.0" minHeight="20.0" prefHeight="24.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                                                                <RowConstraints maxHeight="34.0" minHeight="30.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="49.0" minHeight="16.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="40.0" minHeight="20.0" prefHeight="27.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="42.0" minHeight="26.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="34.0" minHeight="18.0" prefHeight="24.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="34.0" minHeight="24.0" prefHeight="24.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <children>
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="203.0" text="Societé / Society" GridPane.rowIndex="2">
@@ -192,14 +189,14 @@
                                                                 <ComboBox fx:id="comboSection" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition" GridPane.rowIndex="4" />
                                                                 <ComboBox fx:id="comboAmbition" maxWidth="1.7976931348623157E308" GridPane.rowIndex="5" />
-                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
                                                                 <ComboBox fx:id="comboPotentiel" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Contrat" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                                                 <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                                                                <DatePicker fx:id="dateFincontrat" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                                                <DatePicker fx:id="dateFincontrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                                                                 <Label text="Langues parlées" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                                                  <DatePicker fx:id="datePicker" editable="false" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" GridPane.rowIndex="1" />
+                                                                  <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" GridPane.rowIndex="1" />
                                                                   <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="15.0" prefWidth="2.0" text="Date Naiss./Born Date">
                                                                         </Label>
                                                                   <ComboBox fx:id="comboPays" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -209,6 +206,8 @@
                                                                   <Label minWidth="50.0" prefWidth="50.0" text="Langue" GridPane.columnIndex="2" />
                                                                   <DatePicker fx:id="datePassport" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                                                   <Label text="Passport (Date d'expiration)" GridPane.columnIndex="3" />
+                                                <ComboBox fx:id="comboAgence" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.rowIndex="7" />
+                                                <Label text="Agence / Agency" GridPane.rowIndex="6" />
                                                             </children>
                                                             <VBox.margin>
                                                                 <Insets left="10.0" right="10.0" />

@@ -23,13 +23,15 @@ public class ExcelRapport {
     public CellStyle headerStyle, defaultStyle, redStyle, wrapStyle, redBackground, dateStyle;
     public CellStyle shortDateStyle;
     public XSSFRow row;
-    public CreationHelper createHelper = workbook.getCreationHelper();
+    public CreationHelper helper = workbook.getCreationHelper();
     XSSFSheet sheet = workbook.createSheet("new sheet");
 
     CellStyle timingPassed;
     CellStyle timingNotPassed;
+    Drawing drawing;
 
     public ExcelRapport() {
+        drawing = sheet.createDrawingPatriarch();
         headerStyle = workbook.createCellStyle();
         timingNotPassed = timingStyle(false);
         timingPassed = timingStyle(true);
@@ -61,8 +63,8 @@ public class ExcelRapport {
         dateStyle = workbook.createCellStyle();
         shortDateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(
-                createHelper.createDataFormat().getFormat("dddd, dd mmmm, yyyy"));
-        shortDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-mmm-yy"));
+                helper.createDataFormat().getFormat("dddd, dd mmmm, yyyy"));
+        shortDateStyle.setDataFormat(helper.createDataFormat().getFormat("dd-mmm-yy"));
 
         defaultStyle = workbook.createCellStyle();
         defaultStyle.setBorderBottom(BorderStyle.THIN);
@@ -139,7 +141,7 @@ public class ExcelRapport {
         Row row = sheet.getRow(sheet.getLastRowNum());
         if (autoSizeColumn) {
             for (int colNum = 0; colNum < row.getLastCellNum(); colNum++) {
-                sheet.autoSizeColumn(colNum);
+                sheet.autoSizeColumn(colNum, true);
             }
         }
 
@@ -175,7 +177,7 @@ public class ExcelRapport {
             font.setColor(IndexedColors.ORANGE.getIndex());
         }
         cs.setDataFormat(
-                createHelper.createDataFormat().getFormat("dddd, dd mmmm, yyyy"));
+                helper.createDataFormat().getFormat("dddd, dd mmmm, yyyy"));
         return cs;
     }
 

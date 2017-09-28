@@ -5,15 +5,15 @@
 
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!-- property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/servicepro</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.username">root</property -->
 
-        <!-- property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
         <property name="hibernate.connection.url">jdbc:hsqldb:file:data/servicepro</property>
         <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
-        <property name="hibernate.connection.username">sa</property -->
+        <property name="hibernate.connection.username">sa</property>
         <!-- property name="hibernate.connection.url">jdbc:hsqldb:./data/servicepro</property -->
         <!-- property name="hibernate.connection.url"> jdbc:hsqldb:hsql://localhost/servicepro</property-->
 
@@ -50,7 +50,6 @@
 
         <mapping resource="mapping/section.hbm.xml" />
         <mapping resource="mapping/niveauetude.hbm.xml" />
-        <mapping resource="mapping/modele.hbm.xml" />
         <mapping resource="mapping/formationpersonnel.hbm.xml" />
 
         <mapping class="com.cfao.app.beans.Personne" />
@@ -58,6 +57,8 @@
         <mapping class="com.cfao.app.beans.Domaine" />
         <mapping class="com.cfao.app.beans.EtatFormation" />
         <mapping class="com.cfao.app.beans.Pays" />
+        <mapping class="com.cfao.app.beans.Agence" />
+        <mapping class="com.cfao.app.beans.Modele" />
         <mapping class="com.cfao.app.beans.User" />
         <mapping class="com.cfao.app.beans.UserProfil" />
         <mapping class="com.cfao.app.beans.Groupe" />
@@ -92,6 +93,7 @@
         <mapping class="com.cfao.app.beans.LangueParleeId" />
 
         <mapping class="com.cfao.app.beans.FormationPersonne" />
+        <mapping class="com.cfao.app.beans.LieuFormation" />
         <mapping class="com.cfao.app.beans.SocieteFormatrice" />
         <mapping class="com.cfao.app.beans.FormationPersonneId" />
         <mapping class="com.cfao.app.beans.FormationCompetence" />

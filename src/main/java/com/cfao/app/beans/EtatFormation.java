@@ -96,6 +96,10 @@ public class EtatFormation implements java.io.Serializable {
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
         return result;
     }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
 }
 
 

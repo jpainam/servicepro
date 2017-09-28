@@ -74,7 +74,7 @@ public class Competence implements java.io.Serializable {
     }
 
     public void setProfils(List<Profil> profils) {
-        this.profils.set(FXCollections.observableList(profils));
+        this.profils.set(FXCollections.observableArrayList(profils));
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -86,7 +86,9 @@ public class Competence implements java.io.Serializable {
     }
 
     public void setFormations(List<Formation> formations) {
-        this.formations.set(FXCollections.observableArrayList(formations));
+        if(formations != null){
+            this.formations.set(FXCollections.observableArrayList(formations));
+        }
     }
 
 
@@ -141,7 +143,9 @@ public class Competence implements java.io.Serializable {
     }
 
     public void setPersonneCompetences(List<PersonneCompetence> personneCompetences) {
-        this.personneCompetences.set(FXCollections.observableList(personneCompetences));
+        if(personneCompetences != null) {
+            this.personneCompetences.set(FXCollections.observableArrayList(personneCompetences));
+        }
     }
 
     @ManyToMany(fetch=FetchType.LAZY)

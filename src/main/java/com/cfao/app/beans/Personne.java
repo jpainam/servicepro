@@ -34,6 +34,7 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
     private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
+    private ObjectProperty<Agence> agence = new SimpleObjectProperty<>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
     private ObjectProperty<Section> section = new SimpleObjectProperty<Section>();
     private ObjectProperty<Contrat> contrat = new SimpleObjectProperty<Contrat>();
@@ -499,4 +500,17 @@ public class Personne implements java.io.Serializable {
         return false;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "AGENCE")
+    public Agence getAgence() {
+        return agence.get();
+    }
+
+    public ObjectProperty<Agence> agenceProperty() {
+        return agence;
+    }
+
+    public void setAgence(Agence agence) {
+        this.agence.set(agence);
+    }
 }

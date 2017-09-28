@@ -62,7 +62,7 @@ public class FormationController implements Initializable {
 
     public ListView<Personnel> listeViewFormateurs;
     public ComboBox<Typeformation> comboTypeformation;
-    public ComboBox<SocieteFormatrice> comboSocieteFormatrice;
+    public ComboBox<LieuFormation> comboLieuFormation;
     public StackPane formationStackPane;
 
 
@@ -151,7 +151,7 @@ public class FormationController implements Initializable {
                 map.put("modele", FXCollections.observableList((new Model<Modele>("Modele")).getList()));
                 map.put("etatformation", FXCollections.observableList((new Model<EtatFormation>("EtatFormation")).getList()));
                 map.put("typeformation", FXCollections.observableList((new Model<Typeformation>("Typeformation")).getList()));
-                map.put("societeformatrice", FXCollections.observableList((new Model<SocieteFormatrice>("SocieteFormatrice")).getList()));
+                map.put("lieuformation", FXCollections.observableList((new Model<LieuFormation>("LieuFormation")).getList()));
                 return map;
             }
         };
@@ -162,7 +162,7 @@ public class FormationController implements Initializable {
             comboModele.setItems((ObservableList<Modele>) map.get("modele"));
             comboEtatformation.setItems(map.get("etatformation"));
             comboTypeformation.setItems(map.get("typeformation"));
-            comboSocieteFormatrice.setItems(map.get("societeformatrice"));
+            comboLieuFormation.setItems(map.get("lieuformation"));
         });
         task.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
@@ -177,7 +177,7 @@ public class FormationController implements Initializable {
 
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSupprimer);
         ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur,
-                btnSupprimerFormateur, comboTypeformation, comboSocieteFormatrice);
+                btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
         ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin, txtScore, txtTP);
         ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin, txtScore, txtTP);
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
@@ -228,7 +228,7 @@ public class FormationController implements Initializable {
         comboModele.setValue(formation.getModele());
         comboEtatformation.setValue(formation.getEtatFormation());
         comboTypeformation.setValue(formation.getTypeFormation());
-        comboSocieteFormatrice.setValue(formation.getSocieteFormatrice());
+        comboLieuFormation.setValue(formation.getLieuFormation());
         listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getPersonnels()));
         dateDebut.setValue(new java.sql.Date(formation.getDatedebut().getTime()).toLocalDate());
         dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
@@ -249,34 +249,41 @@ public class FormationController implements Initializable {
         supportController.buildTable();
 
     }
-    public void setFormationParams(Formation formation){
+
+    public void setFormationParams(Formation formation) {
         formation.setEtatFormation(comboEtatformation.getValue());
         formation.setModele(comboModele.getValue());
         formation.setPersonnels(listeViewFormateurs.getItems());
 
         formation.setTitre(txtTitre.getText());
         formation.setDescription(txtDescription.getText());
-        formation.setScore(Integer.parseInt(txtScore.getText()));
+        if (!txtScore.getText().isEmpty()) {
+            formation.setScore(Integer.parseInt(txtScore.getText()));
+        }
         formation.setTp(txtTP.getText());
         formation.setRemarque(txtRemarque.getText());
         formation.setCodeformation(txtCode.getText());
-        formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
-        formation.setDatefin(Date.valueOf(dateFin.getValue()));
+        if (dateDebut.getValue() != null) {
+            formation.setDatedebut(Date.valueOf(dateDebut.getValue()));
+        }
+        if (dateFin.getValue() != null) {
+            formation.setDatefin(Date.valueOf(dateFin.getValue()));
+        }
         formation.setTypeFormation(comboTypeformation.getValue());
-        formation.setSocieteFormatrice(comboSocieteFormatrice.getValue());
+        formation.setLieuFormation(comboLieuFormation.getValue());
 
     }
 
     public void clickNouveau(ActionEvent actionEvent) {
         if (stateBtnNouveau == 0) {
-            btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
-            btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+            ButtonUtil.save(btnNouveau);
+            ButtonUtil.edit(btnModifier);
             listeViewFormateurs.getItems().clear();
             ServiceproUtil.setDisable(true, btnModifier, btnSupprimer);
             ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtTP);
-            ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut,txtScore, txtCode, txtTP);
+            ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtCode, txtTP);
             ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
-                    btnSupprimerFormateur, comboTypeformation, comboSocieteFormatrice);
+                    btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
@@ -294,10 +301,23 @@ public class FormationController implements Initializable {
                     if (task.getValue()) {
                         ServiceproUtil.notify("Ajout OK");
                         formationTable.getItems().add(formation);
+                        ButtonUtil.add(btnNouveau);
+                        stateBtnNouveau = 0;
                         formationTable.getSelectionModel().select(formation);
+                        ServiceproUtil.setDisable(false, btnModifier, btnSupprimer);
+                        ServiceproUtil.setEditable(false, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtCode, txtTP);
+                        ServiceproUtil.setDisable(true, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
+                                btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
                     } else {
                         ServiceproUtil.notify("Erreur d'ajout");
                     }
+                }
+            });
+            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    task.getException().printStackTrace();
+                    ServiceproUtil.notify(task.getException().getMessage());
                 }
             });
             stateBtnNouveau = 0;
@@ -307,12 +327,12 @@ public class FormationController implements Initializable {
     public void clickModifier(ActionEvent actionEvent) {
         if (stateBtnModifier == 0) {
             if (formationTable.getSelectionModel().getSelectedItem() != null) {
-                btnModifier.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
-                btnNouveau.setText(ResourceBundle.getBundle("Bundle").getString("button.add"));
+                ButtonUtil.save(btnModifier);
+                ButtonUtil.add(btnNouveau);
                 ServiceproUtil.setDisable(true, btnNouveau, btnSupprimer);
                 ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtRemarque, txtScore, txtTP);
                 ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur,
-                        btnAjouterFormateur, comboTypeformation, comboSocieteFormatrice);
+                        btnAjouterFormateur, comboTypeformation, comboLieuFormation);
                 stateBtnModifier = 1;
             }
         } else {
@@ -354,9 +374,19 @@ public class FormationController implements Initializable {
                     if (task.getValue()) {
                         ServiceproUtil.notify("Suppression OK");
                         formationTable.getItems().remove(formation);
-                        StageManager.loadContent("/views/formation/formation.fxml");
+                        //StageManager.loadContent("/views/formation/formation.fxml");
+                        if (formationTable.getItems().size() > 0) {
+                            formationTable.getSelectionModel().selectFirst();
+                        }
                     } else {
                         ServiceproUtil.notify("Erreur de suppression");
+                    }
+                });
+                task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        task.getException().printStackTrace();
+                        ServiceproUtil.notify(task.getException().getMessage());
                     }
                 });
             }
@@ -366,7 +396,7 @@ public class FormationController implements Initializable {
     }
 
     public void clickAnnuler(ActionEvent actionEvent) {
-       StageManager.loadContent("/views/formation/formation.fxml");
+        StageManager.loadContent("/views/formation/formation.fxml");
     }
 
     public void ajouterFormateur(ActionEvent actionEvent) {

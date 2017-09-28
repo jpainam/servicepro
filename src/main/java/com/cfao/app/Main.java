@@ -1,6 +1,8 @@
 package com.cfao.app;
 
+import com.cfao.app.controllers.LoginController;
 import com.cfao.app.model.Model;
+import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.FXMLView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -101,7 +103,9 @@ public class Main extends Application {
             // app requires system tray support, just exit if there is no support.
             if (!java.awt.SystemTray.isSupported()) {
                 System.out.println("No system tray support, application exiting.");
-                Platform.exit();
+                AlertUtil.showSimpleAlert("Information", "No system tray support, application exiting.");
+                //Platform.exit();
+                return;
             }
 
             // set up a system tray icon.
@@ -129,6 +133,8 @@ public class Main extends Application {
             // tray icon (removing the tray icon will also shut down AWT).
             java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
             exitItem.addActionListener(event -> {
+                LoginController.stopServiceNotification();
+                LoginController.stopServicePlanification();
                 notificationTimer.cancel();
                 Platform.exit();
                 tray.remove(trayIcon);

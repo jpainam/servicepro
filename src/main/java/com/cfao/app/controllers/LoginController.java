@@ -27,7 +27,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
-import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -206,14 +205,19 @@ public class LoginController implements Initializable {
 
 
     public static void stopServiceNotification() {
-        serviceNotification.cancel();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                serviceNotification.cancel();
+            }
+        });
     }
 
-    public void startServicePlanification() {
+    public void startServicePlanification(){
         ResourceBundle resource = ResourceBundle.getBundle("Bundle");
         servicePlanification = new ScheduledService<ArrayList<ObservableList<Planification>>>() {
             @Override
-            protected Task<ArrayList<ObservableList<Planification>>> createTask() {
+            protected Task <ArrayList<ObservableList<Planification>>> createTask() {
                 return new Task<ArrayList<ObservableList<Planification>>>() {
                     @Override
                     protected ArrayList<ObservableList<Planification>> call() throws Exception {
@@ -225,61 +229,68 @@ public class LoginController implements Initializable {
                         list2 = FXCollections.observableArrayList();
                         list3 = FXCollections.observableArrayList();
                         list4 = FXCollections.observableArrayList();
-                        planifications = FXCollections.observableList(new PlanificationModel().getListToAlert());
 
-                        for (Planification p : planifications) {
+                        planifications = FXCollections.observableList(new PlanificationModel().getPlanificationToAlert());
+
+                        for(Planification p: planifications){
                             LocalDate dateDebFormation = new java.sql.Date(p.getFormation().getDatedebut().getTime()).toLocalDate();
                             LocalDate dateFinFormation = new java.sql.Date(p.getFormation().getDatefin().getTime()).toLocalDate();
                             LocalDate dateactuel = LocalDate.now();
                             int timing = p.getTiming();
                             int timeAlert = Integer.valueOf(resource.getString("planification.alertTime"));
-                            if (timing > 0) {
-                                if ((Period.between(dateactuel, dateDebFormation).getDays() - timing) >= 0) {
-                                    p.setDuration((Period.between(dateDebFormation, dateactuel).getDays() + timing));
+
+                            if(timing > 0){
+                                LocalDate dateDebutSujet = dateDebFormation.plusDays(timing);
+                                // sujet alert à date jj ...
+                                if(Period.between(dateactuel, dateDebutSujet).getDays() >= 0 &&
+                                        Period.between(dateactuel, dateDebutSujet).getDays() <= timeAlert ) {
+                                    p.setDuration(Period.between(dateactuel, dateDebutSujet).getDays());
                                     list1.add(p);
                                 }
-                                if (((Period.between(dateactuel, dateDebFormation).getDays() - timing) > (-timeAlert)) &&
-                                        (Period.between(dateactuel, dateDebFormation).getDays() - timing) <= 0) {
-                                    p.setDuration(Math.abs((Period.between(dateactuel, dateDebFormation).getDays() - timing)));
+
+                                // sujet passé de tel nombre de ...
+                                if(Period.between(dateactuel, dateDebutSujet).getDays() < 0 &&
+                                        Period.between(dateactuel, dateFinFormation).getDays() >= 0) {
+                                    p.setDuration(Math.abs(Period.between(dateactuel, dateDebutSujet).getDays()));
                                     list2.add(p);
                                 }
                             }
-                            if (timing < 0) {
-                                if (((Period.between(dateDebFormation, dateactuel).getDays() + timing) <= 0) &&
-                                        (Period.between(dateFinFormation, dateactuel).getDays() >= 0)) {
-                                    p.setDuration(Math.abs((Period.between(dateDebFormation, dateactuel).getDays() + timing)));
+                            if(timing < 0){
+                                LocalDate dateDebutSujet = dateDebFormation.minusDays(Math.abs(timing));
+                                // sujet alert à date jj ...
+                                if(Period.between(dateactuel, dateDebutSujet).getDays() >= 0 &&
+                                        Period.between(dateactuel, dateDebutSujet).getDays() <= timeAlert){
+                                    p.setDuration(Period.between(dateactuel, dateDebutSujet).getDays());
                                     list3.add(p);
                                 }
-                                if (((Period.between(dateDebFormation, dateactuel).getDays() + timing) >= 0) &&
-                                        (Period.between(dateFinFormation, dateactuel).getDays() + timing) > timeAlert) {
-                                    p.setDuration((Period.between(dateDebFormation, dateactuel).getDays() + timing));
+                                // sujet passé de tel nombre de ...
+                                if(Period.between(dateactuel, dateDebutSujet).getDays() < 0 &&
+                                        Period.between(dateactuel, dateFinFormation).getDays() >= 0){
+                                    p.setDuration(Math.abs(Period.between(dateactuel, dateDebutSujet).getDays()));
                                     list4.add(p);
                                 }
 
                             }
-                        }
 
+                        }
+                        /*
+                        System.out.println(list1.size()+" list 1");
+                        System.out.println(list2.size()+" list 2");
+                        System.out.println(list3.size()+" list 3");
+                        System.out.println(list4.size()+" list 4");
+                        */
                         array.add(list1);
                         array.add(list2);
                         array.add(list3);
                         array.add(list4);
+
                         return array;
                     }
 
-                    private void fillObservableList(ObservableList<Planification> planif, ObservableList list, PlanificationModel model) {
-                        Iterator iterator = list.iterator();
-                        while (iterator.hasNext()) {
-                            Object[] tab = (Object[]) iterator.next();
-                            Planification tmp = model.getById((int) tab[0]);
-                            BigInteger i = (BigInteger) tab[tab.length - 1];
-                            tmp.setDuration(i.intValue());
-                            planif.add(tmp);
-                        }
-                    }
                 };
             }
         };
-        servicePlanification.setPeriod(Duration.seconds(2));
+        servicePlanification.setPeriod(Duration.hours(2));
         servicePlanification.setRestartOnFailure(true);
         servicePlanification.setMaximumFailureCount(50);
         servicePlanification.start();
@@ -287,7 +298,13 @@ public class LoginController implements Initializable {
     }
 
     public static void stopServicePlanification() {
-        servicePlanification.cancel();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                servicePlanification.cancel();
+            }
+        });
+
     }
 
 }

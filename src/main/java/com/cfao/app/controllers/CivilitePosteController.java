@@ -158,8 +158,8 @@ public class CivilitePosteController extends AnchorPane implements Initializable
                 ServiceproUtil.notify("Erreur dans le thread du dialog");
                 task.getException().printStackTrace();
             });
-            dateFrom.setValue(LocalDate.now());
-            dateTo.setValue(LocalDate.now());
+            //dateFrom.setValue(LocalDate.now());
+            //dateTo.setValue(LocalDate.now());
         }
 
         public Poste getPoste() {
@@ -167,8 +167,12 @@ public class CivilitePosteController extends AnchorPane implements Initializable
                 Poste poste = new Poste();
                 poste.setTitre(txtPoste.getText());
                 poste.setSociete(comboSociete.getSelectionModel().getSelectedItem());
-                poste.setDatedebut(Date.valueOf(dateFrom.getValue()));
-                poste.setDatefin(Date.valueOf(dateTo.getValue()));
+                if(dateFrom.getValue() != null) {
+                    poste.setDatedebut(Date.valueOf(dateFrom.getValue()));
+                }
+                if(dateTo.getValue() != null) {
+                    poste.setDatefin(Date.valueOf(dateTo.getValue()));
+                }
                 if(personne != null) {
                     poste.setPersonne(personne);
                 }

@@ -31,10 +31,7 @@ import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -72,7 +69,7 @@ public class AccueilController implements Initializable {
         notificationUpdate();
         notificationPlanificationUpdate();
 
-        Slider slider=new Slider();
+        Slider slider = new Slider();
         slider.setMin(0.0);
         slider.setMax(10.0);
         slider.setMinWidth(30);
@@ -97,9 +94,9 @@ public class AccueilController implements Initializable {
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override
             public String toString(Double n) {
-                if (n < 60) return ""+n.intValue();
-                Double d=new Double(n/60);
-                return ""+d.intValue();
+                if (n < 60) return "" + n.intValue();
+                Double d = new Double(n / 60);
+                return "" + d.intValue();
             }
 
             @Override
@@ -206,9 +203,9 @@ public class AccueilController implements Initializable {
             AlertUtil.showErrorMessage(ex);
         }
     }
+
     private void notificationPlanificationUpdate() {
-        System.err.println("Je commence");
-        if(LoginController.servicePlanification != null) {
+        if (LoginController.servicePlanification != null) {
             LoginController.servicePlanification.setOnSucceeded(event -> {
                 ArrayList<ObservableList<Planification>> array = LoginController.servicePlanification.getValue();
                 ObservableList<Planification> planif1 = array.get(0);
@@ -219,6 +216,7 @@ public class AccueilController implements Initializable {
                 if (!planif1.isEmpty()) {
                     for (Planification planification : planif1) {
                         Platform.runLater(() -> {
+                            showNotification(planification, "JJ - " + planification.getDuration(), TrayIcon.MessageType.INFO);
                             System.out.println(planification.getSujet().getLibelle());
                         });
                     }
@@ -227,15 +225,14 @@ public class AccueilController implements Initializable {
                 if (!planif2.isEmpty()) {
                     for (Planification planification : planif2) {
                         Platform.runLater(() -> {
-                            System.out.println(planification.getSujet().getLibelle());
+                            showNotification(planification, " Passé de " + planification.getDuration() + "jr(s)", TrayIcon.MessageType.WARNING);
                         });
                     }
                 }
                 if (!planif3.isEmpty()) {
-
                     for (Planification planification : planif3) {
                         Platform.runLater(() -> {
-                            System.out.println(planification.getSujet().getLibelle());
+                            showNotification(planification, "JJ - " + planification.getDuration(), TrayIcon.MessageType.INFO);
                         });
                     }
 
@@ -244,36 +241,24 @@ public class AccueilController implements Initializable {
                 if (!planif4.isEmpty()) {
                     for (Planification planification : planif4) {
                         Platform.runLater(() -> {
-                            System.out.println(planification.getSujet().getLibelle());
+                            showNotification(planification, " Passé de " + planification.getDuration() + "jr(s)", TrayIcon.MessageType.WARNING);
                         });
                     }
                 }
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        /*FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
-                        iconView.setFill(Color.YELLOW);
-                        iconView.setGlyphSize(30);*/
-                        DateFormat timeFormat = SimpleDateFormat.getTimeInstance();
-                        Main.trayIcon.displayMessage(
-                                "Sujet : Envoi des lettre",
-                                "Taches : Réception, compilation des réponses\n" +
-                                        "Emission lettres d'invitation\n" +
-                                        "Envoi des lettres d'invitation et confirmation de réservation d'hôtel"
-                                        + timeFormat.format(new Date()),
-                                TrayIcon.MessageType.INFO
-                        );
-                        /*Notifications.create().title().graphic(iconView)
-                                .text("Réception, compilation des réponses\n" +
-                                        "Emission lettres d'invitation\n" +
-                                        "Envoi des lettres d'invitation et confirmation de réservation d'hôtel").show();*/
-                    }
-                });
             });
         }
         LoginController.servicePlanification.setOnFailed(event -> {
             System.out.println(event.getSource().getMessage());
         });
     }
+
+    private void showNotification(Planification p, String sms, TrayIcon.MessageType messageType) {
+        Main.trayIcon.displayMessage(
+                p.getFormation().getTitre(),
+                        "\nSujet : " + p.getSujet() + " (" + sms + ")" +
+                "\nTaches : " + p.getTaches(), messageType
+        );
+    }
+
 
 }

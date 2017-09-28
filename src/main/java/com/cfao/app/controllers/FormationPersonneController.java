@@ -162,7 +162,7 @@ public class FormationPersonneController extends AnchorPane implements Initializ
                 }
             }
         };
-        //personneTable.itemsProperty().bind(task.valueProperty());
+        //formationTable.itemsProperty().bind(task.valueProperty());
         ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
@@ -203,14 +203,14 @@ public class FormationPersonneController extends AnchorPane implements Initializ
     public void personneDoubleClick(MouseEvent event) {
         if (event.getClickCount() > 1 && stateBtnModifierParticipant == 1) {
             this.move(personneTable, participantTable);
-            //personneTable.getSelectionModel().clearSelection();
+            //formationTable.getSelectionModel().clearSelection();
         }
     }
 
     public void personneToParticipantAction(ActionEvent actionEvent) {
         if (personneTable.getSelectionModel().getSelectedItem() != null) {
             this.move(personneTable, participantTable);
-            //personneTable.getSelectionModel().clearSelection();
+            //formationTable.getSelectionModel().clearSelection();
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la personne à ajouter");
         }
@@ -218,7 +218,7 @@ public class FormationPersonneController extends AnchorPane implements Initializ
 
     public void personneToParticipantAllAction(ActionEvent actionEvent) {
         this.move(personneTable, participantTable, new ArrayList(this.personneTable.getItems()));
-        //personneTable.getSelectionModel().clearSelection();
+        //formationTable.getSelectionModel().clearSelection();
     }
 
     public void participantToPersonneAction(ActionEvent actionEvent) {
@@ -228,7 +228,7 @@ public class FormationPersonneController extends AnchorPane implements Initializ
             while (iterator.hasNext()) {
                 FormationPersonne fp = iterator.next();
                 participantTable.getItems().remove(fp);
-                //personneTable.getItems().add(fp.getPersonne());
+                //formationTable.getItems().add(fp.getPersonne());
                 personneData.add(fp.getPersonne());
             }
             //participantTable.getSelectionModel().clearSelection();
@@ -243,7 +243,7 @@ public class FormationPersonneController extends AnchorPane implements Initializ
         while (iterator.hasNext()) {
             FormationPersonne fp = iterator.next();
             participantTable.getItems().remove(fp);
-            //personneTable.getItems().add(fp.getPersonne());
+            //formationTable.getItems().add(fp.getPersonne());
             personneData.add(fp.getPersonne());
         }
         //participantTable.getSelectionModel().clearSelection();

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="705.0" prefWidth="1121.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
    <children>
       <SplitPane dividerPositions="0.6244665718349929" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -140,8 +138,8 @@
                                                                                         </VBox>
                                                                                         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                                                                             <children>
-                                                                                                <Label text="Société formatrice" />
-                                                                                                <ComboBox fx:id="comboSocieteFormatrice" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
+                                                                                                <Label text="Lieu de formation" />
+                                                                                                <ComboBox fx:id="comboLieuFormation" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
                                                                                             </children>
                                                                                         </VBox>
                                                                                       <VBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS">

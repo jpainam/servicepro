@@ -68,6 +68,10 @@ public class Groupe  implements java.io.Serializable {
     public String toString() {
         return getLibelle();
     }
+
+    public SimpleStringProperty libelleProperty() {
+        return libelle;
+    }
 }
 
 

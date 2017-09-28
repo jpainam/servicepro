@@ -1,6 +1,7 @@
 package com.cfao.app.controllers;
 
 import com.cfao.app.beans.Section;
+import com.cfao.app.model.Model;
 import com.cfao.app.model.SectionModel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
@@ -11,7 +12,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -99,18 +102,33 @@ public class SectionController implements Initializable {
             stateBtnNouveau = 0;
             ButtonUtil.add(btnNouveau);
             ServiceproUtil.setDisable(false, btnModifier);
-            if (!txtLibelle.getText().isEmpty()) {
-                Section section = new Section();
-                section.setLibelle(txtLibelle.getText());
-                if (sectionModel.save(section)) {
+            Section section = new Section();
+            section.setLibelle(txtLibelle.getText());
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    new Model<Section>("Section").save(section);
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
                     ServiceproUtil.notify("Enregistrement OK");
-                } else {
+                    ServiceproUtil.setEditable(false, txtLibelle);
+                    sectionListView.getItems().add(section);
+                    sectionListView.getSelectionModel().select(section);
+                }
+            });
+            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    task.getException().printStackTrace();
+                    ServiceproUtil.notify(task.getException().getMessage());
                     ServiceproUtil.notify("Une erreur est survenue");
                 }
-                ServiceproUtil.emptyFields(txtLibelle);
-                ServiceproUtil.setEditable(false, txtLibelle);
-            }
-            buildListView();
+            });
         }
     }
 
@@ -129,13 +147,29 @@ public class SectionController implements Initializable {
                 ServiceproUtil.setEditable(false, txtLibelle);
                 Section section = sectionListView.getSelectionModel().getSelectedItem();
                 section.setLibelle(txtLibelle.getText());
-                if (sectionModel.update(section)) {
-                    ServiceproUtil.notify("Enregistrement OK");
-                } else {
-                    ServiceproUtil.notify("Une erreur est survenue");
-                }
-                ServiceproUtil.emptyFields(txtLibelle);
-                buildListView();
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        new Model<Section>("Section").update(section);
+                        return null;
+                    }
+                };
+                new  Thread(task).start();
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        sectionListView.getItems().remove(section);
+                        sectionListView.getItems().add(section);
+                        ServiceproUtil.notify("Enregistrement OK");
+                    }
+                });
+                task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        ServiceproUtil.notify("Une erreur est survenue");
+                    }
+                });
+
             }
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir la section à modifier");
@@ -147,13 +181,30 @@ public class SectionController implements Initializable {
             Section section = sectionListView.getSelectionModel().getSelectedItem();
             boolean okay = AlertUtil.showConfirmationMessage("Suppression", "Etes vous sûr de vouloir supprimer " + section);
             if (okay) {
-                if (sectionModel.delete(section)) {
-                    ServiceproUtil.notify("Suppression OK");
-                } else {
-                    ServiceproUtil.notify("Erreur de suppression");
-                }
-                buildListView();
-                ServiceproUtil.emptyFields(txtLibelle);
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        new Model<Section>("Section").delete(section);
+                        return null;
+                    }
+                };
+                new Thread(task).start();
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        ServiceproUtil.notify("Suppression OK");
+                        sectionListView.getItems().remove(section);
+                        txtLibelle.setText("");
+                    }
+                });
+                task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        task.getException().printStackTrace();
+                        ServiceproUtil.notify(task.getException().getMessage());
+                        ServiceproUtil.notify("Erreur de suppression");
+                    }
+                });
             }
         } else {
             AlertUtil.showSimpleAlert("Information", "Veuillez choisir le section à supprimer");

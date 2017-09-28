@@ -48,7 +48,12 @@ public class DomaineController implements Initializable {
         adresseColumn.setCellValueFactory(param -> param.getValue().adresseProperty());
         paysColumn.setCellValueFactory(param -> param.getValue().paysProperty());
         telephoneColumn.setCellValueFactory(param -> param.getValue().telephoneProperty());
-        domaineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> personnelTable.itemsProperty().bind(newValue.personnelsProperty()));
+        domaineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null) {
+                txtLibelle.setText(newValue.getLibelle());
+                personnelTable.itemsProperty().bind(newValue.personnelsProperty());
+            }
+        });
     }
 
     private void initComponent() {
@@ -109,6 +114,7 @@ public class DomaineController implements Initializable {
             ServiceproUtil.setEditable(true, txtLibelle);
             ButtonUtil.save(btnModifier);
         } else {
+            domaine.setLibelle(txtLibelle.getText());
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {

@@ -4,6 +4,8 @@ package com.cfao.app;
 import com.cfao.app.model.PersonneModel;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,6 +19,31 @@ import java.util.ResourceBundle;
 
 public class Login extends Application {
     static Logger logger = Logger.getLogger(Login.class);
+
+    @Override
+    public void init() throws Exception {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                new PersonneModel();
+                return null;
+            }
+        };
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.out.println("Database Connectivity OK");
+            }
+        });
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+                System.err.println("Error Database Connectivity");
+            }
+        });
+        new Thread(task).start();
+    }
 
     @Override
     public void start(Stage stage) throws Exception {

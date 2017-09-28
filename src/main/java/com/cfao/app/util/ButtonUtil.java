@@ -115,13 +115,15 @@ public class ButtonUtil {
 
     public static void plusIcon(Button... buttons) {
         for (Button button : buttons) {
-            GlyphsDude.setIcon(button, FontAwesomeIcon.PLUS_SQUARE);
+            //GlyphsDude.setIcon(button, FontAwesomeIcon.PLUS_SQUARE);
+            button.setGraphic(new ImageView(new Image("images/icons/plus.png")));
         }
     }
 
     public static void minusIcon(Button... buttons) {
         for (Button button : buttons) {
-            GlyphsDude.setIcon(button, FontAwesomeIcon.MINUS_SQUARE);
+            //GlyphsDude.setIcon(button, FontAwesomeIcon.MINUS_SQUARE);
+            button.setGraphic(new ImageView(new Image("images/icons/minus.png")));
         }
     }
 }

@@ -13,7 +13,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -26,7 +25,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -257,7 +255,7 @@ public class FormationParticipantController extends AnchorPane implements Initia
             FormationPersonne fp = participantTable.getSelectionModel().getSelectedItem();
             formation.getFormationPersonnes().remove(fp);
             participantTable.getItems().remove(fp);
-            //personneTable.getItems().add(fp.getPersonne());
+            //formationTable.getItems().add(fp.getPersonne());
             personneData.add(fp.getPersonne());
             //participantTable.getSelectionModel().clearSelection();
             Task<Void> task = new Task<Void>() {

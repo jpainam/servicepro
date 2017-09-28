@@ -1,0 +1,1 @@
+2017-09-26 14:34:55 ERROR SqlExceptionHelper:146 - Cannot add or update a child row: a foreign key constraint fails (`servicepro`.`formations`, CONSTRAINT `FK_5y40esjd0jhj0kc4q4hy7h2hi` FOREIGN KEY (`LIEUFORMATION`) REFERENCES `lieu_formation` (`IDLIEU`))

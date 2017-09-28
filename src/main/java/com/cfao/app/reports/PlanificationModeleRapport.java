@@ -85,7 +85,7 @@ public class PlanificationModeleRapport extends ExcelRapport {
                 taches = taches.substring(0, taches.lastIndexOf("\n"));
             cell.setCellValue(taches);
             /*row..setCellValue(
-                    createHelper.createRichTextString(planification.getTaches().toString()));*/
+                    helper.createRichTextString(planification.getTaches().toString()));*/
             /** RESPONSABLE et VALIDATION */
             cell = row.createCell(col++);
             cell.setCellValue(planification.getResponsable().getLibelle());

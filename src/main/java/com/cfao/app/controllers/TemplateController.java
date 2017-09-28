@@ -203,7 +203,16 @@ public class TemplateController implements Initializable, Controller {
     public void groupeAction(ActionEvent actionEvent) {
         openParameterScene(ParametreController.TAB_GROUPE);
     }
+    public void agenceAction(ActionEvent actionEvent) {
+        openParameterScene(ParametreController.TAB_AGENCE);
+    }
 
+    public void modeleAction(ActionEvent actionEvent) {
+        openParameterScene(ParametreController.TAB_MODELE);
+    }
+    public void lieuAction(ActionEvent actionEvent) {
+        openParameterScene(ParametreController.TAB_LIEU);
+    }
     public void sectionAction(ActionEvent actionEvent) {
         openParameterScene(ParametreController.TAB_SECTION);
     }
@@ -335,6 +344,8 @@ public class TemplateController implements Initializable, Controller {
 
     public void exitButton(MouseEvent mouseEvent) {
         try {
+            LoginController.stopServiceNotification();
+            LoginController.stopServicePlanification();
             new Login().start(new Stage());
             //Stage stage = (Stage) ((Node) .getSource()).getScene().getWindow();
             Stage stage = Main.stage;
@@ -403,6 +414,8 @@ public class TemplateController implements Initializable, Controller {
     }
 
     public void quitterAction(ActionEvent event) {
+        LoginController.stopServiceNotification();
+        LoginController.stopServicePlanification();
         Main.tray.remove(Main.trayIcon);
         Platform.exit();
         System.exit(0);

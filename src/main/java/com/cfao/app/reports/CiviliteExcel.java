@@ -147,7 +147,7 @@ public class CiviliteExcel extends ExcelRapport {
                 if (diff.getMonths() < 6) {
                     cell.setCellStyle(redBackground);
                     cell.getCellStyle().setDataFormat(
-                            createHelper.createDataFormat().getFormat("dd-mmm-yy"));
+                            helper.createDataFormat().getFormat("dd-mmm-yy"));
                 }
             }
 

@@ -34,7 +34,7 @@ public class PlanificationModel extends Model<Planification> {
         return null;
     }
 
-    public List<Planification> getListToAlert() {
+    public List<Planification> getPlanificationToAlert() {
         Session session = getCurrentSession();
         try {
             Criterion critere = Restrictions.and(Restrictions.eq("fait", false),
@@ -52,6 +52,5 @@ public class PlanificationModel extends Model<Planification> {
             }
         }
         return null;
-
     }
 }

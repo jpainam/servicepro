@@ -3,6 +3,7 @@ package com.cfao.app.reports;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.Model;
 import com.cfao.app.util.AlertUtil;
+import com.cfao.app.util.ServiceproUtil;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,19 +13,23 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 /**
  * Created by JP on 8/30/2017.
  */
 public class FormationExcel extends ExcelRapport {
+    private static final String FEUILLE_PRESENCE_TEMPLATE = "feuille_presence.xlsx";
     static Logger logger = Logger.getLogger(FormationExcel.class);
     private Formation formation;
 
@@ -115,7 +120,7 @@ public class FormationExcel extends ExcelRapport {
                 taches = taches.substring(0, taches.lastIndexOf("\n"));
             cell.setCellValue(taches);
             /*row..setCellValue(
-                    createHelper.createRichTextString(planification.getTaches().toString()));*/
+                    helper.createRichTextString(planification.getTaches().toString()));*/
             /** RESPONSABLE et VALIDATION */
             cell = row.createCell(col++);
             cell.setCellValue(planification.getResponsable().getLibelle());
@@ -230,7 +235,7 @@ public class FormationExcel extends ExcelRapport {
 
         line++;
         row = sheet.createRow(line);
-        String[] titres = {"N°", "Pays", "Filiale", "Prénom", "Nom", "Téléphone", "Fonction", "Section", "Groupe", };
+        String[] titres = {"N°", "Pays", "Filiale", "Prénom", "Nom", "Téléphone", "Fonction", "Section", "Groupe",};
         for (int i = 0; i < titres.length; i++) {
             cell = row.createCell((short) i);
             cell.setCellValue(titres[i]);
@@ -282,26 +287,55 @@ public class FormationExcel extends ExcelRapport {
     }
 
     public void printFeuillePresence(Formation formation) throws Exception {
-        short line = 0;
-        row = sheet.createRow(line++);
-        createCell(0, "Feuille de Présence", headerStyle);
-        row = sheet.createRow(line++);
-        createCell(0, "", headerStyle);
-        row = sheet.createRow(line++);
-        createCell(1, formation.getTitre(), headerStyle);
-        createCell(5, "Trainer(s)", headerStyle);
-        if (formation.getSocieteFormatrice() != null) {
-            createCell(6, formation.getSocieteFormatrice().getLibelle(), headerStyle);
-        } else {
-            createCell(6, "", headerStyle);
+        File file = new File(ResourceBundle.getBundle("Bundle").
+                getString("report.dir") + File.separator + FEUILLE_PRESENCE_TEMPLATE);
+
+        XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(file));
+        XSSFSheet sheet = wb.getSheetAt(0);
+        Cell cell;
+        short line = 2;
+        //Update the value of cell
+        cell = sheet.getRow(line).getCell(0);
+        cell.setCellValue("Formation : " + formation.getTitre());
+        sheet.addMergedRegion(new CellRangeAddress(line, line, 0, 4));
+
+        cell = sheet.getRow(line).getCell(6);
+        if(formation.getSocieteFormatrice() != null) {
+            cell.setCellValue(formation.getSocieteFormatrice().getLibelle());
         }
-        row = sheet.createRow(line++);
-        createCell(0, "Name", headerStyle);
-        for(int i = 1; i < 12; i++){
-            createCell(i++, "AM", headerStyle);
-            createCell(i, "PM", headerStyle);
+        line = 7;
+        List<FormationPersonne> formationPersonnes = formation.getFormationPersonnes();
+        for (FormationPersonne fp : formationPersonnes) {
+            Personne p = fp.getPersonne();
+            row = sheet.getRow(line);
+            if(row == null){
+                row = sheet.createRow(line);
+            }
+            cell = row.getCell(0);
+            if(cell == null){
+                cell = row.createCell(0);
+            }
+            cell.setCellValue(p.getNom() + " " + p.getPrenom());
+            line++;
         }
-        //sheet.addMergedRegion(new CellRangeAddress(line, line, 6, 12));
-        terminer();
+
+        /*sheet.setColumnWidth(0, 8000);
+        for (int i = 1; i < 10; i++) {
+            sheet.setColumnWidth(i, 3000);
+        }*/
+        sheet.autoSizeColumn(0);
+        //save workbook
+        FileOutputStream fileOut = new FileOutputStream(new File(ResourceBundle.getBundle("Bundle").getString("document.dir") + File.separator + "workbook.xlsx"));
+        wb.write(fileOut);
+        fileOut.close();
+        Path path = Paths.get(ResourceBundle.getBundle("Bundle").getString("document.dir")).toAbsolutePath();
+        if (Files.notExists(path)) {
+            Files.createDirectories(path);
+        }
+        String document = path.toString() + File.separator + "workbook.xlsx";
+        File f = new File((document));
+        if (f.exists() && !f.isDirectory()) {
+            ServiceproUtil.openDocument(f);
+        }
     }
 }

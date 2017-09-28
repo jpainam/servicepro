@@ -96,7 +96,7 @@ public class Tache implements java.io.Serializable {
 
     @Override
     public String toString(){
-        return this.getLibelle();
+        return this.getLibelle() + "\n";
     }
 }
 

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.input.*?>
-<?import javafx.scene.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
-
 <StackPane fx:id="principalLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.TemplateController">
     <children>
         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
@@ -55,6 +51,9 @@
                                         <MenuItem mnemonicParsing="false" onAction="#sectionAction" text="Gestion des Sections" />
                                         <MenuItem mnemonicParsing="false" onAction="#planificationModeleAction" text="Modèle de planification" />
                               <MenuItem mnemonicParsing="false" onAction="#domaineAction" text="Gestion des Domaines" />
+                              <MenuItem mnemonicParsing="false" onAction="#agenceAction" text="Gestion des Agences" />
+                              <MenuItem mnemonicParsing="false" onAction="#modeleAction" text="Gestion des Modèles de formation" />
+                              <MenuItem mnemonicParsing="false" onAction="#lieuAction" text="Gestion des lieux de formation" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="_?">

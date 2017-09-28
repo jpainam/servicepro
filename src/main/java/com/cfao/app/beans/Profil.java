@@ -104,7 +104,7 @@ public class Profil implements java.io.Serializable {
 
     public void setCompetences(List<Competence> competences) {
         if(competences != null) {
-            this.competences.set(FXCollections.observableList(competences));
+            this.competences.set(FXCollections.observableArrayList(competences));
         }
     }
 

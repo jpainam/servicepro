@@ -172,7 +172,7 @@ public class AccueilPersonneController extends AnchorPane implements Initializab
         };
         ProgressIndicatorUtil.show(personneStackPane, task);
         new Thread(task).start();
-        //personneTable.itemsProperty().bind(task.valueProperty());
+        //formationTable.itemsProperty().bind(task.valueProperty());
         task.setOnSucceeded(event -> {
             FilteredList<Personne> filteredList = new FilteredList<Personne>(task.getValue(), p -> true);
             SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);

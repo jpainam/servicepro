@@ -1,0 +1,2 @@
+1. Une personne peut il avoir plusieurs profil avec des niveau différent dans ces profil?
+2. Doit on précisé les niveau des compétences/profil associé à une formation

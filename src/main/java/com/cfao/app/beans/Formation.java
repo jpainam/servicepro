@@ -31,6 +31,7 @@ public class Formation {
     private ListProperty<Personnel> personnels = new SimpleListProperty<>();
     // Societe formatrice
     private SimpleObjectProperty<SocieteFormatrice> societeFormatrice = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<LieuFormation> lieuFormation = new SimpleObjectProperty<>();
     private ListProperty<SupportFormation> supportFormations = new SimpleListProperty<>();
     private ListProperty<Competence> competences = new SimpleListProperty<>();
     //private SetProperty<Competence> prerequis = new SimpleSetProperty<>();
@@ -341,6 +342,26 @@ public class Formation {
 
     public ListProperty<SupportFormation> supportFormationsProperty() {
         return supportFormations;
+    }
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="LIEUFORMATION")
+    public LieuFormation getLieuFormation() {
+        return lieuFormation.get();
+    }
+
+    public SimpleObjectProperty<LieuFormation> lieuFormationProperty() {
+        return lieuFormation;
+    }
+
+    public void setLieuFormation(LieuFormation lieuFormation) {
+        if(lieuFormation != null) {
+            this.lieuFormation.set(lieuFormation);
+        }
+    }
+
+    public SimpleStringProperty descriptionProperty() {
+        return description;
     }
 }
 
