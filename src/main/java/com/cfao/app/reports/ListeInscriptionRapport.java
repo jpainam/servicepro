@@ -77,10 +77,14 @@ public class ListeInscriptionRapport extends ExcelRapport {
                 /** Pays */
                 cell = row.createCell(col++);
                 cell.setCellStyle(defaultStyle);
-                cell.setCellValue(p.getPays().getNamefr());
+                if(p.getPays() != null) {
+                    cell.setCellValue(p.getPays().getNamefr());
+                }
                 /** Filiale */
                 cell = row.createCell(col++);
-                cell.setCellValue(p.getSociete().getNom());
+                if(p.getSociete() != null) {
+                    cell.setCellValue(p.getSociete().getNom());
+                }
                 cell.setCellStyle(defaultStyle);
                 /** Prenom */
                 cell = row.createCell(col++);
@@ -92,7 +96,9 @@ public class ListeInscriptionRapport extends ExcelRapport {
                 cell.setCellStyle(defaultStyle);
                 /** Fonction */
                 cell = row.createCell(col++);
-                cell.setCellValue(p.getFonction());
+                if(p.getFonction() != null) {
+                    cell.setCellValue(p.getFonction());
+                }
                 cell.setCellStyle(defaultStyle);
                 /** Formation */
                 cell = row.createCell(col++);

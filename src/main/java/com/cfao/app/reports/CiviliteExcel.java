@@ -62,10 +62,14 @@ public class CiviliteExcel extends ExcelRapport {
             /** Pays */
             cell = row.createCell(col++);
             cell.setCellStyle(defaultStyle);
-            cell.setCellValue(p.getPays().getNamefr());
+            if(p.getPays() != null) {
+                cell.setCellValue(p.getPays().getNamefr());
+            }
             /** Filiale */
             cell = row.createCell(col++);
-            cell.setCellValue(p.getSociete().getNom());
+            if(p.getSociete() != null) {
+                cell.setCellValue(p.getSociete().getNom());
+            }
             cell.setCellStyle(defaultStyle);
             /** Matric */
             cell = row.createCell(col++);
@@ -81,7 +85,9 @@ public class CiviliteExcel extends ExcelRapport {
             cell.setCellStyle(defaultStyle);
             /** Fonction */
             cell = row.createCell(col++);
-            cell.setCellValue(p.getFonction());
+            if(p.getFonction() != null) {
+                cell.setCellValue(p.getFonction());
+            }
             cell.setCellStyle(defaultStyle);
             /** Profil */
             cell = row.createCell(col++);
@@ -136,7 +142,9 @@ public class CiviliteExcel extends ExcelRapport {
             cell = row.createCell(col++);
             cell.setCellStyle(defaultStyle);
             if (p.getPassport() != null) {
-                cell.setCellValue(p.getPassport().substring(0, p.getPassport().lastIndexOf(".")));
+                if(p.getPassport().lastIndexOf(".") != -1) {
+                    cell.setCellValue(p.getPassport().substring(0, p.getPassport().lastIndexOf(".")));
+                }
             }
             /** Expire */
             cell = row.createCell(col++);
