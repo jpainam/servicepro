@@ -33,9 +33,9 @@
                                  </accelerator></MenuItem>
                                     </items>
                                 </Menu>
-                                <Menu text="Personnel">
+                                <Menu text="Formateurs">
                                     <items>
-                                        <MenuItem fx:id="menuListePersonne" onAction="#showPersonnel" text="Liste des personnels">
+                                        <MenuItem fx:id="menuListeFormateurs" onAction="#showFormateurs" text="Liste des formateurs">
                                  <accelerator>
                                     <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                  </accelerator></MenuItem>

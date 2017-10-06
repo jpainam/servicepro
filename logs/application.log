@@ -5,3 +5,5 @@
 2017-09-28 23:25:42 ERROR RapportController:213 - java.lang.NullPointerException
 2017-09-28 23:26:45 ERROR RapportController:184 - java.lang.NullPointerException
 2017-09-28 23:28:30 ERROR RapportController:213 - java.lang.StringIndexOutOfBoundsException: String index out of range: -1
+2017-10-01 01:51:11 ERROR SqlExceptionHelper:146 - Duplicate entry '1-1' for key 'PRIMARY'
+2017-10-02 21:59:43 ERROR RapportController:246 - java.io.FileNotFoundException: documents\workbook.xlsx (The process cannot access the file because it is being used by another process)

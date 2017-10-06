@@ -6,7 +6,7 @@ import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
 import com.cfao.app.model.SujetModel;
 import com.cfao.app.model.TacheModel;
-import com.cfao.app.reports.FormationExcel;
+import com.cfao.app.reports.PlanificationExcel;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.ButtonUtil;
 import com.cfao.app.util.DialogUtil;
@@ -453,8 +453,8 @@ public class FormationPlanificationController extends AnchorPane implements Init
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    FormationExcel formationExcel = new FormationExcel(formation);
-                    formationExcel.printPlanification();
+                    PlanificationExcel formationExcel = new PlanificationExcel();
+                    formationExcel.printPlanification(formation);
                     return null;
                 }
             };

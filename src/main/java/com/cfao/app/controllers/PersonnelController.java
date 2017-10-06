@@ -3,8 +3,8 @@ package com.cfao.app.controllers;
 import com.cfao.app.beans.Domaine;
 import com.cfao.app.beans.Personnel;
 import com.cfao.app.model.Model;
+import com.cfao.app.model.PersonnelModel;
 import com.cfao.app.util.*;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -17,6 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.util.Iterator;
@@ -48,6 +49,9 @@ public class PersonnelController implements Initializable{
     public int stateBtnModifier = 0;
     public Personnel personnel = null;
     public ComboBox<Personnel> comboPersonnel;
+    public Button btnExcel;
+    public TextField txtPrestataire;
+    public TextField txtEmail;
 
 
     private SearchBox searchBox = new SearchBox();
@@ -66,6 +70,7 @@ public class PersonnelController implements Initializable{
         ButtonUtil.cancel(btnAnnulerPersonnel);
         ButtonUtil.edit(btnModifierPersonnel);
         ButtonUtil.delete(btnSupprimerPersonnel);
+        ButtonUtil.excel(btnExcel);
 
         ServiceproUtil.setDisable(true, btnModifierPersonnel, btnSupprimerPersonnel);
         disableAllComponents(false);
@@ -79,7 +84,7 @@ public class PersonnelController implements Initializable{
             if (stateBtnNouveau == 1) {
                 ServiceproUtil.setDisable(true, btnModifierPersonnel, btnSupprimerPersonnel, comboDomaines);
                 ServiceproUtil.setEditable(false, txtNom, txtPrenom, txtTelephone, txtAdresse);
-                btnNouveauPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
+                ButtonUtil.add(btnNouveauPersonnel);
                 stateBtnNouveau = 0;
             }
 
@@ -98,10 +103,12 @@ public class PersonnelController implements Initializable{
         txtPrenom.setText(personnel.getPrenom());
         txtAdresse.setText(personnel.getAdresse());
         txtTelephone.setText(personnel.getTelephone());
+        txtPrestataire.setText(personnel.getPrestataire());
+        txtEmail.setText(personnel.getEmail());
         updateDomaine(personnel.getDomaines());
     }
 
-    private void updateDomaine(List<Domaine> domaines) {
+   /* private void updateDomaine(List<Domaine> domaines) {
         comboDomaines.getCheckModel().clearChecks();
         if( domaines.size() > 0) {
             Task<int[]> task = new Task<int[]>() {
@@ -128,7 +135,20 @@ public class PersonnelController implements Initializable{
                 });
             });
         }
-    }
+    }*/
+   private void updateDomaine(List<Domaine> domaines) {
+       comboDomaines.getCheckModel().clearChecks();
+       int index = 0;
+       for (Domaine l : comboDomaines.getItems()) {
+           Iterator<Domaine> iterator = domaines.iterator();
+           while (iterator.hasNext()) {
+               if (l.equals(iterator.next())) {
+                   comboDomaines.getCheckModel().check(index);
+               }
+           }
+           index++;
+       }
+   }
 
     private void buildData() {
         Task<ObservableMap<String, ObservableList>> task = new Task<ObservableMap<String, ObservableList>>() {
@@ -137,6 +157,7 @@ public class PersonnelController implements Initializable{
                 map = FXCollections.observableHashMap();
                 map.put("personnel", FXCollections.observableList(new Model<Personnel>("Personnel").getList()));
                 map.put("domaine", FXCollections.observableList(new Model<Domaine>("Domaine").getList()));
+                map.put("prestataire", FXCollections.observableArrayList(new PersonnelModel().getPrestataires()));
                 return map;
             }
         };
@@ -147,6 +168,7 @@ public class PersonnelController implements Initializable{
             personnelTable.getItems().setAll(map.get("personnel"));
             comboDomaines.getItems().setAll(map.get("domaine"));
             comboPersonnel.setItems(map.get("personnel"));
+            TextFields.bindAutoCompletion(txtPrestataire, map.get("prestataire"));
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
@@ -164,7 +186,7 @@ public class PersonnelController implements Initializable{
                     ServiceproUtil.setDisable(true, btnModifierPersonnel, btnSupprimerPersonnel);
                     disableAllComponents(true);
                     resetAllComponents();
-                    btnNouveauPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                    ButtonUtil.save(btnNouveauPersonnel);
                     this.stateBtnNouveau = 1;
                     break;
                 case 1:
@@ -174,7 +196,7 @@ public class PersonnelController implements Initializable{
                     Personnel p = new Personnel();
                     setPersonnelParameters(p);
                     savePersonnel(p);
-                    btnNouveauPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
+                    ButtonUtil.add(btnNouveauPersonnel);
                     disableAllComponents(false);
                     this.stateBtnNouveau = 0;
                     ServiceproUtil.setDisable(false, btnModifierPersonnel, btnSupprimerPersonnel);
@@ -190,6 +212,8 @@ public class PersonnelController implements Initializable{
         txtPrenom.setText("");
         txtTelephone.setText("");
         comboDomaines.getCheckModel().clearChecks();
+        txtEmail.setText("");
+        txtPrestataire.setText("");
     }
 
     public void setPersonnelParameters(Personnel p){
@@ -197,12 +221,14 @@ public class PersonnelController implements Initializable{
         p.setPrenom(txtPrenom.getText());
         p.setAdresse(txtAdresse.getText());
         p.setTelephone(txtTelephone.getText());
+        p.setPrestataire(txtPrestataire.getText());
+        p.setEmail(txtEmail.getText());
         p.setDomaines(comboDomaines.getCheckModel().getCheckedItems());
     }
 
     private void disableAllComponents(boolean b) {
         ServiceproUtil.setDisable(!b, comboDomaines);
-        ServiceproUtil.setEditable(b, txtNom, txtPrenom, txtTelephone, txtAdresse);
+        ServiceproUtil.setEditable(b, txtNom, txtPrenom, txtTelephone, txtAdresse, txtEmail, txtPrestataire);
     }
 
     private void savePersonnel(Personnel p) {
@@ -237,13 +263,13 @@ public class PersonnelController implements Initializable{
                 case 0:
                     ServiceproUtil.setDisable(true, btnNouveauPersonnel, btnSupprimerPersonnel);
                     disableAllComponents(true);
-                    btnModifierPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.save"));
+                    ButtonUtil.save(btnModifierPersonnel);
                     this.stateBtnModifier = 1;
                     break;
                 case 1:
                     setPersonnelParameters(personnel);
                     updatePersonnel(personnel);
-                    btnModifierPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+                    ButtonUtil.edit(btnModifierPersonnel);
                     this.stateBtnModifier = 0;
                     disableAllComponents(false);
                     ServiceproUtil.setDisable(false, btnNouveauPersonnel, btnSupprimerPersonnel);
@@ -284,11 +310,11 @@ public class PersonnelController implements Initializable{
             disableAllComponents(false);
             personnelTable.refresh();
             if (btnNouveauPersonnel.isDisable()) {
-                btnModifierPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.edit"));
+                ButtonUtil.edit(btnModifierPersonnel);
                 ServiceproUtil.setDisable(false, btnNouveauPersonnel, btnSupprimerPersonnel);
                 stateBtnModifier = 0;
             } else if (btnModifierPersonnel.isDisable()) {
-                btnNouveauPersonnel.setText(ResourceBundle.getBundle("Bundle").getString("button.new"));
+                ButtonUtil.add(btnNouveauPersonnel);
                 ServiceproUtil.setDisable(false, btnModifierPersonnel, btnSupprimerPersonnel);
                 stateBtnNouveau = 0;
             }
@@ -318,5 +344,8 @@ public class PersonnelController implements Initializable{
                 }
             });
         }
+    }
+
+    public void excelAction(ActionEvent event) {
     }
 }

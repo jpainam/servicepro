@@ -147,7 +147,29 @@ public class AccueilController implements Initializable {
 
 
     private void initComponents() {
-
+        /**System.err.println("Ici");
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Path str = ServiceproUtil.download("http://uacosendai-edu.net/sites/default/files/field/documents/formulaire-recommandation-ministre-du-culte.pdf",
+                        "Documents");
+                System.err.println(str.toFile().getAbsolutePath());
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                task.getException().printStackTrace();
+            }
+        });
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.err.println("Bien deroule");
+            }
+        });*/
     }
 
     public void printProfilAction(ActionEvent event) {

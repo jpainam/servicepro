@@ -64,4 +64,35 @@ public class PersonnelModel extends  Model<Personnel> {
         return 0;
     }
 
+    public List<String> getPrestataires(){
+        Session session = getCurrentSession();
+        try{
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Personnel.class);
+            criteria.add(Restrictions.isNotNull("prestataire"));
+            criteria.setProjection(Projections.distinct(Projections.property("prestataire")));
+            /*List<Personnel> personnels = criteria.list();
+            System.err.println(personnels);
+            //Platform.exit();
+           if(personnels == null){
+               return null;
+           }
+            List<String> prestataires = new ArrayList<>();
+            for(Personnel p : personnels.cl){
+                if(p != null && p.getPrestataire() != null) {
+                    prestataires.add(p.getPrestataire());
+                }
+            }
+            return prestataires;*/
+            return  criteria.list();
+        }catch (Exception ex){
+            AlertUtil.showErrorMessage(ex);
+        }finally {
+            if(session.isOpen()){
+                session.close();
+            }
+        }
+        return null;
+    }
+
 }

@@ -81,7 +81,7 @@ public class TemplateController implements Initializable, Controller {
     public MenuItem menuQuitter;
     public MenuItem menuImporter;
     public MenuItem menuExporter;
-    public MenuItem menuListePersonne;
+    public MenuItem menuListeFormateurs;
     public MenuItem mnuMiseAjour;
 
 
@@ -131,7 +131,7 @@ public class TemplateController implements Initializable, Controller {
         menuExporter.setGraphic(new ImageView(new Image("images/icons/database_go.png")));
         menuImporter.setGraphic(new ImageView(new Image("images/icons/folder_database.png")));
         menuQuitter.setGraphic(new ImageView(new Image("images/icons/sign_out.png")));
-        menuListePersonne.setGraphic(new ImageView(new Image("images/icons/personnel.png")));
+        menuListeFormateurs.setGraphic(new ImageView(new Image("images/icons/personnel.png")));
         mnuMiseAjour.setGraphic(new ImageView(new Image("images/icons/update.png")));
         /*menuQuitter.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         menuExporter.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
@@ -331,7 +331,7 @@ public class TemplateController implements Initializable, Controller {
         });
     }
 
-    public void showPersonnel(ActionEvent event) {
+    public void showFormateurs(ActionEvent event) {
         breadCrumb.setSelectedCrumb("personnel");
         try {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/personnel/personnel.fxml"));

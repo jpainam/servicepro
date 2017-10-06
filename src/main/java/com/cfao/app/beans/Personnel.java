@@ -25,6 +25,9 @@ public class Personnel implements java.io.Serializable {
     private ListProperty<Formation> formations = new SimpleListProperty<>();
     private ListProperty<Domaine> domaines = new SimpleListProperty<>();
 
+    private SimpleStringProperty prestataire = new SimpleStringProperty();
+    private SimpleStringProperty email = new SimpleStringProperty();
+
     public Personnel() {
     }
 
@@ -154,6 +157,41 @@ public class Personnel implements java.io.Serializable {
 
     public SimpleStringProperty telephoneProperty() {
         return telephone;
+    }
+
+    @Column(name="PRESTATAIRE", length=150)
+    public String getPrestataire() {
+        return prestataire.get();
+    }
+
+    public SimpleStringProperty prestataireProperty() {
+        return prestataire;
+    }
+
+    public void setPrestataire(String prestataire) {
+        this.prestataire.set(prestataire);
+    }
+
+    @Column(name="EMAIL", length=50)
+    public String getEmail() {
+        return email.get();
+    }
+
+    public SimpleStringProperty emailProperty() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email.set(email);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Personnel){
+            Personnel p = (Personnel)o;
+            return p.getIdpersonnel().equals(this.getIdpersonnel());
+        }
+        return false;
     }
 }
 

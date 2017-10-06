@@ -38,7 +38,14 @@ public class ButtonUtil {
 
     public static void print(Button... buttons) {
         for (Button button : buttons) {
-            GlyphsDude.setIcon(button, FontAwesomeIcon.PRINT);
+            //GlyphsDude.setIcon(button, FontAwesomeIcon.PRINT);
+            button.setGraphic(new ImageView(new Image("images/icons/print.png")));
+        }
+    }
+    public static void pdf(Button... buttons) {
+        for (Button button : buttons) {
+            //GlyphsDude.setIcon(button, FontAwesomeIcon.PRINT);
+            button.setGraphic(new ImageView(new Image("images/icons/pdf.png")));
         }
     }
 
@@ -97,13 +104,15 @@ public class ButtonUtil {
 
     public static void excel(Button... buttons) {
         for (Button button : buttons) {
-            GlyphsDude.setIcon(button, FontAwesomeIcon.FILE_EXCEL_ALT);
+            button.setGraphic(new ImageView(new Image("images/icons/excel.png")));
+            //GlyphsDude.setIcon(button, FontAwesomeIcon.FILE_EXCEL_ALT);
         }
     }
 
     public static void excel(Hyperlink... hyperlinks) {
         for (Hyperlink hyperlink : hyperlinks) {
-            GlyphsDude.setIcon(hyperlink, FontAwesomeIcon.FILE_EXCEL_ALT);
+            //GlyphsDude.setIcon(hyperlink, FontAwesomeIcon.FILE_EXCEL_ALT);
+            hyperlink.setGraphic(new ImageView(new Image("images/icons/excel.png")));
         }
     }
 

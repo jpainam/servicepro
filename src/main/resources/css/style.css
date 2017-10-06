@@ -191,6 +191,9 @@ JFOenix CSS
 .button .glyph-icon {
     -fx-fill: black;
 }
+.button-profil .glyph-icon{
+    -fx-fill: white;
+}
 .combo-box:disabled, .combo-box:disabled > * {
     -fx-opacity: 1.0 ;
 }

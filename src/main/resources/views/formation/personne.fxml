@@ -21,6 +21,8 @@
                        <Button fx:id="btnModifierParticipant" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#modifierParticipant" styleClass="actionButton" text="Modifier/Edit" textFill="#2920b0" />
                        <Separator orientation="VERTICAL" />
                        <Button fx:id="btnAnnulerParticipant" mnemonicParsing="false" onAction="#annulerParticipant" styleClass="actionButton" text="Annuler/Cancel" />
+                  <Separator orientation="VERTICAL" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Ajout automatique des compétences aux participants?" />
                    </items>
                </ToolBar>
             <VBox spacing="5.0" VBox.vgrow="ALWAYS">

@@ -4,7 +4,7 @@ import com.cfao.app.StageManager;
 import com.cfao.app.beans.*;
 import com.cfao.app.model.FormationModel;
 import com.cfao.app.model.Model;
-import com.cfao.app.model.PersonnelModel;
+import com.cfao.app.reports.FormationExcel;
 import com.cfao.app.reports.PrintFormation;
 import com.cfao.app.util.*;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -48,9 +48,7 @@ public class FormationController implements Initializable {
     public TextArea txtRemarque;
     public ComboBox<Modele> comboModele;
     public ComboBox<EtatFormation> comboEtatformation;
-    public ComboBox<Personnel> comboFormateur;
-    public Button btnAjouterFormateur;
-    public Button btnSupprimerFormateur;
+
     public VBox researchBox;
     public Button btnPrevious;
     public Button btnNext;
@@ -60,11 +58,11 @@ public class FormationController implements Initializable {
     public Button btnSupprimer;
     public Button btnAnnuler;
 
-    public ListView<Personnel> listeViewFormateurs;
     public ComboBox<Typeformation> comboTypeformation;
     public ComboBox<LieuFormation> comboLieuFormation;
     public StackPane formationStackPane;
-
+    public Button btnExcel;
+    public HBox formateurContainer;
 
     private SearchBox searchBox = new SearchBox();
 
@@ -82,6 +80,7 @@ public class FormationController implements Initializable {
     private FormationPlanificationController planificationController;
     private FormationParticipantController participantController;
     private FormationSupportController supportController;
+    private FormationFormateurController formateurController;
     public HBox supportContainer;
 
 
@@ -107,9 +106,6 @@ public class FormationController implements Initializable {
         searchBox.setMaxWidth(Double.MAX_VALUE);
         researchBox.getChildren().setAll(new Label("Formations : "), searchBox);
 
-
-        GlyphsDude.setIcon(btnAjouterFormateur, FontAwesomeIcon.USER_PLUS);
-        GlyphsDude.setIcon(btnSupprimerFormateur, FontAwesomeIcon.USER_TIMES);
         GlyphsDude.setIcon(tabCompetenceAssociee, FontAwesomeIcon.TASKS);
         GlyphsDude.setIcon(tabParticipant, FontAwesomeIcon.USERS);
         GlyphsDude.setIcon(tabPersonne, FontAwesomeIcon.USERS);
@@ -118,6 +114,7 @@ public class FormationController implements Initializable {
         ButtonUtil.next(btnNext);
         ButtonUtil.previous(btnPrevious);
         ButtonUtil.print(btnPrint);
+        ButtonUtil.excel(btnExcel);
         ButtonUtil.edit(btnModifier);
         ButtonUtil.delete(btnSupprimer);
         ButtonUtil.add(btnNouveau);
@@ -130,11 +127,13 @@ public class FormationController implements Initializable {
                 competenceController = new FormationCompetenceController();
                 planificationController = new FormationPlanificationController();
                 supportController = new FormationSupportController();
+                formateurController = new FormationFormateurController();
                 tabParticipant.setContent(participantController);
                 tabPersonne.setContent(personneController);
                 tabCompetenceAssociee.setContent(competenceController);
                 tabPlanification.setContent(planificationController);
                 supportContainer.getChildren().setAll(supportController);
+                formateurContainer.getChildren().setAll(formateurController);
                 return null;
             }
         };
@@ -147,7 +146,6 @@ public class FormationController implements Initializable {
             @Override
             protected ObservableMap<String, ObservableList> call() throws Exception {
                 ObservableMap<String, ObservableList> map = FXCollections.observableHashMap();
-                map.put("personnel", FXCollections.observableArrayList((new PersonnelModel()).getList()));
                 map.put("modele", FXCollections.observableList((new Model<Modele>("Modele")).getList()));
                 map.put("etatformation", FXCollections.observableList((new Model<EtatFormation>("EtatFormation")).getList()));
                 map.put("typeformation", FXCollections.observableList((new Model<Typeformation>("Typeformation")).getList()));
@@ -158,7 +156,6 @@ public class FormationController implements Initializable {
         new Thread(task).start();
         task.setOnSucceeded(event -> {
             ObservableMap<String, ObservableList> map = task.getValue();
-            comboFormateur.setItems(map.get("personnel"));
             comboModele.setItems((ObservableList<Modele>) map.get("modele"));
             comboEtatformation.setItems(map.get("etatformation"));
             comboTypeformation.setItems(map.get("typeformation"));
@@ -176,8 +173,8 @@ public class FormationController implements Initializable {
     private void buildTable() {
 
         ServiceproUtil.setDisable(false, btnNouveau, btnModifier, btnSupprimer);
-        ServiceproUtil.setDisable(true, comboEtatformation, comboFormateur, comboModele, btnAjouterFormateur,
-                btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
+        ServiceproUtil.setDisable(true, comboEtatformation, comboModele,
+                comboTypeformation, comboLieuFormation);
         ServiceproUtil.setEditable(false, txtTitre, txtDescription, txtCode, dateDebut, dateFin, txtScore, txtTP);
         ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateDebut, dateFin, txtScore, txtTP);
         Task<ObservableList<Formation>> task = new Task<ObservableList<Formation>>() {
@@ -188,7 +185,7 @@ public class FormationController implements Initializable {
         };
         ProgressIndicatorUtil.show(formationStackPane, task);
         formationTable.itemsProperty().bind(task.valueProperty());
-        //listeViewFormateurs.getItems().clear();
+        //formateursTable.getItems().clear();
         formationTable.setRowFactory((TableView<Formation> param) -> {
             final TableRow<Formation> row = new TableRow<>();
             final Tooltip tooltip = new Tooltip();
@@ -229,11 +226,11 @@ public class FormationController implements Initializable {
         comboEtatformation.setValue(formation.getEtatFormation());
         comboTypeformation.setValue(formation.getTypeFormation());
         comboLieuFormation.setValue(formation.getLieuFormation());
-        listeViewFormateurs.setItems(FXCollections.observableArrayList(formation.getPersonnels()));
         dateDebut.setValue(new java.sql.Date(formation.getDatedebut().getTime()).toLocalDate());
         dateFin.setValue(new java.sql.Date(formation.getDatefin().getTime()).toLocalDate());
 
         supportController.setFormation(formation);
+        formateurController.setFormation(formation);
         personneController.setFormation(formation);
         participantController.setFormation(formation);
         competenceController.setFormation(formation);
@@ -247,14 +244,14 @@ public class FormationController implements Initializable {
         competenceController.buildTable();
         planificationController.buildTable();
         supportController.buildTable();
+        formateurController.buildTable();
 
     }
 
     public void setFormationParams(Formation formation) {
         formation.setEtatFormation(comboEtatformation.getValue());
         formation.setModele(comboModele.getValue());
-        formation.setPersonnels(listeViewFormateurs.getItems());
-
+        formation.setPersonnels(formateurController.getItems());
         formation.setTitre(txtTitre.getText());
         formation.setDescription(txtDescription.getText());
         if (!txtScore.getText().isEmpty()) {
@@ -278,12 +275,14 @@ public class FormationController implements Initializable {
         if (stateBtnNouveau == 0) {
             ButtonUtil.save(btnNouveau);
             ButtonUtil.edit(btnModifier);
-            listeViewFormateurs.getItems().clear();
+            //formateursTable.getItems().clear();
+
             ServiceproUtil.setDisable(true, btnModifier, btnSupprimer);
             ServiceproUtil.emptyFields(txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtTP);
             ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtCode, txtTP);
-            ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
-                    btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
+            ServiceproUtil.setDisable(false, comboModele, comboEtatformation,
+                     comboTypeformation, comboLieuFormation);
+            formateurController.setActive(true);
             stateBtnNouveau = 1;
         } else {
             Formation formation = new Formation();
@@ -306,8 +305,8 @@ public class FormationController implements Initializable {
                         formationTable.getSelectionModel().select(formation);
                         ServiceproUtil.setDisable(false, btnModifier, btnSupprimer);
                         ServiceproUtil.setEditable(false, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtScore, txtCode, txtTP);
-                        ServiceproUtil.setDisable(true, comboModele, comboFormateur, comboEtatformation, btnAjouterFormateur,
-                                btnSupprimerFormateur, comboTypeformation, comboLieuFormation);
+                        ServiceproUtil.setDisable(true, comboModele, comboEtatformation, comboTypeformation, comboLieuFormation);
+                        formateurController.setActive(false);
                     } else {
                         ServiceproUtil.notify("Erreur d'ajout");
                     }
@@ -331,8 +330,8 @@ public class FormationController implements Initializable {
                 ButtonUtil.add(btnNouveau);
                 ServiceproUtil.setDisable(true, btnNouveau, btnSupprimer);
                 ServiceproUtil.setEditable(true, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtRemarque, txtScore, txtTP);
-                ServiceproUtil.setDisable(false, comboModele, comboFormateur, comboEtatformation, btnSupprimerFormateur,
-                        btnAjouterFormateur, comboTypeformation, comboLieuFormation);
+                ServiceproUtil.setDisable(false, comboModele, comboEtatformation, comboTypeformation, comboLieuFormation);
+                formateurController.setActive(true);
                 stateBtnModifier = 1;
             }
         } else {
@@ -348,12 +347,18 @@ public class FormationController implements Initializable {
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Modification OK");
-                    StageManager.loadContent("/views/formation/formation.fxml");
+                    ButtonUtil.edit(btnModifier);
+                    ServiceproUtil.setDisable(false, btnNouveau, btnSupprimer);
+                    ServiceproUtil.setEditable(false, txtCode, txtDescription, txtTitre, dateFin, dateDebut, txtRemarque, txtScore, txtTP);
+                    ServiceproUtil.setDisable(true, comboModele, comboEtatformation, comboTypeformation, comboLieuFormation);
+                    formateurController.setActive(false);
+                    //StageManager.loadContent("/views/formation/formation.fxml");
+                    formationTable.getSelectionModel().select(formation);
                 } else {
                     ServiceproUtil.notify("Erreur de modification");
                 }
             });
-            task.setOnFailed(event -> AlertUtil.showErrorMessage(new Exception(task.getException())));
+            task.setOnFailed(event -> task.getException().printStackTrace());
             stateBtnModifier = 0;
         }
     }
@@ -378,6 +383,7 @@ public class FormationController implements Initializable {
                         if (formationTable.getItems().size() > 0) {
                             formationTable.getSelectionModel().selectFirst();
                         }
+                        formateurController.setActive(false);
                     } else {
                         ServiceproUtil.notify("Erreur de suppression");
                     }
@@ -398,35 +404,6 @@ public class FormationController implements Initializable {
     public void clickAnnuler(ActionEvent actionEvent) {
         StageManager.loadContent("/views/formation/formation.fxml");
     }
-
-    public void ajouterFormateur(ActionEvent actionEvent) {
-        if (comboFormateur.getSelectionModel().getSelectedItem() != null) {
-            Personnel personnel = comboFormateur.getSelectionModel().getSelectedItem();
-            if (!listeViewFormateurs.getItems().contains(personnel)) {
-                listeViewFormateurs.getItems().add(personnel);
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Sélectionner le formateur à ajouter dans la liste des formateurs");
-            alert.setTitle("");
-            alert.setHeaderText("");
-            alert.showAndWait();
-        }
-    }
-
-    public void supprimerFormateur(ActionEvent actionEvent) {
-        if (listeViewFormateurs.getSelectionModel().getSelectedItem() != null) {
-            Personnel personnel = listeViewFormateurs.getSelectionModel().getSelectedItem();
-            listeViewFormateurs.getItems().remove(personnel);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("");
-            alert.setTitle("");
-            alert.setContentText("Sélectionner le formateur à supprimer dans le tableau des formateurs");
-            alert.showAndWait();
-        }
-    }
-
 
     public void previousAction(ActionEvent event) {
         if (formationTable.getSelectionModel().getSelectedIndex() > 0) {
@@ -461,5 +438,38 @@ public class FormationController implements Initializable {
             ServiceproUtil.notify("Impression réussie");
         });
 
+    }
+
+    public void excelAction(ActionEvent event) {
+        Formation formation = formationTable.getSelectionModel().getSelectedItem();
+        if (formation == null) {
+            AlertUtil.showWarningMessage("Information", "Veuillez d'abord choisir une formation");
+            return;
+        }
+        try {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    FormationExcel formationExcel = new FormationExcel();
+                    formationExcel.printDetails(formation);
+                    return null;
+                }
+            };
+
+            StageManager.getProgressBar().progressProperty().bind(task.progressProperty());
+            new Thread(task).start();
+            task.setOnSucceeded(event1 -> {
+                StageManager.getProgressBar().progressProperty().unbind();
+                StageManager.getProgressBar().setProgress(0);
+                ServiceproUtil.notify("Impression réussie");
+            });
+            task.setOnFailed(event12 -> {
+                logger.error(task.getException());
+                task.getException().printStackTrace();
+            });
+        } catch (Exception ex) {
+            AlertUtil.showErrorMessage(ex);
+            logger.error(ex);
+        }
     }
 }

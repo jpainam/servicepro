@@ -149,9 +149,12 @@ public class Formation {
             @JoinColumn(name="FORMATION", nullable=false, updatable=false) }, inverseJoinColumns = {
             @JoinColumn(name="PERSONNEL", nullable=false, updatable=false) })
     public List<Personnel> getPersonnels() {
-        return this.personnels;
+        return this.personnels.get();
     }
 
+    public ListProperty<Personnel> personnelsProperty(){
+        return personnels;
+    }
     public void setPersonnels(List<Personnel> personnels) {
         if(personnels != null) {
             this.personnels.set(FXCollections.observableArrayList(personnels));

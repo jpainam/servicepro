@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="705.0" prefWidth="1121.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.FormationController">
    <children>
-      <SplitPane dividerPositions="0.6244665718349929" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.5889046941678521" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                 <children>
@@ -49,6 +51,7 @@
                                                                     <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#previousAction" styleClass="onlyIcon" />
                                                                     <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextAction" styleClass="onlyIcon" />
                                                                     <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printAction" styleClass="onlyIcon" />
+                                                      <Button fx:id="btnExcel" mnemonicParsing="false" onAction="#excelAction" />
                                                                     <Separator orientation="VERTICAL" />
                                                                     <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
                                                                     <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clickModifier" styleClass="actionButton" text="Modifier/Edit" />
@@ -59,7 +62,7 @@
                                                             </ToolBar>
                                                 <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefViewportHeight="473.0" prefViewportWidth="629.0" VBox.vgrow="ALWAYS">
                                                    <content>
-                                                      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
+                                                      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
                                                          <children>
                                                                         <HBox maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="686.0" spacing="5.0">
                                                                             <children>
@@ -162,26 +165,10 @@
                                                                             </VBox.margin>
                                                                         </HBox>
                                                                         <Separator layoutY="254.0" prefHeight="3.0" prefWidth="686.0" />
-                                                                        <HBox prefHeight="137.0" prefWidth="686.0" spacing="5.0">
+                                                                        <HBox prefHeight="137.0" prefWidth="686.0" spacing="15.0">
                                                                             <children>
-                                                                                <VBox>
-                                                                                    <children>
-                                                                                        <Label minWidth="100.0" prefHeight="17.0" prefWidth="100.0" text="Formateurs" />
-                                                                                        <ListView fx:id="listeViewFormateurs" maxWidth="1.7976931348623157E308" minWidth="10.0" prefHeight="164.0" prefWidth="326.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
-                                                                                    </children>
-                                                                                </VBox>
+                                                                  <HBox fx:id="formateurContainer" HBox.hgrow="ALWAYS" />
                                                                                 <HBox fx:id="supportContainer" spacing="10.0" HBox.hgrow="ALWAYS" />
-                                                                            </children>
-                                                                            <VBox.margin>
-                                                                                <Insets left="10.0" right="10.0" />
-                                                                            </VBox.margin>
-                                                                        </HBox>
-                                                                        <HBox prefHeight="25.0" prefWidth="0.0" spacing="5.0">
-                                                                            <children>
-                                                                                <Label text="Formateurs" />
-                                                                                <ComboBox fx:id="comboFormateur" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="285.0" HBox.hgrow="ALWAYS" />
-                                                                                <Button fx:id="btnAjouterFormateur" mnemonicParsing="false" onAction="#ajouterFormateur" HBox.hgrow="NEVER" />
-                                                                                <Button fx:id="btnSupprimerFormateur" mnemonicParsing="false" onAction="#supprimerFormateur" HBox.hgrow="NEVER" />
                                                                             </children>
                                                                             <VBox.margin>
                                                                                 <Insets left="10.0" right="10.0" />

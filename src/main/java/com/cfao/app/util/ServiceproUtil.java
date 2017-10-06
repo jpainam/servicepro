@@ -18,7 +18,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -213,5 +215,15 @@ public class ServiceproUtil {
                 Files.copy(file.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         }
+    }
+    public static Path download(String sourceURL, String targetDirectory) throws IOException {
+        URL url = new URL(sourceURL);
+        String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1, sourceURL.length());
+        Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
+        Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+        return targetPath;
+    }
+    private static Path upload(String destinationURL, String fileName) throws IOException{
+        return null;
     }
 }

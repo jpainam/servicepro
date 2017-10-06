@@ -635,8 +635,9 @@ public class CiviliteController implements Initializable {
         task.setOnSucceeded(event -> {
             if (task.getValue()) {
                 ServiceproUtil.notify("Modification OK");
-
-                StageManager.loadContent("/views/civilite/civilite.fxml");
+                //masterData.get
+                personneTable.getSelectionModel().select(personne);
+                //StageManager.loadContent("/views/civilite/civilite.fxml");
             } else {
                 ServiceproUtil.notify("Erreur de modification");
             }
@@ -669,9 +670,10 @@ public class CiviliteController implements Initializable {
             task.setOnSucceeded(event -> {
                 if (task.getValue()) {
                     ServiceproUtil.notify("Suppression OK");
-                    /*formationTable.getSelectionModel().selectPrevious();
-                    formationTable.getItems().remove(p);*/
-                    StageManager.loadContent("/views/civilite/civilite.fxml");
+                    personneTable.getSelectionModel().selectPrevious();
+                    masterData.remove(p);
+                    //personneTable.getItems().remove(p); => unsupported operation after research
+                    //StageManager.loadContent("/views/civilite/civilite.fxml");
                 } else {
                     ServiceproUtil.notify("Erreur de suppression");
                 }
