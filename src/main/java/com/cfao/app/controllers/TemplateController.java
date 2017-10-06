@@ -101,7 +101,7 @@ public class TemplateController implements Initializable, Controller {
                 userNameLabel.setText(ServiceproUtil.getLoggedUser().getLogin());
             }
             currentLogTimeLabel.setText(ServiceproUtil.getLoggedTime());
-            Pane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
+            ScrollPane leftMenuPane = FXMLLoader.load(getClass().getResource("/views/menu/leftmenu.fxml"));
             shortcutContent.getChildren().setAll(leftMenuPane);
             notificationPane.getActions().addAll(new Action("Cacher/Hide", ae -> {
                 notificationPane.hide();
@@ -218,6 +218,9 @@ public class TemplateController implements Initializable, Controller {
     }
     public void domaineAction(ActionEvent actionEvent){
         openParameterScene(ParametreController.TAB_DOMAINE);
+    }
+    public void situationMatrimonialeAction(ActionEvent event) {
+        openParameterScene(ParametreController.TAB_SITUATIONMATRIMONIALE);
     }
 
     public void planificationModeleAction(ActionEvent event) {
@@ -456,6 +459,8 @@ public class TemplateController implements Initializable, Controller {
     public void showAccueil(MouseEvent mouseEvent) {
         StageManager.loadContent("/views/accueil/accueil.fxml");
     }
+
+
 
     class ChangePassword {
         public String oldPwd;

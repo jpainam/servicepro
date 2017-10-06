@@ -34,6 +34,7 @@ public class LeftmenuController implements Initializable{
     public ToggleButton btnParametre;
     public ToggleButton btnFormation;
     public final ToggleGroup toggleGroup = new ToggleGroup();
+    public ToggleButton btnPlanSuccession;
 
 
     @Override
@@ -64,6 +65,7 @@ public class LeftmenuController implements Initializable{
         setLeftMenuSetting(btnRapport, FontAwesomeIcon.FILES_ALT);
         setLeftMenuSetting(btnTest, FontAwesomeIcon.BALANCE_SCALE);
         setLeftMenuSetting(btnProfil, FontAwesomeIcon.TAGS);
+        setLeftMenuSetting(btnPlanSuccession, FontAwesomeIcon.CUBE);
     }
     public void setLeftMenuSetting(ToggleButton button, FontAwesomeIcon fontAwesomeIcon) {
         button.setToggleGroup(toggleGroup);
@@ -107,5 +109,8 @@ public class LeftmenuController implements Initializable{
     public void profilAction(ActionEvent event) {
         StageManager.setSelectedCrumb("profil");
         StageManager.loadContent("/views/profil/profil.fxml");
+    }
+    public void planAction(ActionEvent event){
+        AlertUtil.showSimpleAlert("Information", "Fonctionnalité non implementée");
     }
 }

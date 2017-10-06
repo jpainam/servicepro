@@ -34,6 +34,8 @@ public class Personne implements java.io.Serializable {
     private ListProperty<Langue> langues = new SimpleListProperty<Langue>();
     private ObjectProperty<Pays> pays = new SimpleObjectProperty<Pays>();
     private ObjectProperty<Groupe> groupe = new SimpleObjectProperty<Groupe>();
+    private ObjectProperty<SituationMatrimoniale> situationmatrimoniale = new SimpleObjectProperty<>();
+    private ObjectProperty<ReviewPositionnement> reviewpositionnement = new SimpleObjectProperty<>();
     private ObjectProperty<Agence> agence = new SimpleObjectProperty<>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<Societe>();
     private ObjectProperty<Section> section = new SimpleObjectProperty<Section>();
@@ -50,6 +52,9 @@ public class Personne implements java.io.Serializable {
     private ObjectProperty<Date> expirationPassport = new SimpleObjectProperty<Date>();
     private SimpleStringProperty passport = new SimpleStringProperty();
     private SimpleStringProperty fonction = new SimpleStringProperty();
+    private SimpleIntegerProperty nbEnfant = new SimpleIntegerProperty();
+    private SimpleStringProperty adresse = new SimpleStringProperty();
+    private SimpleIntegerProperty grading = new SimpleIntegerProperty();
 
 
     @Id
@@ -512,5 +517,76 @@ public class Personne implements java.io.Serializable {
 
     public void setAgence(Agence agence) {
         this.agence.set(agence);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "SITUATIONMATRIMONIALE")
+    public SituationMatrimoniale getSituationmatrimoniale() {
+        return situationmatrimoniale.get();
+    }
+
+    public ObjectProperty<SituationMatrimoniale> situationmatrimonialeProperty() {
+        return situationmatrimoniale;
+    }
+
+    public void setSituationmatrimoniale(SituationMatrimoniale situationmatrimoniale) {
+        this.situationmatrimoniale.set(situationmatrimoniale);
+    }
+
+    @Column(name = "NBENFANT", length = 11)
+    public Integer getNbEnfant() {
+        return nbEnfant.get();
+    }
+
+    public SimpleIntegerProperty nbEnfantProperty() {
+        return nbEnfant;
+    }
+
+    public void setNbEnfant(Integer nbEnfant) {
+        if(nbEnfant != null) {
+            this.nbEnfant.set(nbEnfant);
+        }
+    }
+
+    @Column(name = "ADRESSE", length = 250)
+    public String getAdresse() {
+        return adresse.get();
+    }
+
+    public SimpleStringProperty adresseProperty() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse.set(adresse);
+    }
+
+    @Column(name = "GRADING", length = 11)
+    public Integer getGrading() {
+        return grading.get();
+    }
+
+    public SimpleIntegerProperty gradingProperty() {
+        return grading;
+    }
+
+    public void setGrading(Integer grading) {
+        if(grading != null) {
+            this.grading.set(grading);
+        }
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "REVIEWPOSITIONNEMENT")
+    public ReviewPositionnement getReviewpositionnement() {
+        return reviewpositionnement.get();
+    }
+
+    public ObjectProperty<ReviewPositionnement> reviewpositionnementProperty() {
+        return reviewpositionnement;
+    }
+
+    public void setReviewpositionnement(ReviewPositionnement reviewpositionnement) {
+        this.reviewpositionnement.set(reviewpositionnement);
     }
 }

@@ -24,12 +24,13 @@ import java.text.SimpleDateFormat;
  */
 public class PrintCivilite extends PdfReport {
     CivilitePhoto civilitePhoto = new CivilitePhoto();
-    public PrintCivilite(){
+
+    public PrintCivilite() {
         super();
     }
 
-    public void printDetails(Personne personne) throws Exception {
-        URL filename = civilitePhoto.getImagePath(personne);
+    public void printDetails(Personne p) throws Exception {
+        URL filename = civilitePhoto.getImagePath(p);
         Image photo = new Image(ImageDataFactory.create(filename));
         photo.setWidth(35);
         photo.setHeight(30);
@@ -48,44 +49,48 @@ public class PrintCivilite extends PdfReport {
         infos.setWidthPercent(100);
 
         infos.addCell(new Cell().add(new Paragraph("Matricule").setBold())
-                .add(personne.getMatricule()).setBorder(Border.NO_BORDER));
+                .add(p.getMatricule()).setBorder(Border.NO_BORDER));
         infos.addCell(new Cell().add(new Paragraph("Noms et Prenoms").setBold())
-                .add(personne.getNom() + " " + personne.getPrenom()).setBorder(Border.NO_BORDER));
+                .add(p.getNom() + " " + p.getPrenom()).setBorder(Border.NO_BORDER));
 
 
         infos.addCell(new Cell().add(new Paragraph("Date Naiss").setBold())
-                .add(personne.getDatenaiss() == null ? "" : format.format(personne.getDatenaiss())).setBorder(Border.NO_BORDER));
+                .add(p.getDatenaiss() == null ? "" : format.format(p.getDatenaiss())).setBorder(Border.NO_BORDER));
 
         infos.addCell(new Cell().add(new Paragraph("Email").setBold())
-                .add(personne.getEmail()).setBorder(Border.NO_BORDER));
+                .add(p.getEmail()).setBorder(Border.NO_BORDER));
 
         infos.addCell(new Cell().add(new Paragraph("Groupe").setBold())
-                .add(personne.getGroupe() != null ? personne.getGroupe().getLibelle() : "").setBorder(Border.NO_BORDER));
+                .add(p.getGroupe() != null ? p.getGroupe().getLibelle() : "").setBorder(Border.NO_BORDER));
         infos.addCell(new Cell().add(new Paragraph("Société").setBold())
-                .add(personne.getSociete().getNom()).setBorder(Border.NO_BORDER));
+                .add(p.getSociete() != null ? p.getSociete().getNom() : "").setBorder(Border.NO_BORDER));
         infos.addCell(new Cell().add(new Paragraph("Section").setBold())
-                .add(personne.getSection().getLibelle()).setBorder(Border.NO_BORDER));
+                .add(p.getSection() != null ? p.getSection().getLibelle() : "").setBorder(Border.NO_BORDER));
         infos.addCell(new Cell().add(new Paragraph("Ambition").setBold())
-                .add(personne.getAmbition().getLibelle()).setBorder(Border.NO_BORDER));
+                .add(p.getAmbition() != null ? p.getAmbition().getLibelle() : "").setBorder(Border.NO_BORDER));
 
 
         infos.addCell(new Cell().add(new Paragraph("Date Contrat").setBold())
-                .add(personne.getDatecontrat() == null ? "" : format.format(personne.getDatecontrat())).setBorder(Border.NO_BORDER));
+                .add(p.getDatecontrat() == null ? "" : format.format(p.getDatecontrat())).setBorder(Border.NO_BORDER));
         infos.addCell(new Cell().add(new Paragraph("Pays").setBold())
-                .add(personne.getPays().getNamefr()).setBorder(Border.NO_BORDER));
-        if(personne.getPassport() != null) {
-            infos.addCell(new Cell().add(new Paragraph("Passport").setBold())
-                    .add(personne.getPassport().substring(0, personne.getPassport().lastIndexOf("."))).setBorder(Border.NO_BORDER));
-        }else{
+                .add(p.getPays() != null ? p.getPays().getNamefr() : "").setBorder(Border.NO_BORDER));
+        if (p.getPassport() != null) {
+            Cell cell = new Cell();
+            cell.add(new Paragraph("Passport").setBold());
+            if (p.getPassport().lastIndexOf(".") != -1) {
+                cell.add(p.getPassport().substring(0, p.getPassport().lastIndexOf("."))).setBorder(Border.NO_BORDER);
+            }
+            infos.addCell(cell);
+        } else {
             infos.addCell(new Cell().add(new Paragraph("Passport").setBold()).setBorder(Border.NO_BORDER));
         }
         infos.addCell(new Cell().add(new Paragraph("Langue").setBold())
-                .add(personne.getLangue().getLibelle()).setBorder(Border.NO_BORDER));
+                .add(p.getLangue() != null ? p.getLangue().getLibelle() : "").setBorder(Border.NO_BORDER));
         document.add(infos);
-        document.add(new Paragraph("Langues parlées : " + personne.getLangues()));
-        if(personne.getMemo() != null) {
+        document.add(new Paragraph("Langues parlées : " + p.getLangues()));
+        if (p.getMemo() != null) {
             document.add(new Paragraph("Memo").setBold());
-            document.add(new Paragraph(personne.getMemo() + ""));
+            document.add(new Paragraph(p.getMemo() + ""));
         }
         /**
          * PROFIL
@@ -96,11 +101,11 @@ public class PrintCivilite extends PdfReport {
         profilTable.addHeaderCell(new Paragraph("Abbréviation").setBold());
         profilTable.addHeaderCell(new Paragraph("Libellé").setBold());
         int i = 1;
-        for(ProfilPersonne pp : personne.getProfilPersonnes()){
-            Profil p = pp.getProfil();
+        for (ProfilPersonne pp : p.getProfilPersonnes()) {
+            Profil pro = pp.getProfil();
             profilTable.addCell(i + "");
-            profilTable.addCell(p.getAbbreviation());
-            profilTable.addCell(p.getLibelle());
+            profilTable.addCell(pro.getAbbreviation());
+            profilTable.addCell(pro.getLibelle());
             i++;
         }
         document.add(new Paragraph("Profils").setBold().setUnderline());
@@ -116,12 +121,12 @@ public class PrintCivilite extends PdfReport {
         posteTable.addHeaderCell(new Paragraph("Date debut").setBold());
         posteTable.addHeaderCell(new Paragraph("Date fin").setBold());
         i = 1;
-        for(Poste p : personne.getPostes()){
+        for (Poste po : p.getPostes()) {
             posteTable.addCell(i + "");
-            posteTable.addCell(p.getTitre());
-            posteTable.addCell(p.getSociete().getNom());
-            posteTable.addCell(p.getDatedebut() != null ? format.format(p.getDatedebut()) : "");
-            posteTable.addCell(p.getDatedebut() != null ? format.format(p.getDatefin()) : "");
+            posteTable.addCell(po.getTitre());
+            posteTable.addCell(po.getSociete().getNom());
+            posteTable.addCell(po.getDatedebut() != null ? format.format(po.getDatedebut()) : "");
+            posteTable.addCell(po.getDatedebut() != null ? format.format(po.getDatefin()) : "");
             i++;
         }
         document.add(new Paragraph("Postes").setBold().setUnderline());
@@ -129,7 +134,7 @@ public class PrintCivilite extends PdfReport {
         /**
          * TABLE COMPETENCE
          */
-        Table competenceTable = new Table(new float[] {1, 5, 2, 4});
+        Table competenceTable = new Table(new float[]{1, 5, 2, 4});
         //use 100% of the width of the page
         competenceTable.setWidthPercent(100);
         competenceTable.addHeaderCell(new Paragraph("N°").setBold());
@@ -137,7 +142,7 @@ public class PrintCivilite extends PdfReport {
         competenceTable.addHeaderCell(new Paragraph("Niveau").setBold());
         competenceTable.addHeaderCell(new Paragraph("Certification").setBold());
         i = 1;
-        for(PersonneCompetence pc : personne.getPersonneCompetences()){
+        for (PersonneCompetence pc : p.getPersonneCompetences()) {
             Competence competence = pc.getCompetence();
             competenceTable.addCell(i + "");
             competenceTable.addCell(competence.getDescription());
@@ -160,7 +165,7 @@ public class PrintCivilite extends PdfReport {
         qcmTable.addHeaderCell(new Paragraph("Note").setBold());
         qcmTable.addHeaderCell(new Paragraph("Base").setBold());
         i = 1;
-        for(PersonneQcm pq : personne.getPersonneQcms()){
+        for (PersonneQcm pq : p.getPersonneQcms()) {
             Qcm qcm = pq.getQcm();
             qcmTable.addCell(i + "");
             qcmTable.addCell(qcm.getTitre());

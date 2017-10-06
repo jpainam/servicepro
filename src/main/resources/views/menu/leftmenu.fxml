@@ -1,61 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
-    <children>
-        <ToggleButton fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor></ToggleButton>
-        <ToggleButton fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor></ToggleButton>
-        <ToggleButton fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor></ToggleButton>
-        <ToggleButton fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor></ToggleButton>
-        <ToggleButton fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </ToggleButton>
-        <ToggleButton fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </ToggleButton>
-        <ToggleButton fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres" VBox.vgrow="ALWAYS">
-            <font>
-                <Font size="14.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor></ToggleButton>
-    </children>
-</VBox>
+
+
+<ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" pannable="true" prefHeight="703.0" prefViewportHeight="688.0" prefWidth="132.0" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.LeftmenuController">
+   <content>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="688.0" prefHeight="688.0" prefWidth="127.0">
+          <children>
+              <ToggleButton fx:id="btnPersonne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#personneAction" prefHeight="109.0" text="Personnes" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+            </ToggleButton>
+              <ToggleButton fx:id="btnFormation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#formationAction" prefHeight="102.0" text="Formations" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+            </ToggleButton>
+              <ToggleButton fx:id="btnCompetence" layoutX="10.0" layoutY="119.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#competenceAction" prefHeight="102.0" text="Compétences" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+            </ToggleButton>
+              <ToggleButton fx:id="btnProfil" layoutX="10.0" layoutY="221.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#profilAction" prefHeight="102.0" text="Profils" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+            </ToggleButton>
+              <ToggleButton fx:id="btnTest" layoutX="10.0" layoutY="227.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#testAction" prefHeight="102.0" text="Tests" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </ToggleButton>
+              <ToggleButton fx:id="btnRapport" layoutX="10.0" layoutY="191.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#rapportAction" prefHeight="102.0" text="Rapports" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </ToggleButton>
+            <ToggleButton fx:id="btnPlanSuccession" layoutX="10.0" layoutY="527.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#planAction" prefHeight="102.0" text="Plan de succession" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </ToggleButton>
+              <ToggleButton fx:id="btnParametre" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#parametreAction" prefHeight="109.0" text="Paramètres" VBox.vgrow="ALWAYS">
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+            </ToggleButton>
+          </children>
+      </VBox>
+   </content>
+</ScrollPane>

@@ -41,6 +41,7 @@ public class CivilitePosteController extends AnchorPane implements Initializable
      */
     public TableView<Poste> tablePoste;
     public TableColumn<Poste, String> columnPoste;
+    public TableColumn<Poste, String> columnIntitule;
     public TableColumn<Poste, Societe> columnSociete;
     public TableColumn<Poste, LocalDate> columnDebut;
     public TableColumn<Poste, LocalDate> columnFin;
@@ -81,6 +82,8 @@ public class CivilitePosteController extends AnchorPane implements Initializable
         ServiceproUtil.setDisable(true,  btnAjouterPoste, btnDeletePoste);
 
         columnPoste.setCellValueFactory(param -> param.getValue().titreProperty());
+        columnIntitule.setCellValueFactory(param -> param.getValue().intituleBulletinProperty());
+
         columnSociete.setCellValueFactory(param -> param.getValue().societe());
         columnDebut.setCellValueFactory(new PropertyValueFactory<>("datedebut"));
         columnFin.setCellValueFactory(new PropertyValueFactory<Poste, LocalDate>("datefin"));
@@ -125,6 +128,10 @@ public class CivilitePosteController extends AnchorPane implements Initializable
     class DialogPosteController extends AnchorPane implements  Initializable{
         @FXML
         public TextField txtPoste;
+
+        @FXML
+        public TextField txtIntitule;
+
         @FXML
         public ComboBox<Societe> comboSociete;
         @FXML
@@ -166,6 +173,7 @@ public class CivilitePosteController extends AnchorPane implements Initializable
             if (!txtPoste.getText().isEmpty() && comboSociete.getValue() != null) {
                 Poste poste = new Poste();
                 poste.setTitre(txtPoste.getText());
+                poste.setIntituleBulletin(txtIntitule.getText());
                 poste.setSociete(comboSociete.getSelectionModel().getSelectedItem());
                 if(dateFrom.getValue() != null) {
                     poste.setDatedebut(Date.valueOf(dateFrom.getValue()));

@@ -17,12 +17,12 @@
                     <children>
                         <AnchorPane layoutY="17.0" prefHeight="223.0" prefWidth="389.0" styleClass="box-login" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
                             <children>
-                                <TextField text="cfao" fx:id="login" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0" promptText="Nom de l'utilisateur" styleClass="nom" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                                <TextField fx:id="login" layoutX="68.0" layoutY="65.0" prefHeight="40.0" prefWidth="336.0" promptText="Nom de l'utilisateur" styleClass="nom" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </TextField>
-                                <PasswordField text="cfao" fx:id="password" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0" promptText="Mot de passe" styleClass="password" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0">
+                                <PasswordField fx:id="password" layoutX="68.0" layoutY="120.0" prefHeight="40.0" prefWidth="333.0" promptText="Mot de passe" styleClass="password" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

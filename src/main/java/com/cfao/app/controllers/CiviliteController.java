@@ -121,6 +121,11 @@ public class CiviliteController implements Initializable {
 
     public Label searchLabelStat = new Label();
     public Button btnPrintExcel;
+    public ComboBox<Integer> comboNbEnfant;
+    public ComboBox<SituationMatrimoniale> comboMatrimoniale;
+    public TextField txtAdresse;
+    public ComboBox<ReviewPositionnement> comboPositionnement;
+    public ComboBox<Integer> comboGrading;
     private ObservableList<Personne> masterData = FXCollections.observableArrayList();
     private FilteredList<Personne> filteredList = new FilteredList<Personne>(masterData, p -> true);
     private SortedList<Personne> sortedList = new SortedList<Personne>(filteredList);
@@ -174,6 +179,7 @@ public class CiviliteController implements Initializable {
         });
     }
 
+
     private void buildcontent() {
         formationController = new CiviliteFormationController();
         tabFormation.setContent(formationController);
@@ -199,6 +205,14 @@ public class CiviliteController implements Initializable {
             }
             return false;
         });*/
+        ObservableList<Integer> nbEnfantData = FXCollections.observableArrayList();
+        ObservableList<Integer> gradingData = FXCollections.observableArrayList();
+        for(int i = 1; i < 30; i++){
+            nbEnfantData.add(i);
+            gradingData.add(i);
+        }
+        comboNbEnfant.setItems(nbEnfantData);
+        comboGrading.setItems(gradingData);
 
         comboLanguesParlees = new CheckComboBox(FXCollections.observableArrayList());
         comboLanguesParlees.setMaxWidth(Double.MAX_VALUE);
@@ -270,6 +284,8 @@ public class CiviliteController implements Initializable {
                 map.put("contrat", FXCollections.observableList(new Model<Contrat>("Contrat").getList()));
                 map.put("ambition", FXCollections.observableList(new Model<Ambition>("Ambition").getList()));
                 map.put("langue", FXCollections.observableList(new Model<Langue>("Langue").getList()));
+                map.put("reviewpositionnement", FXCollections.observableArrayList(new Model<ReviewPositionnement>("ReviewPositionnement").getList()));
+                map.put("situationmatrimoniale", FXCollections.observableArrayList(new Model<SituationMatrimoniale>("SituationMatrimoniale").getList()));
                 return map;
             }
         };
@@ -286,6 +302,8 @@ public class CiviliteController implements Initializable {
             comboAmbition.setItems(map.get("ambition"));
             comboAgence.setItems(map.get("agence"));
             comboLangue.setItems(map.get("langue"));
+            comboMatrimoniale.setItems(map.get("situationmatrimoniale"));
+            comboPositionnement.setItems(map.get("reviewpositionnement"));
         });
         task.setOnFailed(event -> {
             System.err.println(task.getException());
@@ -391,6 +409,10 @@ public class CiviliteController implements Initializable {
         comboAgence.setValue(person.getAgence());
         comboLangue.setValue(person.getLangue());
         comboPotentiel.setValue(person.getPotentiel());
+        comboNbEnfant.setValue(person.getNbEnfant());
+        comboMatrimoniale.setValue(person.getSituationmatrimoniale());
+        comboGrading.setValue(person.getGrading());
+        comboPositionnement.setValue(person.getReviewpositionnement());
 
         /*Necessaire à l'update du component checkcombobox des Langues parlées par une personne*/
         updateLangue(person.getLangues());
@@ -495,6 +517,10 @@ public class CiviliteController implements Initializable {
         personne.setAmbition(comboAmbition.getValue());
         personne.setAgence(comboAgence.getValue());
         personne.setPotentiel(comboPotentiel.getValue());
+        personne.setNbEnfant(comboNbEnfant.getValue());
+        personne.setSituationmatrimoniale(comboMatrimoniale.getValue());
+        personne.setGrading(comboGrading.getValue());
+        personne.setReviewpositionnement(comboPositionnement.getValue());
         personne.setPhoto(civilitePhoto.getCurrentPhoto());
         System.err.println(civilitePhoto.getCurrentPhoto());
     }

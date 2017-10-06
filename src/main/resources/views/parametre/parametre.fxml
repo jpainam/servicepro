@@ -16,6 +16,7 @@
             <Tab fx:id="tabAgence" text="Agences" />
             <Tab fx:id="tabModele" text="Modèle de Formation" />
             <Tab fx:id="tabLieu" text="Lieu de formation" />
+            <Tab fx:id="tabSituationMatrimoniale" text="Situation Matrimoniale" />
         </tabs>
       </TabPane>
    </children>

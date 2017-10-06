@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="727.0" prefWidth="950.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cfao.app.controllers.CiviliteController">
     <children>
         <SplitPane dividerPositions="0.20698924731182797" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
@@ -52,7 +56,7 @@
                                                 <Button fx:id="btnPrintExcel" mnemonicParsing="false" onAction="#printExcelCivilite" />
                                                                 <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printCiviliteAction" styleClass="onlyIcon" />
                                                                 <Separator orientation="VERTICAL" />
-                                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" textFill="#2920b0" />
+                                                                <Button fx:id="btnNouveau" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clickNouveau" styleClass="actionButton" text="Nouveau/New" />
                                                                 <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#clicModifier" styleClass="actionButton" text="Modifier/Edit" />
                                                                 <Separator orientation="VERTICAL" />
                                                                 <Button fx:id="btnSuppr" mnemonicParsing="false" onAction="#clicSuppr" styleClass="actionButton" text="Supprimer/Delete" />
@@ -116,12 +120,6 @@
                                                             </VBox>
                                                          </children>
                                                       </HBox>
-                                                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowSpan="2">
-                                                                              <children>
-                                                                                  <Label text="Memo" />
-                                                                                  <TextArea fx:id="txtMemo" editable="false" prefHeight="76.0" prefWidth="228.0" promptText="memo" />
-                                                                              </children>
-                                                                          </VBox>
                                                       <VBox GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                          <children>
                                                             <Label text="Passport / Passport file" />
@@ -130,6 +128,28 @@
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
                                                             </TextField>
+                                                         </children>
+                                                      </VBox>
+                                                      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
+                                                         <children>
+                                                            <VBox prefHeight="44.0" prefWidth="132.0" HBox.hgrow="NEVER">
+                                                               <children>
+                                                                  <Label text="Nombre d'enfants" />
+                                                                  <ComboBox fx:id="comboNbEnfant" prefWidth="150.0" />
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <Label text="Situation matrimoniale" />
+                                                                  <ComboBox fx:id="comboMatrimoniale" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                         <children>
+                                                            <Label text="Adresse / Address" />
+                                                            <TextField fx:id="txtAdresse" maxWidth="1.7976931348623157E308" />
                                                          </children>
                                                       </VBox>
                                                    </children>
@@ -176,6 +196,7 @@
                                                                 <RowConstraints maxHeight="42.0" minHeight="26.0" prefHeight="26.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="34.0" minHeight="18.0" prefHeight="24.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="34.0" minHeight="24.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="34.0" minHeight="24.0" prefHeight="24.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <children>
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="203.0" text="Societé / Society" GridPane.rowIndex="2">
@@ -187,7 +208,7 @@
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Section/ Branch " GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                                 </Label>
                                                                 <ComboBox fx:id="comboSection" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition / Ambition" GridPane.rowIndex="4" />
+                                                                <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Ambition" GridPane.rowIndex="4" />
                                                                 <ComboBox fx:id="comboAmbition" maxWidth="1.7976931348623157E308" GridPane.rowIndex="5" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Potentiel" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
                                                                 <ComboBox fx:id="comboPotentiel" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
@@ -195,7 +216,7 @@
                                                                 <ComboBox fx:id="comboContrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                                                                 <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" text="Fin Contrat" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                                                                 <DatePicker fx:id="dateFincontrat" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                                                                <Label text="Langues parlées" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                                <Label text="Langues parlées / Spoken languages" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                                                   <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" onAction="#datePickerClic" GridPane.rowIndex="1" />
                                                                   <Label fx:id="labelDateNaiss" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="15.0" prefWidth="2.0" text="Date Naiss./Born Date">
                                                                         </Label>
@@ -203,11 +224,17 @@
                                                                   <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="15.0" text="Nationalité / Citizen" GridPane.columnIndex="1">
                                                                         </Label>
                                                                   <ComboBox fx:id="comboLangue" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="146.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                                  <Label minWidth="50.0" prefWidth="50.0" text="Langue" GridPane.columnIndex="2" />
+                                                                  <Label maxWidth="1.7976931348623157E308" minWidth="50.0" prefHeight="17.0" prefWidth="158.0" text="Langue / Native Language" GridPane.columnIndex="2" />
                                                                   <DatePicker fx:id="datePassport" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                                                   <Label text="Passport (Date d'expiration)" GridPane.columnIndex="3" />
                                                 <ComboBox fx:id="comboAgence" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.rowIndex="7" />
                                                 <Label text="Agence / Agency" GridPane.rowIndex="6" />
+                                                                      <Label text="Memo" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                                                                      <TextArea fx:id="txtMemo" editable="false" prefHeight="76.0" prefWidth="228.0" promptText="memo" GridPane.columnIndex="3" GridPane.rowIndex="7" GridPane.rowSpan="2" />
+                                                <Label text="Review Positionnement" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                <ComboBox fx:id="comboPositionnement" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                <ComboBox fx:id="comboGrading" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                                <Label text="Pesée / Grading" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                                             </children>
                                                             <VBox.margin>
                                                                 <Insets left="10.0" right="10.0" />

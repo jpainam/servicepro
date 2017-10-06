@@ -211,7 +211,9 @@ public class Formation {
     }
 
     public void setPersonnes(List<Personne> personnes) {
-        this.personnes.set(FXCollections.observableArrayList(personnes));
+        if(personnes != null) {
+            this.personnes.set(FXCollections.observableArrayList(personnes));
+        }
     }
 
 

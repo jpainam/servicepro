@@ -41,7 +41,7 @@
                                  </accelerator></MenuItem>
                                     </items>
                                 </Menu>
-                                <Menu text="_Paramètres">
+                                <Menu text="Paramètres">
                                     <items>
                                         <!-- MenuItem mnemonicParsing="false" onAction="#utilisateurAction" text="Gestion des Utilisateurs" / -->
                                         <!-- MenuItem mnemonicParsing="false" onAction="#profilAction" text="Gestion des Profils" / -->
@@ -54,6 +54,7 @@
                               <MenuItem mnemonicParsing="false" onAction="#agenceAction" text="Gestion des Agences" />
                               <MenuItem mnemonicParsing="false" onAction="#modeleAction" text="Gestion des Modèles de formation" />
                               <MenuItem mnemonicParsing="false" onAction="#lieuAction" text="Gestion des lieux de formation" />
+                              <MenuItem mnemonicParsing="false" onAction="#situationMatrimonialeAction" text="Gestion des Situations matrimoniales" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="_?">

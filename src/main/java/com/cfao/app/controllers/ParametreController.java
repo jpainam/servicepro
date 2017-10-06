@@ -27,6 +27,7 @@ public class ParametreController implements Initializable {
     public static final int TAB_GROUPE = 6;
     public static final int TAB_DOMAINE = 7;
     public static final int TAB_AGENCE = 8;
+    public static final int TAB_SITUATIONMATRIMONIALE = 11;
     /**
      * Modele de formation
      */
@@ -43,6 +44,8 @@ public class ParametreController implements Initializable {
     public Tab tabSection;
     public Tab tabModele;
     public Tab tabLieu;
+    public Tab tabSituationMatrimoniale;
+
     public TabPane tabPane;
     private int activeTab;
     private SingleSelectionModel<Tab> singleSelectionModel;
@@ -66,9 +69,9 @@ public class ParametreController implements Initializable {
         tabAgence.setContent(getTabContent("/views/agence/agence.fxml"));
         tabModele.setContent(getTabContent("/views/modele/modele.fxml"));
         tabLieu.setContent(getTabContent("/views/lieu/lieu.fxml"));
-        //tabNiveauetude.setContent(getTabContent("/views/niveauetude/niveauetude.fxml"));
-        singleSelectionModel = tabPane.getSelectionModel();
+        tabSituationMatrimoniale.setContent(getTabContent("/views/situationmatrimoniale/situationmatrimoniale.fxml"));
 
+        singleSelectionModel = tabPane.getSelectionModel();
         singleSelectionModel.select(getActiveTab());
     }
 
@@ -93,6 +96,7 @@ public class ParametreController implements Initializable {
         tabModele.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("modele.icon")));
         tabLieu.setGraphic(buildImage(ResourceBundle.getBundle("Application").getString("lieu.icon")));
         GlyphsDude.setIcon(tabDomaine, FontAwesomeIcon.DASHBOARD);
+        GlyphsDude.setIcon(tabSituationMatrimoniale, FontAwesomeIcon.VENUS_MARS);
     }
 
     public Tab getActiveTab() {
@@ -113,6 +117,8 @@ public class ParametreController implements Initializable {
                 return tabAgence;
             case TAB_MODELE:
                 return tabModele;
+            case TAB_SITUATIONMATRIMONIALE:
+                return tabSituationMatrimoniale;
         }
         return tabSociete;
     }

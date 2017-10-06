@@ -307,9 +307,10 @@ public class CiviliteExcel extends ExcelRapport {
         createCell(4, "Langue", headerStyle);
         row = sheet.createRow(line++);
         createCell(1, p.getDatecontrat(), shortDateStyle);
-        createCell(2, p.getPays().getNamefr(), defaultStyle);
-        createCell(3, p.getPassport() != null ? p.getPassport().
-                substring(0, p.getPassport().lastIndexOf(".")) : "", defaultStyle);
+        createCell(2, p.getPays() != null ? p.getPays().getNamefr() : "", defaultStyle);
+        createCell(3, p.getPassport() != null ?
+                p.getPassport().lastIndexOf(".") != -1 ? p.getPassport().
+                substring(0, p.getPassport().lastIndexOf(".")) : p.getPassport() : "", defaultStyle);
         row = sheet.createRow(line++);
         createCell(0, "Langues parlées : " + p.getLangues().toString(), defaultStyle);
         sheet.addMergedRegion(new CellRangeAddress(line - 1, line - 1, 0, 3));

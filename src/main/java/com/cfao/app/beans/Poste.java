@@ -23,6 +23,7 @@ public class Poste implements java.io.Serializable {
     private ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
     private ObjectProperty<Societe> societe = new SimpleObjectProperty<>();
     private SimpleStringProperty titre = new SimpleStringProperty();
+    private SimpleStringProperty intituleBulletin = new SimpleStringProperty();
     private ObjectProperty<Date> datedebut = new SimpleObjectProperty<>();
     private ObjectProperty<Date> datefin = new SimpleObjectProperty<>();
 
@@ -105,9 +106,22 @@ public class Poste implements java.io.Serializable {
     }
 
 
+    @Column(name = "INTITULEBULLETIN", length = 80)
+    public String getIntituleBulletin() {
+        return this.intituleBulletin.get();
+    }
+
+    public void setIntituleBulletin(String intitule) {
+        this.intituleBulletin.set(intitule);
+    }
+
     public SimpleStringProperty titreProperty() {
         return this.titre;
     }
+    public SimpleStringProperty intituleBulletinProperty() {
+        return this.intituleBulletin;
+    }
+
 
     public ObjectProperty<Societe> societe() {
         return this.societe;
