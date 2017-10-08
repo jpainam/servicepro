@@ -16,10 +16,8 @@ import javafx.stage.WindowEvent;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
-import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 
@@ -110,9 +108,11 @@ public class Main extends Application {
 
             // set up a system tray icon.
             tray = java.awt.SystemTray.getSystemTray();
-            URL imageLoc = getClass().getResource("/images/tray-icon.png").toURI().toURL();
-            java.awt.Image image = ImageIO.read(imageLoc);
+            //URL imageLoc = getClass().getResource("/images/tray-icon.png").toURI().toURL();
+            //java.awt.Image image = ImageIO.read(imageLoc);
+            java.awt.Image image = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tray-icon.png"));
            trayIcon = new java.awt.TrayIcon(image);
+           trayIcon.setImageAutoSize(true);
 
             // if the user double-clicks on the tray icon, show the main app stage.
             trayIcon.addActionListener(event -> Platform.runLater(this::showStage));

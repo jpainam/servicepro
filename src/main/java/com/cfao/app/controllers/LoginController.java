@@ -221,7 +221,6 @@ public class LoginController implements Initializable {
                 return new Task<ArrayList<ObservableList<Planification>>>() {
                     @Override
                     protected ArrayList<ObservableList<Planification>> call() throws Exception {
-
                         ArrayList<ObservableList<Planification>> array = new ArrayList<>();
                         PlanificationModel model = new PlanificationModel();
                         ObservableList<Planification> list1, list2, list3, list4, planifications;
@@ -290,7 +289,7 @@ public class LoginController implements Initializable {
                 };
             }
         };
-        servicePlanification.setPeriod(Duration.hours(2));
+        servicePlanification.setPeriod(Duration.seconds(30));
         servicePlanification.setRestartOnFailure(true);
         servicePlanification.setMaximumFailureCount(50);
         servicePlanification.start();

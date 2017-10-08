@@ -176,10 +176,25 @@ public class FormationExcel extends ExcelRapport {
         cell.setCellValue("Formation : " + formation.getTitre());
         sheet.addMergedRegion(new CellRangeAddress(line, line, 0, 4));
 
-        cell = sheet.getRow(line).getCell(6);
-        if(formation.getSocieteFormatrice() != null) {
-            cell.setCellValue(formation.getSocieteFormatrice().getLibelle());
+        cell = sheet.getRow(3).getCell(6);
+
+        if(formation.getLieuFormation() != null) {
+            cell.setCellValue("Place : " + formation.getLieuFormation().getDescription());
         }
+        row = sheet.getRow(3);
+        if(row == null){
+            row = sheet.createRow(3);
+        }
+        cell = row.getCell(0);
+        if(cell == null){
+            cell = row.createCell(0);
+        }
+        cell.setCellValue("Start : " + formation.getDatedebut());
+        cell = row.getCell(4);
+        if(cell == null){
+            cell = row.createCell(4);
+        }
+        cell.setCellValue("End : " + formation.getDatefin());
         line = 7;
         List<FormationPersonne> formationPersonnes = formation.getFormationPersonnes();
         for (FormationPersonne fp : formationPersonnes) {
@@ -193,6 +208,11 @@ public class FormationExcel extends ExcelRapport {
                 cell = row.createCell(0);
             }
             cell.setCellValue(p.getNom() + " " + p.getPrenom());
+            cell = row.getCell(12);
+            if(cell == null){
+                cell = row.createCell(12);
+            }
+            cell.setCellValue(p.getNom());
             line++;
         }
 

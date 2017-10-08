@@ -150,13 +150,13 @@
             <artifactId>postgresql</artifactId>
             <version>9.4.1212</version>
         </dependency -->
-        <!-- dependency>
-            <groupId>com.hxtt</groupId>
-            <artifactId>hxtt</artifactId>
+        <dependency>
+            <groupId>ds.desktop</groupId>
+            <artifactId>notify</artifactId>
             <version>5.2</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/hxtt-5.2.jar</systemPath>
-        </dependency -->
+            <systemPath>${basedir}/libs/DS_Desktop_Notify.jar</systemPath>
+        </dependency>
 
     </dependencies>
 </project>

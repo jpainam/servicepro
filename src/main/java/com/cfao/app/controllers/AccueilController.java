@@ -1,6 +1,5 @@
 package com.cfao.app.controllers;
 
-import com.cfao.app.Main;
 import com.cfao.app.StageManager;
 import com.cfao.app.beans.Personne;
 import com.cfao.app.beans.Planification;
@@ -9,6 +8,7 @@ import com.cfao.app.reports.PrintCivilite;
 import com.cfao.app.util.AlertUtil;
 import com.cfao.app.util.DialogUtil;
 import com.cfao.app.util.ServiceproUtil;
+import ds.desktop.notify.DesktopNotify;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -60,6 +60,8 @@ public class AccueilController implements Initializable {
     public Label lblNbTest;
     public VBox vboxPlanification;
     public Label lblNbPlanification;
+    /*private java.awt.Image notificationIcon =
+            Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/notification-icon.png"));*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -238,7 +240,7 @@ public class AccueilController implements Initializable {
                 if (!planif1.isEmpty()) {
                     for (Planification planification : planif1) {
                         Platform.runLater(() -> {
-                            showNotification(planification, "JJ - " + planification.getDuration(), TrayIcon.MessageType.INFO);
+                            showNotification(planification, "Jour J -" + planification.getDuration(), TrayIcon.MessageType.INFO);
                             System.out.println(planification.getSujet().getLibelle());
                         });
                     }
@@ -254,7 +256,7 @@ public class AccueilController implements Initializable {
                 if (!planif3.isEmpty()) {
                     for (Planification planification : planif3) {
                         Platform.runLater(() -> {
-                            showNotification(planification, "JJ - " + planification.getDuration(), TrayIcon.MessageType.INFO);
+                            showNotification(planification, "Jour J -" + planification.getDuration(), TrayIcon.MessageType.INFO);
                         });
                     }
 
@@ -275,11 +277,16 @@ public class AccueilController implements Initializable {
     }
 
     private void showNotification(Planification p, String sms, TrayIcon.MessageType messageType) {
-        Main.trayIcon.displayMessage(
+        /*Main.trayIcon.displayMessage(
                 p.getFormation().getTitre(),
                         "\nSujet : " + p.getSujet() + " (" + sms + ")" +
                 "\nTaches : " + p.getTaches(), messageType
-        );
+        );*/
+        DesktopNotify.showDesktopMessage(
+                "Formation : " + p.getFormation().getTitre(),
+                "Sujet : " + p.getSujet().getLibelle() + "\n " + sms + "\n"+
+                "Taches : " + p.getTaches(),
+                DesktopNotify.INFORMATION);
     }
 
 
